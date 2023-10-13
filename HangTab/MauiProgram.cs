@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using BowlingMaui.Data;
+using Microsoft.Extensions.Logging;
 
 namespace HangTab
 {
@@ -13,10 +14,13 @@ namespace HangTab
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                    fonts.AddFont("MaterialIcons-Regular.ttf", "GoogleFont");
                 });
 
+            builder.Services.AddSingleton<DatabaseContext>();
+
 #if DEBUG
-		builder.Logging.AddDebug();
+            builder.Logging.AddDebug();
 #endif
 
             return builder.Build();
