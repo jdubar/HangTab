@@ -1,4 +1,4 @@
-﻿namespace BowlingMaui.Helpers;
+﻿namespace HangTab.Helpers;
 public static class GoogleFont
 {
     public const string Icon1 = "\u0030";

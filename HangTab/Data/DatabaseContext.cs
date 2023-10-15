@@ -2,7 +2,7 @@
 
 using System.Linq.Expressions;
 
-namespace BowlingMaui.Data;
+namespace HangTab.Data;
 public class DatabaseContext : IAsyncDisposable
 {
     private const string DatabaseFilename = "Bowling.db3";
