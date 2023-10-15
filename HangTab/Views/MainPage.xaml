@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:components="clr-namespace:HangTab.Views.Components"
-             x:Class="HangTab.MainPage">
+             x:Class="HangTab.Views.MainPage">
 
     <ScrollView>
         <VerticalStackLayout
@@ -10,28 +10,6 @@
             Padding="30,0"
             VerticalOptions="Center">
 
-            <!--<Image
-                Source="dotnet_bot.png"
-                SemanticProperties.Description="Cute dot net bot waving hi to you!"
-                HeightRequest="200"
-                HorizontalOptions="Center" />-->
-            <!--<Border WidthRequest="300"
-                    HeightRequest="100"
-                    StrokeThickness="4"
-                    StrokeShape="RoundRectangle 10">
-                <StackLayout Orientation="Horizontal">
-                    <Label Text="{x:Static icons:GoogleFont.Account_circle}"
-                           Style="{x:StaticResource GoogleFont}"
-                           HorizontalOptions="Center"
-                           VerticalOptions="Center"
-                           FontSize="48"
-                           Margin="10 20 10 20"/>
-                    <VerticalStackLayout VerticalOptions="Center">
-                        <Label Text="Jason Dubar"/>
-                        <Label Text="Total Hangings: 0"/>
-                    </VerticalStackLayout>
-                </StackLayout>
-            </Border>-->
             <components:CardView CardTitle="Jason Dubar"/>
 
             <Label

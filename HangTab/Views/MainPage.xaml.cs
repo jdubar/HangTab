@@ -1,4 +1,4 @@
-﻿namespace HangTab;
+﻿namespace HangTab.Views;
 
 public partial class MainPage : ContentPage
 {
