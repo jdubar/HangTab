@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:icons="clr-namespace:BowlingMaui.Helpers"
+             xmlns:icons="clr-namespace:HangTab.Helpers"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Name="this"
              x:Class="HangTab.Views.Components.CardView">
     <Border BindingContext="{x:Reference this}"
@@ -10,12 +11,16 @@
             StrokeThickness="4"
             StrokeShape="RoundRectangle 10">
         <StackLayout Orientation="Horizontal">
-            <Label Text="{x:Static icons:GoogleFont.Account_circle}"
-                   Style="{x:StaticResource GoogleFont}"
+            <Image Source="account_circle.png"
                    HorizontalOptions="Center"
                    VerticalOptions="Center"
-                   FontSize="48"
-                   Margin="10 20 10 20"/>
+                   HeightRequest="48"
+                   Margin="10">
+                <Image.Behaviors>
+                    <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Dark={StaticResource White},
+                                                                               Light={StaticResource Gray300}}" />
+                </Image.Behaviors>
+            </Image>
             <VerticalStackLayout VerticalOptions="Center">
                 <Label Text="{Binding CardTitle, FallbackValue='Card Title'}"/>
                 <Label Text="Total Hangings: 0"/>
