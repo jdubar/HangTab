@@ -6,7 +6,7 @@
              x:Name="this"
              x:Class="HangTab.Views.Components.CardView">
     <Border BindingContext="{x:Reference this}"
-            WidthRequest="300"
+            WidthRequest="380"
             HeightRequest="80"
             StrokeThickness="4"
             StrokeShape="RoundRectangle 10">
