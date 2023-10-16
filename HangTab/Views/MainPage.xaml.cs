@@ -1,22 +1,33 @@
-﻿namespace HangTab.Views;
+﻿using HangTab.ViewModels;
+
+namespace HangTab.Views;
 
 public partial class MainPage : ContentPage
 {
+    private readonly BowlersViewModel _viewModel;
     private int count = 0;
 
-    public MainPage()
+    public MainPage(BowlersViewModel viewModel)
     {
         InitializeComponent();
+        BindingContext = viewModel;
+        _viewModel = viewModel;
     }
 
-    private void OnCounterClicked(object sender, EventArgs e)
+    protected async override void OnAppearing()
     {
-        count++;
-
-        CounterBtn.Text = count == 1
-            ? $"Clicked {count} time"
-            : $"Clicked {count} times";
-
-        SemanticScreenReader.Announce(CounterBtn.Text);
+        base.OnAppearing();
+        await _viewModel.LoadBowlersAsync();
     }
+
+    //private void OnCounterClicked(object sender, EventArgs e)
+    //{
+    //    count++;
+
+    //    CounterBtn.Text = count == 1
+    //        ? $"Clicked {count} time"
+    //        : $"Clicked {count} times";
+
+    //    SemanticScreenReader.Announce(CounterBtn.Text);
+    //}
 }

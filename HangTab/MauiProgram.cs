@@ -1,5 +1,8 @@
-﻿using BowlingMaui.Data;
+﻿using HangTab.Data;
+using CommunityToolkit.Maui;
 using Microsoft.Extensions.Logging;
+using HangTab.Views;
+using HangTab.ViewModels;
 
 namespace HangTab
 {
@@ -10,6 +13,7 @@ namespace HangTab
             var builder = MauiApp.CreateBuilder();
             builder
                 .UseMauiApp<App>()
+                .UseMauiCommunityToolkit()
                 .ConfigureFonts(fonts =>
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -18,6 +22,11 @@ namespace HangTab
                 });
 
             builder.Services.AddSingleton<DatabaseContext>();
+            builder.Services.AddSingleton<BowlersViewModel>();
+
+            builder.Services.AddSingleton<MainPage>();
+
+            builder.Services.AddSingleton<AddBowlerPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();
