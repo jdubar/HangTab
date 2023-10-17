@@ -1,9 +1,9 @@
-﻿using HangTab.Data;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
+
+using HangTab.Data;
 using HangTab.Models;
 using HangTab.Views;
-
-using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
 
 using System.Collections.ObjectModel;
 

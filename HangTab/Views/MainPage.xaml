@@ -4,6 +4,7 @@
              xmlns:components="clr-namespace:HangTab.Views.Components"
              xmlns:icons="clr-namespace:HangTab.Helpers"
              xmlns:models="clr-namespace:HangTab.Models"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:vm="clr-namespace:HangTab.ViewModels"
              x:Class="HangTab.Views.MainPage">
 
@@ -16,93 +17,139 @@
         </ToolbarItem>
     </ContentPage.ToolbarItems>
 
-    <Grid RowDefinitions="Auto, *">
-        <VerticalStackLayout Grid.RowSpan="2"
-                             VerticalOptions="Center"
-                             HorizontalOptions="Center"
-                             IsVisible="{Binding IsBusy}">
-            <ActivityIndicator IsRunning="True"
-                               VerticalOptions="Center"
-                               HorizontalOptions="Center"/>
-            <Label Text="{Binding BusyText}"
-                   VerticalOptions="Center"
-                   HorizontalOptions="Center"/>
-        </VerticalStackLayout>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="80"/>
+        </Grid.RowDefinitions>
+        
+        <Grid Grid.Row="0"
+              RowDefinitions="Auto, *"
+              ColumnDefinitions="*, Auto">
+            <VerticalStackLayout Grid.RowSpan="2"
+                                 VerticalOptions="Center"
+                                 HorizontalOptions="Center"
+                                 IsVisible="{Binding IsBusy}">
+                <ActivityIndicator IsRunning="True"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"/>
+                <Label Text="{Binding BusyText}"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"/>
+            </VerticalStackLayout>
 
-        <Grid Grid.Row="1"
-              RowDefinitions="*, Auto">
-            <RefreshView IsEnabled="False">
-                <CollectionView Grid.Row="0"
-                                ItemsSource="{Binding Bowlers}">
-                    <CollectionView.ItemsLayout>
-                        <LinearItemsLayout ItemSpacing="10"
-                                           Orientation="Vertical"/>
-                    </CollectionView.ItemsLayout>
-                    <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="models:Bowler">
-                            <SwipeView>
-                                <SwipeView.LeftItems>
-                                    <SwipeItems>
-                                        <SwipeItem BackgroundColor="{DynamicResource Info}"
-                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlersViewModel}}, Path=AddUpdateBowlerCommand}"
-                                                   CommandParameter="{Binding .}">
-                                            <SwipeItem.IconImageSource>
-                                                <FontImageSource FontFamily="GoogleFont"
-                                                                 Glyph="{Static icons:GoogleFont.Edit}"
-                                                                 Size="20" />
-                                            </SwipeItem.IconImageSource>
-                                        </SwipeItem>
-                                    </SwipeItems>
-                                </SwipeView.LeftItems>
-                                <SwipeView.RightItems>
-                                    <SwipeItems>
-                                        <SwipeItem BackgroundColor="{DynamicResource Error}"
-                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlersViewModel}}, Path=DeleteBowlerCommand}"
-                                                   CommandParameter="{Binding Id}">
-                                            <SwipeItem.IconImageSource>
-                                                <FontImageSource FontFamily="GoogleFont"
-                                                                 Glyph="{Static icons:GoogleFont.Delete}"
-                                                                 Size="20" />
-                                            </SwipeItem.IconImageSource>
-                                        </SwipeItem>
-                                    </SwipeItems>
-                                </SwipeView.RightItems>
-                                <Grid RowDefinitions="Auto, Auto"
-                                      ColumnDefinitions="*, Auto"
-                                      RowSpacing="5"
-                                      Padding="5">
-                                    <components:CardView CardTitle="{Binding FullName}"/>
-                                </Grid>
-                            </SwipeView>
-                        </DataTemplate>
-                    </CollectionView.ItemTemplate>
-                    <CollectionView.EmptyView>
-                        <ContentView>
-                            <VerticalStackLayout HorizontalOptions="Center"
-                                                 VerticalOptions="Center"
-                                                 WidthRequest="380">
-                                <Label Text="No Bowlers Found"
-                                       FontSize="18"
-                                       FontAttributes="Bold"
-                                       HorizontalTextAlignment="Center"/>
-                                <Label Text="Try creating a bowler using the button above"
-                                       HorizontalTextAlignment="Center"/>
-                            </VerticalStackLayout>
-                        </ContentView>
-                    </CollectionView.EmptyView>
-                </CollectionView>
-            </RefreshView>
+            <Grid Grid.Row="1"
+                  RowDefinitions="*, Auto">
+                <RefreshView IsEnabled="False">
+                    <CollectionView Grid.Row="0"
+                                    ItemsSource="{Binding Bowlers}">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout ItemSpacing="10"
+                                               Orientation="Vertical"/>
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:Bowler">
+                                <SwipeView>
+                                    <SwipeView.LeftItems>
+                                        <SwipeItems>
+                                            <SwipeItem BackgroundColor="{DynamicResource Info}"
+                                                       Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlersViewModel}}, Path=AddUpdateBowlerCommand}"
+                                                       CommandParameter="{Binding .}">
+                                                <SwipeItem.IconImageSource>
+                                                    <FontImageSource FontFamily="GoogleFont"
+                                                                     Glyph="{Static icons:GoogleFont.Edit}"
+                                                                     Size="20" />
+                                                </SwipeItem.IconImageSource>
+                                            </SwipeItem>
+                                        </SwipeItems>
+                                    </SwipeView.LeftItems>
+                                    <SwipeView.RightItems>
+                                        <SwipeItems>
+                                            <SwipeItem BackgroundColor="{DynamicResource Error}"
+                                                       Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlersViewModel}}, Path=DeleteBowlerCommand}"
+                                                       CommandParameter="{Binding Id}">
+                                                <SwipeItem.IconImageSource>
+                                                    <FontImageSource FontFamily="GoogleFont"
+                                                                     Glyph="{Static icons:GoogleFont.Delete}"
+                                                                     Size="20" />
+                                                </SwipeItem.IconImageSource>
+                                            </SwipeItem>
+                                        </SwipeItems>
+                                    </SwipeView.RightItems>
+                                    <Grid RowDefinitions="Auto, Auto, Auto"
+                                          ColumnDefinitions="Auto, Auto, *"
+                                          Padding="5"
+                                          HeightRequest="81">
+                                        <components:CardView BowlerName="{Binding FullName}"/>
+                                    </Grid>
+                                </SwipeView>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                        <CollectionView.EmptyView>
+                            <ContentView>
+                                <VerticalStackLayout HorizontalOptions="Center"
+                                                     VerticalOptions="Center"
+                                                     WidthRequest="380">
+                                    <Label Text="No Bowlers Found"
+                                           FontSize="18"
+                                           FontAttributes="Bold"
+                                           HorizontalTextAlignment="Center"/>
+                                    <Label Text="Try creating a bowler using the button above"
+                                           HorizontalTextAlignment="Center"/>
+                                </VerticalStackLayout>
+                            </ContentView>
+                        </CollectionView.EmptyView>
+                    </CollectionView>
+                </RefreshView>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="1">
+            <SwipeView Threshold="300">
+                <SwipeView.LeftItems>
+                    <SwipeItems>
+                        <SwipeItem Text="Starting..."
+					               BackgroundColor="{StaticResource Success}"/>
+                    </SwipeItems>
+                </SwipeView.LeftItems>
+                <Grid HorizontalOptions="Center"
+                      VerticalOptions="End"
+                      HeightRequest="70">
+                    <Border HeightRequest="80"
+                            WidthRequest="400"
+                            StrokeThickness="4">
+                        <StackLayout Orientation="Horizontal">
+                            <ImageButton Margin="20"
+                                         HeightRequest="58">
+                                <ImageButton.Source>
+                                    <FontImageSource FontFamily="GoogleFont"
+                                                     Glyph="{Static icons:GoogleFont.Arrow_circle_right}" />
+                                </ImageButton.Source>
+                                <ImageButton.Behaviors>
+                                    <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Dark={StaticResource White},
+                                                                            Light={StaticResource Gray300}}" />
+                                </ImageButton.Behaviors>
+                            </ImageButton>
+                            <Label Text="Swipe right to start a new week"
+			                       HorizontalOptions="Center"
+			                       VerticalOptions="Center" />
+                        </StackLayout>
+                    </Border>
+                </Grid>
+            </SwipeView>
         </Grid>
     </Grid>
+</ContentPage>
 
 
-    <!--<ScrollView>
+
+<!--<ScrollView>
         <VerticalStackLayout
             Spacing="25"
             Padding="30,0"
             VerticalOptions="Center">
 
-            <components:CardView CardTitle="Jason Dubar"/>
+            <components:CardView BowlerName="Jason Dubar"/>
 
             <Label
                 Text="Hello, World!"
@@ -127,4 +174,3 @@
         </VerticalStackLayout>
     </ScrollView>-->
 
-</ContentPage>

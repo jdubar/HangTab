@@ -1,8 +1,10 @@
-﻿using HangTab.Data;
-using CommunityToolkit.Maui;
-using Microsoft.Extensions.Logging;
-using HangTab.Views;
+﻿using CommunityToolkit.Maui;
+
+using HangTab.Data;
 using HangTab.ViewModels;
+using HangTab.Views;
+
+using Microsoft.Extensions.Logging;
 
 namespace HangTab
 {
