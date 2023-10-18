@@ -76,10 +76,10 @@
                                             </SwipeItem>
                                         </SwipeItems>
                                     </SwipeView.RightItems>
-                                    <Grid RowDefinitions="Auto, Auto, Auto"
-                                          ColumnDefinitions="Auto, Auto, *"
-                                          Padding="5"
-                                          HeightRequest="81">
+                                    <Grid HorizontalOptions="Center"
+                                          VerticalOptions="End"
+                                          HeightRequest="70"
+                                          Margin="5">
                                         <components:CardView BowlerName="{Binding FullName}"/>
                                     </Grid>
                                 </SwipeView>
