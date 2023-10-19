@@ -86,7 +86,8 @@ public partial class BowlersViewModel : BaseViewModel
         }
 
         if (Bowlers.FirstOrDefault(b => b.FirstName == OperatingBowler.FirstName
-                                        && b.LastName == OperatingBowler.LastName) is not null)
+                                        && b.LastName == OperatingBowler.LastName) is not null
+            && OperatingBowler.Id == 0)
         {
             await Shell.Current.DisplayAlert("Validation Error", "This bowler already exists", "Ok");
             return;
