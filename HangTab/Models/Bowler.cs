@@ -10,6 +10,7 @@ public class Bowler
     public string ImageUrl { get; set; } = string.Empty;
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
+    public bool IsSub { get; set; }
     public string FullName => $"{FirstName} {LastName}";
 
     public Bowler Clone => MemberwiseClone() as Bowler;

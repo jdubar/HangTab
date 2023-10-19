@@ -58,7 +58,16 @@
                                                 <SwipeItem.IconImageSource>
                                                     <FontImageSource FontFamily="GoogleFont"
                                                                      Glyph="{Static icons:GoogleFont.Edit}"
-                                                                     Size="20" />
+                                                                     Size="20"/>
+                                                </SwipeItem.IconImageSource>
+                                            </SwipeItem>
+                                            <SwipeItem BackgroundColor="{DynamicResource Tertiary}"
+                                                       Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlersViewModel}}, Path=AddUpdateBowlerCommand}"
+                                                       CommandParameter="{Binding .}">
+                                                <SwipeItem.IconImageSource>
+                                                    <FontImageSource FontFamily="GoogleFont"
+                                                                     Glyph="{Static icons:GoogleFont.Switch_account}"
+                                                                     Size="20"/>
                                                 </SwipeItem.IconImageSource>
                                             </SwipeItem>
                                         </SwipeItems>
@@ -80,7 +89,7 @@
                                           VerticalOptions="End"
                                           HeightRequest="70"
                                           Margin="5">
-                                        <components:CardView BowlerName="{Binding FullName}"/>
+                                        <components:CardView BowlerName="{Binding FullName}" IsSub="{Binding IsSub}"/>
                                     </Grid>
                                 </SwipeView>
                             </DataTemplate>
