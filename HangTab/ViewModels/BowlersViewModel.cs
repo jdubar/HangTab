@@ -44,13 +44,13 @@ public partial class BowlersViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    public async Task LoadBowlersAsync()
+    public async Task LoadMainBowlersAsync()
     {
         await ExecuteAsync(async () =>
         {
             SetOperatingBowlerCommand.Execute(new());
             Bowlers ??= new ObservableCollection<Bowler>();
-            var bowlers = await _context.GetAllAsync<Bowler>();
+            var bowlers = await _context.GetFilteredAsync<Bowler>(b => !b.IsSub);
             if (bowlers is not null && bowlers.Any())
             {
                 Bowlers.Clear();

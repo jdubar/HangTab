@@ -5,7 +5,6 @@ namespace HangTab.Views;
 public partial class MainPage : ContentPage
 {
     private readonly BowlersViewModel _viewModel;
-    private int count = 0;
 
     public MainPage(BowlersViewModel viewModel)
     {
@@ -17,17 +16,11 @@ public partial class MainPage : ContentPage
     protected async override void OnAppearing()
     {
         base.OnAppearing();
-        await _viewModel.LoadBowlersAsync();
+        await _viewModel.LoadMainBowlersAsync();
     }
 
-    //private void OnCounterClicked(object sender, EventArgs e)
-    //{
-    //    count++;
+    private void OnBusRideClicked(object sender, EventArgs e)
+    {
 
-    //    CounterBtn.Text = count == 1
-    //        ? $"Clicked {count} time"
-    //        : $"Clicked {count} times";
-
-    //    SemanticScreenReader.Announce(CounterBtn.Text);
-    //}
+    }
 }

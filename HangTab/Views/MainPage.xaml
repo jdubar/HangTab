@@ -21,6 +21,7 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="80"/>
+            <RowDefinition Height="80"/>
         </Grid.RowDefinitions>
         
         <Grid Grid.Row="0"
@@ -114,6 +115,37 @@
         </Grid>
 
         <Grid Grid.Row="1">
+            <Grid HorizontalOptions="Center"
+                  VerticalOptions="End"
+                  HeightRequest="70">
+                <Border HeightRequest="107"
+                        WidthRequest="410"
+                        StrokeThickness="4">
+                    <StackLayout Orientation="Horizontal">
+                        <Image Source="school_bus.png"
+                               Margin="15 20"/>
+                        <VerticalStackLayout VerticalOptions="Center"
+                                             WidthRequest="210">
+                            <Label x:Name="BusRideCount"
+                                   Text="Bus Rides: 0"/>
+                            <Label x:Name="TotalBusRideCount"
+                                   Text="Total Bus Rides: 0"/>
+                        </VerticalStackLayout>
+                        <ImageButton HorizontalOptions="End" Clicked="OnBusRideClicked">
+                            <ImageButton.Source>
+                                <FontImageSource FontFamily="GoogleFont"
+                                                 Glyph="{Static icons:GoogleFont.Add_box}" />
+                            </ImageButton.Source>
+                            <ImageButton.Behaviors>
+                                <toolkit:IconTintColorBehavior TintColor="{StaticResource Success}" />
+                            </ImageButton.Behaviors>
+                        </ImageButton>
+                    </StackLayout>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="2">
             <SwipeView Threshold="300">
                 <SwipeView.LeftItems>
                     <SwipeItems>
