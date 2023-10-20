@@ -56,6 +56,9 @@ public class DatabaseContext : IAsyncDisposable
         return await action();
     }
 
-    public async ValueTask DisposeAsync() =>
+    public async ValueTask DisposeAsync()
+    {
         await Connection?.CloseAsync();
+        GC.SuppressFinalize(this);
+    }
 }
