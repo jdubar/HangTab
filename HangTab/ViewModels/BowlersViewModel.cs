@@ -24,6 +24,13 @@ public partial class BowlersViewModel : BaseViewModel
     private Bowler _operatingBowler = new();
 
     [RelayCommand]
+    private async Task AddUpdateBowlerAsync(Bowler? bowler)
+    {
+        SetOperatingBowlerCommand.Execute(bowler);
+        await Shell.Current.GoToAsync(nameof(AddBowlerPage), true);
+    }
+
+    [RelayCommand]
     private async Task DeleteBowlerAsync(int id)
     {
         if (await Shell.Current.DisplayAlert("Delete", "Are you sure you want to delete this bowler?", "Yes", "No"))
@@ -44,6 +51,21 @@ public partial class BowlersViewModel : BaseViewModel
     }
 
     [RelayCommand]
+    private async Task HangBowlerAsync(Bowler? bowler)
+    {
+        SetOperatingBowlerCommand.Execute(bowler);
+        await ExecuteAsync(async () =>
+        {
+            OperatingBowler.TotalHangings++;
+            await _context.UpdateItemAsync(OperatingBowler);
+
+            RefreshBowler();
+
+            SetOperatingBowlerCommand.Execute(new());
+        }, "Hanging bowler...");
+    }
+
+    [RelayCommand]
     public async Task LoadMainBowlersAsync()
     {
         await ExecuteAsync(async () =>
@@ -61,13 +83,6 @@ public partial class BowlersViewModel : BaseViewModel
                 }
             }
         }, "Loading bowlers...");
-    }
-
-    [RelayCommand]
-    private async Task AddUpdateBowlerAsync(Bowler? bowler)
-    {
-        SetOperatingBowlerCommand.Execute(bowler);
-        await Shell.Current.GoToAsync(nameof(AddBowlerPage), true);
     }
 
     [RelayCommand]
@@ -108,12 +123,7 @@ public partial class BowlersViewModel : BaseViewModel
             {
                 await _context.UpdateItemAsync(OperatingBowler);
 
-                var bowlerCopy = OperatingBowler.Clone;
-
-                var index = Bowlers.IndexOf(OperatingBowler);
-                Bowlers.RemoveAt(index);
-
-                Bowlers.Insert(index, bowlerCopy);
+                RefreshBowler();
             }
             SetOperatingBowlerCommand.Execute(new());
             await Shell.Current.GoToAsync("..", true);
@@ -123,4 +133,14 @@ public partial class BowlersViewModel : BaseViewModel
     [RelayCommand]
     private void SetOperatingBowler(Bowler? bowler) =>
         OperatingBowler = bowler ?? new();
+
+    private void RefreshBowler()
+    {
+        var bowlerCopy = OperatingBowler.Clone;
+
+        var index = Bowlers.IndexOf(OperatingBowler);
+        Bowlers.RemoveAt(index);
+
+        Bowlers.Insert(index, bowlerCopy);
+    }
 }

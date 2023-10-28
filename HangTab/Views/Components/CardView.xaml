@@ -18,7 +18,7 @@
             StrokeThickness="4"
             Stroke="{Binding IsSub, Converter={StaticResource BoolToObjectConverter}}">
         <StackLayout Orientation="Horizontal">
-            <Image Source="account_circle.png"
+            <Image Source="{Binding ImageUrl}"
                    HorizontalOptions="Center"
                    VerticalOptions="Center"
                    HeightRequest="50"
@@ -37,7 +37,9 @@
                 <Label x:Name="TotalHangCount"
                        Text="Total Hangings: 0"/>
             </VerticalStackLayout>
-            <ImageButton HorizontalOptions="End" Clicked="OnHangBowlerClicked">
+            <ImageButton HorizontalOptions="End"
+                         Command="{Binding Source={x:Reference this}, Path=HangBowlerCommand}"
+                         CommandParameter="{Binding Id}">
                 <ImageButton.Source>
                     <FontImageSource FontFamily="GoogleFont"
                                      Glyph="{Static icons:GoogleFont.Add_box}" />

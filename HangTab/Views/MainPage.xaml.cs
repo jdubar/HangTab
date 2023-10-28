@@ -21,6 +21,6 @@ public partial class MainPage : ContentPage
 
     private void OnBusRideClicked(object sender, EventArgs e)
     {
-
+        BowlerList.ScrollTo(0);
     }
 }
