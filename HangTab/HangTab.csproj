@@ -60,19 +60,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Compile Update="Views\SubBowlerPage.xaml.cs">
-	    <DependentUpon>SubBowlerPage.xaml</DependentUpon>
-	  </Compile>
-	</ItemGroup>
-
-	<ItemGroup>
 	  <MauiXaml Update="Views\AddBowlerPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Views\Components\CardView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
-	  <MauiXaml Update="Views\SubBowlerPage.xaml">
+	  <MauiXaml Update="Views\SwitchBowlerPage.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	</ItemGroup>

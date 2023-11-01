@@ -8,6 +8,7 @@ namespace HangTab
         {
             InitializeComponent();
             Routing.RegisterRoute(nameof(AddBowlerPage), typeof(AddBowlerPage));
+            Routing.RegisterRoute(nameof(SwitchBowlerPage), typeof(SwitchBowlerPage));
         }
     }
 }

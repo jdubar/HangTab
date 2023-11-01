@@ -11,6 +11,7 @@ public class Bowler
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public bool IsSub { get; set; }
+    public bool IsHidden { get; set; }
     public int TotalHangings { get; set; }
     public string FullName => $"{FirstName} {LastName}";
 

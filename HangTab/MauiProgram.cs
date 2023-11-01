@@ -29,6 +29,7 @@ namespace HangTab
             builder.Services.AddSingleton<MainPage>();
 
             builder.Services.AddSingleton<AddBowlerPage>();
+            builder.Services.AddSingleton<SwitchBowlerPage>();
 
 #if DEBUG
             builder.Logging.AddDebug();

@@ -70,7 +70,7 @@ public partial class BowlersViewModel : BaseViewModel
         {
             SetOperatingBowlerCommand.Execute(new());
             Bowlers ??= new ObservableCollection<BowlerWeek>();
-            var bowlers = await _context.GetFilteredAsync<Bowler>(b => !b.IsSub);
+            var bowlers = await _context.GetFilteredAsync<Bowler>(b => !b.IsHidden);
             var weeks = await _context.GetAllAsync<Week>();
             if (bowlers is not null && bowlers.Any())
             {
@@ -137,6 +137,13 @@ public partial class BowlersViewModel : BaseViewModel
             }
             await Shell.Current.GoToAsync("..", true);
         }, busyText);
+    }
+
+    [RelayCommand]
+    private async Task SwitchBowlerAsync(BowlerWeek? bowler)
+    {
+        SetOperatingBowlerCommand.Execute(bowler);
+        await Shell.Current.GoToAsync(nameof(SwitchBowlerPage), true);
     }
 
     [RelayCommand]

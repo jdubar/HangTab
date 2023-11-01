@@ -22,6 +22,14 @@
                    VerticalOptions="Center"
                    FontSize="Medium"/>
         </HorizontalStackLayout>
+        <HorizontalStackLayout>
+            <Switch IsToggled="{Binding OperatingBowler.Bowler.IsHidden, Mode=TwoWay}"
+                    OnColor="{StaticResource Success}"
+                    VerticalOptions="Center"/>
+            <Label Text="Hide Bowler"
+                   VerticalOptions="Center"
+                   FontSize="Medium"/>
+        </HorizontalStackLayout>
         <StackLayout Orientation="Horizontal">
             <Button Grid.Row="1"
                     Grid.ColumnSpan="2"
