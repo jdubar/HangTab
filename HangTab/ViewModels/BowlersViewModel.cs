@@ -18,13 +18,13 @@ public partial class BowlersViewModel : BaseViewModel
     }
 
     [ObservableProperty]
-    private ObservableCollection<Bowler> _bowlers;
+    private ObservableCollection<BowlerWeek> _bowlers;
 
     [ObservableProperty]
-    private Bowler _operatingBowler = new();
+    private BowlerWeek _operatingBowler = new();
 
     [RelayCommand]
-    private async Task AddUpdateBowlerAsync(Bowler? bowler)
+    private async Task AddUpdateBowlerAsync(BowlerWeek? bowler)
     {
         SetOperatingBowlerCommand.Execute(bowler);
         await Shell.Current.GoToAsync(nameof(AddBowlerPage), true);
@@ -39,7 +39,7 @@ public partial class BowlersViewModel : BaseViewModel
             {
                 if (await _context.DeleteItemByIdAsync<Bowler>(id))
                 {
-                    var bowler = Bowlers.FirstOrDefault(b => b.Id == id);
+                    var bowler = Bowlers.FirstOrDefault(b => b.Bowler.Id == id);
                     Bowlers.Remove(bowler);
                 }
                 else
@@ -51,17 +51,15 @@ public partial class BowlersViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private async Task HangBowlerAsync(Bowler? bowler)
+    private async Task HangBowlerAsync(BowlerWeek? bowler)
     {
         SetOperatingBowlerCommand.Execute(bowler);
         await ExecuteAsync(async () =>
         {
-            OperatingBowler.TotalHangings++;
-            await _context.UpdateItemAsync(OperatingBowler);
+            OperatingBowler.Bowler.TotalHangings++;
+            await _context.UpdateItemAsync(OperatingBowler.Bowler);
 
             RefreshBowler();
-
-            SetOperatingBowlerCommand.Execute(new());
         }, "Hanging bowler...");
     }
 
@@ -71,15 +69,27 @@ public partial class BowlersViewModel : BaseViewModel
         await ExecuteAsync(async () =>
         {
             SetOperatingBowlerCommand.Execute(new());
-            Bowlers ??= new ObservableCollection<Bowler>();
+            Bowlers ??= new ObservableCollection<BowlerWeek>();
             var bowlers = await _context.GetFilteredAsync<Bowler>(b => !b.IsSub);
+            var weeks = await _context.GetAllAsync<Week>();
             if (bowlers is not null && bowlers.Any())
             {
                 Bowlers.Clear();
 
                 foreach (var bowler in bowlers)
                 {
-                    Bowlers.Add(bowler);
+                    var week = weeks.FirstOrDefault(w => w.BowlerId == bowler.Id);
+                    week ??= new Week()
+                    {
+                        BowlerId = bowler.Id
+                    };
+
+                    var bowlerWeek = new BowlerWeek()
+                    {
+                        Bowler = bowler,
+                        Week = week
+                    };
+                    Bowlers.Add(bowlerWeek);
                 }
             }
         }, "Loading bowlers...");
@@ -88,59 +98,60 @@ public partial class BowlersViewModel : BaseViewModel
     [RelayCommand]
     private async Task SaveBowlerAsync()
     {
-        if (OperatingBowler is null)
+        if (OperatingBowler.Bowler is null)
         {
             return;
         }
 
-        var (isValid, errorMessage) = OperatingBowler.Validate();
+        var (isValid, errorMessage) = OperatingBowler.Bowler.Validate();
         if (!isValid)
         {
             await Shell.Current.DisplayAlert("Validation Error", errorMessage, "Ok");
             return;
         }
 
-        if (Bowlers.FirstOrDefault(b => b.FirstName == OperatingBowler.FirstName
-                                        && b.LastName == OperatingBowler.LastName) is not null
-            && OperatingBowler.Id == 0)
+        if (Bowlers.FirstOrDefault(b => b.Bowler.FirstName == OperatingBowler.Bowler.FirstName
+                                        && b.Bowler.LastName == OperatingBowler.Bowler.LastName) is not null
+            && OperatingBowler.Bowler.Id == 0)
         {
             await Shell.Current.DisplayAlert("Validation Error", "This bowler already exists", "Ok");
             return;
         }
 
-        var busyText = OperatingBowler.Id == 0
+        var busyText = OperatingBowler.Bowler.Id == 0
             ? "Creating bowler..."
             : "Updating bowler...";
 
         await ExecuteAsync(async () =>
         {
-            if (OperatingBowler.Id == 0)
+            if (OperatingBowler.Bowler.Id == 0)
             {
-                await _context.AddItemAsync(OperatingBowler);
+                await _context.AddItemAsync(OperatingBowler.Bowler);
                 Bowlers.Add(OperatingBowler);
             }
             else
             {
-                await _context.UpdateItemAsync(OperatingBowler);
+                await _context.UpdateItemAsync(OperatingBowler.Bowler);
 
                 RefreshBowler();
             }
-            SetOperatingBowlerCommand.Execute(new());
             await Shell.Current.GoToAsync("..", true);
         }, busyText);
     }
 
     [RelayCommand]
-    private void SetOperatingBowler(Bowler? bowler) =>
+    private void SetOperatingBowler(BowlerWeek? bowler) =>
         OperatingBowler = bowler ?? new();
 
     private void RefreshBowler()
     {
-        var bowlerCopy = OperatingBowler.Clone;
+        var bowlerCopy = OperatingBowler.Clone();
 
         var index = Bowlers.IndexOf(OperatingBowler);
         Bowlers.RemoveAt(index);
 
         Bowlers.Insert(index, bowlerCopy);
+
+        SetOperatingBowlerCommand.Execute(new());
     }
 }

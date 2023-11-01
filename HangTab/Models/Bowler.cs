@@ -14,7 +14,7 @@ public class Bowler
     public int TotalHangings { get; set; }
     public string FullName => $"{FirstName} {LastName}";
 
-    public Bowler Clone => MemberwiseClone() as Bowler;
+    public Bowler Clone() => MemberwiseClone() as Bowler;
 
     public (bool IsValid, string ErrorMessage) Validate()
     {
