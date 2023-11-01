@@ -21,6 +21,9 @@ public partial class BowlersViewModel : BaseViewModel
     private ObservableCollection<BowlerWeek> _bowlers;
 
     [ObservableProperty]
+    private ObservableCollection<Bowler> _hiddenBowlers;
+
+    [ObservableProperty]
     private BowlerWeek _operatingBowler = new();
 
     [RelayCommand]
@@ -61,6 +64,25 @@ public partial class BowlersViewModel : BaseViewModel
 
             RefreshBowler();
         }, "Hanging bowler...");
+    }
+
+    [RelayCommand]
+    public async Task LoadHiddenBowlersAsync()
+    {
+        await ExecuteAsync(async () =>
+        {
+            HiddenBowlers ??= new ObservableCollection<Bowler>();
+            var bowlers = await _context.GetFilteredAsync<Bowler>(b => b.IsHidden);
+            if (bowlers is not null && bowlers.Any())
+            {
+                HiddenBowlers.Clear();
+
+                foreach (var bowler in bowlers)
+                {
+                    HiddenBowlers.Add(bowler);
+                }
+            }
+        });
     }
 
     [RelayCommand]
