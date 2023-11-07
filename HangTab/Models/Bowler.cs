@@ -17,7 +17,7 @@ public class Bowler
 
     public Bowler Clone() => MemberwiseClone() as Bowler;
 
-    public (bool IsValid, string ErrorMessage) Validate()
+    public (bool IsValid, string ErrorMessage) ValidateEmptyFields()
     {
         if (string.IsNullOrWhiteSpace(FirstName))
         {

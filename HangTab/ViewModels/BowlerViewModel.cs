@@ -24,7 +24,7 @@ public partial class BowlerViewModel : BaseViewModel
     private ObservableCollection<Bowler> _hiddenBowlers;
 
     [ObservableProperty]
-    private BowlerWeek _operatingBowler = new();
+    private BowlerWeek _workingBowlerWeek = new();
 
     [ObservableProperty]
     private Bowler _selectedBowler;
@@ -32,7 +32,7 @@ public partial class BowlerViewModel : BaseViewModel
     [RelayCommand]
     private async Task AddUpdateBowlerAsync(BowlerWeek? bowler)
     {
-        SetOperatingBowlerCommand.Execute(bowler);
+        SetWorkingBowlerWeekCommand.Execute(bowler);
         await Shell.Current.GoToAsync(nameof(AddBowlerPage), true);
     }
 
@@ -59,11 +59,11 @@ public partial class BowlerViewModel : BaseViewModel
     [RelayCommand]
     private async Task HangBowlerAsync(BowlerWeek? bowler)
     {
-        SetOperatingBowlerCommand.Execute(bowler);
+        SetWorkingBowlerWeekCommand.Execute(bowler);
         await ExecuteAsync(async () =>
         {
-            OperatingBowler.Bowler.TotalHangings++;
-            await _context.UpdateItemAsync(OperatingBowler.Bowler);
+            WorkingBowlerWeek.Bowler.TotalHangings++;
+            await _context.UpdateItemAsync(WorkingBowlerWeek.Bowler);
 
             RefreshBowler();
         }, "Hanging bowler...");
@@ -78,17 +78,17 @@ public partial class BowlerViewModel : BaseViewModel
             var bowlers = await _context.GetFilteredAsync<Bowler>(b => b.IsHidden);
             if (bowlers is not null && bowlers.Any())
             {
-                var oldItemsIndexes = HiddenBowlers?.Select((item, index) => new { Item = item, Index = index });
-                bowlers?.ToList()?.ForEach(p =>
+                var oldItemsIndexes = HiddenBowlers?.Select((bowler, index) => new { Bowler = bowler, Index = index });
+                bowlers.ToList().ForEach(bowler =>
                 {
-                    var oldItem = oldItemsIndexes?.FirstOrDefault(i => i.Item.Id == p.Id);
-                    if (oldItem != null)
+                    var oldItem = oldItemsIndexes?.FirstOrDefault(i => i.Bowler.Id == bowler.Id);
+                    if (oldItem == null)
                     {
-                        HiddenBowlers[oldItem.Index] = p;
+                        HiddenBowlers.Add(bowler);
                     }
                     else
                     {
-                        HiddenBowlers.Add(p);
+                        HiddenBowlers[oldItem.Index] = bowler;
                     }
                 });
             }
@@ -100,7 +100,7 @@ public partial class BowlerViewModel : BaseViewModel
     {
         await ExecuteAsync(async () =>
         {
-            SetOperatingBowlerCommand.Execute(new());
+            SetWorkingBowlerWeekCommand.Execute(new());
             Bowlers ??= new ObservableCollection<BowlerWeek>();
             var bowlers = await _context.GetFilteredAsync<Bowler>(b => !b.IsHidden);
             var weeks = await _context.GetAllAsync<Week>();
@@ -130,40 +130,40 @@ public partial class BowlerViewModel : BaseViewModel
     [RelayCommand]
     private async Task SaveBowlerAsync()
     {
-        if (OperatingBowler.Bowler is null)
+        if (WorkingBowlerWeek.Bowler is null)
         {
             return;
         }
 
-        var (isValid, errorMessage) = OperatingBowler.Bowler.Validate();
+        var (isValid, errorMessage) = WorkingBowlerWeek.Bowler.ValidateEmptyFields();
         if (!isValid)
         {
             await Shell.Current.DisplayAlert("Validation Error", errorMessage, "Ok");
             return;
         }
 
-        if (Bowlers.FirstOrDefault(b => b.Bowler.FirstName == OperatingBowler.Bowler.FirstName
-                                        && b.Bowler.LastName == OperatingBowler.Bowler.LastName) is not null
-            && OperatingBowler.Bowler.Id == 0)
+        if (await _context.GetFilteredAsync<Bowler>(b => b.FirstName == WorkingBowlerWeek.Bowler.FirstName
+                                                         && b.LastName == WorkingBowlerWeek.Bowler.LastName) is not null
+            && WorkingBowlerWeek.Bowler.Id == 0)
         {
             await Shell.Current.DisplayAlert("Validation Error", "This bowler already exists", "Ok");
             return;
         }
 
-        var busyText = OperatingBowler.Bowler.Id == 0
+        var busyText = WorkingBowlerWeek.Bowler.Id == 0
             ? "Creating bowler..."
             : "Updating bowler...";
 
         await ExecuteAsync(async () =>
         {
-            if (OperatingBowler.Bowler.Id == 0)
+            if (WorkingBowlerWeek.Bowler.Id == 0)
             {
-                await _context.AddItemAsync(OperatingBowler.Bowler);
-                Bowlers.Add(OperatingBowler);
+                await _context.AddItemAsync(WorkingBowlerWeek.Bowler);
+                Bowlers.Add(WorkingBowlerWeek);
             }
             else
             {
-                await _context.UpdateItemAsync(OperatingBowler.Bowler);
+                await _context.UpdateItemAsync(WorkingBowlerWeek.Bowler);
 
                 RefreshBowler();
             }
@@ -172,25 +172,25 @@ public partial class BowlerViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private void SetOperatingBowler(BowlerWeek? bowler) =>
-    OperatingBowler = bowler ?? new();
+    private void SetWorkingBowlerWeek(BowlerWeek? bowler) =>
+    WorkingBowlerWeek = bowler ?? new();
 
     [RelayCommand]
     private async Task SwitchBowlerAsync(BowlerWeek? bowler)
     {
-        SetOperatingBowlerCommand.Execute(bowler);
+        SetWorkingBowlerWeekCommand.Execute(bowler);
         await Shell.Current.GoToAsync(nameof(SwitchBowlerPage), true);
     }
 
     private void RefreshBowler()
     {
-        var bowlerCopy = OperatingBowler.Clone();
+        var bowlerCopy = WorkingBowlerWeek.Clone();
 
-        var index = Bowlers.IndexOf(OperatingBowler);
+        var index = Bowlers.IndexOf(WorkingBowlerWeek);
         Bowlers.RemoveAt(index);
 
         Bowlers.Insert(index, bowlerCopy);
 
-        SetOperatingBowlerCommand.Execute(new());
+        SetWorkingBowlerWeekCommand.Execute(new());
     }
 }

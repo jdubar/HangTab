@@ -6,16 +6,16 @@
              x:Class="HangTab.Views.AddBowlerPage">
     
     <StackLayout Spacing="5" Padding="15" Margin="10">
-        <Entry Text="{Binding OperatingBowler.Bowler.FirstName, Mode=TwoWay}"
+        <Entry Text="{Binding WorkingBowlerWeek.Bowler.FirstName, Mode=TwoWay}"
                FontSize="Medium"
                Placeholder="First Name"
                Margin="0"/>
-        <Entry Text="{Binding OperatingBowler.Bowler.LastName, Mode=TwoWay}"
+        <Entry Text="{Binding WorkingBowlerWeek.Bowler.LastName, Mode=TwoWay}"
                FontSize="Medium"
                Placeholder="Last Name"
                Margin="0"/>
         <HorizontalStackLayout>
-            <Switch IsToggled="{Binding OperatingBowler.Bowler.IsSub, Mode=TwoWay}"
+            <Switch IsToggled="{Binding WorkingBowlerWeek.Bowler.IsSub, Mode=TwoWay}"
                     OnColor="{StaticResource Success}"
                     VerticalOptions="Center"/>
             <Label Text="Substitute Bowler"
@@ -23,7 +23,7 @@
                    FontSize="Medium"/>
         </HorizontalStackLayout>
         <HorizontalStackLayout>
-            <Switch IsToggled="{Binding OperatingBowler.Bowler.IsHidden, Mode=TwoWay}"
+            <Switch IsToggled="{Binding WorkingBowlerWeek.Bowler.IsHidden, Mode=TwoWay}"
                     OnColor="{StaticResource Success}"
                     VerticalOptions="Center"/>
             <Label Text="Hide Bowler"
@@ -41,7 +41,7 @@
                     Command="{Binding SaveBowlerCommand}">
                 <Button.Triggers>
                     <DataTrigger TargetType="Button" 
-                                 Binding="{Binding OperatingBowler.Bowler.Id}"
+                                 Binding="{Binding WorkingBowlerWeek.Bowler.Id}"
                                  Value="0">
                         <Setter Property="Text"
                                 Value="Add Bowler"/>
