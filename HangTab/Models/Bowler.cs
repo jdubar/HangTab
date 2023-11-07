@@ -21,11 +21,11 @@ public class Bowler
     {
         if (string.IsNullOrWhiteSpace(FirstName))
         {
-            return (false, $"{nameof(FirstName)} is required.");
+            return (false, "First name is required.");
         }
         else if (string.IsNullOrWhiteSpace(LastName))
         {
-            return (false, $"{nameof(LastName)} is required.");
+            return (false, "Last name is required.");
         }
         return (true, string.Empty);
     }

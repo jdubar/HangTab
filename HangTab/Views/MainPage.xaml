@@ -122,9 +122,9 @@
                                                     <Label Text="{Binding Bowler.FullName, FallbackValue='Unknown Bowler'}"
                                                            FontAttributes="Bold"/>
                                                     <Label x:Name="HangCount"
-                                                           Text="Tonight's Hangings: 0"/>
+                                                           Text="Hangings Tonight: 0"/>
                                                     <Label x:Name="TotalHangCount"
-                                                           Text="{Binding Bowler.TotalHangings, StringFormat='Total Hangings: {0}'}"/>
+                                                           Text="{Binding Bowler.TotalHangings, StringFormat='Hangings Total: {0}'}"/>
                                                 </VerticalStackLayout>
                                                 <ImageButton HorizontalOptions="End"
                                                              Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlerViewModel}}, Path=HangBowlerCommand}"
@@ -177,9 +177,9 @@
                         <VerticalStackLayout VerticalOptions="Center"
                                              WidthRequest="230">
                             <Label x:Name="BusRideCount"
-                                   Text="Bus Rides: 0"/>
+                                   Text="Bus Rides Tonight: 0"/>
                             <Label x:Name="TotalBusRideCount"
-                                   Text="Total Bus Rides: 0"/>
+                                   Text="Bus Rides Total: 0"/>
                         </VerticalStackLayout>
                         <ImageButton HorizontalOptions="End"
                                      Clicked="OnBusRideClicked">
