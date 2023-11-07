@@ -2,9 +2,10 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:HangTab.ViewModels"
-             x:Class="HangTab.Views.SwitchBowlerPage"
-             x:DataType="vm:BowlersViewModel"
              xmlns:models="clr-namespace:HangTab.Models"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="HangTab.Views.SwitchBowlerPage"
+             x:DataType="vm:BowlerViewModel"
              Title="Switch Bowler">
     <Grid>
         <Grid.RowDefinitions>
@@ -31,14 +32,35 @@
                 <RefreshView IsEnabled="False">
                     <CollectionView Grid.Row="0"
                                     x:Name="BowlerList"
-                                    ItemsSource="{Binding HiddenBowlers}">
+                                    ItemsSource="{Binding HiddenBowlers}"
+                                    SelectionMode="Single"
+                                    SelectedItem="{Binding SelectedBowler}">
+                        <!--SelectionChangedCommand="{Binding BowlerSwitchedCommand}">-->
                         <CollectionView.ItemsLayout>
                             <LinearItemsLayout ItemSpacing="10"
                                                Orientation="Vertical"/>
                         </CollectionView.ItemsLayout>
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:Bowler">
-                                <Label Text="{Binding FullName}"/>
+                                <StackLayout Orientation="Horizontal">
+                                    <Image Source="{Binding ImageUrl}"
+                                           HorizontalOptions="Center"
+                                           VerticalOptions="Center"
+                                           HeightRequest="50"
+                                           Margin="10">
+                                        <Image.Behaviors>
+                                            <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Dark={StaticResource White},
+                                                                                                       Light={StaticResource Gray300}}" />
+                                        </Image.Behaviors>
+                                    </Image>
+                                    <VerticalStackLayout VerticalOptions="Center"
+                                                         WidthRequest="250">
+                                        <Label Text="{Binding FullName, FallbackValue='Unknown Bowler'}"
+                                               FontAttributes="Bold"/>
+                                        <Label x:Name="TotalHangCount"
+                                               Text="{Binding TotalHangings, StringFormat='Total Hangings: {0}'}"/>
+                                    </VerticalStackLayout>
+                                </StackLayout>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                         <CollectionView.EmptyView>

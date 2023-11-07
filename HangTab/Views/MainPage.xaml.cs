@@ -4,9 +4,9 @@ namespace HangTab.Views;
 
 public partial class MainPage : ContentPage
 {
-    private readonly BowlersViewModel _viewModel;
+    private readonly BowlerViewModel _viewModel;
 
-    public MainPage(BowlersViewModel viewModel)
+    public MainPage(BowlerViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;

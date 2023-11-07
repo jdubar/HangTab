@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui;
 
 using HangTab.Data;
+using HangTab.Helpers;
 using HangTab.ViewModels;
 using HangTab.Views;
 
@@ -24,10 +25,9 @@ namespace HangTab
                 });
 
             builder.Services.AddSingleton<DatabaseContext>();
-            builder.Services.AddSingleton<BowlersViewModel>();
+            builder.Services.AddSingleton<BowlerViewModel>();
 
             builder.Services.AddSingleton<MainPage>();
-
             builder.Services.AddSingleton<AddBowlerPage>();
             builder.Services.AddSingleton<SwitchBowlerPage>();
 

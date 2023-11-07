@@ -8,11 +8,11 @@ using HangTab.Views;
 using System.Collections.ObjectModel;
 
 namespace HangTab.ViewModels;
-public partial class BowlersViewModel : BaseViewModel
+public partial class BowlerViewModel : BaseViewModel
 {
     private readonly DatabaseContext _context;
 
-    public BowlersViewModel(DatabaseContext context)
+    public BowlerViewModel(DatabaseContext context)
     {
         _context = context;
     }
@@ -25,6 +25,9 @@ public partial class BowlersViewModel : BaseViewModel
 
     [ObservableProperty]
     private BowlerWeek _operatingBowler = new();
+
+    [ObservableProperty]
+    private Bowler _selectedBowler;
 
     [RelayCommand]
     private async Task AddUpdateBowlerAsync(BowlerWeek? bowler)
@@ -75,12 +78,19 @@ public partial class BowlersViewModel : BaseViewModel
             var bowlers = await _context.GetFilteredAsync<Bowler>(b => b.IsHidden);
             if (bowlers is not null && bowlers.Any())
             {
-                HiddenBowlers.Clear();
-
-                foreach (var bowler in bowlers)
+                var oldItemsIndexes = HiddenBowlers?.Select((item, index) => new { Item = item, Index = index });
+                bowlers?.ToList()?.ForEach(p =>
                 {
-                    HiddenBowlers.Add(bowler);
-                }
+                    var oldItem = oldItemsIndexes?.FirstOrDefault(i => i.Item.Id == p.Id);
+                    if (oldItem != null)
+                    {
+                        HiddenBowlers[oldItem.Index] = p;
+                    }
+                    else
+                    {
+                        HiddenBowlers.Add(p);
+                    }
+                });
             }
         });
     }
@@ -162,15 +172,15 @@ public partial class BowlersViewModel : BaseViewModel
     }
 
     [RelayCommand]
+    private void SetOperatingBowler(BowlerWeek? bowler) =>
+    OperatingBowler = bowler ?? new();
+
+    [RelayCommand]
     private async Task SwitchBowlerAsync(BowlerWeek? bowler)
     {
         SetOperatingBowlerCommand.Execute(bowler);
         await Shell.Current.GoToAsync(nameof(SwitchBowlerPage), true);
     }
-
-    [RelayCommand]
-    private void SetOperatingBowler(BowlerWeek? bowler) =>
-        OperatingBowler = bowler ?? new();
 
     private void RefreshBowler()
     {

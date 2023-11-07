@@ -61,7 +61,7 @@
                                     <SwipeView.LeftItems>
                                         <SwipeItems>
                                             <SwipeItem BackgroundColor="{DynamicResource Info}"
-                                                       Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlersViewModel}}, Path=AddUpdateBowlerCommand}"
+                                                       Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlerViewModel}}, Path=AddUpdateBowlerCommand}"
                                                        CommandParameter="{Binding .}">
                                                 <SwipeItem.IconImageSource>
                                                     <FontImageSource FontFamily="GoogleFont"
@@ -70,7 +70,7 @@
                                                 </SwipeItem.IconImageSource>
                                             </SwipeItem>
                                             <SwipeItem BackgroundColor="{DynamicResource Tertiary}"
-                                                       Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlersViewModel}}, Path=SwitchBowlerCommand}"
+                                                       Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlerViewModel}}, Path=SwitchBowlerCommand}"
                                                        CommandParameter="{Binding .}">
                                                 <SwipeItem.IconImageSource>
                                                     <FontImageSource FontFamily="GoogleFont"
@@ -83,7 +83,7 @@
                                     <SwipeView.RightItems>
                                         <SwipeItems>
                                             <SwipeItem BackgroundColor="{DynamicResource Error}"
-                                                       Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlersViewModel}}, Path=DeleteBowlerCommand}"
+                                                       Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlerViewModel}}, Path=DeleteBowlerCommand}"
                                                        CommandParameter="{Binding Bowler.Id}">
                                                 <SwipeItem.IconImageSource>
                                                     <FontImageSource FontFamily="GoogleFont"
@@ -101,7 +101,7 @@
                                                              IsSub="{Binding IsSub}"
                                                              ImageUrl="{Binding ImageUrl}"
                                                              TotalHangings="{Binding TotalHangings}"
-                                                             HangBowlerCommand="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlersViewModel}}, Path=HangBowlerCommand}"/>-->
+                                                             HangBowlerCommand="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlerViewModel}}, Path=HangBowlerCommand}"/>-->
                                         <Border WidthRequest="380"
                                                 HeightRequest="80"
                                                 StrokeThickness="4"
@@ -127,7 +127,7 @@
                                                            Text="{Binding Bowler.TotalHangings, StringFormat='Total Hangings: {0}'}"/>
                                                 </VerticalStackLayout>
                                                 <ImageButton HorizontalOptions="End"
-                                                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlersViewModel}}, Path=HangBowlerCommand}"
+                                                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlerViewModel}}, Path=HangBowlerCommand}"
                                                              CommandParameter="{Binding .}">
                                                     <ImageButton.Source>
                                                         <FontImageSource FontFamily="GoogleFont"
