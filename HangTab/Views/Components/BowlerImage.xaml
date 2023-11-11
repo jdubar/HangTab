@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Name="this"
+             x:Class="HangTab.Views.Components.BowlerImage">
+    <ContentView.Resources>
+        <ResourceDictionary>
+            <toolkit:BoolToObjectConverter x:Key="BoolToObjectConverter"
+                                           TrueObject="{StaticResource Success}"
+                                           FalseObject="{StaticResource Gray300}"/>
+        </ResourceDictionary>
+    </ContentView.Resources>
+    <Grid BindingContext="{x:Reference this}">
+        <Border IsVisible="{Binding IsSub}"
+                StrokeShape="RoundRectangle 40,40,40,40"
+                ZIndex="2"
+                Margin="0,29,0,0"
+                HeightRequest="20"
+                WidthRequest="47">
+            <Label Text="SUB"
+                   FontSize="12"
+                   HorizontalOptions="Center"
+                   TextColor="{StaticResource Success}"/>
+        </Border>
+        <Image Source="{Binding ImageUrl}"
+               HorizontalOptions="Center"
+               VerticalOptions="Center"
+               HeightRequest="50"
+               Margin="10"
+               ZIndex="1">
+            <Image.Behaviors>
+                <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Dark={StaticResource White},
+                                                                           Light={StaticResource Gray300}}" />
+            </Image.Behaviors>
+        </Image>
+    </Grid>
+</ContentView>
