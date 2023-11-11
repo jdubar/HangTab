@@ -1,0 +1,137 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:vm="clr-namespace:HangTab.ViewModels"
+             xmlns:components="clr-namespace:HangTab.Views.Components"
+             xmlns:icons="clr-namespace:HangTab.Helpers"
+             xmlns:models="clr-namespace:HangTab.Models"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+             x:Class="HangTab.Views.ManageBowlersPage"
+             x:DataType="vm:BowlerViewModel"
+             Title="Manage Bowlers">
+    <ContentPage.Resources>
+        <ResourceDictionary>
+            <toolkit:BoolToObjectConverter x:Key="BoolToObjectConverter"
+                                           TrueObject="{StaticResource Success}"
+                                           FalseObject="{StaticResource Gray300}"/>
+        </ResourceDictionary>
+    </ContentPage.Resources>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Command="{Binding AddUpdateBowlerCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource FontFamily="GoogleFont"
+                                 Glyph="{Static icons:GoogleFont.Person_add}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="80"/>
+            <RowDefinition Height="80"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0"
+              RowDefinitions="Auto, *"
+              ColumnDefinitions="*, Auto">
+            <VerticalStackLayout Grid.RowSpan="2"
+                                 VerticalOptions="Center"
+                                 HorizontalOptions="Center"
+                                 IsVisible="{Binding IsBusy}">
+                <ActivityIndicator IsRunning="True"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"/>
+                <Label Text="{Binding BusyText}"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+
+            <Grid Grid.Row="1"
+                  RowDefinitions="*, Auto">
+                <RefreshView IsEnabled="False">
+                    <CollectionView Grid.Row="0"
+                                    x:Name="BowlerList"
+                                    ItemsSource="{Binding Bowlers}">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout ItemSpacing="10"
+                                               Orientation="Vertical"/>
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="models:BowlerWeek">
+                                <SwipeView>
+                                    <SwipeView.LeftItems>
+                                        <SwipeItems>
+                                            <SwipeItem BackgroundColor="{DynamicResource Info}"
+                                                       Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlerViewModel}}, Path=AddUpdateBowlerCommand}"
+                                                       CommandParameter="{Binding .}">
+                                                <SwipeItem.IconImageSource>
+                                                    <FontImageSource FontFamily="GoogleFont"
+                                                                     Glyph="{Static icons:GoogleFont.Edit}"
+                                                                     Size="20"/>
+                                                </SwipeItem.IconImageSource>
+                                            </SwipeItem>
+                                        </SwipeItems>
+                                    </SwipeView.LeftItems>
+                                    <SwipeView.RightItems>
+                                        <SwipeItems>
+                                            <SwipeItem BackgroundColor="{DynamicResource Error}"
+                                                       Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlerViewModel}}, Path=DeleteBowlerCommand}"
+                                                       CommandParameter="{Binding Bowler.Id}">
+                                                <SwipeItem.IconImageSource>
+                                                    <FontImageSource FontFamily="GoogleFont"
+                                                                     Glyph="{Static icons:GoogleFont.Delete}"
+                                                                     Size="20" />
+                                                </SwipeItem.IconImageSource>
+                                            </SwipeItem>
+                                        </SwipeItems>
+                                    </SwipeView.RightItems>
+                                    <Grid HorizontalOptions="Center"
+                                          VerticalOptions="End"
+                                          HeightRequest="70"
+                                          Margin="5">
+                                        <!--<components:CardView BowlerName="{Binding FullName}"
+                                                             IsSub="{Binding IsSub}"
+                                                             ImageUrl="{Binding ImageUrl}"
+                                                             TotalHangings="{Binding TotalHangings}"
+                                                             HangBowlerCommand="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlerViewModel}}, Path=HangBowlerCommand}"/>-->
+                                        <Border WidthRequest="380"
+                                                HeightRequest="80"
+                                                StrokeThickness="4"
+                                                Stroke="{Binding Bowler.IsSub, Converter={StaticResource BoolToObjectConverter}}">
+                                            <StackLayout Orientation="Horizontal">
+                                                <components:BowlerImage IsSub="{Binding Bowler.IsSub}"
+                                                                        ImageUrl="{Binding Bowler.ImageUrl}"/>
+                                                <VerticalStackLayout VerticalOptions="Center"
+                                                                     WidthRequest="250">
+                                                    <Label Text="{Binding Bowler.FullName, FallbackValue='Unknown Bowler'}"
+                                                           FontAttributes="Bold"/>
+                                                    <Label x:Name="TotalHangCount"
+                                                           Text="{Binding Bowler.TotalHangings, StringFormat='Hangings Total: {0}'}"/>
+                                                </VerticalStackLayout>
+                                            </StackLayout>
+                                        </Border>
+                                    </Grid>
+                                </SwipeView>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                        <CollectionView.EmptyView>
+                            <ContentView>
+                                <VerticalStackLayout HorizontalOptions="Center"
+                                                     VerticalOptions="Center"
+                                                     WidthRequest="380">
+                                    <Label Text="No Bowlers Found"
+                                           FontSize="18"
+                                           FontAttributes="Bold"
+                                           HorizontalTextAlignment="Center"/>
+                                    <Label Text="Try creating a bowler using the button above"
+                                           HorizontalTextAlignment="Center"/>
+                                </VerticalStackLayout>
+                            </ContentView>
+                        </CollectionView.EmptyView>
+                    </CollectionView>
+                </RefreshView>
+            </Grid>
+        </Grid>
+    </Grid>
+</ContentPage>
