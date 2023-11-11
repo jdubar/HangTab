@@ -128,6 +128,39 @@ public partial class BowlerViewModel : BaseViewModel
     }
 
     [RelayCommand]
+    public async Task LoadAllBowlersAsync()
+    {
+        await ExecuteAsync(async () =>
+        {
+            SetWorkingBowlerWeekCommand.Execute(new());
+            Bowlers ??= new ObservableCollection<BowlerWeek>();
+            var bowlers = await _context.GetAllAsync<Bowler>();
+            var weeks = await _context.GetAllAsync<Week>();
+            if (bowlers is not null && bowlers.Any())
+            {
+                Bowlers.Clear();
+
+                foreach (var bowler in bowlers)
+                {
+                    var week = weeks.FirstOrDefault(w => w.BowlerId == bowler.Id);
+                    week ??= new Week()
+                    {
+                        BowlerId = bowler.Id
+                    };
+
+                    var bowlerWeek = new BowlerWeek()
+                    {
+                        Bowler = bowler,
+                        Week = week
+                    };
+                    Bowlers.Add(bowlerWeek);
+                }
+                Bowlers = new ObservableCollection<BowlerWeek>(Bowlers.OrderBy(i => i.Bowler.FullName));
+            }
+        }, "Loading bowlers...");
+    }
+
+    [RelayCommand]
     private async Task SaveBowlerAsync()
     {
         if (WorkingBowlerWeek.Bowler is null)
