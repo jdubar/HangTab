@@ -26,7 +26,7 @@
             <Switch IsToggled="{Binding WorkingBowlerWeek.Bowler.IsHidden, Mode=TwoWay}"
                     OnColor="{StaticResource Success}"
                     VerticalOptions="Center"/>
-            <Label Text="Hide Bowler"
+            <Label Text="Inactive Bowler"
                    VerticalOptions="Center"
                    FontSize="Medium"/>
         </HorizontalStackLayout>

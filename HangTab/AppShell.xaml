@@ -3,12 +3,33 @@
     x:Class="HangTab.AppShell"
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:local="clr-namespace:HangTab.Views"
+    xmlns:icons="clr-namespace:HangTab.Helpers"
+    xmlns:views="clr-namespace:HangTab.Views"
     Shell.FlyoutBehavior="Disabled">
-
-    <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate local:MainPage}"
-        Route="MainPage" />
-
+    <TabBar>
+        <ShellContent Title="Home"
+                      ContentTemplate="{DataTemplate views:MainPage}"
+                      Route="MainPage">
+            <ShellContent.Icon>
+                <FontImageSource FontFamily="GoogleFont"
+                                 Glyph="{x:Static icons:GoogleFont.Home}"/>
+            </ShellContent.Icon>
+        </ShellContent>
+        <ShellContent Title="Bowlers"
+                      ContentTemplate="{DataTemplate views:ManageBowlersPage}"
+                      Route="ManageBowlersPage">
+            <ShellContent.Icon>
+                <FontImageSource FontFamily="GoogleFont"
+                                 Glyph="{x:Static icons:GoogleFont.Account_circle}"/>
+            </ShellContent.Icon>
+        </ShellContent>
+        <ShellContent Title="Settings"
+                      ContentTemplate="{DataTemplate views:SettingsPage}"
+                      Route="SettingsPage">
+            <ShellContent.Icon>
+                <FontImageSource FontFamily="GoogleFont"
+                                 Glyph="{x:Static icons:GoogleFont.Settings}"/>
+            </ShellContent.Icon>
+        </ShellContent>
+    </TabBar>
 </Shell>

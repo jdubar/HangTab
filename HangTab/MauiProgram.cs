@@ -21,13 +21,16 @@ namespace HangTab
                 {
                     fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                     fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                    fonts.AddFont("MaterialIcons-Regular.ttf", "GoogleFont");
+                    fonts.AddFont("MaterialIconsOutlined-Regular.otf", "GoogleFont");
                 });
 
             builder.Services.AddSingleton<DatabaseContext>();
             builder.Services.AddSingleton<BowlerViewModel>();
 
             builder.Services.AddSingleton<MainPage>();
+            builder.Services.AddSingleton<ManageBowlersPage>();
+            builder.Services.AddSingleton<SettingsPage>();
+
             builder.Services.AddSingleton<AddBowlerPage>();
             builder.Services.AddSingleton<SwitchBowlerPage>();
 
