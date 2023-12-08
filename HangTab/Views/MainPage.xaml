@@ -14,22 +14,13 @@
                                            FalseObject="{StaticResource Gray300}"/>
         </ResourceDictionary>
     </ContentPage.Resources>
-    <ContentPage.ToolbarItems>
-        <ToolbarItem Command="{Binding AddUpdateBowlerCommand}">
-            <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="GoogleFont"
-                                 Glyph="{Static icons:GoogleFont.Person_add}" />
-            </ToolbarItem.IconImageSource>
-        </ToolbarItem>
-    </ContentPage.ToolbarItems>
-
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
             <RowDefinition Height="80"/>
             <RowDefinition Height="80"/>
         </Grid.RowDefinitions>
-        
+
         <Grid Grid.Row="0"
               RowDefinitions="Auto, *"
               ColumnDefinitions="*, Auto">
@@ -57,25 +48,15 @@
                         </CollectionView.ItemsLayout>
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="models:BowlerWeek">
-                                <SwipeView>
+                                <SwipeView HeightRequest="80">
                                     <SwipeView.LeftItems>
                                         <SwipeItems>
-                                            <SwipeItem BackgroundColor="{DynamicResource Info}"
-                                                       Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlerViewModel}}, Path=AddUpdateBowlerCommand}"
-                                                       CommandParameter="{Binding .}">
-                                                <SwipeItem.IconImageSource>
-                                                    <FontImageSource FontFamily="GoogleFont"
-                                                                     Glyph="{Static icons:GoogleFont.Edit}"
-                                                                     Size="20"/>
-                                                </SwipeItem.IconImageSource>
-                                            </SwipeItem>
                                             <SwipeItem BackgroundColor="{DynamicResource Tertiary}"
                                                        Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlerViewModel}}, Path=SwitchBowlerCommand}"
                                                        CommandParameter="{Binding .}">
                                                 <SwipeItem.IconImageSource>
                                                     <FontImageSource FontFamily="GoogleFont"
-                                                                     Glyph="{Static icons:GoogleFont.Switch_account}"
-                                                                     Size="20"/>
+                                                                     Glyph="{Static icons:GoogleFont.Switch_account}"/>
                                                 </SwipeItem.IconImageSource>
                                             </SwipeItem>
                                         </SwipeItems>
@@ -144,7 +125,7 @@
                                            FontSize="18"
                                            FontAttributes="Bold"
                                            HorizontalTextAlignment="Center"/>
-                                    <Label Text="Try creating a bowler using the button above"
+                                    <Label Text="Create bowlers on the Bowlers page"
                                            HorizontalTextAlignment="Center"/>
                                 </VerticalStackLayout>
                             </ContentView>
@@ -169,9 +150,9 @@
                         <VerticalStackLayout VerticalOptions="Center"
                                              WidthRequest="230">
                             <Label x:Name="BusRideCount"
-                                   Text="Bus Rides Tonight: 0"/>
+                                   Text="Bus Rides: 0"/>
                             <Label x:Name="TotalBusRideCount"
-                                   Text="Bus Rides Total: 0"/>
+                                   Text="Total: 0"/>
                         </VerticalStackLayout>
                         <ImageButton HorizontalOptions="End"
                                      Clicked="OnBusRideClicked">
@@ -224,37 +205,3 @@
         </Grid>
     </Grid>
 </ContentPage>
-
-
-
-<!--<ScrollView>
-        <VerticalStackLayout
-            Spacing="25"
-            Padding="30,0"
-            VerticalOptions="Center">
-
-            <components:CardView BowlerName="Jason Dubar"/>
-
-            <Label
-                Text="Hello, World!"
-                SemanticProperties.HeadingLevel="Level1"
-                FontSize="32"
-                HorizontalOptions="Center" />
-
-            <Label
-                Text="Welcome to .NET Multi-platform App UI"
-                SemanticProperties.HeadingLevel="Level2"
-                SemanticProperties.Description="Welcome to dot net Multi platform App U I"
-                FontSize="18"
-                HorizontalOptions="Center" />
-
-            <Button
-                x:Name="CounterBtn"
-                Text="Click me"
-                SemanticProperties.Hint="Counts the number of times you click"
-                Clicked="OnCounterClicked"
-                HorizontalOptions="Center" />
-
-        </VerticalStackLayout>
-    </ScrollView>-->
-
