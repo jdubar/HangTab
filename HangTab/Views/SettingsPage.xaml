@@ -4,9 +4,13 @@
              x:Class="HangTab.Views.SettingsPage"
              Title="Settings">
     <VerticalStackLayout>
-        <Label 
-            Text="Welcome to .NET MAUI!"
-            VerticalOptions="Center" 
-            HorizontalOptions="Center" />
+        <Label Text="Delete data"
+               HeightRequest="80"
+               FontSize="Large"
+               Margin="10">
+            <Label.GestureRecognizers>
+                <TapGestureRecognizer Tapped="ClearAllDataOnTap"/>
+            </Label.GestureRecognizers>
+        </Label>
     </VerticalStackLayout>
 </ContentPage>
