@@ -24,7 +24,7 @@
         </HorizontalStackLayout>
         <HorizontalStackLayout>
             <Switch IsToggled="{Binding WorkingBowlerWeek.Bowler.IsHidden, Mode=TwoWay}"
-                    OnColor="{StaticResource Success}"
+                    OnColor="{StaticResource Error}"
                     VerticalOptions="Center"/>
             <Label Text="Inactive Bowler"
                    VerticalOptions="Center"
