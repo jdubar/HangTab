@@ -26,14 +26,7 @@
     </ContentPage.ToolbarItems>
 
     <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="80"/>
-            <RowDefinition Height="80"/>
-        </Grid.RowDefinitions>
-
-        <Grid Grid.Row="0"
-              RowDefinitions="Auto, *"
+        <Grid RowDefinitions="Auto, *"
               ColumnDefinitions="*, Auto">
             <VerticalStackLayout Grid.RowSpan="2"
                                  VerticalOptions="Center"
@@ -105,6 +98,7 @@
                                                            Text="{Binding Bowler.TotalHangings, StringFormat='Hangings Total: {0}'}"/>
                                                 </VerticalStackLayout>
                                                 <Label Text="INACTIVE"
+                                                       FontAttributes="Bold"
                                                        TextColor="{StaticResource Error}"
                                                        VerticalOptions="Center"
                                                        IsVisible="{Binding Bowler.IsHidden}"/>
