@@ -190,17 +190,17 @@ public partial class BowlerViewModel : BaseViewModel
             return;
         }
 
-        if (await _context.GetFilteredAsync<Bowler>(b => b.FirstName == WorkingBowlerWeek.Bowler.FirstName
-                                                         && b.LastName == WorkingBowlerWeek.Bowler.LastName) is not null
-            && WorkingBowlerWeek.Bowler.Id == 0)
+        var busyText = "Updating bowler...";
+        if (WorkingBowlerWeek.Bowler.Id == 0)
         {
-            await Shell.Current.DisplayAlert("Validation Error", "This bowler already exists", "Ok");
-            return;
+            busyText = "Creating bowler...";
+            var find = await _context.GetFilteredAsync<Bowler>(b => b.FirstName == WorkingBowlerWeek.Bowler.FirstName && b.LastName == WorkingBowlerWeek.Bowler.LastName);
+            if (find.Any())
+            {
+                await Shell.Current.DisplayAlert("Validation Error", "This bowler already exists", "Ok");
+                return;
+            }
         }
-
-        var busyText = WorkingBowlerWeek.Bowler.Id == 0
-            ? "Creating bowler..."
-            : "Updating bowler...";
 
         await ExecuteAsync(async () =>
         {
@@ -212,7 +212,6 @@ public partial class BowlerViewModel : BaseViewModel
             else
             {
                 await _context.UpdateItemAsync(WorkingBowlerWeek.Bowler);
-
                 RefreshBowler();
             }
             await Shell.Current.GoToAsync("..", true);
