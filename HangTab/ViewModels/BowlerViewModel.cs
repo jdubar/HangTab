@@ -37,6 +37,21 @@ public partial class BowlerViewModel : BaseViewModel
     }
 
     [RelayCommand]
+    private async Task DropAllTablesAsync()
+    {
+        if (await Shell.Current.DisplayAlert("Delete", "Are you sure you want to delete ALL data?", "Yes", "No"))
+        {
+            await ExecuteAsync(async () =>
+            {
+                await _context.DropTableAsync<Bowler>();
+                await _context.DropTableAsync<Week>();
+                Bowlers.Clear();
+                HiddenBowlers.Clear();
+            });
+        }
+    }
+
+    [RelayCommand]
     private async Task DeleteBowlerAsync(int id)
     {
         if (await Shell.Current.DisplayAlert("Delete", "Are you sure you want to delete this bowler?", "Yes", "No"))
