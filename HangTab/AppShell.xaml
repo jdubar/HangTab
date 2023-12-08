@@ -20,7 +20,7 @@
                       Route="ManageBowlersPage">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="GoogleFont"
-                                 Glyph="{x:Static icons:GoogleFont.Account_circle}"/>
+                                 Glyph="{x:Static icons:GoogleFont.Group}"/>
             </ShellContent.Icon>
         </ShellContent>
         <ShellContent Title="Settings"
