@@ -61,19 +61,6 @@
                                             </SwipeItem>
                                         </SwipeItems>
                                     </SwipeView.LeftItems>
-                                    <SwipeView.RightItems>
-                                        <SwipeItems>
-                                            <SwipeItem BackgroundColor="{DynamicResource Error}"
-                                                       Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlerViewModel}}, Path=DeleteBowlerCommand}"
-                                                       CommandParameter="{Binding Bowler.Id}">
-                                                <SwipeItem.IconImageSource>
-                                                    <FontImageSource FontFamily="GoogleFont"
-                                                                     Glyph="{Static icons:GoogleFont.Delete}"
-                                                                     Size="20" />
-                                                </SwipeItem.IconImageSource>
-                                            </SwipeItem>
-                                        </SwipeItems>
-                                    </SwipeView.RightItems>
                                     <Grid HorizontalOptions="Center"
                                           VerticalOptions="End"
                                           HeightRequest="70"

@@ -5,12 +5,14 @@
              Title="Settings">
     <VerticalStackLayout>
         <Label Text="Delete data"
-               HeightRequest="80"
-               FontSize="Large"
+               HeightRequest="40"
+               FontSize="Title"
                Margin="10">
             <Label.GestureRecognizers>
                 <TapGestureRecognizer Tapped="ClearAllDataOnTap"/>
             </Label.GestureRecognizers>
         </Label>
+        <BoxView BackgroundColor="LightGray"
+                 HeightRequest="1"/>
     </VerticalStackLayout>
 </ContentPage>
