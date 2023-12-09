@@ -30,7 +30,7 @@ public partial class BowlerViewModel : BaseViewModel
     private Bowler _selectedBowler;
 
     [RelayCommand]
-    private async Task AddUpdateBowlerAsync(BowlerWeek? bowler)
+    private async Task AddUpdateBowlerAsync(BowlerWeek bowler)
     {
         SetWorkingBowlerWeekCommand.Execute(bowler);
         await Shell.Current.GoToAsync(nameof(AddBowlerPage), true);
@@ -72,13 +72,15 @@ public partial class BowlerViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private async Task HangBowlerAsync(BowlerWeek? bowler)
+    private async Task HangBowlerAsync(BowlerWeek bowler)
     {
         SetWorkingBowlerWeekCommand.Execute(bowler);
         await ExecuteAsync(async () =>
         {
             WorkingBowlerWeek.Bowler.TotalHangings++;
-            await _context.UpdateItemAsync(WorkingBowlerWeek.Bowler);
+            WorkingBowlerWeek.Week.Hangings++;
+            _ = await _context.UpdateItemAsync(WorkingBowlerWeek.Bowler);
+            _ = await _context.UpdateItemAsync(WorkingBowlerWeek.Week);
 
             RefreshBowler();
         }, "Hanging bowler...");
@@ -206,12 +208,12 @@ public partial class BowlerViewModel : BaseViewModel
         {
             if (WorkingBowlerWeek.Bowler.Id == 0)
             {
-                await _context.AddItemAsync(WorkingBowlerWeek.Bowler);
+                _ = await _context.AddItemAsync(WorkingBowlerWeek.Bowler);
                 Bowlers.Add(WorkingBowlerWeek);
             }
             else
             {
-                await _context.UpdateItemAsync(WorkingBowlerWeek.Bowler);
+                _ = await _context.UpdateItemAsync(WorkingBowlerWeek.Bowler);
                 RefreshBowler();
             }
             await Shell.Current.GoToAsync("..", true);
@@ -219,11 +221,11 @@ public partial class BowlerViewModel : BaseViewModel
     }
 
     [RelayCommand]
-    private void SetWorkingBowlerWeek(BowlerWeek? bowler) =>
-    WorkingBowlerWeek = bowler ?? new();
+    private void SetWorkingBowlerWeek(BowlerWeek bowler) =>
+        WorkingBowlerWeek = bowler ?? new();
 
     [RelayCommand]
-    private async Task SwitchBowlerAsync(BowlerWeek? bowler)
+    private async Task SwitchBowlerAsync(BowlerWeek bowler)
     {
         SetWorkingBowlerWeekCommand.Execute(bowler);
         await Shell.Current.GoToAsync(nameof(SwitchBowlerPage), true);

@@ -82,7 +82,7 @@
                                                     <Label Text="{Binding Bowler.FullName, FallbackValue='Unknown Bowler'}"
                                                            FontAttributes="Bold"/>
                                                     <Label x:Name="HangCount"
-                                                           Text="Hangings: 0"/>
+                                                           Text="{Binding Week.Hangings, StringFormat='Hangings: {0}'}"/>
                                                     <Label x:Name="TotalHangCount"
                                                            Text="{Binding Bowler.TotalHangings, StringFormat='Total: {0}'}"/>
                                                 </VerticalStackLayout>
@@ -179,7 +179,7 @@
                                 </ImageButton.Source>
                                 <ImageButton.Behaviors>
                                     <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Dark={StaticResource White},
-                                                                            Light={StaticResource Gray300}}" />
+                                                                                               Light={StaticResource Gray300}}" />
                                 </ImageButton.Behaviors>
                             </ImageButton>
                             <Label Text="Swipe right to start a new week"
