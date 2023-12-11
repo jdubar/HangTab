@@ -17,11 +17,15 @@
                 ZIndex="2"
                 Margin="0,29,0,0"
                 HeightRequest="20"
-                WidthRequest="47">
+                WidthRequest="47"
+                BackgroundColor="{AppThemeBinding Dark={StaticResource White},
+                                                  Light={StaticResource Gray300}}">
             <Label Text="SUB"
                    FontSize="12"
+                   FontAttributes="Bold"
                    HorizontalOptions="Center"
-                   TextColor="{StaticResource Success}"/>
+                   TextColor="{AppThemeBinding Dark={StaticResource Success},
+                                               Light={StaticResource Black}}"/>
         </Border>
         <Image Source="{Binding ImageUrl}"
                HorizontalOptions="Center"

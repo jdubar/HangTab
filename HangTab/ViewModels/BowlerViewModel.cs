@@ -8,15 +8,8 @@ using HangTab.Views;
 using System.Collections.ObjectModel;
 
 namespace HangTab.ViewModels;
-public partial class BowlerViewModel : BaseViewModel
+public partial class BowlerViewModel(DatabaseContext context) : BaseViewModel
 {
-    private readonly DatabaseContext _context;
-
-    public BowlerViewModel(DatabaseContext context)
-    {
-        _context = context;
-    }
-
     [ObservableProperty]
     private ObservableCollection<BowlerWeek> _bowlers;
 
@@ -24,7 +17,7 @@ public partial class BowlerViewModel : BaseViewModel
     private ObservableCollection<Bowler> _hiddenBowlers;
 
     [ObservableProperty]
-    private BowlerWeek _workingBowlerWeek = new();
+    private BowlerWeek _workingBowlerWeek;
 
     [ObservableProperty]
     private Bowler _selectedBowler;
@@ -43,8 +36,8 @@ public partial class BowlerViewModel : BaseViewModel
         {
             await ExecuteAsync(async () =>
             {
-                await _context.DropTableAsync<Bowler>();
-                await _context.DropTableAsync<Week>();
+                await context.DropTableAsync<Bowler>();
+                await context.DropTableAsync<Week>();
                 Bowlers.Clear();
                 HiddenBowlers.Clear();
             });
@@ -58,7 +51,7 @@ public partial class BowlerViewModel : BaseViewModel
         {
             await ExecuteAsync(async () =>
             {
-                if (await _context.DeleteItemByIdAsync<Bowler>(id))
+                if (await context.DeleteItemByIdAsync<Bowler>(id))
                 {
                     var bowler = Bowlers.FirstOrDefault(b => b.Bowler.Id == id);
                     Bowlers.Remove(bowler);
@@ -79,8 +72,8 @@ public partial class BowlerViewModel : BaseViewModel
         {
             WorkingBowlerWeek.Bowler.TotalHangings++;
             WorkingBowlerWeek.Week.Hangings++;
-            _ = await _context.UpdateItemAsync(WorkingBowlerWeek.Bowler);
-            _ = await _context.UpdateItemAsync(WorkingBowlerWeek.Week);
+            _ = await context.UpdateItemAsync(WorkingBowlerWeek.Bowler);
+            _ = await context.UpdateItemAsync(WorkingBowlerWeek.Week);
 
             RefreshBowler();
         }, "Hanging bowler...");
@@ -91,23 +84,12 @@ public partial class BowlerViewModel : BaseViewModel
     {
         await ExecuteAsync(async () =>
         {
-            HiddenBowlers ??= new ObservableCollection<Bowler>();
-            var bowlers = await _context.GetFilteredAsync<Bowler>(b => b.IsHidden);
+            HiddenBowlers ??= [];
+            var bowlers = await context.GetFilteredAsync<Bowler>(b => b.IsHidden);
+            var weeks = await context.GetAllAsync<Week>();
             if (bowlers is not null && bowlers.Any())
             {
-                var oldItemsIndexes = HiddenBowlers?.Select((bowler, index) => new { Bowler = bowler, Index = index });
-                bowlers.ToList().ForEach(bowler =>
-                {
-                    var oldItem = oldItemsIndexes?.FirstOrDefault(i => i.Bowler.Id == bowler.Id);
-                    if (oldItem == null)
-                    {
-                        HiddenBowlers.Add(bowler);
-                    }
-                    else
-                    {
-                        HiddenBowlers[oldItem.Index] = bowler;
-                    }
-                });
+                LoadBowlers(bowlers, weeks);
             }
         });
     }
@@ -118,28 +100,12 @@ public partial class BowlerViewModel : BaseViewModel
         await ExecuteAsync(async () =>
         {
             SetWorkingBowlerWeekCommand.Execute(new());
-            Bowlers ??= new ObservableCollection<BowlerWeek>();
-            var bowlers = await _context.GetFilteredAsync<Bowler>(b => !b.IsHidden);
-            var weeks = await _context.GetAllAsync<Week>();
+            Bowlers ??= [];
+            var bowlers = await context.GetFilteredAsync<Bowler>(b => !b.IsHidden);
+            var weeks = await context.GetAllAsync<Week>();
             if (bowlers is not null && bowlers.Any())
             {
-                Bowlers.Clear();
-
-                foreach (var bowler in bowlers)
-                {
-                    var week = weeks.FirstOrDefault(w => w.BowlerId == bowler.Id);
-                    week ??= new Week()
-                    {
-                        BowlerId = bowler.Id
-                    };
-
-                    var bowlerWeek = new BowlerWeek()
-                    {
-                        Bowler = bowler,
-                        Week = week
-                    };
-                    Bowlers.Add(bowlerWeek);
-                }
+                LoadBowlers(bowlers, weeks);
             }
         }, "Loading bowlers...");
     }
@@ -150,28 +116,12 @@ public partial class BowlerViewModel : BaseViewModel
         await ExecuteAsync(async () =>
         {
             SetWorkingBowlerWeekCommand.Execute(new());
-            Bowlers ??= new ObservableCollection<BowlerWeek>();
-            var bowlers = await _context.GetAllAsync<Bowler>();
-            var weeks = await _context.GetAllAsync<Week>();
+            Bowlers ??= [];
+            var bowlers = await context.GetAllAsync<Bowler>();
+            var weeks = await context.GetAllAsync<Week>();
             if (bowlers is not null && bowlers.Any())
             {
-                Bowlers.Clear();
-
-                foreach (var bowler in bowlers)
-                {
-                    var week = weeks.FirstOrDefault(w => w.BowlerId == bowler.Id);
-                    week ??= new Week()
-                    {
-                        BowlerId = bowler.Id
-                    };
-
-                    var bowlerWeek = new BowlerWeek()
-                    {
-                        Bowler = bowler,
-                        Week = week
-                    };
-                    Bowlers.Add(bowlerWeek);
-                }
+                LoadBowlers(bowlers, weeks);
                 Bowlers = new ObservableCollection<BowlerWeek>(Bowlers.OrderBy(i => i.Bowler.FullName));
             }
         }, "Loading bowlers...");
@@ -196,7 +146,7 @@ public partial class BowlerViewModel : BaseViewModel
         if (WorkingBowlerWeek.Bowler.Id == 0)
         {
             busyText = "Creating bowler...";
-            var find = await _context.GetFilteredAsync<Bowler>(b => b.FirstName == WorkingBowlerWeek.Bowler.FirstName && b.LastName == WorkingBowlerWeek.Bowler.LastName);
+            var find = await context.GetFilteredAsync<Bowler>(b => b.FirstName == WorkingBowlerWeek.Bowler.FirstName && b.LastName == WorkingBowlerWeek.Bowler.LastName);
             if (find.Any())
             {
                 await Shell.Current.DisplayAlert("Validation Error", "This bowler already exists", "Ok");
@@ -208,12 +158,12 @@ public partial class BowlerViewModel : BaseViewModel
         {
             if (WorkingBowlerWeek.Bowler.Id == 0)
             {
-                _ = await _context.AddItemAsync(WorkingBowlerWeek.Bowler);
+                _ = await context.AddItemAsync(WorkingBowlerWeek.Bowler);
                 Bowlers.Add(WorkingBowlerWeek);
             }
             else
             {
-                _ = await _context.UpdateItemAsync(WorkingBowlerWeek.Bowler);
+                _ = await context.UpdateItemAsync(WorkingBowlerWeek.Bowler);
                 RefreshBowler();
             }
             await Shell.Current.GoToAsync("..", true);
@@ -229,6 +179,27 @@ public partial class BowlerViewModel : BaseViewModel
     {
         SetWorkingBowlerWeekCommand.Execute(bowler);
         await Shell.Current.GoToAsync(nameof(SwitchBowlerPage), true);
+    }
+
+    private void LoadBowlers(IEnumerable<Bowler> bowlers, IEnumerable<Week> weeks)
+    {
+        Bowlers.Clear();
+
+        foreach (var bowler in bowlers)
+        {
+            var week = weeks.FirstOrDefault(w => w.BowlerId == bowler.Id);
+            week ??= new Week()
+            {
+                BowlerId = bowler.Id
+            };
+
+            var bowlerWeek = new BowlerWeek()
+            {
+                Bowler = bowler,
+                Week = week
+            };
+            Bowlers.Add(bowlerWeek);
+        }
     }
 
     private void RefreshBowler()
