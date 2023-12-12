@@ -7,8 +7,8 @@ public partial class SwitchBowlerPage : ContentPage
     private readonly BowlerViewModel _viewModel;
 
     public SwitchBowlerPage(BowlerViewModel viewModel)
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
         BindingContext = viewModel;
         _viewModel = viewModel;
     }

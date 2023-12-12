@@ -44,19 +44,20 @@
                   RowDefinitions="*, Auto">
                 <CollectionView Grid.Row="0"
                                 x:Name="BowlerList"
-                                ItemsSource="{Binding Bowlers}">
+                                ItemsSource="{Binding Bowlers}"
+                                Margin="0,10,0,0">
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout ItemSpacing="10"
-                                            Orientation="Vertical"/>
+                                           Orientation="Vertical"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:BowlerWeek">
-                            <SwipeView>
+                            <SwipeView HeightRequest="80">
                                 <SwipeView.LeftItems>
                                     <SwipeItems>
                                         <SwipeItem BackgroundColor="{DynamicResource Info}"
-                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlerViewModel}}, Path=AddUpdateBowlerCommand}"
-                                                    CommandParameter="{Binding .}">
+                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlerViewModel}}, Path=AddUpdateBowlerCommand}"
+                                                   CommandParameter="{Binding .}">
                                             <SwipeItem.IconImageSource>
                                                 <FontImageSource FontFamily="GoogleFont"
                                                                     Glyph="{Static icons:GoogleFont.Edit}"
@@ -68,39 +69,39 @@
                                 <SwipeView.RightItems>
                                     <SwipeItems>
                                         <SwipeItem BackgroundColor="{DynamicResource Error}"
-                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlerViewModel}}, Path=DeleteBowlerCommand}"
-                                                    CommandParameter="{Binding Bowler.Id}">
+                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlerViewModel}}, Path=DeleteBowlerCommand}"
+                                                   CommandParameter="{Binding Bowler.Id}">
                                             <SwipeItem.IconImageSource>
                                                 <FontImageSource FontFamily="GoogleFont"
-                                                                    Glyph="{Static icons:GoogleFont.Delete}"
-                                                                    Size="20" />
+                                                                 Glyph="{Static icons:GoogleFont.Delete}"
+                                                                 Size="20" />
                                             </SwipeItem.IconImageSource>
                                         </SwipeItem>
                                     </SwipeItems>
                                 </SwipeView.RightItems>
                                 <Grid HorizontalOptions="Center"
-                                        VerticalOptions="End"
-                                        HeightRequest="70"
-                                        Margin="5">
-                                    <Border WidthRequest="380"
-                                            HeightRequest="80"
+                                      VerticalOptions="End"
+                                      HeightRequest="80">
+                                    <Border WidthRequest="393"
+                                            HeightRequest="81"
                                             StrokeThickness="4"
+                                            BackgroundColor="{AppThemeBinding Dark={StaticResource Black}, Light={StaticResource White}}"
                                             Stroke="{Binding Bowler.IsSub, Converter={StaticResource BoolToObjectConverter}}">
                                         <StackLayout Orientation="Horizontal">
                                             <components:BowlerImage IsSub="{Binding Bowler.IsSub}"
                                                                     ImageUrl="{Binding Bowler.ImageUrl}"/>
                                             <VerticalStackLayout VerticalOptions="Center"
-                                                                    WidthRequest="200">
+                                                                 WidthRequest="200">
                                                 <Label Text="{Binding Bowler.FullName, FallbackValue='Unknown Bowler'}"
-                                                        FontAttributes="Bold"/>
+                                                       FontAttributes="Bold"/>
                                                 <Label x:Name="TotalHangCount"
-                                                        Text="{Binding Bowler.TotalHangings, StringFormat='Hangings Total: {0}'}"/>
+                                                       Text="{Binding Bowler.TotalHangings, StringFormat='Hangings Total: {0}'}"/>
                                             </VerticalStackLayout>
                                             <Label Text="INACTIVE"
-                                                    FontAttributes="Bold"
-                                                    TextColor="{StaticResource Error}"
-                                                    VerticalOptions="Center"
-                                                    IsVisible="{Binding Bowler.IsHidden}"/>
+                                                   FontAttributes="Bold"
+                                                   TextColor="{StaticResource Error}"
+                                                   VerticalOptions="Center"
+                                                   IsVisible="{Binding Bowler.IsHidden}"/>
                                         </StackLayout>
                                     </Border>
                                 </Grid>
@@ -110,14 +111,14 @@
                     <CollectionView.EmptyView>
                         <ContentView>
                             <VerticalStackLayout HorizontalOptions="Center"
-                                                    VerticalOptions="Center"
-                                                    WidthRequest="380">
+                                                 VerticalOptions="Center"
+                                                 WidthRequest="380">
                                 <Label Text="No Bowlers Found"
-                                        FontSize="18"
-                                        FontAttributes="Bold"
-                                        HorizontalTextAlignment="Center"/>
+                                       FontSize="18"
+                                       FontAttributes="Bold"
+                                       HorizontalTextAlignment="Center"/>
                                 <Label Text="Try creating a bowler using the button above"
-                                        HorizontalTextAlignment="Center"/>
+                                       HorizontalTextAlignment="Center"/>
                             </VerticalStackLayout>
                         </ContentView>
                     </CollectionView.EmptyView>

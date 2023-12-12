@@ -1,7 +1,6 @@
 ﻿using CommunityToolkit.Maui;
 
 using HangTab.Data;
-using HangTab.Helpers;
 using HangTab.ViewModels;
 using HangTab.Views;
 

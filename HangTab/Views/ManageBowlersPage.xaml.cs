@@ -7,8 +7,8 @@ public partial class ManageBowlersPage : ContentPage
     private readonly BowlerViewModel _viewModel;
 
     public ManageBowlersPage(BowlerViewModel viewModel)
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
         BindingContext = viewModel;
         _viewModel = viewModel;
     }

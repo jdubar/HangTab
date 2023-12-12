@@ -20,7 +20,7 @@ public partial class BowlerImage : ContentView
     }
 
     public BowlerImage()
-	{
-		InitializeComponent();
-	}
+    {
+        InitializeComponent();
+    }
 }

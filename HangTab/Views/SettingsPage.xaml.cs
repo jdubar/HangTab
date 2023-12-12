@@ -7,10 +7,10 @@ public partial class SettingsPage : ContentPage
     private readonly BowlerViewModel _viewModel;
 
     public SettingsPage(BowlerViewModel viewModel)
-	{
-		InitializeComponent();
+    {
+        InitializeComponent();
         _viewModel = viewModel;
-	}
+    }
 
     private void ClearAllDataOnTap(object sender, TappedEventArgs e)
     {
