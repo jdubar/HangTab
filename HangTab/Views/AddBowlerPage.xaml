@@ -4,7 +4,6 @@
              xmlns:vm="clr-namespace:HangTab.ViewModels"
              x:DataType="vm:BowlerViewModel"
              x:Class="HangTab.Views.AddBowlerPage">
-    
     <StackLayout Spacing="5" Padding="15" Margin="10">
         <Entry Text="{Binding WorkingBowlerWeek.Bowler.FirstName, Mode=TwoWay}"
                FontSize="Medium"
@@ -16,7 +15,8 @@
                Margin="0"/>
         <HorizontalStackLayout>
             <Switch IsToggled="{Binding WorkingBowlerWeek.Bowler.IsSub, Mode=TwoWay}"
-                    OnColor="{StaticResource Success}"
+                    OnColor="{DynamicResource Success}"
+                    ThumbColor="{StaticResource Primary}"
                     VerticalOptions="Center"/>
             <Label Text="Substitute Bowler"
                    VerticalOptions="Center"
@@ -24,7 +24,8 @@
         </HorizontalStackLayout>
         <HorizontalStackLayout>
             <Switch IsToggled="{Binding WorkingBowlerWeek.Bowler.IsHidden, Mode=TwoWay}"
-                    OnColor="{StaticResource Error}"
+                    OnColor="{DynamicResource Error}"
+                    ThumbColor="{StaticResource Primary}"
                     VerticalOptions="Center"/>
             <Label Text="Inactive Bowler"
                    VerticalOptions="Center"
