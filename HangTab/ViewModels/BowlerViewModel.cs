@@ -22,6 +22,8 @@ public partial class BowlerViewModel(DatabaseContext context) : BaseViewModel
     [ObservableProperty]
     private Bowler _selectedBowler;
 
+    private int WorkingWeek { get; set; }
+
     [RelayCommand]
     private async Task AddUpdateBowlerAsync(BowlerWeek bowler)
     {
@@ -65,15 +67,21 @@ public partial class BowlerViewModel(DatabaseContext context) : BaseViewModel
     }
 
     [RelayCommand]
-    private async Task HangBowlerAsync(BowlerWeek bowler)
+    private async Task HangBowlerAsync(BowlerWeek bowlerWeek)
     {
-        SetWorkingBowlerWeekCommand.Execute(bowler);
+        SetWorkingBowlerWeekCommand.Execute(bowlerWeek);
         await ExecuteAsync(async () =>
         {
             WorkingBowlerWeek.Bowler.TotalHangings++;
             WorkingBowlerWeek.Week.Hangings++;
+            WorkingBowlerWeek.Week.WeekNumber = WorkingWeek;
+
             _ = await context.UpdateItemAsync(WorkingBowlerWeek.Bowler);
-            _ = await context.UpdateItemAsync(WorkingBowlerWeek.Week);
+
+            var weeks = await context.GetFilteredAsync<Week>(w => w.WeekNumber == WorkingWeek && w.BowlerId == WorkingBowlerWeek.Bowler.Id);
+            _ = weeks is not null && weeks.Any()
+                ? await context.UpdateItemAsync(WorkingBowlerWeek.Week)
+                : await context.AddItemAsync(WorkingBowlerWeek.Week);
 
             RefreshBowler();
         }, "Hanging bowler...");
@@ -99,10 +107,11 @@ public partial class BowlerViewModel(DatabaseContext context) : BaseViewModel
     {
         await ExecuteAsync(async () =>
         {
+            await SetWorkingWeek(context);
             SetWorkingBowlerWeekCommand.Execute(new());
             Bowlers ??= [];
             var bowlers = await context.GetFilteredAsync<Bowler>(b => !b.IsHidden);
-            var weeks = await context.GetAllAsync<Week>();
+            var weeks = await context.GetFilteredAsync<Week>(weeks => weeks.WeekNumber == WorkingWeek);
             if (bowlers is not null && bowlers.Any())
             {
                 LoadBowlers(bowlers, weeks);
@@ -171,8 +180,8 @@ public partial class BowlerViewModel(DatabaseContext context) : BaseViewModel
     }
 
     [RelayCommand]
-    private void SetWorkingBowlerWeek(BowlerWeek bowler) =>
-        WorkingBowlerWeek = bowler ?? new();
+    private void SetWorkingBowlerWeek(BowlerWeek bowlerWeek) =>
+        WorkingBowlerWeek = bowlerWeek ?? new();
 
     [RelayCommand]
     private async Task SwitchBowlerAsync(BowlerWeek bowler)
@@ -190,7 +199,9 @@ public partial class BowlerViewModel(DatabaseContext context) : BaseViewModel
             var week = weeks.FirstOrDefault(w => w.BowlerId == bowler.Id);
             week ??= new Week()
             {
-                BowlerId = bowler.Id
+                WeekNumber = WorkingWeek,
+                BowlerId = bowler.Id,
+                Hangings = 0
             };
 
             var bowlerWeek = new BowlerWeek()
@@ -212,5 +223,13 @@ public partial class BowlerViewModel(DatabaseContext context) : BaseViewModel
         Bowlers.Insert(index, bowlerCopy);
 
         SetWorkingBowlerWeekCommand.Execute(new());
+    }
+
+    private async Task SetWorkingWeek(DatabaseContext context)
+    {
+        var allWeeks = await context.GetAllAsync<Week>();
+        WorkingWeek = allWeeks is not null && allWeeks.Any()
+            ? allWeeks.OrderBy(w => w.WeekNumber).Last().WeekNumber
+            : 1;
     }
 }
