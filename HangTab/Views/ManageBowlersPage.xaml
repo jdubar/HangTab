@@ -4,10 +4,9 @@
              xmlns:vm="clr-namespace:HangTab.ViewModels"
              xmlns:components="clr-namespace:HangTab.Views.Components"
              xmlns:icons="clr-namespace:HangTab.Helpers"
-             xmlns:models="clr-namespace:HangTab.Models"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="HangTab.Views.ManageBowlersPage"
-             x:DataType="vm:BowlerViewModel"
+             x:DataType="vm:MainViewModel"
              Title="Manage Bowlers">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -51,12 +50,12 @@
                                            Orientation="Vertical"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="models:BowlerWeek">
+                        <DataTemplate x:DataType="vm:BowlerViewModel">
                             <SwipeView HeightRequest="80">
                                 <SwipeView.LeftItems>
                                     <SwipeItems>
                                         <SwipeItem BackgroundColor="{DynamicResource Info}"
-                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlerViewModel}}, Path=AddUpdateBowlerCommand}"
+                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=AddUpdateBowlerCommand}"
                                                    CommandParameter="{Binding .}">
                                             <SwipeItem.IconImageSource>
                                                 <FontImageSource FontFamily="GoogleFont"
@@ -69,7 +68,7 @@
                                 <SwipeView.RightItems>
                                     <SwipeItems>
                                         <SwipeItem BackgroundColor="{DynamicResource Error}"
-                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlerViewModel}}, Path=DeleteBowlerCommand}"
+                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=DeleteBowlerCommand}"
                                                    CommandParameter="{Binding Bowler.Id}">
                                             <SwipeItem.IconImageSource>
                                                 <FontImageSource FontFamily="GoogleFont"

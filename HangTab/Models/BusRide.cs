@@ -5,21 +5,19 @@ using System.Runtime.CompilerServices;
 
 namespace HangTab.Models;
 
-[Table("bowlerweek")]
-public class BowlerWeek : INotifyPropertyChanged
+[Table("busride")]
+public class BusRide : INotifyPropertyChanged
 {
-    private int _hangings;
+    private int _totalBusRides;
 
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
-    public int WeekNumber { get; set; }
-    public int BowlerId { get; set; }
-    public int Hangings
+    public int TotalBusRides
     {
-        get => _hangings;
+        get => _totalBusRides;
         set
         {
-            _hangings = value;
+            _totalBusRides = value;
             OnPropertyChanged();
         }
     }

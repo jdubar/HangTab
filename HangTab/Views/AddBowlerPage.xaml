@@ -2,19 +2,19 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:vm="clr-namespace:HangTab.ViewModels"
-             x:DataType="vm:BowlerViewModel"
+             x:DataType="vm:MainViewModel"
              x:Class="HangTab.Views.AddBowlerPage">
     <StackLayout Spacing="5" Padding="15" Margin="10">
-        <Entry Text="{Binding WorkingBowlerWeek.Bowler.FirstName, Mode=TwoWay}"
+        <Entry Text="{Binding WorkingBowlerViewModel.Bowler.FirstName, Mode=TwoWay}"
                FontSize="Medium"
                Placeholder="First Name"
                Margin="0"/>
-        <Entry Text="{Binding WorkingBowlerWeek.Bowler.LastName, Mode=TwoWay}"
+        <Entry Text="{Binding WorkingBowlerViewModel.Bowler.LastName, Mode=TwoWay}"
                FontSize="Medium"
                Placeholder="Last Name"
                Margin="0"/>
         <HorizontalStackLayout>
-            <Switch IsToggled="{Binding WorkingBowlerWeek.Bowler.IsSub, Mode=TwoWay}"
+            <Switch IsToggled="{Binding WorkingBowlerViewModel.Bowler.IsSub, Mode=TwoWay}"
                     OnColor="{DynamicResource Success}"
                     ThumbColor="{StaticResource Primary}"
                     VerticalOptions="Center"/>
@@ -23,7 +23,7 @@
                    FontSize="Medium"/>
         </HorizontalStackLayout>
         <HorizontalStackLayout>
-            <Switch IsToggled="{Binding WorkingBowlerWeek.Bowler.IsHidden, Mode=TwoWay}"
+            <Switch IsToggled="{Binding WorkingBowlerViewModel.Bowler.IsHidden, Mode=TwoWay}"
                     OnColor="{DynamicResource Error}"
                     ThumbColor="{StaticResource Primary}"
                     VerticalOptions="Center"/>
@@ -42,7 +42,7 @@
                     Command="{Binding SaveBowlerCommand}">
                 <Button.Triggers>
                     <DataTrigger TargetType="Button" 
-                                 Binding="{Binding WorkingBowlerWeek.Bowler.Id}"
+                                 Binding="{Binding WorkingBowlerViewModel.Bowler.Id}"
                                  Value="0">
                         <Setter Property="Text"
                                 Value="Add Bowler"/>

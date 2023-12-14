@@ -4,9 +4,9 @@ namespace HangTab.Views;
 
 public partial class MainPage : ContentPage
 {
-    private readonly BowlerViewModel _viewModel;
+    private readonly MainViewModel _viewModel;
 
-    public MainPage(BowlerViewModel viewModel)
+    public MainPage(MainViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;
@@ -17,10 +17,5 @@ public partial class MainPage : ContentPage
     {
         base.OnAppearing();
         await _viewModel.LoadMainBowlersAsync();
-    }
-
-    private void OnBusRideClicked(object sender, EventArgs e)
-    {
-        BowlerList.ScrollTo(0);
     }
 }

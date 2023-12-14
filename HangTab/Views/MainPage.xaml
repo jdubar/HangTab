@@ -3,11 +3,10 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:components="clr-namespace:HangTab.Views.Components"
              xmlns:icons="clr-namespace:HangTab.Helpers"
-             xmlns:models="clr-namespace:HangTab.Models"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:vm="clr-namespace:HangTab.ViewModels"
              x:Class="HangTab.Views.MainPage"
-             x:DataType="vm:BowlerViewModel">
+             x:DataType="vm:MainViewModel">
     <ContentPage.Resources>
         <ResourceDictionary>
             <toolkit:BoolToObjectConverter x:Key="BoolToObjectConverter"
@@ -48,12 +47,12 @@
                                             Orientation="Vertical"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="models:BowlerWeek">
+                        <DataTemplate x:DataType="vm:BowlerViewModel">
                             <SwipeView HeightRequest="80">
                                 <SwipeView.LeftItems>
                                     <SwipeItems>
                                         <SwipeItem BackgroundColor="{DynamicResource Tertiary}"
-                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlerViewModel}}, Path=SwitchBowlerCommand}"
+                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=SwitchBowlerCommand}"
                                                    CommandParameter="{Binding .}">
                                             <SwipeItem.IconImageSource>
                                                 <FontImageSource FontFamily="GoogleFont"
@@ -69,7 +68,7 @@
                                                             IsSub="{Binding IsSub}"
                                                             ImageUrl="{Binding ImageUrl}"
                                                             TotalHangings="{Binding TotalHangings}"
-                                                            HangBowlerCommand="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlerViewModel}}, Path=HangBowlerCommand}"/>-->
+                                                            HangBowlerCommand="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=HangBowlerCommand}"/>-->
                                     <Border WidthRequest="393"
                                             HeightRequest="81"
                                             StrokeThickness="4"
@@ -83,11 +82,11 @@
                                                                  WidthRequest="250">
                                                 <Label Text="{Binding Bowler.FullName, FallbackValue='Unknown Bowler'}"
                                                        FontAttributes="Bold"/>
-                                                <Label Text="{Binding Week.Hangings, StringFormat='Hangings: {0}'}"/>
+                                                <Label Text="{Binding BowlerWeek.Hangings, StringFormat='Hangings: {0}'}"/>
                                                 <Label Text="{Binding Bowler.TotalHangings, StringFormat='Total: {0}'}"/>
                                             </VerticalStackLayout>
                                             <ImageButton HorizontalOptions="End"
-                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:BowlerViewModel}}, Path=HangBowlerCommand}"
+                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=HangBowlerCommand}"
                                                          CommandParameter="{Binding .}">
                                                 <ImageButton.Source>
                                                     <FontImageSource FontFamily="GoogleFont"
@@ -135,13 +134,11 @@
                                Margin="15,15,15,25"/>
                         <VerticalStackLayout VerticalOptions="Center"
                                              WidthRequest="230">
-                            <Label x:Name="BusRideCount"
-                                   Text="Bus Rides: 0"/>
-                            <Label x:Name="TotalBusRideCount"
-                                   Text="Total: 0"/>
+                            <Label Text="{Binding BusRides, StringFormat='Bus Rides: {0}'}"/>
+                            <Label Text="{Binding TotalBusRides, StringFormat='Total: {0}'}"/>
                         </VerticalStackLayout>
                         <ImageButton HorizontalOptions="End"
-                                     Clicked="OnBusRideClicked">
+                                     Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=BusRideCommand}">
                             <ImageButton.Source>
                                 <FontImageSource FontFamily="GoogleFont"
                                                  Glyph="{Static icons:GoogleFont.Add_circle}" />

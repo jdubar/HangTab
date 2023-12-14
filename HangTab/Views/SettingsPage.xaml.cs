@@ -4,9 +4,9 @@ namespace HangTab.Views;
 
 public partial class SettingsPage : ContentPage
 {
-    private readonly BowlerViewModel _viewModel;
+    private readonly MainViewModel _viewModel;
 
-    public SettingsPage(BowlerViewModel viewModel)
+    public SettingsPage(MainViewModel viewModel)
     {
         InitializeComponent();
         _viewModel = viewModel;

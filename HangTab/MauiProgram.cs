@@ -24,7 +24,7 @@ namespace HangTab
                 });
 
             builder.Services.AddSingleton<DatabaseContext>();
-            builder.Services.AddSingleton<BowlerViewModel>();
+            builder.Services.AddSingleton<MainViewModel>();
 
             builder.Services.AddSingleton<MainPage>();
             builder.Services.AddSingleton<ManageBowlersPage>();
