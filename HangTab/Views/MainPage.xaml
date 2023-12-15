@@ -157,8 +157,9 @@
                        HeightRequest="70">
                 <SwipeView.LeftItems>
                     <SwipeItems>
-                        <SwipeItem Text="Starting..."
-					               BackgroundColor="{StaticResource Success}"/>
+                        <SwipeItem Text="Starting new week..."
+					               BackgroundColor="{StaticResource Success}"
+                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=StartNewWeekCommand}"/>
                     </SwipeItems>
                 </SwipeView.LeftItems>
                 <Grid HorizontalOptions="Center"

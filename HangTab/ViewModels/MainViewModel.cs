@@ -135,9 +135,9 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
     {
         await ExecuteAsync(async () =>
         {
-            await SetWorkingWeek(context);
+            await SetWorkingWeekAsync(context);
 
-            await LoadBusRides();
+            await LoadBusRidesAsync();
             BusRides = WorkingBusRideViewModel.BusRideWeek.BusRides;
             TotalBusRides = WorkingBusRideViewModel.BusRide.TotalBusRides;
 
@@ -170,21 +170,29 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
     }
 
     [RelayCommand]
-    public async Task LoadBusRides()
+    public async Task LoadBusRidesAsync()
     {
         await ExecuteAsync(async () =>
         {
             SetWorkingBusRideViewModelCommand.Execute(new());
             var rides = await context.GetAllAsync<BusRide>();
+            if (rides.Any())
+            {
+                WorkingBusRideViewModel.BusRide = rides.First();
+            }
+            else
+            {
+                _ = await context.AddItemAsync(WorkingBusRideViewModel.BusRide);
+                rides = await context.GetAllAsync<BusRide>();
+            }
             var weeks = await context.GetFilteredAsync<BusRideWeek>(week => week.WeekNumber == WorkingWeek);
-            if (rides is not null && rides.Any())
+            if (weeks.Any())
             {
                 WorkingBusRideViewModel.BusRide = rides.First(br => br.Id == weeks.First().Id);
                 WorkingBusRideViewModel.BusRideWeek = weeks.First();
             }
             else
             {
-                _ = await context.AddItemAsync(WorkingBusRideViewModel.BusRide);
                 WorkingBusRideViewModel.BusRideWeek.BusRideId = WorkingBusRideViewModel.BusRide.Id;
                 WorkingBusRideViewModel.BusRideWeek.WeekNumber = WorkingWeek;
                 _ = await context.AddItemAsync(WorkingBusRideViewModel.BusRideWeek);
@@ -243,6 +251,16 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
         WorkingBusRideViewModel = viewModel ?? new();
 
     [RelayCommand]
+    private async Task StartNewWeekAsync()
+    {
+        await ExecuteAsync(async () =>
+        {
+            WorkingWeek++;
+            await LoadMainBowlersAsync();
+        }, "Starting new week...");
+    }
+
+    [RelayCommand]
     private async Task SwitchBowlerAsync(BowlerViewModel bowler)
     {
         SetWorkingBowlerViewModelCommand.Execute(bowler);
@@ -272,11 +290,14 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
         }
     }
 
-    private async Task SetWorkingWeek(DatabaseContext context)
+    private async Task SetWorkingWeekAsync(DatabaseContext context)
     {
-        var allWeeks = await context.GetAllAsync<BowlerWeek>();
-        WorkingWeek = allWeeks is not null && allWeeks.Any()
-            ? allWeeks.OrderBy(w => w.WeekNumber).Last().WeekNumber
-            : 1;
+        if (WorkingWeek == 0)
+        {
+            var allWeeks = await context.GetAllAsync<BowlerWeek>();
+            WorkingWeek = allWeeks is not null && allWeeks.Any()
+                ? allWeeks.OrderBy(w => w.WeekNumber).Last().WeekNumber
+                : 1;
+        }
     }
 }
