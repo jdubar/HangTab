@@ -14,7 +14,7 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
     private ObservableCollection<BowlerViewModel> _bowlers;
 
     [ObservableProperty]
-    private ObservableCollection<Bowler> _hiddenBowlers;
+    private ObservableCollection<Bowler> _switchBowlers;
 
     [ObservableProperty]
     private BowlerViewModel _workingBowlerViewModel;
@@ -71,7 +71,7 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
                 await context.DropTableAsync<BowlerWeek>();
                 await context.DropTableAsync<BusRide>();
                 Bowlers.Clear();
-                HiddenBowlers.Clear();
+                SwitchBowlers.Clear();
             });
         }
     }
@@ -116,12 +116,29 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
     }
 
     [RelayCommand]
-    public async Task LoadHiddenBowlersAsync()
+    public async Task LoadAllBowlersAsync()
     {
         await ExecuteAsync(async () =>
         {
-            HiddenBowlers ??= [];
-            var bowlers = await context.GetFilteredAsync<Bowler>(b => b.IsHidden);
+            SetWorkingBowlerViewModelCommand.Execute(new());
+            Bowlers ??= [];
+            var bowlers = await context.GetAllAsync<Bowler>();
+            var weeks = await context.GetAllAsync<BowlerWeek>();
+            if (bowlers is not null && bowlers.Any())
+            {
+                LoadBowlers(bowlers, weeks);
+                Bowlers = new ObservableCollection<BowlerViewModel>(Bowlers.OrderBy(i => i.Bowler.FullName));
+            }
+        }, "Loading bowlers...");
+    }
+
+    [RelayCommand]
+    public async Task LoadSwitchBowlersAsync()
+    {
+        await ExecuteAsync(async () =>
+        {
+            SwitchBowlers ??= [];
+            var bowlers = await context.GetFilteredAsync<Bowler>(b => b.Id != WorkingBowlerViewModel.Bowler.Id && !b.IsHidden);
             var weeks = await context.GetAllAsync<BowlerWeek>();
             if (bowlers is not null && bowlers.Any())
             {
@@ -148,23 +165,6 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
             if (bowlers is not null && bowlers.Any())
             {
                 LoadBowlers(bowlers, weeks);
-            }
-        }, "Loading bowlers...");
-    }
-
-    [RelayCommand]
-    public async Task LoadAllBowlersAsync()
-    {
-        await ExecuteAsync(async () =>
-        {
-            SetWorkingBowlerViewModelCommand.Execute(new());
-            Bowlers ??= [];
-            var bowlers = await context.GetAllAsync<Bowler>();
-            var weeks = await context.GetAllAsync<BowlerWeek>();
-            if (bowlers is not null && bowlers.Any())
-            {
-                LoadBowlers(bowlers, weeks);
-                Bowlers = new ObservableCollection<BowlerViewModel>(Bowlers.OrderBy(i => i.Bowler.FullName));
             }
         }, "Loading bowlers...");
     }

@@ -16,6 +16,6 @@ public partial class SwitchBowlerPage : ContentPage
     protected async override void OnAppearing()
     {
         base.OnAppearing();
-        await _viewModel.LoadHiddenBowlersAsync();
+        await _viewModel.LoadSwitchBowlersAsync();
     }
 }

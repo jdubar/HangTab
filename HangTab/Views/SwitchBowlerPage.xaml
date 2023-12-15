@@ -32,7 +32,7 @@
                 <RefreshView IsEnabled="False">
                     <CollectionView Grid.Row="0"
                                     x:Name="BowlerList"
-                                    ItemsSource="{Binding HiddenBowlers}"
+                                    ItemsSource="{Binding SwitchBowlers}"
                                     SelectionMode="Single"
                                     SelectedItem="{Binding SelectedBowler}">
                         <!--SelectionChangedCommand="{Binding BowlerSwitchedCommand}">-->
