@@ -178,18 +178,16 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
             var rides = await context.GetAllAsync<BusRide>();
             if (rides.Any())
             {
-                WorkingBusRideViewModel.BusRide = rides.First();
+                WorkingBusRideViewModel.BusRide = rides.Last();
             }
             else
             {
                 _ = await context.AddItemAsync(WorkingBusRideViewModel.BusRide);
-                rides = await context.GetAllAsync<BusRide>();
             }
             var weeks = await context.GetFilteredAsync<BusRideWeek>(week => week.WeekNumber == WorkingWeek);
             if (weeks.Any())
             {
-                WorkingBusRideViewModel.BusRide = rides.First(br => br.Id == weeks.First().Id);
-                WorkingBusRideViewModel.BusRideWeek = weeks.First();
+                WorkingBusRideViewModel.BusRideWeek = weeks.Last();
             }
             else
             {

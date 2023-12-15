@@ -153,10 +153,10 @@
         </Grid>
 
         <Grid Grid.Row="2">
-            <SwipeView Threshold="300"
+            <SwipeView Threshold="250"
                        HeightRequest="70">
                 <SwipeView.LeftItems>
-                    <SwipeItems>
+                    <SwipeItems Mode="Execute">
                         <SwipeItem Text="Starting new week..."
 					               BackgroundColor="{StaticResource Success}"
                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=StartNewWeekCommand}"/>
