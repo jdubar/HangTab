@@ -11,10 +11,13 @@ namespace HangTab.ViewModels;
 public partial class MainViewModel(DatabaseContext context) : BaseViewModel
 {
     [ObservableProperty]
-    private ObservableCollection<BowlerViewModel> _bowlers;
+    private ObservableCollection<BowlerViewModel> _allBowlers;
 
     [ObservableProperty]
-    private ObservableCollection<Bowler> _switchBowlers;
+    private ObservableCollection<BowlerViewModel> _mainBowlers;
+
+    [ObservableProperty]
+    private ObservableCollection<BowlerViewModel> _switchBowlers;
 
     [ObservableProperty]
     private BowlerViewModel _workingBowlerViewModel;
@@ -70,7 +73,8 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
                 await context.DropTableAsync<Bowler>();
                 await context.DropTableAsync<BowlerWeek>();
                 await context.DropTableAsync<BusRide>();
-                Bowlers.Clear();
+                await context.DropTableAsync<BusRideWeek>();
+                MainBowlers.Clear();
                 SwitchBowlers.Clear();
             });
         }
@@ -85,8 +89,8 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
             {
                 if (await context.DeleteItemByIdAsync<Bowler>(id))
                 {
-                    var bowler = Bowlers.FirstOrDefault(b => b.Bowler.Id == id);
-                    Bowlers.Remove(bowler);
+                    var bowler = AllBowlers.FirstOrDefault(b => b.Bowler.Id == id);
+                    AllBowlers.Remove(bowler);
                 }
                 else
                 {
@@ -121,13 +125,14 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
         await ExecuteAsync(async () =>
         {
             SetWorkingBowlerViewModelCommand.Execute(new());
-            Bowlers ??= [];
+            AllBowlers ??= [];
             var bowlers = await context.GetAllAsync<Bowler>();
             var weeks = await context.GetAllAsync<BowlerWeek>();
             if (bowlers is not null && bowlers.Any())
             {
-                LoadBowlers(bowlers, weeks);
-                Bowlers = new ObservableCollection<BowlerViewModel>(Bowlers.OrderBy(i => i.Bowler.FullName));
+                AllBowlers.Clear();
+                AllBowlers = LoadBowlers(bowlers, weeks);
+                AllBowlers = new ObservableCollection<BowlerViewModel>(AllBowlers.OrderBy(i => i.Bowler.FullName));
             }
         }, "Loading bowlers...");
     }
@@ -138,11 +143,12 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
         await ExecuteAsync(async () =>
         {
             SwitchBowlers ??= [];
-            var bowlers = await context.GetFilteredAsync<Bowler>(b => b.Id != WorkingBowlerViewModel.Bowler.Id && !b.IsHidden);
+            var bowlers = await context.GetFilteredAsync<Bowler>(b => b.Id != WorkingBowlerViewModel.Bowler.Id);
             var weeks = await context.GetAllAsync<BowlerWeek>();
             if (bowlers is not null && bowlers.Any())
             {
-                LoadBowlers(bowlers, weeks);
+                SwitchBowlers.Clear();
+                SwitchBowlers = LoadBowlers(bowlers, weeks);
             }
         });
     }
@@ -159,12 +165,13 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
             TotalBusRides = WorkingBusRideViewModel.BusRide.TotalBusRides;
 
             SetWorkingBowlerViewModelCommand.Execute(new());
-            Bowlers ??= [];
+            MainBowlers ??= [];
             var bowlers = await context.GetFilteredAsync<Bowler>(b => !b.IsHidden);
             var weeks = await context.GetFilteredAsync<BowlerWeek>(week => week.WeekNumber == WorkingWeek);
             if (bowlers is not null && bowlers.Any())
             {
-                LoadBowlers(bowlers, weeks);
+                MainBowlers.Clear();
+                MainBowlers = LoadBowlers(bowlers, weeks);
             }
         }, "Loading bowlers...");
     }
@@ -230,7 +237,7 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
             if (WorkingBowlerViewModel.Bowler.Id == 0)
             {
                 _ = await context.AddItemAsync(WorkingBowlerViewModel.Bowler);
-                Bowlers.Add(WorkingBowlerViewModel);
+                MainBowlers.Add(WorkingBowlerViewModel);
             }
             else
             {
@@ -265,9 +272,9 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
         await Shell.Current.GoToAsync(nameof(SwitchBowlerPage), true);
     }
 
-    private void LoadBowlers(IEnumerable<Bowler> bowlers, IEnumerable<BowlerWeek> weeks)
+    private ObservableCollection<BowlerViewModel> LoadBowlers(IEnumerable<Bowler> bowlers, IEnumerable<BowlerWeek> weeks)
     {
-        Bowlers.Clear();
+        var bowlerList = new ObservableCollection<BowlerViewModel>();
 
         foreach (var bowler in bowlers)
         {
@@ -284,8 +291,9 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
                 Bowler = bowler,
                 BowlerWeek = week
             };
-            Bowlers.Add(mainViewModel);
+            bowlerList.Add(mainViewModel);
         }
+        return bowlerList;
     }
 
     private async Task SetWorkingWeekAsync(DatabaseContext context)
