@@ -52,7 +52,7 @@
                                 <SwipeView.LeftItems>
                                     <SwipeItems>
                                         <SwipeItem BackgroundColor="{DynamicResource Tertiary}"
-                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=SwitchBowlerCommand}"
+                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=ShowSwitchBowlerViewCommand}"
                                                    CommandParameter="{Binding .}">
                                             <SwipeItem.IconImageSource>
                                                 <FontImageSource FontFamily="GoogleFont"

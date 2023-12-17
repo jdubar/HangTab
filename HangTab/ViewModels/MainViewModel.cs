@@ -26,7 +26,7 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
     private BusRideViewModel _workingBusRideViewModel;
 
     [ObservableProperty]
-    private Bowler _selectedBowler;
+    private BowlerViewModel _selectedBowler;
 
     [ObservableProperty]
     private int _busRides;
@@ -37,7 +37,7 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
     private int WorkingWeek { get; set; }
 
     [RelayCommand]
-    private async Task AddUpdateBowlerAsync(BowlerViewModel bowler)
+    private async Task ShowAddUpdateBowlerViewAsync(BowlerViewModel bowler)
     {
         SetWorkingBowlerViewModelCommand.Execute(bowler);
         await Shell.Current.GoToAsync(nameof(AddBowlerPage), true);
@@ -266,10 +266,21 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
     }
 
     [RelayCommand]
-    private async Task SwitchBowlerAsync(BowlerViewModel bowler)
+    private async Task ShowSwitchBowlerViewAsync(BowlerViewModel bowler)
     {
         SetWorkingBowlerViewModelCommand.Execute(bowler);
         await Shell.Current.GoToAsync(nameof(SwitchBowlerPage), true);
+    }
+
+    [RelayCommand]
+    private async Task SwitchBowlerAsync()
+    {
+        var index = MainBowlers.IndexOf(WorkingBowlerViewModel);
+        MainBowlers.RemoveAt(index);
+
+        MainBowlers.Insert(index, SelectedBowler);
+
+        //await Shell.Current.GoToAsync("..", true);
     }
 
     private ObservableCollection<BowlerViewModel> LoadBowlers(IEnumerable<Bowler> bowlers, IEnumerable<BowlerWeek> weeks)

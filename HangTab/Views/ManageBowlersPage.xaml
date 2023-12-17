@@ -16,7 +16,7 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ContentPage.ToolbarItems>
-        <ToolbarItem Command="{Binding AddUpdateBowlerCommand}">
+        <ToolbarItem Command="{Binding ShowAddUpdateBowlerViewCommand}">
             <ToolbarItem.IconImageSource>
                 <FontImageSource FontFamily="GoogleFont"
                                  Glyph="{Static icons:GoogleFont.Person_add}" />
@@ -55,7 +55,7 @@
                                 <SwipeView.LeftItems>
                                     <SwipeItems>
                                         <SwipeItem BackgroundColor="{DynamicResource Info}"
-                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=AddUpdateBowlerCommand}"
+                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=ShowAddUpdateBowlerViewCommand}"
                                                    CommandParameter="{Binding .}">
                                             <SwipeItem.IconImageSource>
                                                 <FontImageSource FontFamily="GoogleFont"

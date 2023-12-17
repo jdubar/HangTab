@@ -30,8 +30,8 @@
                                 ItemsSource="{Binding SwitchBowlers}"
                                 Margin="0,10,0,0"
                                 SelectionMode="Single"
-                                SelectedItem="{Binding SelectedBowler}">
-                    <!--SelectionChangedCommand="{Binding BowlerSwitchedCommand}">-->
+                                SelectedItem="{Binding SelectedBowler}"
+                                SelectionChangedCommand="{Binding SwitchBowlerCommand}">
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout ItemSpacing="10"
                                            Orientation="Vertical"/>
