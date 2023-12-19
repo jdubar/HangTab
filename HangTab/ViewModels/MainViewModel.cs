@@ -143,7 +143,7 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
         await ExecuteAsync(async () =>
         {
             SwitchBowlers ??= [];
-            var bowlers = await context.GetFilteredAsync<Bowler>(b => b.Id != WorkingBowlerViewModel.Bowler.Id);
+            var bowlers = await context.GetFilteredAsync<Bowler>(b => b.Id != WorkingBowlerViewModel.Bowler.Id && b.IsHidden);
             var weeks = await context.GetAllAsync<BowlerWeek>();
             if (bowlers is not null && bowlers.Any())
             {
@@ -275,12 +275,17 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
     [RelayCommand]
     private async Task SwitchBowlerAsync()
     {
-        var index = MainBowlers.IndexOf(WorkingBowlerViewModel);
-        MainBowlers.RemoveAt(index);
+        await ExecuteAsync(async () =>
+        {
+            await HideBowler(WorkingBowlerViewModel, true);
+            await HideBowler(SelectedBowler, false);
 
-        MainBowlers.Insert(index, SelectedBowler);
+            var index = MainBowlers.IndexOf(WorkingBowlerViewModel);
+            MainBowlers.RemoveAt(index);
+            MainBowlers.Insert(index, SelectedBowler);
+        }, "Switching bowler...");
 
-        //await Shell.Current.GoToAsync("..", true);
+        await Shell.Current.GoToAsync("..", true);
     }
 
     private ObservableCollection<BowlerViewModel> LoadBowlers(IEnumerable<Bowler> bowlers, IEnumerable<BowlerWeek> weeks)
@@ -305,6 +310,12 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
             bowlerList.Add(mainViewModel);
         }
         return bowlerList;
+    }
+
+    private async Task HideBowler(BowlerViewModel viewModel, bool isHidden)
+    {
+        viewModel.Bowler.IsHidden = isHidden;
+        _ = await context.UpdateItemAsync(viewModel.Bowler);
     }
 
     private async Task SetWorkingWeekAsync(DatabaseContext context)
