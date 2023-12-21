@@ -1,12 +1,12 @@
-using HangTab.ViewModels;
+using HangTab.Views.ViewModels;
 
 namespace HangTab.Views;
 
 public partial class ManageBowlersPage : ContentPage
 {
-    private readonly MainViewModel _viewModel;
+    private readonly ManageBowlerViewModel _viewModel;
 
-    public ManageBowlersPage(MainViewModel viewModel)
+    public ManageBowlersPage(ManageBowlerViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;

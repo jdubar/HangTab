@@ -1,12 +1,12 @@
-using HangTab.ViewModels;
+using HangTab.Views.ViewModels;
 
 namespace HangTab.Views;
 
 public partial class SettingsPage : ContentPage
 {
-    private readonly MainViewModel _viewModel;
+    private readonly SettingsViewModel _viewModel;
 
-    public SettingsPage(MainViewModel viewModel)
+    public SettingsPage(SettingsViewModel viewModel)
     {
         InitializeComponent();
         _viewModel = viewModel;

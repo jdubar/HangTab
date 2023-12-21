@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:HangTab.ViewModels"
-             x:DataType="vm:MainViewModel"
+             xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
+             x:DataType="vm:ManageBowlerViewModel"
              x:Class="HangTab.Views.AddBowlerPage">
     <StackLayout Spacing="5" Padding="15" Margin="10">
         <Entry Text="{Binding WorkingBowlerViewModel.Bowler.FirstName, Mode=TwoWay}"

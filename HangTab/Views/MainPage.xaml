@@ -3,8 +3,9 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:components="clr-namespace:HangTab.Views.Components"
              xmlns:icons="clr-namespace:HangTab.Helpers"
+             xmlns:model="clr-namespace:HangTab.ViewModels"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             xmlns:vm="clr-namespace:HangTab.ViewModels"
+             xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
              x:Class="HangTab.Views.MainPage"
              x:DataType="vm:MainViewModel">
     <ContentPage.Resources>
@@ -47,7 +48,7 @@
                                             Orientation="Vertical"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="vm:BowlerViewModel">
+                        <DataTemplate x:DataType="model:BowlerViewModel">
                             <SwipeView HeightRequest="80">
                                 <SwipeView.LeftItems>
                                     <SwipeItems>

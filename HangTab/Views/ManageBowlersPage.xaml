@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:HangTab.ViewModels"
+             xmlns:model="clr-namespace:HangTab.ViewModels"
+             xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
              xmlns:components="clr-namespace:HangTab.Views.Components"
              xmlns:icons="clr-namespace:HangTab.Helpers"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="HangTab.Views.ManageBowlersPage"
-             x:DataType="vm:MainViewModel"
+             x:DataType="vm:ManageBowlerViewModel"
              Title="Manage Bowlers">
     <ContentPage.Resources>
         <ResourceDictionary>
@@ -50,12 +51,12 @@
                                            Orientation="Vertical"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="vm:BowlerViewModel">
+                        <DataTemplate x:DataType="model:BowlerViewModel">
                             <SwipeView HeightRequest="80">
                                 <SwipeView.LeftItems>
                                     <SwipeItems>
                                         <SwipeItem BackgroundColor="{DynamicResource Info}"
-                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=ShowAddUpdateBowlerViewCommand}"
+                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ManageBowlerViewModel}}, Path=ShowAddUpdateBowlerViewCommand}"
                                                    CommandParameter="{Binding .}">
                                             <SwipeItem.IconImageSource>
                                                 <FontImageSource FontFamily="GoogleFont"
@@ -68,7 +69,7 @@
                                 <SwipeView.RightItems>
                                     <SwipeItems>
                                         <SwipeItem BackgroundColor="{DynamicResource Error}"
-                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=DeleteBowlerCommand}"
+                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ManageBowlerViewModel}}, Path=DeleteBowlerCommand}"
                                                    CommandParameter="{Binding Bowler.Id}">
                                             <SwipeItem.IconImageSource>
                                                 <FontImageSource FontFamily="GoogleFont"

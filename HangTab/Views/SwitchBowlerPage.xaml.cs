@@ -1,4 +1,4 @@
-using HangTab.ViewModels;
+using HangTab.Views.ViewModels;
 
 namespace HangTab.Views;
 
