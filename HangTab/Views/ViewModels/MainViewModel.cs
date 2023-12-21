@@ -20,35 +20,33 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
     private BowlerViewModel _workingBowlerViewModel;
 
     [ObservableProperty]
-    private BusRideViewModel _workingBusRideViewModel;
-
-    [ObservableProperty]
     private BowlerViewModel _selectedBowler;
 
     [ObservableProperty]
-    private int _busRides;
+    private int _busRidesLabel;
 
     [ObservableProperty]
-    private int _totalBusRides;
+    private int _totalBusRidesLabel;
+
+    private BusRideViewModel BusRideViewModel { get; set; }
 
     private int WorkingWeek { get; set; }
-
 
     [RelayCommand]
     private async Task BusRideAsync()
     {
         await ExecuteAsync(async () =>
         {
-            WorkingBusRideViewModel.BusRide.TotalBusRides++;
-            WorkingBusRideViewModel.BusRideWeek.BusRides++;
+            BusRideViewModel.BusRide.TotalBusRides++;
+            BusRideViewModel.BusRideWeek.BusRides++;
 
-            _ = await context.UpdateItemAsync(WorkingBusRideViewModel.BusRide);
+            _ = await context.UpdateItemAsync(BusRideViewModel.BusRide);
             var busRides = await context.GetFilteredAsync<BusRideWeek>(b => b.WeekNumber == WorkingWeek);
             _ = busRides is not null && busRides.Any()
-                ? await context.UpdateItemAsync(WorkingBusRideViewModel.BusRideWeek)
-                : await context.AddItemAsync(WorkingBusRideViewModel.BusRideWeek);
+                ? await context.UpdateItemAsync(BusRideViewModel.BusRideWeek)
+                : await context.AddItemAsync(BusRideViewModel.BusRideWeek);
 
-            SetBusRideCounts();
+            SetBusRideLabels();
         }, "Bus Ride!!!");
     }
 
@@ -71,66 +69,31 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
         }, "Hanging bowler...");
     }
 
-    [RelayCommand]
     public async Task LoadMainBowlersAsync()
     {
         await ExecuteAsync(async () =>
         {
             await SetWorkingWeekAsync(context);
-
             await LoadBusRidesAsync();
-            SetBusRideCounts();
+
+            SetBusRideLabels();
 
             SetWorkingBowlerViewModelCommand.Execute(new());
             await SetMainBowlersListAsync(context);
         }, "Loading bowlers...");
     }
 
-    [RelayCommand]
     public async Task LoadSwitchBowlersAsync()
     {
         await ExecuteAsync(async () =>
         {
             await SetSwitchBowlersListAsync(context);
-        }, "Switching bowler...");
-    }
-
-    [RelayCommand]
-    public async Task LoadBusRidesAsync()
-    {
-        await ExecuteAsync(async () =>
-        {
-            SetWorkingBusRideViewModelCommand.Execute(new());
-            var busRides = await context.GetAllAsync<BusRide>();
-            if (busRides.Any())
-            {
-                WorkingBusRideViewModel.BusRide = busRides.Last();
-            }
-            else
-            {
-                _ = await context.AddItemAsync(WorkingBusRideViewModel.BusRide);
-            }
-            var weeks = await context.GetFilteredAsync<BusRideWeek>(week => week.WeekNumber == WorkingWeek);
-            if (weeks.Any())
-            {
-                WorkingBusRideViewModel.BusRideWeek = weeks.Last();
-            }
-            else
-            {
-                WorkingBusRideViewModel.BusRideWeek.BusRideId = WorkingBusRideViewModel.BusRide.Id;
-                WorkingBusRideViewModel.BusRideWeek.WeekNumber = WorkingWeek;
-                _ = await context.AddItemAsync(WorkingBusRideViewModel.BusRideWeek);
-            }
-        });
+        }, "Loading bowlers...");
     }
 
     [RelayCommand]
     private void SetWorkingBowlerViewModel(BowlerViewModel viewModel) =>
         WorkingBowlerViewModel = viewModel ?? new();
-
-    [RelayCommand]
-    private void SetWorkingBusRideViewModel(BusRideViewModel viewModel) =>
-        WorkingBusRideViewModel = viewModel ?? new();
 
     [RelayCommand]
     private async Task ShowSwitchBowlerViewAsync(BowlerViewModel bowler)
@@ -195,10 +158,38 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
         return collection;
     }
 
-    private void SetBusRideCounts()
+    private async Task LoadBusRidesAsync()
     {
-        BusRides = WorkingBusRideViewModel.BusRideWeek.BusRides;
-        TotalBusRides = WorkingBusRideViewModel.BusRide.TotalBusRides;
+        await ExecuteAsync(async () =>
+        {
+            BusRideViewModel = new();
+            var busRides = await context.GetAllAsync<BusRide>();
+            if (busRides.Any())
+            {
+                BusRideViewModel.BusRide = busRides.Last();
+            }
+            else
+            {
+                _ = await context.AddItemAsync(BusRideViewModel.BusRide);
+            }
+            var weeks = await context.GetFilteredAsync<BusRideWeek>(week => week.WeekNumber == WorkingWeek);
+            if (weeks.Any())
+            {
+                BusRideViewModel.BusRideWeek = weeks.Last();
+            }
+            else
+            {
+                BusRideViewModel.BusRideWeek.BusRideId = BusRideViewModel.BusRide.Id;
+                BusRideViewModel.BusRideWeek.WeekNumber = WorkingWeek;
+                _ = await context.AddItemAsync(BusRideViewModel.BusRideWeek);
+            }
+        });
+    }
+
+    private void SetBusRideLabels()
+    {
+        BusRidesLabel = BusRideViewModel.BusRideWeek.BusRides;
+        TotalBusRidesLabel = BusRideViewModel.BusRide.TotalBusRides;
     }
 
     private async Task SetMainBowlersListAsync(DatabaseContext context)
