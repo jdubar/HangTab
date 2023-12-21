@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace HangTab.ViewModels;
+namespace HangTab.Views.ViewModels;
 public partial class BaseViewModel : ObservableObject
 {
     [ObservableProperty]
@@ -23,5 +23,4 @@ public partial class BaseViewModel : ObservableObject
             BusyText = "Processing...";
         }
     }
-
 }
