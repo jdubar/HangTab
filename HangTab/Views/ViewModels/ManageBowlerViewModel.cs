@@ -36,7 +36,6 @@ public partial class ManageBowlerViewModel(DatabaseContext context) : BaseViewMo
         }
     }
 
-    [RelayCommand]
     public async Task LoadAllBowlersAsync()
     {
         await ExecuteAsync(async () =>
