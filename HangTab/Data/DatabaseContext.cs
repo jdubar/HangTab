@@ -3,7 +3,7 @@
 using System.Linq.Expressions;
 
 namespace HangTab.Data;
-public class DatabaseContext : IAsyncDisposable
+public class DatabaseContext : IDatabaseContext, IAsyncDisposable
 {
     private const string DatabaseFilename = "Bowling.db3";
     private static string DatabasePath =>
