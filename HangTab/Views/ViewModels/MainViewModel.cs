@@ -3,12 +3,13 @@ using CommunityToolkit.Mvvm.Input;
 
 using HangTab.Data;
 using HangTab.Models;
+using HangTab.Services;
 using HangTab.ViewModels;
 
 using System.Collections.ObjectModel;
 
 namespace HangTab.Views.ViewModels;
-public partial class MainViewModel(DatabaseContext context) : BaseViewModel
+public partial class MainViewModel(IDatabaseService dbservice, IDatabaseContext context) : BaseViewModel
 {
     [ObservableProperty]
     private ObservableCollection<BowlerViewModel> _mainBowlers;
@@ -40,11 +41,7 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
             BusRideViewModel.BusRide.TotalBusRides++;
             BusRideViewModel.BusRideWeek.BusRides++;
 
-            _ = await context.UpdateItemAsync(BusRideViewModel.BusRide);
-            var busRides = await context.GetFilteredAsync<BusRideWeek>(b => b.WeekNumber == WorkingWeek);
-            _ = busRides is not null && busRides.Any()
-                ? await context.UpdateItemAsync(BusRideViewModel.BusRideWeek)
-                : await context.AddItemAsync(BusRideViewModel.BusRideWeek);
+            await dbservice.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek);
 
             SetBusRideLabels();
         }, "Bus Ride!!!");
@@ -59,13 +56,7 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
             viewModel.BowlerWeek.Hangings++;
             viewModel.BowlerWeek.WeekNumber = WorkingWeek;
 
-            _ = await context.UpdateItemAsync(viewModel.Bowler);
-
-            var weeks = await context.GetFilteredAsync<BowlerWeek>(w => w.WeekNumber == WorkingWeek
-                                                                        && w.BowlerId == viewModel.Bowler.Id);
-            _ = weeks is not null && weeks.Any()
-                ? await context.UpdateItemAsync(viewModel.BowlerWeek)
-                : await context.AddItemAsync(viewModel.BowlerWeek);
+            await dbservice.UpdateBowlerHangingsByWeek(viewModel, WorkingWeek);
         }, "Hanging bowler...");
     }
 
@@ -73,7 +64,11 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
     {
         await ExecuteAsync(async () =>
         {
-            await SetWorkingWeekAsync(context);
+            if (WorkingWeek == 0)
+            {
+                WorkingWeek = await dbservice.SetWorkingWeek();
+            }
+
             await LoadBusRidesAsync();
 
             SetBusRideLabels();
@@ -131,7 +126,7 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
     private async Task ChangeBowlerHiddenStateAsync(BowlerViewModel viewModel)
     {
         viewModel.Bowler.IsHidden = !viewModel.Bowler.IsHidden;
-        _ = await context.UpdateItemAsync(viewModel.Bowler);
+        await dbservice.UpdateBowler(viewModel.Bowler);
     }
 
     private ObservableCollection<BowlerViewModel> LoadBowlers(IEnumerable<Bowler> bowlers, IEnumerable<BowlerWeek> weeks)
@@ -162,27 +157,7 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
     {
         await ExecuteAsync(async () =>
         {
-            BusRideViewModel = new();
-            var busRides = await context.GetAllAsync<BusRide>();
-            if (busRides.Any())
-            {
-                BusRideViewModel.BusRide = busRides.Last();
-            }
-            else
-            {
-                _ = await context.AddItemAsync(BusRideViewModel.BusRide);
-            }
-            var weeks = await context.GetFilteredAsync<BusRideWeek>(week => week.WeekNumber == WorkingWeek);
-            if (weeks.Any())
-            {
-                BusRideViewModel.BusRideWeek = weeks.Last();
-            }
-            else
-            {
-                BusRideViewModel.BusRideWeek.BusRideId = BusRideViewModel.BusRide.Id;
-                BusRideViewModel.BusRideWeek.WeekNumber = WorkingWeek;
-                _ = await context.AddItemAsync(BusRideViewModel.BusRideWeek);
-            }
+            BusRideViewModel = await dbservice.GetLatestBusRideWeek(WorkingWeek);
         });
     }
 
@@ -192,7 +167,7 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
         TotalBusRidesLabel = BusRideViewModel.BusRide.TotalBusRides;
     }
 
-    private async Task SetMainBowlersListAsync(DatabaseContext context)
+    private async Task SetMainBowlersListAsync(IDatabaseContext context)
     {
         MainBowlers ??= [];
         var bowlers = await context.GetFilteredAsync<Bowler>(b => !b.IsHidden);
@@ -204,7 +179,7 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
         }
     }
 
-    private async Task SetSwitchBowlersListAsync(DatabaseContext context)
+    private async Task SetSwitchBowlersListAsync(IDatabaseContext context)
     {
         SwitchBowlers ??= [];
         var bowlers = await context.GetFilteredAsync<Bowler>(b => b.Id != WorkingBowlerViewModel.Bowler.Id && b.IsHidden);
@@ -213,17 +188,6 @@ public partial class MainViewModel(DatabaseContext context) : BaseViewModel
         {
             SwitchBowlers.Clear();
             SwitchBowlers = LoadBowlers(bowlers, weeks);
-        }
-    }
-
-    private async Task SetWorkingWeekAsync(DatabaseContext context)
-    {
-        if (WorkingWeek == 0)
-        {
-            var allWeeks = await context.GetAllAsync<BowlerWeek>();
-            WorkingWeek = allWeeks is not null && allWeeks.Any()
-                ? allWeeks.OrderBy(w => w.WeekNumber).Last().WeekNumber
-                : 1;
         }
     }
 }

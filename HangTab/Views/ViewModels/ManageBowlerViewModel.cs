@@ -8,7 +8,7 @@ using HangTab.ViewModels;
 using System.Collections.ObjectModel;
 
 namespace HangTab.Views.ViewModels;
-public partial class ManageBowlerViewModel(DatabaseContext context) : BaseViewModel
+public partial class ManageBowlerViewModel(IDatabaseContext context) : BaseViewModel
 {
     [ObservableProperty]
     private ObservableCollection<BowlerViewModel> _allBowlers;

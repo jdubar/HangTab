@@ -4,7 +4,7 @@ using HangTab.Data;
 using HangTab.Models;
 
 namespace HangTab.Views.ViewModels;
-public partial class SettingsViewModel(DatabaseContext context) : BaseViewModel
+public partial class SettingsViewModel(IDatabaseContext context) : BaseViewModel
 {
     [RelayCommand]
     private async Task DropAllTablesAsync()
