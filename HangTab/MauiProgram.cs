@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Maui;
 
 using HangTab.Data;
+using HangTab.Services;
+using HangTab.Services.Impl;
 using HangTab.Views;
 using HangTab.Views.ViewModels;
 
@@ -22,7 +24,8 @@ public static class MauiProgram
                 fonts.AddFont("MaterialIconsOutlined-Regular.otf", "GoogleFont");
             });
 
-        builder.Services.AddSingleton<DatabaseContext>();
+        builder.Services.AddSingleton<IDatabaseContext, DatabaseContext>();
+        builder.Services.AddSingleton<IDatabaseService, DatabaseService>();
 
         builder.Services.AddSingleton<MainViewModel>();
         builder.Services.AddSingleton<ManageBowlerViewModel>();
