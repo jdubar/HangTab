@@ -9,7 +9,7 @@ using HangTab.ViewModels;
 using System.Collections.ObjectModel;
 
 namespace HangTab.Views.ViewModels;
-public partial class MainViewModel(IDatabaseService dbservice, IDatabaseContext context) : BaseViewModel
+public partial class MainViewModel(IDatabaseService dbservice) : BaseViewModel
 {
     [ObservableProperty]
     private ObservableCollection<BowlerViewModel> _mainBowlers;
@@ -74,7 +74,7 @@ public partial class MainViewModel(IDatabaseService dbservice, IDatabaseContext 
             SetBusRideLabels();
 
             SetWorkingBowlerViewModelCommand.Execute(new());
-            await SetMainBowlersListAsync(context);
+            await SetMainBowlersListAsync();
         }, "Loading bowlers...");
     }
 
@@ -82,7 +82,7 @@ public partial class MainViewModel(IDatabaseService dbservice, IDatabaseContext 
     {
         await ExecuteAsync(async () =>
         {
-            await SetSwitchBowlersListAsync(context);
+            await SetSwitchBowlersListAsync();
         }, "Loading bowlers...");
     }
 
@@ -167,11 +167,11 @@ public partial class MainViewModel(IDatabaseService dbservice, IDatabaseContext 
         TotalBusRidesLabel = BusRideViewModel.BusRide.TotalBusRides;
     }
 
-    private async Task SetMainBowlersListAsync(IDatabaseContext context)
+    private async Task SetMainBowlersListAsync()
     {
         MainBowlers ??= [];
-        var bowlers = await context.GetFilteredAsync<Bowler>(b => !b.IsHidden);
-        var weeks = await context.GetFilteredAsync<BowlerWeek>(week => week.WeekNumber == WorkingWeek);
+        var bowlers = await dbservice.GetMainBowlers();
+        var weeks = await dbservice.GetWeeksByWeek(WorkingWeek);
         if (bowlers is not null && bowlers.Any())
         {
             MainBowlers.Clear();
@@ -179,11 +179,11 @@ public partial class MainViewModel(IDatabaseService dbservice, IDatabaseContext 
         }
     }
 
-    private async Task SetSwitchBowlersListAsync(IDatabaseContext context)
+    private async Task SetSwitchBowlersListAsync()
     {
         SwitchBowlers ??= [];
-        var bowlers = await context.GetFilteredAsync<Bowler>(b => b.Id != WorkingBowlerViewModel.Bowler.Id && b.IsHidden);
-        var weeks = await context.GetAllAsync<BowlerWeek>();
+        var bowlers = await dbservice.GetSwitchBowlers(WorkingBowlerViewModel.Bowler.Id);
+        var weeks = await dbservice.GetAllWeeks();
         if (bowlers is not null && bowlers.Any())
         {
             SwitchBowlers.Clear();

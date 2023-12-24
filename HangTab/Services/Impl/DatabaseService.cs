@@ -5,6 +5,9 @@ using HangTab.ViewModels;
 namespace HangTab.Services.Impl;
 public class DatabaseService(IDatabaseContext context) : IDatabaseService
 {
+    public async Task<IEnumerable<BowlerWeek>> GetAllWeeks() =>
+        await context.GetAllAsync<BowlerWeek>();
+
     public async Task<BusRideViewModel> GetLatestBusRideWeek(int week)
     {
         var viewmodel = new BusRideViewModel();
@@ -30,6 +33,15 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         }
         return viewmodel;
     }
+
+    public async Task<IEnumerable<Bowler>> GetMainBowlers() =>
+        await context.GetFilteredAsync<Bowler>(b => !b.IsHidden);
+
+    public async Task<IEnumerable<Bowler>> GetSwitchBowlers(int id) =>
+        await context.GetFilteredAsync<Bowler>(b => b.Id != id && b.IsHidden);
+
+    public async Task<IEnumerable<BowlerWeek>> GetWeeksByWeek(int week) =>
+        await context.GetFilteredAsync<BowlerWeek>(w => w.WeekNumber == week);
 
     public async Task<int> SetWorkingWeek()
     {
