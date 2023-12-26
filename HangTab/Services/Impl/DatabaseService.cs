@@ -2,13 +2,27 @@
 using HangTab.Models;
 using HangTab.ViewModels;
 
+using System.Linq.Expressions;
+
 namespace HangTab.Services.Impl;
 public class DatabaseService(IDatabaseContext context) : IDatabaseService
 {
-    public async Task<IEnumerable<BowlerWeek>> GetAllWeeks() =>
+    public async Task<bool> AddBowler(Bowler bowler) =>
+        await context.AddItemAsync(bowler);
+
+    public async Task<bool> DeleteBowler(int id) =>
+        await context.DeleteItemByIdAsync<Bowler>(id);
+
+    public async Task<IEnumerable<Bowler>> GetAllBowlers() =>
+        await context.GetAllAsync<Bowler>();
+
+    public async Task<IEnumerable<BowlerWeek>> GetAllBowlerWeeks() =>
         await context.GetAllAsync<BowlerWeek>();
 
-    public async Task<BusRideViewModel> GetLatestBusRideWeek(int week)
+    public async Task<IEnumerable<Bowler>> GetFilteredBowlers(Expression<Func<Bowler, bool>> predicate) =>
+        await context.GetFilteredAsync(predicate);
+
+    public async Task<BusRideViewModel> GetLatestBusRide(int week)
     {
         var viewmodel = new BusRideViewModel();
         var busRides = await context.GetAllAsync<BusRide>();
@@ -34,42 +48,48 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         return viewmodel;
     }
 
-    public async Task<IEnumerable<Bowler>> GetActiveBowlers() =>
-        await context.GetFilteredAsync<Bowler>(b => !b.IsHidden);
-
-    public async Task<IEnumerable<Bowler>> GetSwitchBowlers(int id) =>
-        await context.GetFilteredAsync<Bowler>(b => b.Id != id && b.IsHidden);
-
-    public async Task<IEnumerable<BowlerWeek>> GetWeeksByWeek(int week) =>
+    public async Task<IEnumerable<BowlerWeek>> GetFilteredBowlerWeeks(int week) =>
         await context.GetFilteredAsync<BowlerWeek>(w => w.WeekNumber == week);
 
-    public async Task<int> SetWorkingWeek()
+    public async Task<int> GetWorkingWeek()
     {
         var allWeeks = await context.GetAllAsync<BowlerWeek>();
         return allWeeks is not null && allWeeks.Any()
             ? allWeeks.OrderBy(w => w.WeekNumber).Last().WeekNumber
             : 1;
     }
-
-    public async Task UpdateBowler(Bowler viewModel) =>
-        _ = await context.UpdateItemAsync(viewModel);
-
-    public async Task UpdateBowlerHangingsByWeek(BowlerViewModel viewModel, int week)
+    public async Task<bool> IsBowlerExists(Bowler bowler)
     {
-        _ = await context.UpdateItemAsync(viewModel.Bowler);
+        var find = await context.GetFilteredAsync<Bowler>(b => b.FirstName == bowler.FirstName
+                                                               && b.LastName == bowler.LastName);
+        return find.Any();
+    }
+
+    public async Task<bool> UpdateBowler(Bowler bowler) =>
+        await context.UpdateItemAsync(bowler);
+
+    public async Task<bool> UpdateBowlerHangingsByWeek(BowlerViewModel viewModel, int week)
+    {
+        if (!await context.UpdateItemAsync(viewModel.Bowler))
+        {
+            return false;
+        }
 
         var weeks = await context.GetFilteredAsync<BowlerWeek>(w => w.WeekNumber == week
                                                                     && w.BowlerId == viewModel.Bowler.Id);
-        _ = weeks is not null && weeks.Any()
+        return weeks is not null && weeks.Any()
             ? await context.UpdateItemAsync(viewModel.BowlerWeek)
             : await context.AddItemAsync(viewModel.BowlerWeek);
     }
 
-    public async Task UpdateBusRidesByWeek(BusRideViewModel viewModel, int week)
+    public async Task<bool> UpdateBusRidesByWeek(BusRideViewModel viewModel, int week)
     {
-        _ = await context.UpdateItemAsync(viewModel.BusRide);
+        if (!await context.UpdateItemAsync(viewModel.BusRide))
+        {
+            return false;
+        }
         var busRides = await context.GetFilteredAsync<BusRideWeek>(b => b.WeekNumber == week);
-        _ = busRides is not null && busRides.Any()
+        return busRides is not null && busRides.Any()
             ? await context.UpdateItemAsync(viewModel.BusRideWeek)
             : await context.AddItemAsync(viewModel.BusRideWeek);
     }

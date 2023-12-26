@@ -1,14 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-using HangTab.Data;
-using HangTab.Models;
+using HangTab.Services;
 using HangTab.ViewModels;
 
 using System.Collections.ObjectModel;
 
 namespace HangTab.Views.ViewModels;
-public partial class ManageBowlerViewModel(IDatabaseContext context) : BaseViewModel
+public partial class ManageBowlerViewModel(IDatabaseService dbservice) : BaseViewModel
 {
     [ObservableProperty]
     private ObservableCollection<BowlerViewModel> _allBowlers;
@@ -23,7 +22,7 @@ public partial class ManageBowlerViewModel(IDatabaseContext context) : BaseViewM
         {
             await ExecuteAsync(async () =>
             {
-                if (await context.DeleteItemByIdAsync<Bowler>(id))
+                if (await dbservice.DeleteBowler(id))
                 {
                     var bowler = AllBowlers.FirstOrDefault(b => b.Bowler.Id == id);
                     AllBowlers.Remove(bowler);
@@ -42,7 +41,7 @@ public partial class ManageBowlerViewModel(IDatabaseContext context) : BaseViewM
         {
             SetWorkingBowlerViewModelCommand.Execute(new());
             AllBowlers ??= [];
-            var bowlers = await context.GetAllAsync<Bowler>();
+            var bowlers = await dbservice.GetAllBowlers();
             if (bowlers is not null && bowlers.Any())
             {
                 AllBowlers.Clear();
@@ -78,9 +77,7 @@ public partial class ManageBowlerViewModel(IDatabaseContext context) : BaseViewM
         if (WorkingBowlerViewModel.Bowler.Id == 0)
         {
             busyText = "Creating bowler...";
-            var find = await context.GetFilteredAsync<Bowler>(b => b.FirstName == WorkingBowlerViewModel.Bowler.FirstName
-                                                                   && b.LastName == WorkingBowlerViewModel.Bowler.LastName);
-            if (find.Any())
+            if (await dbservice.IsBowlerExists(WorkingBowlerViewModel.Bowler))
             {
                 await Shell.Current.DisplayAlert("Validation Error", "This bowler already exists", "Ok");
                 return;
@@ -89,9 +86,12 @@ public partial class ManageBowlerViewModel(IDatabaseContext context) : BaseViewM
 
         await ExecuteAsync(async () =>
         {
-            _ = WorkingBowlerViewModel.Bowler.Id == 0
-                ? await context.AddItemAsync(WorkingBowlerViewModel.Bowler)
-                : await context.UpdateItemAsync(WorkingBowlerViewModel.Bowler);
+            if (!(WorkingBowlerViewModel.Bowler.Id == 0
+                ? await dbservice.AddBowler(WorkingBowlerViewModel.Bowler)
+                : await dbservice.UpdateBowler(WorkingBowlerViewModel.Bowler)))
+            {
+                await Shell.Current.DisplayAlert("Update Error", "Unable to save bowler", "Ok");
+            }
 
             await Shell.Current.GoToAsync("..", true);
         }, busyText);

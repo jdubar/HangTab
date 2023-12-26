@@ -40,8 +40,11 @@ public partial class MainViewModel(IDatabaseService dbservice) : BaseViewModel
             BusRideViewModel.BusRide.TotalBusRides++;
             BusRideViewModel.BusRideWeek.BusRides++;
 
-            await dbservice.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek);
-
+            if (!await dbservice.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
+            {
+                await Shell.Current.DisplayAlert("Update Error", "Error updating bus ride", "Ok");
+                return;
+            }
             SetBusRideLabels();
         }, "Bus Ride!!!");
     }
@@ -55,7 +58,10 @@ public partial class MainViewModel(IDatabaseService dbservice) : BaseViewModel
             viewModel.BowlerWeek.Hangings++;
             viewModel.BowlerWeek.WeekNumber = WorkingWeek;
 
-            await dbservice.UpdateBowlerHangingsByWeek(viewModel, WorkingWeek);
+            if (!await dbservice.UpdateBowlerHangingsByWeek(viewModel, WorkingWeek))
+            {
+                await Shell.Current.DisplayAlert("Update Error", "Error updating bowler hang count", "Ok");
+            }
         }, "Hanging bowler...");
     }
 
@@ -65,10 +71,10 @@ public partial class MainViewModel(IDatabaseService dbservice) : BaseViewModel
         {
             if (WorkingWeek == 0)
             {
-                WorkingWeek = await dbservice.SetWorkingWeek();
+                WorkingWeek = await dbservice.GetWorkingWeek();
             }
 
-            BusRideViewModel ??= await dbservice.GetLatestBusRideWeek(WorkingWeek);
+            BusRideViewModel ??= await dbservice.GetLatestBusRide(WorkingWeek);
 
             SetBusRideLabels();
 
@@ -107,8 +113,16 @@ public partial class MainViewModel(IDatabaseService dbservice) : BaseViewModel
     {
         await ExecuteAsync(async () =>
         {
-            await ChangeBowlerHiddenStateAsync(WorkingBowlerViewModel);
-            await ChangeBowlerHiddenStateAsync(SelectedBowler);
+            if (!await ChangeBowlerHiddenStateAsync(WorkingBowlerViewModel))
+            {
+                await Shell.Current.DisplayAlert("Update Error", "Error updating bowler state", "Ok");
+                return;
+            }
+            if (!await ChangeBowlerHiddenStateAsync(SelectedBowler))
+            {
+                await Shell.Current.DisplayAlert("Update Error", "Error updating bowler state", "Ok");
+                return;
+            }
 
             var index = MainBowlers.IndexOf(WorkingBowlerViewModel);
             MainBowlers.RemoveAt(index);
@@ -118,10 +132,10 @@ public partial class MainViewModel(IDatabaseService dbservice) : BaseViewModel
         await Shell.Current.GoToAsync("..", true);
     }
 
-    private async Task ChangeBowlerHiddenStateAsync(BowlerViewModel viewModel)
+    private async Task<bool> ChangeBowlerHiddenStateAsync(BowlerViewModel viewModel)
     {
         viewModel.Bowler.IsHidden = !viewModel.Bowler.IsHidden;
-        await dbservice.UpdateBowler(viewModel.Bowler);
+        return await dbservice.UpdateBowler(viewModel.Bowler);
     }
 
     private ObservableCollection<BowlerViewModel> LoadBowlers(IEnumerable<Bowler> bowlers, IEnumerable<BowlerWeek> weeks)
@@ -157,8 +171,8 @@ public partial class MainViewModel(IDatabaseService dbservice) : BaseViewModel
     private async Task SetMainBowlersListAsync()
     {
         MainBowlers ??= [];
-        var bowlers = await dbservice.GetActiveBowlers();
-        var weeks = await dbservice.GetWeeksByWeek(WorkingWeek);
+        var bowlers = await dbservice.GetFilteredBowlers(b => !b.IsHidden);
+        var weeks = await dbservice.GetFilteredBowlerWeeks(WorkingWeek);
         if (bowlers is not null && bowlers.Any())
         {
             MainBowlers.Clear();
@@ -169,8 +183,8 @@ public partial class MainViewModel(IDatabaseService dbservice) : BaseViewModel
     private async Task SetSwitchBowlersListAsync()
     {
         SwitchBowlers ??= [];
-        var bowlers = await dbservice.GetSwitchBowlers(WorkingBowlerViewModel.Bowler.Id);
-        var weeks = await dbservice.GetAllWeeks();
+        var bowlers = await dbservice.GetFilteredBowlers(b => b.Id != WorkingBowlerViewModel.Bowler.Id && b.IsHidden);
+        var weeks = await dbservice.GetAllBowlerWeeks();
         if (bowlers is not null && bowlers.Any())
         {
             SwitchBowlers.Clear();
