@@ -34,7 +34,7 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         return viewmodel;
     }
 
-    public async Task<IEnumerable<Bowler>> GetMainBowlers() =>
+    public async Task<IEnumerable<Bowler>> GetActiveBowlers() =>
         await context.GetFilteredAsync<Bowler>(b => !b.IsHidden);
 
     public async Task<IEnumerable<Bowler>> GetSwitchBowlers(int id) =>

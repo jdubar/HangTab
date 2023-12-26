@@ -68,7 +68,7 @@ public partial class MainViewModel(IDatabaseService dbservice) : BaseViewModel
                 WorkingWeek = await dbservice.SetWorkingWeek();
             }
 
-            await LoadBusRidesAsync();
+            BusRideViewModel ??= await dbservice.GetLatestBusRideWeek(WorkingWeek);
 
             SetBusRideLabels();
 
@@ -77,13 +77,9 @@ public partial class MainViewModel(IDatabaseService dbservice) : BaseViewModel
         }, "Loading bowlers...");
     }
 
-    public async Task LoadSwitchBowlersAsync()
-    {
-        await ExecuteAsync(async () =>
-        {
-            await SetSwitchBowlersListAsync();
-        }, "Loading bowlers...");
-    }
+    public async Task LoadSwitchBowlersAsync() =>
+        await ExecuteAsync(SetSwitchBowlersListAsync,
+                           "Loading bowlers...");
 
     [RelayCommand]
     private void SetWorkingBowlerViewModel(BowlerViewModel viewModel) =>
@@ -152,14 +148,6 @@ public partial class MainViewModel(IDatabaseService dbservice) : BaseViewModel
         return collection;
     }
 
-    private async Task LoadBusRidesAsync()
-    {
-        await ExecuteAsync(async () =>
-        {
-            BusRideViewModel = await dbservice.GetLatestBusRideWeek(WorkingWeek);
-        });
-    }
-
     private void SetBusRideLabels()
     {
         BusRidesLabel = BusRideViewModel.BusRideWeek.BusRides;
@@ -169,7 +157,7 @@ public partial class MainViewModel(IDatabaseService dbservice) : BaseViewModel
     private async Task SetMainBowlersListAsync()
     {
         MainBowlers ??= [];
-        var bowlers = await dbservice.GetMainBowlers();
+        var bowlers = await dbservice.GetActiveBowlers();
         var weeks = await dbservice.GetWeeksByWeek(WorkingWeek);
         if (bowlers is not null && bowlers.Any())
         {
