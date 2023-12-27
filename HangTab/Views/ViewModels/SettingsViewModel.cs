@@ -1,10 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 
-using HangTab.Data;
-using HangTab.Models;
+using HangTab.Services;
 
 namespace HangTab.Views.ViewModels;
-public partial class SettingsViewModel(IDatabaseContext context) : BaseViewModel
+public partial class SettingsViewModel(IDatabaseService dbservice) : BaseViewModel
 {
     [RelayCommand]
     private async Task DropAllTablesAsync()
@@ -13,14 +12,7 @@ public partial class SettingsViewModel(IDatabaseContext context) : BaseViewModel
         {
             await ExecuteAsync(async () =>
             {
-                try
-                {
-                    _ = await context.DropTableAsync<Bowler>();
-                    _ = await context.DropTableAsync<BowlerWeek>();
-                    _ = await context.DropTableAsync<BusRide>();
-                    _ = await context.DropTableAsync<BusRideWeek>();
-                }
-                catch (Exception)
+                if (!await dbservice.DropAllTables())
                 {
                     await Shell.Current.DisplayAlert("Critical Error", "Error occurred while deleting data!", "Ok");
                 }

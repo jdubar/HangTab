@@ -13,6 +13,12 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
     public async Task<bool> DeleteBowler(int id) =>
         await context.DeleteItemByIdAsync<Bowler>(id);
 
+    public async Task<bool> DropAllTables() =>
+        await context.DropTableAsync<Bowler>()
+        && await context.DropTableAsync<BowlerWeek>()
+        && await context.DropTableAsync<BusRide>()
+        && await context.DropTableAsync<BusRideWeek>();
+
     public async Task<IEnumerable<Bowler>> GetAllBowlers() =>
         await context.GetAllAsync<Bowler>();
 

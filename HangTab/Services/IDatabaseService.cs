@@ -6,6 +6,8 @@ using System.Linq.Expressions;
 namespace HangTab.Services;
 public interface IDatabaseService
 {
+    Task<bool> DropAllTables();
+
     Task<IEnumerable<Bowler>> GetAllBowlers();
     Task<IEnumerable<Bowler>> GetFilteredBowlers(Expression<Func<Bowler, bool>> predicate);
 
