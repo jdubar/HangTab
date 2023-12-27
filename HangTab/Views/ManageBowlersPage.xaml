@@ -45,19 +45,6 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="model:BowlerViewModel">
                             <SwipeView HeightRequest="80">
-                                <SwipeView.LeftItems>
-                                    <SwipeItems>
-                                        <SwipeItem BackgroundColor="{DynamicResource Info}"
-                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ManageBowlerViewModel}}, Path=ShowAddUpdateBowlerViewCommand}"
-                                                   CommandParameter="{Binding .}">
-                                            <SwipeItem.IconImageSource>
-                                                <FontImageSource FontFamily="GoogleFont"
-                                                                    Glyph="{Static icons:GoogleFont.Edit}"
-                                                                    Size="20"/>
-                                            </SwipeItem.IconImageSource>
-                                        </SwipeItem>
-                                    </SwipeItems>
-                                </SwipeView.LeftItems>
                                 <SwipeView.RightItems>
                                     <SwipeItems>
                                         <SwipeItem BackgroundColor="{DynamicResource Error}"
@@ -78,7 +65,12 @@
                                                          IsSub="{Binding Bowler.IsSub}"
                                                          ImageUrl="{Binding Bowler.ImageUrl}"
                                                          TotalHangings="{Binding Bowler.TotalHangings}"
-                                                         IsHidden="{Binding Bowler.IsHidden}"/>
+                                                         IsHidden="{Binding Bowler.IsHidden}">
+                                        <components:CardView.GestureRecognizers>
+                                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ManageBowlerViewModel}}, Path=ShowAddUpdateBowlerViewCommand}"
+                                                                  CommandParameter="{Binding .}"/>
+                                        </components:CardView.GestureRecognizers>
+                                    </components:CardView>
                                 </Grid>
                             </SwipeView>
                         </DataTemplate>
