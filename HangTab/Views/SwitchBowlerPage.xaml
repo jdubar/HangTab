@@ -3,7 +3,6 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:components="clr-namespace:HangTab.Views.Components"
              xmlns:model="clr-namespace:HangTab.ViewModels"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
              x:Class="HangTab.Views.SwitchBowlerPage"
              x:DataType="vm:MainViewModel"
@@ -41,28 +40,11 @@
                             <Grid HorizontalOptions="Center"
                                     VerticalOptions="End"
                                     HeightRequest="80">
-                                <Border WidthRequest="393"
-                                        HeightRequest="81"
-                                        StrokeThickness="4"
-                                        BackgroundColor="{AppThemeBinding Dark={StaticResource Black}, Light={StaticResource White}}"
-                                        Stroke="{Binding Bowler.IsSub, Converter={StaticResource BoolToObjectConverter}}">
-                                    <StackLayout Orientation="Horizontal">
-                                        <components:BowlerImage IsSub="{Binding Bowler.IsSub}"
-                                                                ImageUrl="{Binding Bowler.ImageUrl}"/>
-                                        <VerticalStackLayout VerticalOptions="Center"
-                                                                WidthRequest="200">
-                                            <Label Text="{Binding Bowler.FullName, FallbackValue='Unknown Bowler'}"
-                                                    FontAttributes="Bold"/>
-                                            <Label x:Name="TotalHangCount"
-                                                    Text="{Binding Bowler.TotalHangings, StringFormat='Hangings Total: {0}'}"/>
-                                        </VerticalStackLayout>
-                                        <Label Text="INACTIVE"
-                                                FontAttributes="Bold"
-                                                TextColor="{StaticResource Error}"
-                                                VerticalOptions="Center"
-                                                IsVisible="{Binding Bowler.IsHidden}"/>
-                                    </StackLayout>
-                                </Border>
+                                <components:CardView BowlerName="{Binding Bowler.FullName}"
+                                                     IsSub="{Binding Bowler.IsSub}"
+                                                     ImageUrl="{Binding Bowler.ImageUrl}"
+                                                     TotalHangings="{Binding Bowler.TotalHangings}"
+                                                     IsHidden="{Binding Bowler.IsHidden}"/>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
