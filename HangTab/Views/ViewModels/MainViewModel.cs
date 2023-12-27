@@ -80,7 +80,7 @@ public partial class MainViewModel(IDatabaseService dbservice) : BaseViewModel
                 WorkingWeek = await dbservice.GetWorkingWeek();
             }
 
-            BusRideViewModel ??= await dbservice.GetLatestBusRide(WorkingWeek);
+            BusRideViewModel = await dbservice.GetLatestBusRide(WorkingWeek);
 
             SetBusRideLabels();
 
@@ -179,11 +179,9 @@ public partial class MainViewModel(IDatabaseService dbservice) : BaseViewModel
         MainBowlers ??= [];
         var bowlers = await dbservice.GetFilteredBowlers(b => !b.IsHidden);
         var weeks = await dbservice.GetFilteredBowlerWeeks(WorkingWeek);
-        if (bowlers is not null && bowlers.Any())
-        {
-            MainBowlers.Clear();
-            MainBowlers = LoadBowlers(bowlers, weeks);
-        }
+        MainBowlers = bowlers is not null && bowlers.Any()
+            ? LoadBowlers(bowlers, weeks)
+            : ([]);
     }
 
     private async Task SetSwitchBowlersListAsync()
@@ -191,10 +189,8 @@ public partial class MainViewModel(IDatabaseService dbservice) : BaseViewModel
         SwitchBowlers ??= [];
         var bowlers = await dbservice.GetFilteredBowlers(b => b.Id != WorkingBowlerViewModel.Bowler.Id && b.IsHidden);
         var weeks = await dbservice.GetAllBowlerWeeks();
-        if (bowlers is not null && bowlers.Any())
-        {
-            SwitchBowlers.Clear();
-            SwitchBowlers = LoadBowlers(bowlers, weeks);
-        }
+        SwitchBowlers = bowlers is not null && bowlers.Any()
+            ? LoadBowlers(bowlers, weeks)
+            : ([]);
     }
 }

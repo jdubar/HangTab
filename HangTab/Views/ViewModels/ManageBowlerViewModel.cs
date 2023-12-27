@@ -55,6 +55,10 @@ public partial class ManageBowlerViewModel(IDatabaseService dbservice) : BaseVie
                     AllBowlers.Add(viewModel);
                 }
             }
+            else
+            {
+                AllBowlers.Clear();
+            }
         }, "Loading bowlers...");
     }
 
