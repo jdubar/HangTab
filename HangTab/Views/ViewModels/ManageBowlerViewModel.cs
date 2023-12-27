@@ -26,6 +26,7 @@ public partial class ManageBowlerViewModel(IDatabaseService dbservice) : BaseVie
                 {
                     var bowler = AllBowlers.FirstOrDefault(b => b.Bowler.Id == id);
                     AllBowlers.Remove(bowler);
+                    await Shell.Current.GoToAsync("..", true);
                 }
                 else
                 {
@@ -39,7 +40,6 @@ public partial class ManageBowlerViewModel(IDatabaseService dbservice) : BaseVie
     {
         await ExecuteAsync(async () =>
         {
-            SetWorkingBowlerViewModelCommand.Execute(new());
             AllBowlers ??= [];
             var bowlers = await dbservice.GetAllBowlers();
             if (bowlers is not null && bowlers.Any())
@@ -92,7 +92,6 @@ public partial class ManageBowlerViewModel(IDatabaseService dbservice) : BaseVie
             {
                 await Shell.Current.DisplayAlert("Update Error", "Unable to save bowler", "Ok");
             }
-
             await Shell.Current.GoToAsync("..", true);
         }, busyText);
     }

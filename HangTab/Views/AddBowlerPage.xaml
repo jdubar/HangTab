@@ -4,51 +4,78 @@
              xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
              x:DataType="vm:ManageBowlerViewModel"
              x:Class="HangTab.Views.AddBowlerPage">
-    <StackLayout Spacing="5" Padding="15" Margin="10">
-        <Entry Text="{Binding WorkingBowlerViewModel.Bowler.FirstName, Mode=TwoWay}"
-               FontSize="Medium"
-               Placeholder="First Name"
-               Margin="0"/>
-        <Entry Text="{Binding WorkingBowlerViewModel.Bowler.LastName, Mode=TwoWay}"
-               FontSize="Medium"
-               Placeholder="Last Name"
-               Margin="0"/>
-        <HorizontalStackLayout>
-            <Switch IsToggled="{Binding WorkingBowlerViewModel.Bowler.IsSub, Mode=TwoWay}"
-                    OnColor="{DynamicResource Success}"
-                    ThumbColor="{StaticResource Primary}"
-                    VerticalOptions="Center"/>
-            <Label Text="Substitute Bowler"
-                   VerticalOptions="Center"
-                   FontSize="Medium"/>
-        </HorizontalStackLayout>
-        <HorizontalStackLayout>
-            <Switch IsToggled="{Binding WorkingBowlerViewModel.Bowler.IsHidden, Mode=TwoWay}"
-                    OnColor="{DynamicResource Error}"
-                    ThumbColor="{StaticResource Primary}"
-                    VerticalOptions="Center"/>
-            <Label Text="Inactive Bowler"
-                   VerticalOptions="Center"
-                   FontSize="Medium"/>
-        </HorizontalStackLayout>
-        <StackLayout Orientation="Horizontal">
-            <Button Grid.Row="1"
-                    Grid.ColumnSpan="2"
-                    Text="Update Bowler"
-                    HorizontalOptions="FillAndExpand"
-                    VerticalOptions="End"
-                    CornerRadius="4"
-                    Padding="50, 0"
-                    Command="{Binding SaveBowlerCommand}">
-                <Button.Triggers>
-                    <DataTrigger TargetType="Button" 
-                                 Binding="{Binding WorkingBowlerViewModel.Bowler.Id}"
-                                 Value="0">
-                        <Setter Property="Text"
-                                Value="Add Bowler"/>
-                    </DataTrigger>
-                </Button.Triggers>
-            </Button>
-        </StackLayout>
-    </StackLayout>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="70"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0"
+              RowDefinitions="Auto, *"
+              ColumnDefinitions="*, Auto">
+            <StackLayout Spacing="5" Padding="15" Margin="10">
+                <Entry Text="{Binding WorkingBowlerViewModel.Bowler.FirstName, Mode=TwoWay}"
+                   FontSize="Medium"
+                   Placeholder="First Name"
+                   Margin="0"/>
+                <Entry Text="{Binding WorkingBowlerViewModel.Bowler.LastName, Mode=TwoWay}"
+                   FontSize="Medium"
+                   Placeholder="Last Name"
+                   Margin="0"/>
+                <HorizontalStackLayout>
+                    <Switch IsToggled="{Binding WorkingBowlerViewModel.Bowler.IsSub, Mode=TwoWay}"
+                        OnColor="{DynamicResource Success}"
+                        ThumbColor="{StaticResource Primary}"
+                        VerticalOptions="Center"/>
+                    <Label Text="Substitute Bowler"
+                       VerticalOptions="Center"
+                       FontSize="Medium"/>
+                </HorizontalStackLayout>
+                <HorizontalStackLayout>
+                    <Switch IsToggled="{Binding WorkingBowlerViewModel.Bowler.IsHidden, Mode=TwoWay}"
+                        OnColor="{DynamicResource Error}"
+                        ThumbColor="{StaticResource Primary}"
+                        VerticalOptions="Center"/>
+                    <Label Text="Inactive Bowler"
+                       VerticalOptions="Center"
+                       FontSize="Medium"/>
+                </HorizontalStackLayout>
+                <StackLayout>
+                    <Button Text="Save Changes"
+                            HorizontalOptions="FillAndExpand"
+                            Command="{Binding SaveBowlerCommand}">
+                        <Button.Triggers>
+                            <DataTrigger TargetType="Button" 
+                                     Binding="{Binding WorkingBowlerViewModel.Bowler.Id}"
+                                     Value="0">
+                                <Setter Property="Text"
+                                    Value="Add Bowler"/>
+                            </DataTrigger>
+                        </Button.Triggers>
+                    </Button>
+                </StackLayout>
+            </StackLayout>
+        </Grid>
+        <Grid Grid.Row="1"
+              RowDefinitions="Auto, *"
+              ColumnDefinitions="*, Auto">
+            <StackLayout Padding="15" Margin="10,0">
+                <Button Text="Delete Bowler"
+                        HorizontalOptions="FillAndExpand"
+                        BackgroundColor="{StaticResource Error}"
+                        TextColor="{StaticResource White}"
+                        Command="{Binding DeleteBowlerCommand}"
+                        CommandParameter="{Binding WorkingBowlerViewModel.Bowler.Id}">
+                    <Button.Triggers>
+                        <DataTrigger TargetType="Button" 
+                                     Binding="{Binding WorkingBowlerViewModel.Bowler.Id}"
+                                     Value="0">
+                            <Setter Property="IsVisible"
+                                    Value="false"/>
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
+            </StackLayout>
+        </Grid>
+    </Grid>
 </ContentPage>
