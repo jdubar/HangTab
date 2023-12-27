@@ -39,10 +39,17 @@
 
             <Grid Grid.Row="1"
                   RowDefinitions="*, Auto">
+                <Image x:Name="BusSplash"
+                       Source="bus_splash.png"
+                       HeightRequest="300"
+                       ZIndex="2"
+                       IsVisible="{Binding ShowBusRideImage}"
+                       HorizontalOptions="Center"/>
                 <CollectionView Grid.Row="0"
                                 x:Name="BowlerList"
                                 ItemsSource="{Binding MainBowlers}"
-                                Margin="0,10,0,0">
+                                Margin="0,10,0,0"
+                                ZIndex="1">
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout ItemSpacing="10"
                                             Orientation="Vertical"/>

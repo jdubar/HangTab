@@ -26,6 +26,9 @@ public partial class MainViewModel(IDatabaseService dbservice) : BaseViewModel
     private int _busRidesLabel;
 
     [ObservableProperty]
+    private bool _showBusRideImage;
+
+    [ObservableProperty]
     private int _totalBusRidesLabel;
 
     private BusRideViewModel BusRideViewModel { get; set; }
@@ -37,6 +40,7 @@ public partial class MainViewModel(IDatabaseService dbservice) : BaseViewModel
     {
         await ExecuteAsync(async () =>
         {
+            ShowBusRideImage = true;
             BusRideViewModel.BusRide.TotalBusRides++;
             BusRideViewModel.BusRideWeek.BusRides++;
 
@@ -46,6 +50,8 @@ public partial class MainViewModel(IDatabaseService dbservice) : BaseViewModel
                 return;
             }
             SetBusRideLabels();
+            await Task.Delay(2000);
+            ShowBusRideImage = false;
         }, "Bus Ride!!!");
     }
 
