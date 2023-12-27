@@ -32,7 +32,8 @@
                    FontAttributes="Bold"
                    TextColor="{StaticResource Error}"
                    VerticalOptions="Center"
-                   IsVisible="{Binding IsHidden}"/>
+                   IsVisible="{Binding IsHidden}"
+                   Margin="-15,0,0,0"/>
         </StackLayout>
     </Border>
 </ContentView>
