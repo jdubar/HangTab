@@ -80,7 +80,8 @@
                                             Stroke="{Binding Bowler.IsSub, Converter={StaticResource BoolToObjectConverter}}">
                                         <StackLayout Orientation="Horizontal">
                                             <components:BowlerImage IsSub="{Binding Bowler.IsSub}"
-                                                                    ImageUrl="{Binding Bowler.ImageUrl}"/>
+                                                                    ImageUrl="{Binding Bowler.ImageUrl}"
+                                                                    IsLowestHangs="{Binding IsLowestHangs}"/>
                                             <VerticalStackLayout VerticalOptions="Center"
                                                                  WidthRequest="250">
                                                 <Label Text="{Binding Bowler.FullName, FallbackValue='Unknown Bowler'}"

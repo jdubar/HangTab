@@ -68,6 +68,10 @@ public partial class MainViewModel(IDatabaseService dbservice) : BaseViewModel
             {
                 await Shell.Current.DisplayAlert("Update Error", "Error updating bowler hang count", "Ok");
             }
+            else
+            {
+                await SetMainBowlersListAsync();
+            }
         }, "Hanging bowler...");
     }
 
@@ -144,9 +148,10 @@ public partial class MainViewModel(IDatabaseService dbservice) : BaseViewModel
         return await dbservice.UpdateBowler(viewModel.Bowler);
     }
 
-    private ObservableCollection<BowlerViewModel> LoadBowlers(IEnumerable<Bowler> bowlers, IEnumerable<BowlerWeek> weeks)
+    private async Task<ObservableCollection<BowlerViewModel>> LoadBowlers(IEnumerable<Bowler> bowlers, IEnumerable<BowlerWeek> weeks)
     {
         var collection = new ObservableCollection<BowlerViewModel>();
+        var lowest = await dbservice.GetLowestHangs();
 
         foreach (var bowler in bowlers)
         {
@@ -163,6 +168,10 @@ public partial class MainViewModel(IDatabaseService dbservice) : BaseViewModel
                 Bowler = bowler,
                 BowlerWeek = week
             };
+            if (lowest.Any(b => b.Id == bowler.Id))
+            {
+                viewModel.IsLowestHangs = true;
+            }
             collection.Add(viewModel);
         }
         return collection;
@@ -180,7 +189,7 @@ public partial class MainViewModel(IDatabaseService dbservice) : BaseViewModel
         var bowlers = await dbservice.GetFilteredBowlers(b => !b.IsHidden);
         var weeks = await dbservice.GetFilteredBowlerWeeks(WorkingWeek);
         MainBowlers = bowlers is not null && bowlers.Any()
-            ? LoadBowlers(bowlers, weeks)
+            ? await LoadBowlers(bowlers, weeks)
             : ([]);
     }
 
@@ -190,7 +199,7 @@ public partial class MainViewModel(IDatabaseService dbservice) : BaseViewModel
         var bowlers = await dbservice.GetFilteredBowlers(b => b.Id != WorkingBowlerViewModel.Bowler.Id && b.IsHidden);
         var weeks = await dbservice.GetAllBowlerWeeks();
         SwitchBowlers = bowlers is not null && bowlers.Any()
-            ? LoadBowlers(bowlers, weeks)
+            ? await LoadBowlers(bowlers, weeks)
             : ([]);
     }
 }
