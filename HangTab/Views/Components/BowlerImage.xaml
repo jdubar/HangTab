@@ -12,6 +12,11 @@
         </ResourceDictionary>
     </ContentView.Resources>
     <Grid BindingContext="{x:Reference this}">
+        <Image IsVisible="{Binding IsLowestHangs}"
+               Source="crown.png"
+               ZIndex="2"
+               WidthRequest="50"
+               Margin="0,-48,0,0"/>
         <Border IsVisible="{Binding IsSub}"
                 StrokeShape="RoundRectangle 40,40,40,40"
                 ZIndex="2"
