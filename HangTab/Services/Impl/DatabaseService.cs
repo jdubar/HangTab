@@ -28,6 +28,9 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
     public async Task<IEnumerable<Bowler>> GetFilteredBowlers(Expression<Func<Bowler, bool>> predicate) =>
         await context.GetFilteredAsync(predicate);
 
+    public async Task<IEnumerable<BowlerWeek>> GetFilteredBowlerWeeks(int week) =>
+        await context.GetFilteredAsync<BowlerWeek>(w => w.WeekNumber == week);
+
     public async Task<BusRideViewModel> GetLatestBusRide(int week)
     {
         var viewmodel = new BusRideViewModel();
@@ -54,8 +57,11 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         return viewmodel;
     }
 
-    public async Task<IEnumerable<BowlerWeek>> GetFilteredBowlerWeeks(int week) =>
-        await context.GetFilteredAsync<BowlerWeek>(w => w.WeekNumber == week);
+    public async Task<IEnumerable<Bowler>> GetLowestHangs()
+    {
+        var bowlers = await context.GetAllAsync<Bowler>();
+        return bowlers.Where((x) => !x.IsSub && x.TotalHangings == bowlers.Min(y => y.TotalHangings));
+    }
 
     public async Task<int> GetWorkingWeek()
     {
