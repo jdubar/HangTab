@@ -32,17 +32,12 @@
                    TextColor="{AppThemeBinding Dark={StaticResource Success},
                                                Light={StaticResource Black}}"/>
         </Border>
-        <Image Source="{Binding ImageUrl,
-                                FallbackValue='account_circle.png'}"
-               HorizontalOptions="Center"
-               VerticalOptions="Center"
-               HeightRequest="50"
-               Margin="10"
-               ZIndex="1">
-            <Image.Behaviors>
-                <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Dark={StaticResource White},
-                                                                           Light={StaticResource Gray300}}" />
-            </Image.Behaviors>
-        </Image>
+        <toolkit:AvatarView ImageSource="{Binding ImageUrl,
+                                                  FallbackValue='account_circle.png'}"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            HeightRequest="50"
+                            Margin="10"
+                            ZIndex="1"/>
     </Grid>
 </ContentView>
