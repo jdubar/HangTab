@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:components="clr-namespace:HangTab.Views.Components"
              xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
-             x:DataType="vm:ManageBowlerViewModel"
+             x:DataType="vm:AddBowlerViewModel"
              x:Class="HangTab.Views.AddBowlerPage">
     <Grid>
         <Grid.RowDefinitions>
@@ -14,18 +14,24 @@
         <Grid Grid.Row="0"
               RowDefinitions="Auto, *"
               ColumnDefinitions="*, Auto">
-            <StackLayout Spacing="5" Padding="15" Margin="10">
-                <components:BowlerImage ImageUrl="{Binding WorkingBowlerViewModel.Bowler.ImageUrl}"/>
-                <Entry Text="{Binding WorkingBowlerViewModel.Bowler.FirstName, Mode=TwoWay}"
+            <StackLayout Spacing="5"
+                         Padding="15"
+                         Margin="10">
+                <components:BowlerImage ImageUrl="{Binding Bowler.ImageUrl, Mode=TwoWay}">
+                    <components:BowlerImage.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SelectBowlerImageCommand}"/>
+                    </components:BowlerImage.GestureRecognizers>
+                </components:BowlerImage>
+                <Entry Text="{Binding Bowler.FirstName, Mode=TwoWay}"
                        FontSize="Medium"
                        Placeholder="First Name"
                        Margin="0"/>
-                <Entry Text="{Binding WorkingBowlerViewModel.Bowler.LastName, Mode=TwoWay}"
+                <Entry Text="{Binding Bowler.LastName, Mode=TwoWay}"
                        FontSize="Medium"
                        Placeholder="Last Name"
                        Margin="0"/>
                 <HorizontalStackLayout>
-                    <Switch IsToggled="{Binding WorkingBowlerViewModel.Bowler.IsSub, Mode=TwoWay}"
+                    <Switch IsToggled="{Binding Bowler.IsSub, Mode=TwoWay}"
                             OnColor="{DynamicResource Success}"
                             ThumbColor="{StaticResource Primary}"
                             VerticalOptions="Center"/>
@@ -34,7 +40,7 @@
                            FontSize="Medium"/>
                 </HorizontalStackLayout>
                 <HorizontalStackLayout>
-                    <Switch IsToggled="{Binding WorkingBowlerViewModel.Bowler.IsHidden, Mode=TwoWay}"
+                    <Switch IsToggled="{Binding Bowler.IsHidden, Mode=TwoWay}"
                             OnColor="{DynamicResource Error}"
                             ThumbColor="{StaticResource Primary}"
                         VerticalOptions="Center"/>
@@ -48,7 +54,7 @@
                             Command="{Binding SaveBowlerCommand}">
                         <Button.Triggers>
                             <DataTrigger TargetType="Button" 
-                                         Binding="{Binding WorkingBowlerViewModel.Bowler.Id}"
+                                         Binding="{Binding Bowler.Id}"
                                          Value="0">
                                 <Setter Property="Text"
                                         Value="Add Bowler"/>
@@ -67,10 +73,10 @@
                         BackgroundColor="{StaticResource Error}"
                         TextColor="{StaticResource White}"
                         Command="{Binding DeleteBowlerCommand}"
-                        CommandParameter="{Binding WorkingBowlerViewModel.Bowler.Id}">
+                        CommandParameter="{Binding Bowler.Id}">
                     <Button.Triggers>
                         <DataTrigger TargetType="Button" 
-                                     Binding="{Binding WorkingBowlerViewModel.Bowler.Id}"
+                                     Binding="{Binding Bowler.Id}"
                                      Value="0">
                             <Setter Property="IsVisible"
                                     Value="false"/>

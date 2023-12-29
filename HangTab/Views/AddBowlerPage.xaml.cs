@@ -4,7 +4,7 @@ namespace HangTab.Views;
 
 public partial class AddBowlerPage : ContentPage
 {
-    public AddBowlerPage(ManageBowlerViewModel viewModel)
+    public AddBowlerPage(AddBowlerViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;

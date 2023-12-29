@@ -31,6 +31,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<MainViewModel>();
         builder.Services.AddSingleton<ManageBowlerViewModel>();
         builder.Services.AddSingleton<SettingsViewModel>();
+        builder.Services.AddSingleton<AddBowlerViewModel>();
 
         builder.Services.AddSingleton<MainPage>();
         builder.Services.AddSingleton<ManageBowlersPage>();

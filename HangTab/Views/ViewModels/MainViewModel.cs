@@ -105,7 +105,7 @@ public partial class MainViewModel(IDatabaseService data, IShellService shell) :
     private async Task ShowSwitchBowlerViewAsync(BowlerViewModel bowler)
     {
         SetWorkingBowlerViewModelCommand.Execute(bowler);
-        await shell.GoToPage(nameof(SwitchBowlerPage), true);
+        await shell.GoToPage(nameof(SwitchBowlerPage));
     }
 
     [RelayCommand]
