@@ -7,7 +7,7 @@ using HangTab.ViewModels;
 using System.Collections.ObjectModel;
 
 namespace HangTab.Views.ViewModels;
-public partial class ManageBowlerViewModel(IDatabaseService dbservice) : BaseViewModel
+public partial class ManageBowlerViewModel(IDatabaseService data, IShellService shell) : BaseViewModel
 {
     [ObservableProperty]
     private ObservableCollection<BowlerViewModel> _allBowlers;
@@ -18,19 +18,19 @@ public partial class ManageBowlerViewModel(IDatabaseService dbservice) : BaseVie
     [RelayCommand]
     private async Task DeleteBowlerAsync(int id)
     {
-        if (await Shell.Current.DisplayAlert("Delete", "Are you sure you want to delete this bowler?", "Yes", "No"))
+        if (await shell.DisplayPrompt("Delete", "Are you sure you want to delete this bowler?", "Yes", "No"))
         {
             await ExecuteAsync(async () =>
             {
-                if (await dbservice.DeleteBowler(id))
+                if (await data.DeleteBowler(id))
                 {
                     var bowler = AllBowlers.FirstOrDefault(b => b.Bowler.Id == id);
                     AllBowlers.Remove(bowler);
-                    await Shell.Current.GoToAsync("..", true);
+                    await shell.ReturnToPage();
                 }
                 else
                 {
-                    await Shell.Current.DisplayAlert("Delete Error", "Bowler was not deleted", "Ok");
+                    await shell.DisplayAlert("Delete Error", "Bowler was not deleted", "Ok");
                 }
             }, "Deleting bowler...");
         }
@@ -41,7 +41,7 @@ public partial class ManageBowlerViewModel(IDatabaseService dbservice) : BaseVie
         await ExecuteAsync(async () =>
         {
             AllBowlers ??= [];
-            var bowlers = await dbservice.GetAllBowlers();
+            var bowlers = await data.GetAllBowlers();
             if (bowlers is not null && bowlers.Any())
             {
                 AllBowlers.Clear();
@@ -73,7 +73,7 @@ public partial class ManageBowlerViewModel(IDatabaseService dbservice) : BaseVie
         var (isValid, errorMessage) = WorkingBowlerViewModel.Bowler.ValidateEmptyFields();
         if (!isValid)
         {
-            await Shell.Current.DisplayAlert("Validation Error", errorMessage, "Ok");
+            await shell.DisplayAlert("Validation Error", errorMessage, "Ok");
             return;
         }
 
@@ -81,9 +81,9 @@ public partial class ManageBowlerViewModel(IDatabaseService dbservice) : BaseVie
         if (WorkingBowlerViewModel.Bowler.Id == 0)
         {
             busyText = "Creating bowler...";
-            if (await dbservice.IsBowlerExists(WorkingBowlerViewModel.Bowler))
+            if (await data.IsBowlerExists(WorkingBowlerViewModel.Bowler))
             {
-                await Shell.Current.DisplayAlert("Validation Error", "This bowler already exists", "Ok");
+                await shell.DisplayAlert("Validation Error", "This bowler already exists", "Ok");
                 return;
             }
         }
@@ -91,12 +91,12 @@ public partial class ManageBowlerViewModel(IDatabaseService dbservice) : BaseVie
         await ExecuteAsync(async () =>
         {
             if (!(WorkingBowlerViewModel.Bowler.Id == 0
-                ? await dbservice.AddBowler(WorkingBowlerViewModel.Bowler)
-                : await dbservice.UpdateBowler(WorkingBowlerViewModel.Bowler)))
+                ? await data.AddBowler(WorkingBowlerViewModel.Bowler)
+                : await data.UpdateBowler(WorkingBowlerViewModel.Bowler)))
             {
-                await Shell.Current.DisplayAlert("Update Error", "Unable to save bowler", "Ok");
+                await shell.DisplayAlert("Update Error", "Unable to save bowler", "Ok");
             }
-            await Shell.Current.GoToAsync("..", true);
+            await shell.ReturnToPage();
         }, busyText);
     }
 
@@ -108,6 +108,6 @@ public partial class ManageBowlerViewModel(IDatabaseService dbservice) : BaseVie
     private async Task ShowAddUpdateBowlerViewAsync(BowlerViewModel bowler)
     {
         SetWorkingBowlerViewModelCommand.Execute(bowler);
-        await Shell.Current.GoToAsync(nameof(AddBowlerPage), true);
+        await shell.GoToPage(nameof(AddBowlerPage), true);
     }
 }
