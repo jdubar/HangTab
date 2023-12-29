@@ -32,7 +32,8 @@
                    TextColor="{AppThemeBinding Dark={StaticResource Success},
                                                Light={StaticResource Black}}"/>
         </Border>
-        <Image Source="{Binding ImageUrl}"
+        <Image Source="{Binding ImageUrl,
+                                FallbackValue='account_circle.png'}"
                HorizontalOptions="Center"
                VerticalOptions="Center"
                HeightRequest="50"

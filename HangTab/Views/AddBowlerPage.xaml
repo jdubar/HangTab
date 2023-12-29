@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:components="clr-namespace:HangTab.Views.Components"
              xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
              x:DataType="vm:ManageBowlerViewModel"
              x:Class="HangTab.Views.AddBowlerPage">
@@ -14,31 +15,32 @@
               RowDefinitions="Auto, *"
               ColumnDefinitions="*, Auto">
             <StackLayout Spacing="5" Padding="15" Margin="10">
+                <components:BowlerImage ImageUrl="{Binding WorkingBowlerViewModel.Bowler.ImageUrl}"/>
                 <Entry Text="{Binding WorkingBowlerViewModel.Bowler.FirstName, Mode=TwoWay}"
-                   FontSize="Medium"
-                   Placeholder="First Name"
-                   Margin="0"/>
+                       FontSize="Medium"
+                       Placeholder="First Name"
+                       Margin="0"/>
                 <Entry Text="{Binding WorkingBowlerViewModel.Bowler.LastName, Mode=TwoWay}"
-                   FontSize="Medium"
-                   Placeholder="Last Name"
-                   Margin="0"/>
+                       FontSize="Medium"
+                       Placeholder="Last Name"
+                       Margin="0"/>
                 <HorizontalStackLayout>
                     <Switch IsToggled="{Binding WorkingBowlerViewModel.Bowler.IsSub, Mode=TwoWay}"
-                        OnColor="{DynamicResource Success}"
-                        ThumbColor="{StaticResource Primary}"
-                        VerticalOptions="Center"/>
+                            OnColor="{DynamicResource Success}"
+                            ThumbColor="{StaticResource Primary}"
+                            VerticalOptions="Center"/>
                     <Label Text="Substitute Bowler"
-                       VerticalOptions="Center"
-                       FontSize="Medium"/>
+                           VerticalOptions="Center"
+                           FontSize="Medium"/>
                 </HorizontalStackLayout>
                 <HorizontalStackLayout>
                     <Switch IsToggled="{Binding WorkingBowlerViewModel.Bowler.IsHidden, Mode=TwoWay}"
-                        OnColor="{DynamicResource Error}"
-                        ThumbColor="{StaticResource Primary}"
+                            OnColor="{DynamicResource Error}"
+                            ThumbColor="{StaticResource Primary}"
                         VerticalOptions="Center"/>
                     <Label Text="Inactive Bowler"
-                       VerticalOptions="Center"
-                       FontSize="Medium"/>
+                           VerticalOptions="Center"
+                           FontSize="Medium"/>
                 </HorizontalStackLayout>
                 <StackLayout>
                     <Button Text="Save Changes"
@@ -46,10 +48,10 @@
                             Command="{Binding SaveBowlerCommand}">
                         <Button.Triggers>
                             <DataTrigger TargetType="Button" 
-                                     Binding="{Binding WorkingBowlerViewModel.Bowler.Id}"
-                                     Value="0">
+                                         Binding="{Binding WorkingBowlerViewModel.Bowler.Id}"
+                                         Value="0">
                                 <Setter Property="Text"
-                                    Value="Add Bowler"/>
+                                        Value="Add Bowler"/>
                             </DataTrigger>
                         </Button.Triggers>
                     </Button>
