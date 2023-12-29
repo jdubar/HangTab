@@ -10,6 +10,15 @@ public class ShellService : IShellService
     public async Task ReturnToPage() =>
         await Shell.Current.GoToAsync("..", true);
 
-    public async Task GoToPage(ShellNavigationState state, bool animate) =>
-        await Shell.Current.GoToAsync(state, animate);
+    public async Task GoToPage(ShellNavigationState state, ShellNavigationQueryParameters pairs = null)
+    {
+        if (pairs == null)
+        {
+            await Shell.Current.GoToAsync(state, true);
+        }
+        else
+        {
+            await Shell.Current.GoToAsync(state, true, pairs);
+        }
+    }
 }
