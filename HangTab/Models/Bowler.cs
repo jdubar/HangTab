@@ -1,12 +1,11 @@
-﻿using SQLite;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using SQLite;
 
 namespace HangTab.Models;
 
 [Table("bowler")]
-public class Bowler : INotifyPropertyChanged
+public class Bowler : ObservableObject
 {
     private int _totalHangings;
     private string _imageUrl;
@@ -16,11 +15,7 @@ public class Bowler : INotifyPropertyChanged
     public string ImageUrl
     {
         get => _imageUrl;
-        set
-        {
-            _imageUrl = value;
-            OnPropertyChanged();
-        }
+        set => SetProperty(ref _imageUrl, value);
     }
 
     public string FirstName { get; set; } = string.Empty;
@@ -30,11 +25,7 @@ public class Bowler : INotifyPropertyChanged
     public int TotalHangings
     {
         get => _totalHangings;
-        set
-        {
-            _totalHangings = value;
-            OnPropertyChanged();
-        }
+        set => SetProperty(ref _totalHangings, value);
     }
 
     public string FullName => $"{FirstName} {LastName}";
@@ -52,12 +43,5 @@ public class Bowler : INotifyPropertyChanged
             return (false, "Last name is required.");
         }
         return (true, string.Empty);
-    }
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
     }
 }

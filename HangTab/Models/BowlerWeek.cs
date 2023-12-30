@@ -1,12 +1,11 @@
-﻿using SQLite;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-using System.ComponentModel;
-using System.Runtime.CompilerServices;
+using SQLite;
 
 namespace HangTab.Models;
 
 [Table("bowlerweek")]
-public class BowlerWeek : INotifyPropertyChanged
+public class BowlerWeek : ObservableObject
 {
     private int _hangings;
 
@@ -17,17 +16,6 @@ public class BowlerWeek : INotifyPropertyChanged
     public int Hangings
     {
         get => _hangings;
-        set
-        {
-            _hangings = value;
-            OnPropertyChanged();
-        }
-    }
-
-    public event PropertyChangedEventHandler PropertyChanged;
-
-    protected virtual void OnPropertyChanged([CallerMemberName] string propertyName = null)
-    {
-        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        set => SetProperty(ref _hangings, value);
     }
 }
