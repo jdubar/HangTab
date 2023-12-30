@@ -9,10 +9,20 @@ namespace HangTab.Models;
 public class Bowler : INotifyPropertyChanged
 {
     private int _totalHangings;
+    private string _imageUrl;
 
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
-    public string ImageUrl { get; set; } = "account_circle.png";
+    public string ImageUrl
+    {
+        get => _imageUrl;
+        set
+        {
+            _imageUrl = value;
+            OnPropertyChanged();
+        }
+    }
+
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
     public bool IsSub { get; set; }
