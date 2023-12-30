@@ -36,6 +36,7 @@ public partial class ManageBowlerViewModel(IDatabaseService data, IShellService 
     [RelayCommand]
     private async Task ShowAddUpdateBowlerViewAsync(Bowler bowler)
     {
+        bowler ??= new Bowler();
         var navigationParameter = new ShellNavigationQueryParameters
         {
             { "Bowler", bowler }

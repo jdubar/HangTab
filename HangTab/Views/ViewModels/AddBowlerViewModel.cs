@@ -6,7 +6,7 @@ using HangTab.Services;
 
 namespace HangTab.Views.ViewModels;
 
-[QueryProperty(nameof(Bowler), "Bowler")]
+[QueryProperty(nameof(Bowler), nameof(Bowler))]
 public partial class AddBowlerViewModel(IDatabaseService data, IShellService shell) : BaseViewModel
 {
     [ObservableProperty]

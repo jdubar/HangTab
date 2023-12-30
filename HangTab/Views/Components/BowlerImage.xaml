@@ -32,11 +32,11 @@
                    TextColor="{AppThemeBinding Dark={StaticResource Success},
                                                Light={StaticResource Black}}"/>
         </Border>
-        <toolkit:AvatarView ImageSource="{Binding ImageUrl,
-                                                  FallbackValue='account_circle.png'}"
+        <toolkit:AvatarView ImageSource="{Binding ImageUrl}"
                             HorizontalOptions="Center"
                             VerticalOptions="Center"
                             HeightRequest="50"
+                            WidthRequest="50"
                             Margin="10"
                             ZIndex="1"/>
     </Grid>
