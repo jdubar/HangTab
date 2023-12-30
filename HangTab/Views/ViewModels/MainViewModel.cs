@@ -23,15 +23,10 @@ public partial class MainViewModel(IDatabaseService data, IShellService shell) :
     private BowlerViewModel _selectedBowler;
 
     [ObservableProperty]
-    private int _busRidesLabel;
-
-    [ObservableProperty]
     private bool _showBusRideImage;
 
     [ObservableProperty]
-    private int _totalBusRidesLabel;
-
-    private BusRideViewModel BusRideViewModel { get; set; }
+    private BusRideViewModel _busRideViewModel;
 
     private int WorkingWeek { get; set; }
 
@@ -49,7 +44,6 @@ public partial class MainViewModel(IDatabaseService data, IShellService shell) :
                 await shell.DisplayAlert("Update Error", "Error updating bus ride", "Ok");
                 return;
             }
-            SetBusRideLabels();
             await Task.Delay(2000);
             ShowBusRideImage = false;
         }, "Bus Ride!!!");
@@ -85,8 +79,6 @@ public partial class MainViewModel(IDatabaseService data, IShellService shell) :
             }
 
             BusRideViewModel = await data.GetLatestBusRide(WorkingWeek);
-
-            SetBusRideLabels();
 
             SetWorkingBowlerViewModelCommand.Execute(new());
             await SetMainBowlersListAsync();
@@ -175,12 +167,6 @@ public partial class MainViewModel(IDatabaseService data, IShellService shell) :
             collection.Add(viewModel);
         }
         return collection;
-    }
-
-    private void SetBusRideLabels()
-    {
-        BusRidesLabel = BusRideViewModel.BusRideWeek.BusRides;
-        TotalBusRidesLabel = BusRideViewModel.BusRide.TotalBusRides;
     }
 
     private async Task SetMainBowlersListAsync()

@@ -138,8 +138,8 @@
                                Margin="15,15,15,25"/>
                         <VerticalStackLayout VerticalOptions="Center"
                                              WidthRequest="230">
-                            <Label Text="{Binding BusRidesLabel, StringFormat='Bus Rides: {0}'}"/>
-                            <Label Text="{Binding TotalBusRidesLabel, StringFormat='Total: {0}'}"/>
+                            <Label Text="{Binding BusRideViewModel.BusRideWeek.BusRides, StringFormat='Bus Rides: {0}'}"/>
+                            <Label Text="{Binding BusRideViewModel.BusRide.TotalBusRides, StringFormat='Total: {0}'}"/>
                         </VerticalStackLayout>
                         <ImageButton HorizontalOptions="End"
                                      Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=BusRideCommand}">

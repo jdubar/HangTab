@@ -30,8 +30,6 @@ public class Bowler : ObservableObject
 
     public string FullName => $"{FirstName} {LastName}";
 
-    public Bowler Clone() => MemberwiseClone() as Bowler;
-
     public (bool IsValid, string ErrorMessage) ValidateEmptyFields()
     {
         if (string.IsNullOrWhiteSpace(FirstName))
