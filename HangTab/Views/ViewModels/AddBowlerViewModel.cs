@@ -19,7 +19,11 @@ public partial class AddBowlerViewModel(IDatabaseService data, IShellService she
         {
             await ExecuteAsync(async () =>
             {
-                if (!await data.DeleteBowler(id))
+                if (await data.DeleteBowler(id))
+                {
+                    IsInitializeMainCollection = true;
+                }
+                else
                 {
                     await shell.DisplayAlert("Delete Error", "Bowler was not deleted", "Ok");
                 }
@@ -56,9 +60,13 @@ public partial class AddBowlerViewModel(IDatabaseService data, IShellService she
 
         await ExecuteAsync(async () =>
         {
-            if (!(Bowler.Id == 0
+            if (Bowler.Id == 0
                 ? await data.AddBowler(Bowler)
-                : await data.UpdateBowler(Bowler)))
+                : await data.UpdateBowler(Bowler))
+            {
+                IsInitializeMainCollection = true;
+            }
+            else
             {
                 await shell.DisplayAlert("Update Error", "Unable to save bowler", "Ok");
             }
@@ -69,13 +77,14 @@ public partial class AddBowlerViewModel(IDatabaseService data, IShellService she
     [RelayCommand]
     private async Task SelectBowlerImage()
     {
+        // TODO: Finish SelectBowlerImage method
         //if (MediaPicker.Default.IsCaptureSupported)
         //{
-            // Take a photo
-            // var photo = await MediaPicker.Default.CapturePhotoAsync();
+        // Take a photo
+        // var photo = await MediaPicker.Default.CapturePhotoAsync();
 
-            // Load a photo
-            var photo = await MediaPicker.Default.PickPhotoAsync();
+        // Load a photo
+        var photo = await MediaPicker.Default.PickPhotoAsync();
 
             if (photo != null)
             {

@@ -4,9 +4,9 @@ namespace HangTab.Views;
 
 public partial class SwitchBowlerPage : ContentPage
 {
-    private readonly MainViewModel _viewModel;
+    private readonly SwitchBowlerViewModel _viewModel;
 
-    public SwitchBowlerPage(MainViewModel viewModel)
+    public SwitchBowlerPage(SwitchBowlerViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;
@@ -16,6 +16,6 @@ public partial class SwitchBowlerPage : ContentPage
     protected async override void OnAppearing()
     {
         base.OnAppearing();
-        await _viewModel.LoadSwitchBowlersAsync();
+        await _viewModel.InitializeDataAsync();
     }
 }

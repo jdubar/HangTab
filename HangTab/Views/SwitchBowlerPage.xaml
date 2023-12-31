@@ -2,10 +2,10 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:components="clr-namespace:HangTab.Views.Components"
-             xmlns:model="clr-namespace:HangTab.ViewModels"
+             xmlns:model="clr-namespace:HangTab.Models"
              xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
              x:Class="HangTab.Views.SwitchBowlerPage"
-             x:DataType="vm:MainViewModel"
+             x:DataType="vm:SwitchBowlerViewModel"
              Title="Switch Bowler">
     <Grid>
         <Grid RowDefinitions="Auto, *"
@@ -36,15 +36,15 @@
                                            Orientation="Vertical"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="model:BowlerViewModel">
+                        <DataTemplate x:DataType="model:Bowler">
                             <Grid HorizontalOptions="Center"
                                     VerticalOptions="End"
                                     HeightRequest="80">
-                                <components:CardView BowlerName="{Binding Bowler.FullName}"
-                                                     IsSub="{Binding Bowler.IsSub}"
-                                                     ImageUrl="{Binding Bowler.ImageUrl}"
-                                                     TotalHangings="{Binding Bowler.TotalHangings}"
-                                                     IsHidden="{Binding Bowler.IsHidden}"/>
+                                <components:CardView BowlerName="{Binding FullName}"
+                                                     IsSub="{Binding IsSub}"
+                                                     ImageUrl="{Binding ImageUrl}"
+                                                     TotalHangings="{Binding TotalHangings}"
+                                                     IsHidden="{Binding IsHidden}"/>
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

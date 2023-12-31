@@ -12,7 +12,7 @@ public partial class ManageBowlerViewModel(IDatabaseService data, IShellService 
     [ObservableProperty]
     private ObservableCollection<Bowler> _allBowlers;
 
-    public async Task LoadAllBowlersAsync()
+    public async Task LoadAllBowlersAsync()// TODO: Change LoadAllBowlersAsync to InitializeData like the rest of the vms?
     {
         await ExecuteAsync(async () =>
         {

@@ -61,7 +61,7 @@
                                     <SwipeItems>
                                         <SwipeItem BackgroundColor="{DynamicResource Tertiary}"
                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=ShowSwitchBowlerViewCommand}"
-                                                   CommandParameter="{Binding .}">
+                                                   CommandParameter="{Binding Bowler}">
                                             <SwipeItem.IconImageSource>
                                                 <FontImageSource FontFamily="GoogleFont"
                                                                  Glyph="{Static icons:GoogleFont.Switch_account}"/>

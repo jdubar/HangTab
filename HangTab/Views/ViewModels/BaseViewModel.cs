@@ -9,6 +9,8 @@ public partial class BaseViewModel : ObservableObject
     [ObservableProperty]
     private string _busyText;
 
+    public bool IsInitializeMainCollection { get; set; } = true;
+
     public async Task ExecuteAsync(Func<Task> operation, string busyText = null)
     {
         IsBusy = true;

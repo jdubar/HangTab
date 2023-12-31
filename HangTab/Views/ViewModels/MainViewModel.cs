@@ -14,13 +14,7 @@ public partial class MainViewModel(IDatabaseService data, IShellService shell) :
     private ObservableCollection<BowlerViewModel> _mainBowlers;
 
     [ObservableProperty]
-    private ObservableCollection<BowlerViewModel> _switchBowlers;
-
-    [ObservableProperty]
     private BowlerViewModel _workingBowlerViewModel;
-
-    [ObservableProperty]
-    private BowlerViewModel _selectedBowler;
 
     [ObservableProperty]
     private bool _showBusRideImage;
@@ -35,6 +29,7 @@ public partial class MainViewModel(IDatabaseService data, IShellService shell) :
     {
         await ExecuteAsync(async () =>
         {
+            // TODO: Does BusRideViewModel need to be rethought?
             ShowBusRideImage = true;
             BusRideViewModel.BusRide.TotalBusRides++;
             BusRideViewModel.BusRideWeek.BusRides++;
@@ -73,81 +68,46 @@ public partial class MainViewModel(IDatabaseService data, IShellService shell) :
         }, "Hanging bowler...");
     }
 
-    public async Task LoadMainBowlersAsync()
+    public async Task InitializeDataAsync()
     {
-        await ExecuteAsync(async () =>
+        // TODO: Reorganize MainViewModel methods by name
+        if (WorkingWeek == 0)
         {
-            if (WorkingWeek == 0)
-            {
-                WorkingWeek = await data.GetWorkingWeek();
-            }
-
-            BusRideViewModel = await data.GetLatestBusRide(WorkingWeek);
-
-            SetWorkingBowlerViewModelCommand.Execute(new());
-            await SetMainBowlersListAsync();
-        }, "Loading bowlers...");
+            WorkingWeek = await data.GetWorkingWeek();
+        }
+        BusRideViewModel = await data.GetLatestBusRide(WorkingWeek);
+        if (IsInitializeMainCollection)
+        {
+            await ExecuteAsync(SetMainBowlersListAsync, "Loading bowlers...");
+        }
     }
 
-    public async Task LoadSwitchBowlersAsync() =>
-        await ExecuteAsync(SetSwitchBowlersListAsync,
-                           "Loading bowlers...");
-
     [RelayCommand]
-    private void SetWorkingBowlerViewModel(BowlerViewModel viewModel) =>
-        WorkingBowlerViewModel = viewModel ?? new();
-
-    [RelayCommand]
-    private async Task ShowSwitchBowlerViewAsync(BowlerViewModel bowler)
+    private async Task ShowSwitchBowlerViewAsync(Bowler bowler)
     {
-        SetWorkingBowlerViewModelCommand.Execute(bowler);
-        await shell.GoToPage(nameof(SwitchBowlerPage));
+        bowler ??= new Bowler();
+        var navigationParameter = new ShellNavigationQueryParameters
+        {
+            { "Bowler", bowler }
+        };
+        await shell.GoToPage(nameof(SwitchBowlerPage), navigationParameter);
     }
 
     [RelayCommand]
     private async Task StartNewWeekAsync()
     {
+        // TODO: Rethink execution of StartNewWeekAsync - might be doing too much by reloading the entire list
         await ExecuteAsync(async () =>
         {
             WorkingWeek++;
-            await LoadMainBowlersAsync();
+            await SetMainBowlersListAsync();
         }, "Starting new week...");
     }
 
-    [RelayCommand]
-    private async Task SwitchBowlerAsync()
-    {
-        await ExecuteAsync(async () =>
-        {
-            if (!await ChangeBowlerHiddenStateAsync(WorkingBowlerViewModel))
-            {
-                await shell.DisplayAlert("Update Error", "Error updating bowler state", "Ok");
-                return;
-            }
-            if (!await ChangeBowlerHiddenStateAsync(SelectedBowler))
-            {
-                await shell.DisplayAlert("Update Error", "Error updating bowler state", "Ok");
-                return;
-            }
-
-            var index = MainBowlers.IndexOf(WorkingBowlerViewModel);
-            MainBowlers.RemoveAt(index);
-            MainBowlers.Insert(index, SelectedBowler);
-        }, "Switching bowler...");
-
-        await shell.ReturnToPage();
-    }
-
-    private async Task<bool> ChangeBowlerHiddenStateAsync(BowlerViewModel viewModel)
-    {
-        viewModel.Bowler.IsHidden = !viewModel.Bowler.IsHidden;
-        return await data.UpdateBowler(viewModel.Bowler);
-    }
-
-    private async Task<ObservableCollection<BowlerViewModel>> LoadBowlers(IEnumerable<Bowler> bowlers, IEnumerable<BowlerWeek> weeks)
+    private ObservableCollection<BowlerViewModel> LoadBowlers(IEnumerable<Bowler> bowlers, IEnumerable<BowlerWeek> weeks)
     {
         var collection = new ObservableCollection<BowlerViewModel>();
-        var lowest = await data.GetLowestHangs();
+        var lowest = bowlers.Where((x) => !x.IsSub && x.TotalHangings == bowlers.Min(y => y.TotalHangings));
 
         foreach (var bowler in bowlers)
         {
@@ -175,21 +135,11 @@ public partial class MainViewModel(IDatabaseService data, IShellService shell) :
 
     private async Task SetMainBowlersListAsync()
     {
-        MainBowlers ??= [];
+        IsInitializeMainCollection = false;
         var bowlers = await data.GetFilteredBowlers(b => !b.IsHidden);
         var weeks = await data.GetFilteredBowlerWeeks(WorkingWeek);
         MainBowlers = bowlers is not null && bowlers.Any()
-            ? await LoadBowlers(bowlers, weeks)
-            : ([]);
-    }
-
-    private async Task SetSwitchBowlersListAsync()
-    {
-        SwitchBowlers ??= [];
-        var bowlers = await data.GetFilteredBowlers(b => b.Id != WorkingBowlerViewModel.Bowler.Id && b.IsHidden);
-        var weeks = await data.GetAllBowlerWeeks();
-        SwitchBowlers = bowlers is not null && bowlers.Any()
-            ? await LoadBowlers(bowlers, weeks)
+            ? LoadBowlers(bowlers, weeks)
             : ([]);
     }
 }
