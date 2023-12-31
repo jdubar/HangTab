@@ -53,11 +53,9 @@
                             <VerticalStackLayout HorizontalOptions="Center"
                                                  VerticalOptions="Center"
                                                  WidthRequest="380">
-                                <Label Text="No Bowlers Found"
+                                <Label Text="No Inactive Bowlers Found"
                                        FontSize="18"
                                        FontAttributes="Bold"
-                                       HorizontalTextAlignment="Center"/>
-                                <Label Text="Try creating a bowler on the Bowlers page"
                                        HorizontalTextAlignment="Center"/>
                             </VerticalStackLayout>
                         </ContentView>

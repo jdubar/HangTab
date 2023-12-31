@@ -64,7 +64,11 @@ public partial class MainViewModel(IDatabaseService data, IShellService shell) :
             }
             else
             {
-                await SetMainBowlersListAsync();
+                foreach (var bowler in MainBowlers)
+                {
+                    bowler.IsLowestHangs = !bowler.Bowler.IsSub
+                                           && bowler.Bowler.TotalHangings == MainBowlers.Min(y => y.Bowler.TotalHangings);
+                }
             }
         }, "Hanging bowler...");
     }
