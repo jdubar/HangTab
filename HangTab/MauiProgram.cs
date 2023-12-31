@@ -25,20 +25,24 @@ public static class MauiProgram
             });
 
         builder.Services.AddSingleton<IDatabaseContext, DatabaseContext>();
+
         builder.Services.AddSingleton<IDatabaseService, DatabaseService>();
         builder.Services.AddSingleton<IShellService, ShellService>();
 
-        builder.Services.AddSingleton<MainViewModel>();
-        builder.Services.AddSingleton<ManageBowlerViewModel>();
-        builder.Services.AddSingleton<SettingsViewModel>();
-        builder.Services.AddSingleton<AddBowlerViewModel>();
-
         builder.Services.AddSingleton<MainPage>();
+        builder.Services.AddSingleton<MainViewModel>();
+
         builder.Services.AddSingleton<ManageBowlersPage>();
+        builder.Services.AddSingleton<ManageBowlerViewModel>();
+
         builder.Services.AddSingleton<SettingsPage>();
+        builder.Services.AddSingleton<SettingsViewModel>();
 
         builder.Services.AddSingleton<AddBowlerPage>();
+        builder.Services.AddSingleton<AddBowlerViewModel>();
+
         builder.Services.AddSingleton<SwitchBowlerPage>();
+        builder.Services.AddSingleton<SwitchBowlerViewModel>();
 
 #if DEBUG
         builder.Logging.AddDebug();
