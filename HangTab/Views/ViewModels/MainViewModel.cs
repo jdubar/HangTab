@@ -39,16 +39,17 @@ public partial class MainViewModel(IDatabaseService data, IShellService shell) :
     {
         await ExecuteAsync(async () =>
         {
-            // TODO: Does BusRideViewModel need to be rethought?
-            ShowBusRideImage = true;
             BusRideViewModel.BusRide.TotalBusRides++;
             BusRideViewModel.BusRideWeek.BusRides++;
 
             if (!await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
             {
-                ShowBusRideImage = false;
                 await shell.DisplayAlert("Update Error", "Error updating bus ride", "Ok");
                 return;
+            }
+            else
+            {
+                ShowBusRideImage = true;
             }
             await Task.Delay(2000);
             ShowBusRideImage = false;
