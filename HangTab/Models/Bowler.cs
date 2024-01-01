@@ -36,10 +36,6 @@ public class Bowler : ObservableObject
         {
             return (false, "First name is required.");
         }
-        else if (string.IsNullOrWhiteSpace(LastName))
-        {
-            return (false, "Last name is required.");
-        }
         return (true, string.Empty);
     }
 }
