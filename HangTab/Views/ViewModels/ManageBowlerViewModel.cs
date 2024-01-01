@@ -12,35 +12,18 @@ public partial class ManageBowlerViewModel(IDatabaseService data, IShellService 
     [ObservableProperty]
     private ObservableCollection<Bowler> _allBowlers;
 
-    public async Task LoadAllBowlersAsync()// TODO: Change LoadAllBowlersAsync to InitializeData like the rest of the vms?
+    public async Task InitializeData() =>
+        await ExecuteAsync(SetAllBowlersListAsync, "Loading all bowlers...");
+
+    private async Task SetAllBowlersListAsync()
     {
-        await ExecuteAsync(async () =>
-        {
-            AllBowlers ??= [];
-            var bowlers = await data.GetAllBowlers();
-            if (bowlers is not null && bowlers.Any())
-            {
-                AllBowlers.Clear();
-                foreach (var bowler in bowlers.OrderBy(b => b.FullName))
-                {
-                    AllBowlers.Add(bowler);
-                }
-            }
-            else
-            {
-                AllBowlers.Clear();
-            }
-        }, "Loading bowlers...");
+        var bowlers = await data.GetAllBowlers();
+        AllBowlers = bowlers is not null && bowlers.Any()
+            ? new ObservableCollection<Bowler>(bowlers.OrderBy(b => b.FullName))
+            : [];
     }
 
     [RelayCommand]
-    private async Task ShowAddUpdateBowlerViewAsync(Bowler bowler)
-    {
-        bowler ??= new Bowler();
-        var navigationParameter = new ShellNavigationQueryParameters
-        {
-            { "Bowler", bowler }
-        };
-        await shell.GoToPage(nameof(AddBowlerPage), navigationParameter);
-    }
+    private async Task ShowAddUpdateBowlerViewAsync(Bowler bowler) =>
+        await shell.GoToPageWithData(nameof(AddBowlerPage), bowler);
 }

@@ -28,10 +28,7 @@ public partial class MainViewModel(IDatabaseService data, IShellService shell) :
             WorkingWeek = await data.GetWorkingWeek();
         }
         BusRideViewModel = await data.GetLatestBusRide(WorkingWeek);
-        if (IsInitializeMainCollection)
-        {
-            await ExecuteAsync(SetMainBowlersListAsync, "Loading bowlers...");
-        }
+        await ExecuteAsync(SetMainBowlersListAsync, "Loading bowlers...");
     }
 
     [RelayCommand]
@@ -81,15 +78,8 @@ public partial class MainViewModel(IDatabaseService data, IShellService shell) :
     }
 
     [RelayCommand]
-    private async Task ShowSwitchBowlerViewAsync(Bowler bowler)
-    {
-        bowler ??= new Bowler();
-        var navigationParameter = new ShellNavigationQueryParameters
-        {
-            { "Bowler", bowler }
-        };
-        await shell.GoToPage(nameof(SwitchBowlerPage), navigationParameter);
-    }
+    private async Task ShowSwitchBowlerViewAsync(Bowler bowler) =>
+        await shell.GoToPageWithData(nameof(SwitchBowlerPage), bowler);
 
     [RelayCommand]
     private async Task StartNewWeekAsync()
@@ -133,11 +123,10 @@ public partial class MainViewModel(IDatabaseService data, IShellService shell) :
 
     private async Task SetMainBowlersListAsync()
     {
-        IsInitializeMainCollection = false;
         var bowlers = await data.GetFilteredBowlers(b => !b.IsHidden);
         var weeks = await data.GetFilteredBowlerWeeks(WorkingWeek);
         MainBowlers = bowlers is not null && bowlers.Any()
             ? LoadBowlers(bowlers, weeks)
-            : ([]);
+            : [];
     }
 }

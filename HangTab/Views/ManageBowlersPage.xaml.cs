@@ -16,6 +16,6 @@ public partial class ManageBowlersPage : ContentPage
     protected async override void OnAppearing()
     {
         base.OnAppearing();
-        await _viewModel.LoadAllBowlersAsync();
+        await _viewModel.InitializeData();
     }
 }

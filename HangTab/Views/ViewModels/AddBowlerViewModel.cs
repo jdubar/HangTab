@@ -19,11 +19,7 @@ public partial class AddBowlerViewModel(IDatabaseService data, IShellService she
         {
             await ExecuteAsync(async () =>
             {
-                if (await data.DeleteBowler(id))
-                {
-                    IsInitializeMainCollection = true;
-                }
-                else
+                if (!await data.DeleteBowler(id))
                 {
                     await shell.DisplayAlert("Delete Error", "Bowler was not deleted", "Ok");
                 }
@@ -60,13 +56,9 @@ public partial class AddBowlerViewModel(IDatabaseService data, IShellService she
 
         await ExecuteAsync(async () =>
         {
-            if (Bowler.Id == 0
+            if (!(Bowler.Id == 0
                 ? await data.AddBowler(Bowler)
-                : await data.UpdateBowler(Bowler))
-            {
-                IsInitializeMainCollection = true;
-            }
-            else
+                : await data.UpdateBowler(Bowler)))
             {
                 await shell.DisplayAlert("Update Error", "Unable to save bowler", "Ok");
             }

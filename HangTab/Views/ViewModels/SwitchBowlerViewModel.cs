@@ -33,7 +33,6 @@ public partial class SwitchBowlerViewModel(IDatabaseService data, IShellService 
         }
         else
         {
-            IsInitializeMainCollection = true;
             await shell.ReturnToPage();
         }
     }
