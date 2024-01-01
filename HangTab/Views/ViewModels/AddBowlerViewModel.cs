@@ -36,7 +36,7 @@ public partial class AddBowlerViewModel(IDatabaseService data, IShellService she
             return;
         }
 
-        var (isValid, errorMessage) = Bowler.ValidateEmptyFields();
+        var (isValid, errorMessage) = Bowler.ValidateFields();
         if (!isValid)
         {
             await shell.DisplayAlert("Validation Error", errorMessage, "Ok");

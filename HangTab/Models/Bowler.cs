@@ -30,12 +30,10 @@ public class Bowler : ObservableObject
 
     public string FullName => $"{FirstName} {LastName}";
 
-    public (bool IsValid, string ErrorMessage) ValidateEmptyFields()
+    public (bool IsValid, string ErrorMessage) ValidateFields()
     {
-        if (string.IsNullOrWhiteSpace(FirstName))
-        {
-            return (false, "First name is required.");
-        }
-        return (true, string.Empty);
+        return string.IsNullOrWhiteSpace(FirstName)
+            ? ((bool IsValid, string ErrorMessage))(false, "First name is required.")
+            : ((bool IsValid, string ErrorMessage))(true, string.Empty);
     }
 }
