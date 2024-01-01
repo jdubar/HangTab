@@ -75,38 +75,23 @@ public partial class AddBowlerViewModel(IDatabaseService data, IShellService she
     }
 
     [RelayCommand]
-    private async Task SelectBowlerImage()
+    private async Task SelectBowlerImageAsync()
     {
-        // TODO: Finish SelectBowlerImage method
-        //if (MediaPicker.Default.IsCaptureSupported)
-        //{
-        // Take a photo
-        // var photo = await MediaPicker.Default.CapturePhotoAsync();
-
-        // Load a photo
         var photo = await MediaPicker.Default.PickPhotoAsync();
-
-            if (photo != null)
+        if (photo != null)
+        {
+            var localFilePath = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
+            using var sourceStream = await photo.OpenReadAsync();
+            using var localFileStream = File.OpenWrite(localFilePath);
+            try
             {
-                // save the file into local storage
-                var localFilePath = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
-                using Stream sourceStream = await photo.OpenReadAsync();
-                using FileStream localFileStream = File.OpenWrite(localFilePath);
-
-                try
-                {
-                    await sourceStream.CopyToAsync(localFileStream);
-                    Bowler.ImageUrl = localFilePath;
-                }
-                catch (ArgumentNullException ex)
-                {
-                    await shell.DisplayAlert("Error", ex.Message, "Ok");
-                }
+                await sourceStream.CopyToAsync(localFileStream);
+                Bowler.ImageUrl = localFilePath;
             }
-        //}
-        //else
-        //{
-        //    await shell.DisplayAlert("Error", "Device not supported", "Ok");
-        //}
+            catch (ArgumentNullException ex)
+            {
+                await shell.DisplayAlert("Error", ex.Message, "Ok");
+            }
+        }
     }
 }
