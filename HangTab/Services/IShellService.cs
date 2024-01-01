@@ -1,8 +1,10 @@
-﻿namespace HangTab.Services;
+﻿using HangTab.Models;
+
+namespace HangTab.Services;
 public interface IShellService
 {
     Task DisplayAlert(string title, string msg, string buttonText);
     Task<bool> DisplayPrompt(string title, string msg, string accept, string cancel);
-    Task GoToPage(ShellNavigationState state, ShellNavigationQueryParameters pairs = null);
+    Task GoToPageWithData(ShellNavigationState state, Bowler bowler);
     Task ReturnToPage();
 }
