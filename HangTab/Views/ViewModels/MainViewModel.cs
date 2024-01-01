@@ -14,15 +14,25 @@ public partial class MainViewModel(IDatabaseService data, IShellService shell) :
     private ObservableCollection<BowlerViewModel> _mainBowlers;
 
     [ObservableProperty]
-    private BowlerViewModel _workingBowlerViewModel;
-
-    [ObservableProperty]
     private bool _showBusRideImage;
 
     [ObservableProperty]
     private BusRideViewModel _busRideViewModel;
 
     private int WorkingWeek { get; set; }
+
+    public async Task InitializeDataAsync()
+    {
+        if (WorkingWeek == 0)
+        {
+            WorkingWeek = await data.GetWorkingWeek();
+        }
+        BusRideViewModel = await data.GetLatestBusRide(WorkingWeek);
+        if (IsInitializeMainCollection)
+        {
+            await ExecuteAsync(SetMainBowlersListAsync, "Loading bowlers...");
+        }
+    }
 
     [RelayCommand]
     private async Task BusRideAsync()
@@ -36,6 +46,7 @@ public partial class MainViewModel(IDatabaseService data, IShellService shell) :
 
             if (!await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
             {
+                ShowBusRideImage = false;
                 await shell.DisplayAlert("Update Error", "Error updating bus ride", "Ok");
                 return;
             }
@@ -66,20 +77,6 @@ public partial class MainViewModel(IDatabaseService data, IShellService shell) :
                 }
             }
         }, "Hanging bowler...");
-    }
-
-    public async Task InitializeDataAsync()
-    {
-        // TODO: Reorganize MainViewModel methods by name
-        if (WorkingWeek == 0)
-        {
-            WorkingWeek = await data.GetWorkingWeek();
-        }
-        BusRideViewModel = await data.GetLatestBusRide(WorkingWeek);
-        if (IsInitializeMainCollection)
-        {
-            await ExecuteAsync(SetMainBowlersListAsync, "Loading bowlers...");
-        }
     }
 
     [RelayCommand]
