@@ -84,11 +84,17 @@ public partial class MainViewModel(IDatabaseService data, IShellService shell) :
     [RelayCommand]
     private async Task StartNewWeekAsync()
     {
-        // TODO: Rethink execution of StartNewWeekAsync - might be doing too much by reloading the entire list
-        await ExecuteAsync(async () =>
+        await ExecuteAsync(() =>
         {
             WorkingWeek++;
-            await SetMainBowlersListAsync();
+            foreach (var week in MainBowlers.Select(b => b.BowlerWeek))
+            {
+                week.Hangings = 0;
+                week.WeekNumber = WorkingWeek;
+            }
+            BusRideViewModel.BusRideWeek.BusRides = 0;
+            BusRideViewModel.BusRideWeek.WeekNumber = WorkingWeek;
+            return Task.CompletedTask;
         }, "Starting new week...");
     }
 
