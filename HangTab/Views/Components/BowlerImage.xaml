@@ -33,6 +33,8 @@
                                                Light={StaticResource Black}}"/>
         </Border>
         <toolkit:AvatarView ImageSource="{Binding ImageUrl}"
+                            BorderColor="{AppThemeBinding Dark={StaticResource Gray300},
+                                                          Light={StaticResource Black}}"
                             HorizontalOptions="Center"
                             VerticalOptions="Center"
                             HeightRequest="50"

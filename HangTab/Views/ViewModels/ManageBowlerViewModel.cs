@@ -12,8 +12,11 @@ public partial class ManageBowlerViewModel(IDatabaseService data, IShellService 
     [ObservableProperty]
     private ObservableCollection<Bowler> _allBowlers;
 
-    public async Task InitializeData() =>
+    public async Task InitializeData()
+    {
+        // TODO: This shouldn't run every time, right??
         await ExecuteAsync(SetAllBowlersListAsync, "Loading all bowlers...");
+    }
 
     private async Task SetAllBowlersListAsync()
     {
