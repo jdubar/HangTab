@@ -8,7 +8,7 @@ namespace HangTab.Models;
 public class Bowler : ObservableObject
 {
     private int _totalHangings;
-    private string _imageUrl;
+    private string _imageUrl = "account_circle.png";
 
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
