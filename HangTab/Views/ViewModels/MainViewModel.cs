@@ -95,7 +95,7 @@ public partial class MainViewModel(IDatabaseService data, IShellService shell) :
     private ObservableCollection<BowlerViewModel> LoadBowlers(IEnumerable<Bowler> bowlers, IEnumerable<BowlerWeek> weeks)
     {
         var collection = new ObservableCollection<BowlerViewModel>();
-        var lowest = bowlers.Where((x) => !x.IsSub && x.TotalHangings == bowlers.Min(y => y.TotalHangings));// TODO: Immediately after IsSub is changed, IsLowestHangs is not calculated correctly
+        var lowest = bowlers.Where(b => !b.IsSub && b.TotalHangings == bowlers.Where(b => !b.IsSub).Min(b => b.TotalHangings));
 
         foreach (var bowler in bowlers)
         {
