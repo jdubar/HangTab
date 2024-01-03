@@ -27,6 +27,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<IDatabaseContext, DatabaseContext>();
 
         builder.Services.AddSingleton<IDatabaseService, DatabaseService>();
+        builder.Services.AddSingleton<IMediaService, MediaService>();
         builder.Services.AddSingleton<IShellService, ShellService>();
 
         builder.Services.AddSingleton<MainPage>();
