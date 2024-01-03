@@ -8,6 +8,8 @@ using HangTab.Views.ViewModels;
 
 using Microsoft.Extensions.Logging;
 
+using Plugin.Maui.Audio;
+
 namespace HangTab;
 public static class MauiProgram
 {
@@ -25,6 +27,7 @@ public static class MauiProgram
             });
 
         builder.Services.AddSingleton<IDatabaseContext, DatabaseContext>();
+        builder.Services.AddSingleton(AudioManager.Current);
 
         builder.Services.AddSingleton<IDatabaseService, DatabaseService>();
         builder.Services.AddSingleton<IMediaService, MediaService>();
