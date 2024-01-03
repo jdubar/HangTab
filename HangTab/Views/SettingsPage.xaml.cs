@@ -16,4 +16,9 @@ public partial class SettingsPage : ContentPage
     {
         _viewModel.DropAllTablesCommand.Execute(null);
     }
+
+    private void ResetHangingsOnTap(object sender, TappedEventArgs e)
+    {
+        _viewModel.ResetAllHangingsCommand.Execute(null);
+    }
 }

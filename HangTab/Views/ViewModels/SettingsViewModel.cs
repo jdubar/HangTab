@@ -19,4 +19,19 @@ public partial class SettingsViewModel(IDatabaseService data, IShellService shel
             }, "Clearing all data...");
         }
     }
+
+    [RelayCommand]
+    private async Task ResetAllHangingsAsync()
+    {
+        if (await shell.DisplayPrompt("Reset", "Are you sure you want to reset all bowler hangings?", "Yes", "No"))
+        {
+            await ExecuteAsync(async () =>
+            {
+                if (!await data.ResetHangings())
+                {
+                    await shell.DisplayAlert("Critical Error", "Error occurred while restting data!", "Ok");
+                }
+            }, "Resetting hangings...");
+        }
+    }
 }

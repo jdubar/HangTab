@@ -1,19 +1,48 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:icons="clr-namespace:HangTab.Helpers"
              xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
+             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Class="HangTab.Views.SettingsPage"
              x:DataType="vm:SettingsViewModel"
              Title="Settings">
     <VerticalStackLayout>
-        <Label Text="Delete data"
-               HeightRequest="40"
+        <Label Text="Reset Hangings"
+               HeightRequest="60"
+               VerticalTextAlignment="Center"
                FontSize="Title"
-               Margin="10">
+               FontAttributes="Bold">
             <Label.GestureRecognizers>
-                <TapGestureRecognizer Tapped="ClearAllDataOnTap"/>
+                <TapGestureRecognizer Tapped="ResetHangingsOnTap"/>
             </Label.GestureRecognizers>
         </Label>
+        <BoxView BackgroundColor="LightGray"
+                 HeightRequest="1"/>
+        <Grid ColumnDefinitions="*, 60"
+              HorizontalOptions="Center"  BackgroundColor="{StaticResource Error}">
+            <StackLayout Orientation="Horizontal">
+                <Label Text="Delete All Bowlers and Data"
+                   HeightRequest="60"
+                   HorizontalOptions="Start"
+                   VerticalTextAlignment="Center"
+                   FontSize="Title"
+                   FontAttributes="Bold">
+                    <Label.GestureRecognizers>
+                        <TapGestureRecognizer Tapped="ClearAllDataOnTap"/>
+                    </Label.GestureRecognizers>
+                </Label>
+                <Image HorizontalOptions="End"
+                       WidthRequest="40"
+                       Margin="20,0,0,0"
+                       Source="skull.png">
+                    <Image.Behaviors>
+                        <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Dark={StaticResource White},
+                                                                                   Light={StaticResource Gray900}}" />
+                    </Image.Behaviors>
+                </Image>
+            </StackLayout>
+        </Grid>
         <BoxView BackgroundColor="LightGray"
                  HeightRequest="1"/>
     </VerticalStackLayout>
