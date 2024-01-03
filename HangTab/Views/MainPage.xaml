@@ -129,28 +129,24 @@
                   VerticalOptions="End"
                   HeightRequest="107">
                 <Border HeightRequest="107"
-                        WidthRequest="410"
+                        WidthRequest="396"
                         StrokeThickness="1">
                     <StackLayout Orientation="Horizontal">
-                        <Image Source="school_bus.png"
-                               VerticalOptions="Center"
-                               HeightRequest="60"
-                               Margin="15,15,15,25"/>
                         <VerticalStackLayout VerticalOptions="Center"
-                                             WidthRequest="230">
-                            <Label Text="{Binding BusRideViewModel.BusRideWeek.BusRides, StringFormat='Bus Rides: {0}'}"/>
-                            <Label Text="{Binding BusRideViewModel.BusRide.TotalBusRides, StringFormat='Total: {0}'}"/>
+                                             WidthRequest="230"
+                                             Margin="20">
+                            <Label Text="{Binding BusRideViewModel.BusRideWeek.BusRides, StringFormat='Bus Rides: {0}'}"
+                                   FontAttributes="Bold"
+                                   FontSize="Body"/>
+                            <Label Text="{Binding BusRideViewModel.BusRide.TotalBusRides, StringFormat='Total: {0}'}"
+                                   FontAttributes="Bold"
+                                   FontSize="Body"/>
                         </VerticalStackLayout>
-                        <ImageButton HorizontalOptions="End"
-                                     Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=BusRideCommand}">
-                            <ImageButton.Source>
-                                <FontImageSource FontFamily="GoogleFont"
-                                                 Glyph="{Static icons:GoogleFont.Add_circle}" />
-                            </ImageButton.Source>
-                            <ImageButton.Behaviors>
-                                <toolkit:IconTintColorBehavior TintColor="{StaticResource Success}" />
-                            </ImageButton.Behaviors>
-                        </ImageButton>
+                        <ImageButton Source="school_bus.png"
+                                     HeightRequest="100"
+                                     WidthRequest="100"
+                                     VerticalOptions="Start"
+                                     Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=BusRideCommand}"/>
                     </StackLayout>
                 </Border>
             </Grid>
