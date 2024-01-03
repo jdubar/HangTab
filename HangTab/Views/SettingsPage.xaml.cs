@@ -14,6 +14,6 @@ public partial class SettingsPage : ContentPage
 
     private void ClearAllDataOnTap(object sender, TappedEventArgs e)
     {
-        _viewModel.DropAllTablesCommand.ExecuteAsync(null);
+        _viewModel.DropAllTablesCommand.Execute(null);
     }
 }
