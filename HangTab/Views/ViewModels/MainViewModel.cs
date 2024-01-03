@@ -87,7 +87,7 @@ public partial class MainViewModel(IDatabaseService data,
                                            && bowler.Bowler.TotalHangings == MainBowlers.Where(b => !b.Bowler.IsSub).Min(y => y.Bowler.TotalHangings);
                 }
             }
-        }, "Hanging bowler...");
+        }, "");
     }
 
     [RelayCommand]
