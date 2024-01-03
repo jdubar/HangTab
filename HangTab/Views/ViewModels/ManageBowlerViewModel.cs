@@ -26,7 +26,7 @@ public partial class ManageBowlerViewModel(IDatabaseService data,
             {
                 AllBowlers.AddRange(bowlers);
             }
-        }, "Loading all bowlers...");
+        }, "");
     }
 
     [RelayCommand]

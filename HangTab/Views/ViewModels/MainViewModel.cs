@@ -47,7 +47,7 @@ public partial class MainViewModel(IDatabaseService data,
             {
                 MainBowlers.AddRange(LoadBowlers(bowlers, weeks));
             }
-        }, "Loading bowlers...");
+        }, "");
     }
 
     [RelayCommand]
