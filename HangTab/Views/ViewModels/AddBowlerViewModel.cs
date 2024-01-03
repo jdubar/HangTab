@@ -7,7 +7,9 @@ using HangTab.Services;
 namespace HangTab.Views.ViewModels;
 
 [QueryProperty(nameof(Bowler), nameof(Bowler))]
-public partial class AddBowlerViewModel(IDatabaseService data, IShellService shell) : BaseViewModel
+public partial class AddBowlerViewModel(IDatabaseService data,
+                                        IShellService shell,
+                                        IMediaService media) : BaseViewModel
 {
     [ObservableProperty]
     private Bowler _bowler;
@@ -22,7 +24,9 @@ public partial class AddBowlerViewModel(IDatabaseService data, IShellService she
                 if (!await data.DeleteBowler(id))
                 {
                     await shell.DisplayAlert("Delete Error", "Bowler was not deleted", "Ok");
+                    return;
                 }
+                await shell.DisplayToast("Bowler deleted");
                 await shell.ReturnToPage();
             }, "Deleting bowler...");
         }
@@ -61,7 +65,9 @@ public partial class AddBowlerViewModel(IDatabaseService data, IShellService she
                 : await data.UpdateBowler(Bowler)))
             {
                 await shell.DisplayAlert("Update Error", "Unable to save bowler", "Ok");
+                return;
             }
+            await shell.DisplayToast("Bowler saved");
             await shell.ReturnToPage();
         }, busyText);
     }
@@ -69,21 +75,17 @@ public partial class AddBowlerViewModel(IDatabaseService data, IShellService she
     [RelayCommand]
     private async Task SelectBowlerImageAsync()
     {
-        var photo = await MediaPicker.Default.PickPhotoAsync();
-        if (photo != null)
+        await ExecuteAsync(async () =>
         {
-            var localFilePath = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
-            using var sourceStream = await photo.OpenReadAsync();
-            using var localFileStream = File.OpenWrite(localFilePath);
-            try
+            var result = await media.PickPhotoAsync();
+            if (result.IsSuccess)
             {
-                await sourceStream.CopyToAsync(localFileStream);
-                Bowler.ImageUrl = localFilePath;
+                Bowler.ImageUrl = result.Result;
             }
-            catch (ArgumentNullException ex)
+            else
             {
-                await shell.DisplayAlert("Error", ex.Message, "Ok");
+                await shell.DisplayAlert("Error", result.Result, "Ok");
             }
-        }
+        }, "Setting Bowler Image");
     }
 }

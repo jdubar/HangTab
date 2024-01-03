@@ -1,29 +1,32 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 
 using HangTab.Models;
 using HangTab.Services;
 
-using System.Collections.ObjectModel;
+using MvvmHelpers;
 
 namespace HangTab.Views.ViewModels;
-public partial class ManageBowlerViewModel(IDatabaseService data, IShellService shell) : BaseViewModel
+public partial class ManageBowlerViewModel(IDatabaseService data,
+                                           IShellService shell) : BaseViewModel
 {
-    [ObservableProperty]
-    private ObservableCollection<Bowler> _allBowlers;
+    public ObservableRangeCollection<Bowler> AllBowlers { get; set; } = [];
 
+    [RelayCommand]
     public async Task InitializeData()
     {
-        // TODO: This shouldn't run every time, right??
-        await ExecuteAsync(SetAllBowlersListAsync, "Loading all bowlers...");
-    }
+        await ExecuteAsync(async () =>
+        {
+            var bowlers = await data.GetAllBowlers();
+            if (AllBowlers.Count > 0)
+            {
+                AllBowlers.Clear();
+            }
 
-    private async Task SetAllBowlersListAsync()
-    {
-        var bowlers = await data.GetAllBowlers();
-        AllBowlers = bowlers is not null && bowlers.Any()
-            ? new ObservableCollection<Bowler>(bowlers.OrderBy(b => b.FullName))
-            : [];
+            if (bowlers.Any())
+            {
+                AllBowlers.AddRange(bowlers);
+            }
+        }, "Loading all bowlers...");
     }
 
     [RelayCommand]

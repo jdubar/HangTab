@@ -5,13 +5,16 @@ using HangTab.Models;
 using HangTab.Services;
 using HangTab.ViewModels;
 
-using System.Collections.ObjectModel;
+using MvvmHelpers;
+
+using Plugin.Maui.Audio;
 
 namespace HangTab.Views.ViewModels;
-public partial class MainViewModel(IDatabaseService data, IShellService shell) : BaseViewModel
+public partial class MainViewModel(IDatabaseService data,
+                                   IShellService shell,
+                                   IAudioManager audio) : BaseViewModel
 {
-    [ObservableProperty]
-    private ObservableCollection<BowlerViewModel> _mainBowlers;
+    public ObservableRangeCollection<BowlerViewModel> MainBowlers { get; set; } = [];
 
     [ObservableProperty]
     private bool _showBusRideImage;
@@ -21,14 +24,30 @@ public partial class MainViewModel(IDatabaseService data, IShellService shell) :
 
     private int WorkingWeek { get; set; }
 
-    public async Task InitializeDataAsync()
+    [RelayCommand]
+    private async Task InitializeDataAsync()
     {
-        if (WorkingWeek == 0)
+        await ExecuteAsync(async () =>
         {
-            WorkingWeek = await data.GetWorkingWeek();
-        }
-        BusRideViewModel = await data.GetLatestBusRide(WorkingWeek);
-        await ExecuteAsync(SetMainBowlersListAsync, "Loading bowlers...");
+            if (WorkingWeek == 0)
+            {
+                WorkingWeek = await data.GetWorkingWeek();
+            }
+            BusRideViewModel = await data.GetLatestBusRide(WorkingWeek);
+
+            var bowlers = await data.GetFilteredBowlers(b => !b.IsHidden);
+            var weeks = await data.GetFilteredBowlerWeeks(WorkingWeek);
+
+            if (MainBowlers.Count > 0)
+            {
+                MainBowlers.Clear();
+            }
+
+            if (bowlers.Any())
+            {
+                MainBowlers.AddRange(LoadBowlers(bowlers, weeks));
+            }
+        }, "Loading bowlers...");
     }
 
     [RelayCommand]
@@ -42,14 +61,11 @@ public partial class MainViewModel(IDatabaseService data, IShellService shell) :
             if (!await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
             {
                 await shell.DisplayAlert("Update Error", "Error updating bus ride", "Ok");
-                return;
             }
             else
             {
-                ShowBusRideImage = true;
+                await ShowBusRideSplash();
             }
-            await Task.Delay(2000);
-            ShowBusRideImage = false;
         }, "Bus Ride!!!");
     }
 
@@ -71,7 +87,7 @@ public partial class MainViewModel(IDatabaseService data, IShellService shell) :
                 foreach (var bowler in MainBowlers)
                 {
                     bowler.IsLowestHangs = !bowler.Bowler.IsSub
-                                           && bowler.Bowler.TotalHangings == MainBowlers.Min(y => y.Bowler.TotalHangings);
+                                           && bowler.Bowler.TotalHangings == MainBowlers.Where(b => !b.Bowler.IsSub).Min(y => y.Bowler.TotalHangings);
                 }
             }
         }, "Hanging bowler...");
@@ -98,9 +114,9 @@ public partial class MainViewModel(IDatabaseService data, IShellService shell) :
         }, "Starting new week...");
     }
 
-    private ObservableCollection<BowlerViewModel> LoadBowlers(IEnumerable<Bowler> bowlers, IEnumerable<BowlerWeek> weeks)
+    private List<BowlerViewModel> LoadBowlers(IEnumerable<Bowler> bowlers, IEnumerable<BowlerWeek> weeks)
     {
-        var collection = new ObservableCollection<BowlerViewModel>();
+        var collection = new List<BowlerViewModel>();
         var lowest = bowlers.Where(b => !b.IsSub && b.TotalHangings == bowlers.Where(b => !b.IsSub).Min(b => b.TotalHangings));
 
         foreach (var bowler in bowlers)
@@ -127,12 +143,12 @@ public partial class MainViewModel(IDatabaseService data, IShellService shell) :
         return collection;
     }
 
-    private async Task SetMainBowlersListAsync()
+    private async Task ShowBusRideSplash()
     {
-        var bowlers = await data.GetFilteredBowlers(b => !b.IsHidden);
-        var weeks = await data.GetFilteredBowlerWeeks(WorkingWeek);
-        MainBowlers = bowlers is not null && bowlers.Any()
-            ? LoadBowlers(bowlers, weeks)
-            : [];
+        ShowBusRideImage = true;
+        using var player = audio.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("beep-beep.mp3"));
+        player.Play();
+        await Task.Delay(2000);
+        ShowBusRideImage = false;
     }
 }

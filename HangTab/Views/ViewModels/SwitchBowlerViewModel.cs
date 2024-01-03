@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.Input;
 using HangTab.Models;
 using HangTab.Services;
 
-using System.Collections.ObjectModel;
+using MvvmHelpers;
 
 namespace HangTab.Views.ViewModels;
 
@@ -15,13 +15,27 @@ public partial class SwitchBowlerViewModel(IDatabaseService data, IShellService 
     private Bowler _bowler;
 
     [ObservableProperty]
-    private ObservableCollection<Bowler> _switchBowlers;
-
-    [ObservableProperty]
     private Bowler _selectedBowler;
 
-    public async Task InitializeDataAsync() =>
-        await ExecuteAsync(SetSwitchBowlersListAsync, "Loading bowlers...");
+    public ObservableRangeCollection<Bowler> SwitchBowlers { get; set; } = [];
+
+    [RelayCommand]
+    public async Task InitializeDataAsync()
+    {
+        await ExecuteAsync(async () =>
+        {
+            var bowlers = await data.GetFilteredBowlers(b => b.Id != Bowler.Id && b.IsHidden);
+            if (SwitchBowlers.Count > 0)
+            {
+                SwitchBowlers.Clear();
+            }
+
+            if (bowlers.Any())
+            {
+                SwitchBowlers.AddRange(bowlers);
+            }
+        }, "Loading bowlers...");
+    }
 
     [RelayCommand]
     private async Task SwitchBowlerAsync()
@@ -41,13 +55,5 @@ public partial class SwitchBowlerViewModel(IDatabaseService data, IShellService 
     {
         bowler.IsHidden = !bowler.IsHidden;
         return await data.UpdateBowler(bowler);
-    }
-
-    private async Task SetSwitchBowlersListAsync()
-    {
-        var bowlers = await data.GetFilteredBowlers(b => b.Id != Bowler.Id && b.IsHidden);
-        SwitchBowlers = bowlers is not null && bowlers.Any()
-            ? new ObservableCollection<Bowler>(bowlers)
-            : ([]);
     }
 }
