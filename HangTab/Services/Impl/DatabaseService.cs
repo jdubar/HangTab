@@ -77,6 +77,27 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         return find.Any();
     }
 
+    public async Task<bool> ResetHangings()
+    {
+        try
+        {
+            var bowlers = await context.GetAllAsync<Bowler>();
+            foreach (var bowler in bowlers)
+            {
+                bowler.TotalHangings = 0;
+                _ = await UpdateBowler(bowler);
+            }
+            _ = await context.DropTableAsync<BowlerWeek>();
+            _ = await context.DropTableAsync<BusRide>();
+            _ = await context.DropTableAsync<BusRideWeek>();
+            return true;
+        }
+        catch (Exception)
+        {
+            return false;
+        }
+    }
+
     public async Task<bool> UpdateBowler(Bowler bowler) =>
         await context.UpdateItemAsync(bowler);
 

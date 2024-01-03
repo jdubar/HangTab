@@ -7,6 +7,7 @@ namespace HangTab.Services;
 public interface IDatabaseService
 {
     Task<bool> DropAllTables();
+    Task<bool> ResetHangings();
 
     Task<IEnumerable<Bowler>> GetAllBowlers();
     Task<IEnumerable<Bowler>> GetFilteredBowlers(Expression<Func<Bowler, bool>> predicate);
