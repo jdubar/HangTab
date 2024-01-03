@@ -53,20 +53,17 @@ public partial class MainViewModel(IDatabaseService data,
     [RelayCommand]
     private async Task BusRideAsync()
     {
-        await ExecuteAsync(async () =>
-        {
-            BusRideViewModel.BusRide.TotalBusRides++;
-            BusRideViewModel.BusRideWeek.BusRides++;
+        BusRideViewModel.BusRide.TotalBusRides++;
+        BusRideViewModel.BusRideWeek.BusRides++;
 
-            if (!await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
-            {
-                await shell.DisplayAlert("Update Error", "Error updating bus ride", "Ok");
-            }
-            else
-            {
-                await ShowBusRideSplash();
-            }
-        }, "Bus Ride!!!");
+        if (!await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
+        {
+            await shell.DisplayAlert("Update Error", "Error updating bus ride", "Ok");
+        }
+        else
+        {
+            await ShowBusRideSplashAsync();
+        }
     }
 
     [RelayCommand]
@@ -143,7 +140,7 @@ public partial class MainViewModel(IDatabaseService data,
         return collection;
     }
 
-    private async Task ShowBusRideSplash()
+    private async Task ShowBusRideSplashAsync()
     {
         ShowBusRideImage = true;
         using var player = audio.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("beep-beep.mp3"));
