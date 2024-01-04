@@ -31,9 +31,7 @@
             <RowDefinition Height="70"/>
         </Grid.RowDefinitions>
 
-        <Grid Grid.Row="0"
-              RowDefinitions="Auto, *"
-              ColumnDefinitions="*, Auto">
+        <Grid Grid.Row="0">
             <VerticalStackLayout Grid.RowSpan="2"
                                  VerticalOptions="Center"
                                  HorizontalOptions="Center"
@@ -46,21 +44,20 @@
                        HorizontalOptions="Center"/>
             </VerticalStackLayout>
 
-            <Grid Grid.Row="1"
-                  RowDefinitions="*, Auto">
+            <Grid>
                 <Image x:Name="BusSplash"
                        Source="bus_splash.png"
                        HeightRequest="300"
                        ZIndex="2"
                        IsVisible="{Binding ShowBusRideImage}"
-                       HorizontalOptions="Center"/>
-                <CollectionView Grid.Row="0"
-                                x:Name="BowlerList"
+                       HorizontalOptions="Center"
+                       VerticalOptions="End"/>
+                <CollectionView x:Name="BowlerList"
                                 ItemsSource="{Binding MainBowlers}"
-                                Margin="0,10,0,0"
+                                Margin="0,5,0,0"
                                 ZIndex="1">
                     <CollectionView.ItemsLayout>
-                        <LinearItemsLayout ItemSpacing="10"
+                        <LinearItemsLayout ItemSpacing="4"
                                             Orientation="Vertical"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
