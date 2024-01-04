@@ -25,6 +25,9 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
     public async Task<IEnumerable<BowlerWeek>> GetAllBowlerWeeks() =>
         await context.GetAllAsync<BowlerWeek>();
 
+    public async Task<IEnumerable<BusRideWeek>> GetAllBusRideWeeks() =>
+        await context.GetAllAsync<BusRideWeek>();
+
     public async Task<IEnumerable<Bowler>> GetFilteredBowlers(Expression<Func<Bowler, bool>> predicate) =>
         await context.GetFilteredAsync(predicate);
 

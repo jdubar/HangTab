@@ -13,6 +13,7 @@ public interface IDatabaseService
     Task<IEnumerable<Bowler>> GetFilteredBowlers(Expression<Func<Bowler, bool>> predicate);
 
     Task<IEnumerable<BowlerWeek>> GetAllBowlerWeeks();
+    Task<IEnumerable<BusRideWeek>> GetAllBusRideWeeks();
     Task<IEnumerable<BowlerWeek>> GetFilteredBowlerWeeks(int week);
 
     Task<BusRideViewModel> GetLatestBusRide(int week);
