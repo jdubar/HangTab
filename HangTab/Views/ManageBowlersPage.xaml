@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:model="clr-namespace:HangTab.Models"
+             xmlns:models="clr-namespace:HangTab.Models"
              xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
              xmlns:components="clr-namespace:HangTab.Views.Components"
              xmlns:icons="clr-namespace:HangTab.Helpers"
@@ -32,7 +32,6 @@
 
         <Grid>
             <CollectionView Grid.Row="0"
-                            x:Name="BowlerList"
                             ItemsSource="{Binding AllBowlers}"
                             Margin="0,5,0,0">
                 <CollectionView.ItemsLayout>
@@ -40,7 +39,7 @@
                                        Orientation="Vertical"/>
                 </CollectionView.ItemsLayout>
                 <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="model:Bowler">
+                    <DataTemplate x:DataType="models:Bowler">
                         <Grid HorizontalOptions="Center"
                               VerticalOptions="End"
                               HeightRequest="80">

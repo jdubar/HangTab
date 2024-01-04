@@ -42,10 +42,7 @@ public partial class MainViewModel(IDatabaseService data,
             var bowlers = await data.GetFilteredBowlers(b => !b.IsHidden);
             var weeks = await data.GetFilteredBowlerWeeks(WorkingWeek);
 
-            if (MainBowlers.Count > 0)
-            {
-                MainBowlers.Clear();
-            }
+            MainBowlers.Clear();
 
             if (bowlers.Any())
             {

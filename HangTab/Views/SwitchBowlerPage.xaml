@@ -2,7 +2,7 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:components="clr-namespace:HangTab.Views.Components"
-             xmlns:model="clr-namespace:HangTab.Models"
+             xmlns:models="clr-namespace:HangTab.Models"
              xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
              x:Class="HangTab.Views.SwitchBowlerPage"
              x:DataType="vm:SwitchBowlerViewModel"
@@ -25,7 +25,6 @@
             <Grid Grid.Row="1"
                   RowDefinitions="*, Auto">
                 <CollectionView Grid.Row="0"
-                                x:Name="BowlerList"
                                 ItemsSource="{Binding SwitchBowlers}"
                                 Margin="0,10,0,0"
                                 SelectionMode="Single"
@@ -36,7 +35,7 @@
                                            Orientation="Vertical"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="model:Bowler">
+                        <DataTemplate x:DataType="models:Bowler">
                             <Grid HorizontalOptions="Center"
                                     VerticalOptions="End"
                                     HeightRequest="80">
