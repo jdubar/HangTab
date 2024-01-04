@@ -8,6 +8,15 @@
              xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
              x:Class="HangTab.Views.MainPage"
              x:DataType="vm:MainViewModel">
+    <Shell.TitleView>
+        <Grid>
+            <Label Text="{Binding TitleWeek}"
+                   HorizontalOptions="Start"
+                   VerticalOptions="Center"
+                   TextColor="White"
+                   FontSize="Title" />
+        </Grid>
+    </Shell.TitleView>
     <ContentPage.Resources>
         <ResourceDictionary>
             <toolkit:BoolToObjectConverter x:Key="BoolToObjectConverter"

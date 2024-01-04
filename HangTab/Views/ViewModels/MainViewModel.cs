@@ -22,6 +22,9 @@ public partial class MainViewModel(IDatabaseService data,
     [ObservableProperty]
     private BusRideViewModel _busRideViewModel;
 
+    [ObservableProperty]
+    private string _titleWeek = "Week 0";
+
     private int WorkingWeek { get; set; }
 
     [RelayCommand]
@@ -33,6 +36,7 @@ public partial class MainViewModel(IDatabaseService data,
             {
                 WorkingWeek = await data.GetWorkingWeek();
             }
+            TitleWeek = $"Week {WorkingWeek}";
             BusRideViewModel = await data.GetLatestBusRide(WorkingWeek);
 
             var bowlers = await data.GetFilteredBowlers(b => !b.IsHidden);
@@ -105,6 +109,7 @@ public partial class MainViewModel(IDatabaseService data,
                 week.Hangings = 0;
                 week.WeekNumber = WorkingWeek;
             }
+            TitleWeek = $"Week {WorkingWeek}";
             BusRideViewModel.BusRideWeek.BusRides = 0;
             BusRideViewModel.BusRideWeek.WeekNumber = WorkingWeek;
             return Task.CompletedTask;
