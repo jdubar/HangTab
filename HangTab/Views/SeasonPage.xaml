@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:models="clr-namespace:HangTab.Models"
+             xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
+             x:Class="HangTab.Views.SeasonPage"
+             x:DataType="vm:SeasonViewModel"
+             Title="Season">
+    <Grid>
+        <VerticalStackLayout Grid.RowSpan="2"
+                             VerticalOptions="Center"
+                             HorizontalOptions="Center"
+                             IsVisible="{Binding IsBusy}">
+            <ActivityIndicator IsRunning="True"
+                               VerticalOptions="Center"
+                               HorizontalOptions="Center"/>
+            <Label Text="{Binding BusyText}"
+                   VerticalOptions="Center"
+                   HorizontalOptions="Center"/>
+        </VerticalStackLayout>
+        <CollectionView ItemsSource="{Binding AllWeeks}"
+                        Margin="0,5,0,0">
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout ItemSpacing="4"
+                                   Orientation="Vertical"/>
+            </CollectionView.ItemsLayout>
+            <CollectionView.ItemTemplate>
+                <DataTemplate x:DataType="models:Week">
+                    <Grid HorizontalOptions="Center"
+                          VerticalOptions="End"
+                          HeightRequest="80">
+                        <Border WidthRequest="393"
+                                HeightRequest="81"
+                                StrokeThickness="4"
+                                BackgroundColor="{AppThemeBinding Dark={StaticResource Black},
+                                                                  Light={StaticResource White}}">
+                            <StackLayout Orientation="Horizontal">
+                                <Label Text="{Binding WeekNumber, StringFormat='Week {0}'}"
+                                       FontAttributes="Bold"
+                                       FontSize="Body"
+                                       VerticalOptions="Center"
+                                       WidthRequest="100"
+                                       Margin="10"/>
+                                <VerticalStackLayout VerticalOptions="Center"
+                                                     WidthRequest="150">
+                                    <Label Text="{Binding TotalHangings, StringFormat='Hangings: {0}'}"/>
+                                    <Label Text="{Binding TotalBusRides, StringFormat='Bus Rides: {0}'}"/>
+                                </VerticalStackLayout>
+                            </StackLayout>
+                        </Border>
+                    </Grid>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </Grid>
+</ContentPage>

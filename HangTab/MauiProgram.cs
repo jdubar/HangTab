@@ -48,6 +48,9 @@ public static class MauiProgram
         builder.Services.AddSingleton<SwitchBowlerPage>();
         builder.Services.AddSingleton<SwitchBowlerViewModel>();
 
+        builder.Services.AddSingleton<SeasonPage>();
+        builder.Services.AddSingleton<SeasonViewModel>();
+
 #if DEBUG
         builder.Logging.AddDebug();
 #endif

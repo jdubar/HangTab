@@ -23,6 +23,14 @@
                                  Glyph="{x:Static icons:GoogleFont.Group}"/>
             </ShellContent.Icon>
         </ShellContent>
+        <ShellContent Title="Season"
+                      ContentTemplate="{DataTemplate views:SeasonPage}"
+                      Route="SeasonPage">
+            <ShellContent.Icon>
+                <FontImageSource FontFamily="GoogleFont"
+                                 Glyph="{x:Static icons:GoogleFont.Calendar_month}"/>
+            </ShellContent.Icon>
+        </ShellContent>
         <ShellContent Title="Settings"
                       ContentTemplate="{DataTemplate views:SettingsPage}"
                       Route="SettingsPage">
