@@ -51,6 +51,9 @@ public static class MauiProgram
         builder.Services.AddSingleton<SeasonPage>();
         builder.Services.AddSingleton<SeasonViewModel>();
 
+        builder.Services.AddSingleton<WeekDetailsPage>();
+        builder.Services.AddSingleton<WeekDetailsViewModel>();
+
 #if DEBUG
         builder.Logging.AddDebug();
 #endif

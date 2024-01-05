@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:models="clr-namespace:HangTab.Models"
+             xmlns:models="clr-namespace:HangTab.ViewModels"
              xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
              x:Class="HangTab.Views.SeasonPage"
              x:DataType="vm:SeasonViewModel"
@@ -25,10 +25,14 @@
                                    Orientation="Vertical"/>
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:Week">
+                <DataTemplate x:DataType="models:WeekViewModel">
                     <Grid HorizontalOptions="Center"
                           VerticalOptions="End"
                           HeightRequest="80">
+                        <Grid.GestureRecognizers>
+                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SeasonViewModel}}, Path=ShowWeekDetailsCommand}"
+                                                  CommandParameter="{Binding .}"/>
+                        </Grid.GestureRecognizers>
                         <Border WidthRequest="393"
                                 HeightRequest="81"
                                 StrokeThickness="4"

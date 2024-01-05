@@ -100,6 +100,9 @@
     <MauiXaml Update="Views\SwitchBowlerPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
+    <MauiXaml Update="Views\WeekDetailsPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
   </ItemGroup>
   <ProjectExtensions>
     <VisualStudio>
