@@ -1,8 +1,6 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 using CommunityToolkit.Maui.Core;
 
-using HangTab.Models;
-
 namespace HangTab.Services.Impl;
 public class ShellService : IShellService
 {
@@ -23,12 +21,12 @@ public class ShellService : IShellService
         await toast.Show(token.Token);
     }
 
-    public async Task GoToPageWithData(ShellNavigationState state, Bowler bowler)
+    public async Task GoToPageWithData<TTable>(ShellNavigationState state, TTable model) where TTable : class, new()
     {
-        bowler ??= new Bowler();
+        model ??= new TTable();
         var navParam = new ShellNavigationQueryParameters
         {
-            { "Bowler", bowler }
+            { typeof(TTable).Name, model }
         };
         await Shell.Current.GoToAsync(state, true, navParam);
     }
