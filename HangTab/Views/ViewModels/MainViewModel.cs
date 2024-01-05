@@ -76,17 +76,13 @@ public partial class MainViewModel(IDatabaseService data,
             viewModel.BowlerWeek.Hangings++;
             viewModel.BowlerWeek.WeekNumber = WorkingWeek;
 
-            if (!await data.UpdateBowlerHangingsByWeek(viewModel, WorkingWeek))
+            if (await data.UpdateBowlerHangingsByWeek(viewModel, WorkingWeek))
             {
-                await shell.DisplayAlert("Update Error", "Error updating bowler hang count", "Ok");
+                SetIsLowestHangsInMainBowlers();
             }
             else
             {
-                foreach (var bowler in MainBowlers)
-                {
-                    bowler.IsLowestHangs = !bowler.Bowler.IsSub
-                                           && bowler.Bowler.TotalHangings == MainBowlers.Where(b => !b.Bowler.IsSub).Min(y => y.Bowler.TotalHangings);
-                }
+                await shell.DisplayAlert("Update Error", "Error updating bowler hang count", "Ok");
             }
         }, "");
     }
@@ -98,8 +94,10 @@ public partial class MainViewModel(IDatabaseService data,
     [RelayCommand]
     private async Task StartNewWeekAsync()
     {
-        await ExecuteAsync(() =>
+        await ExecuteAsync(async () =>
         {
+            await SaveZeroHangBowlerLineup();
+
             WorkingWeek++;
             foreach (var week in MainBowlers.Select(b => b.BowlerWeek))
             {
@@ -109,7 +107,6 @@ public partial class MainViewModel(IDatabaseService data,
             TitleWeek = $"Week {WorkingWeek}";
             BusRideViewModel.BusRideWeek.BusRides = 0;
             BusRideViewModel.BusRideWeek.WeekNumber = WorkingWeek;
-            return Task.CompletedTask;
         }, "Starting new week...");
     }
 
@@ -140,6 +137,23 @@ public partial class MainViewModel(IDatabaseService data,
             collection.Add(viewModel);
         }
         return collection;
+    }
+
+    private async Task SaveZeroHangBowlerLineup()
+    {
+        foreach (var bowler in MainBowlers.Where(bowler => bowler.BowlerWeek.Hangings == 0))
+        {
+            _ = await data.UpdateBowlerHangingsByWeek(bowler, WorkingWeek);
+        }
+    }
+
+    private void SetIsLowestHangsInMainBowlers()
+    {
+        foreach (var bowler in MainBowlers)
+        {
+            bowler.IsLowestHangs = !bowler.Bowler.IsSub
+                                   && bowler.Bowler.TotalHangings == MainBowlers.Where(b => !b.Bowler.IsSub).Min(y => y.Bowler.TotalHangings);
+        }
     }
 
     private async Task ShowBusRideSplashAsync()
