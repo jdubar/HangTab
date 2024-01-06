@@ -16,7 +16,7 @@ public interface IDatabaseService
     Task<IEnumerable<BusRideWeek>> GetAllBusRideWeeks();
     Task<IEnumerable<BowlerWeek>> GetFilteredBowlerWeeks(int week);
 
-    Task<BusRideViewModel> GetLatestBusRide(int week);
+    Task<BusRideViewModel> GetBusRideViewModelByWeek(int week);
     Task<IEnumerable<Bowler>> GetLowestHangs();
     Task<int> GetWorkingWeek();
 

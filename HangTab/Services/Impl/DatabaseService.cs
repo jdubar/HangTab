@@ -34,7 +34,7 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
     public async Task<IEnumerable<BowlerWeek>> GetFilteredBowlerWeeks(int week) =>
         await context.GetFilteredAsync<BowlerWeek>(w => w.WeekNumber == week);
 
-    public async Task<BusRideViewModel> GetLatestBusRide(int week)
+    public async Task<BusRideViewModel> GetBusRideViewModelByWeek(int week)
     {
         var viewmodel = new BusRideViewModel();
         var busRides = await context.GetAllAsync<BusRide>();
@@ -68,7 +68,7 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
 
     public async Task<int> GetWorkingWeek()
     {
-        var allWeeks = await context.GetAllAsync<BowlerWeek>();
+        var allWeeks = await context.GetAllAsync<BusRideWeek>();
         return allWeeks is not null && allWeeks.Any()
             ? allWeeks.OrderBy(w => w.WeekNumber).Last().WeekNumber
             : 1;
