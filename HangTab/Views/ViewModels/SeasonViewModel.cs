@@ -35,38 +35,39 @@ public partial class SeasonViewModel(IDatabaseService data,
     private async Task<List<WeekViewModel>> LoadSeason(IEnumerable<BowlerWeek> allWeeks)
     {
         var allBowlers = await data.GetAllBowlers();
-        var allBusRides = await data.GetAllBusRideWeeks();
-        var lastWeek = allBusRides.OrderBy(w => w.WeekNumber).Last().WeekNumber;
-        var collection = new List<WeekViewModel>();
-        for (var i = lastWeek - 1; i >= 1; i--)
+        var lastSavedWeek = data.GetWorkingWeek().Result;
+
+        var season = new List<WeekViewModel>();
+        for (var savedWeek = lastSavedWeek - 1; savedWeek >= 1; savedWeek--)
         {
             var totalHangs = 0;
             var bowlers = new List<Bowler>();
-            var workingWeeks = allWeeks.Where(w => w.WeekNumber == i).OrderByDescending(b => b.Hangings);
+            var workingWeeks = allWeeks.Where(bw => bw.WeekNumber == savedWeek).OrderByDescending(b => b.Hangings);
             foreach (var week in workingWeeks)
             {
-                var bowler = new Bowler
+                var bowler = allBowlers.First(b => b.Id == week.BowlerId);
+                var bowlerModel = new Bowler
                 {
-                    IsSub = allBowlers.First(b => b.Id == week.BowlerId).IsSub,
-                    ImageUrl = allBowlers.First(b => b.Id == week.BowlerId).ImageUrl,
-                    FirstName = allBowlers.First(b => b.Id == week.BowlerId).FirstName,
-                    LastName = allBowlers.First(b => b.Id == week.BowlerId).LastName,
+                    IsSub = bowler.IsSub,
+                    ImageUrl = bowler.ImageUrl,
+                    FirstName = bowler.FirstName,
+                    LastName = bowler.LastName,
                     TotalHangings = week.Hangings
                 };
-                bowlers.Add(bowler);
+                bowlers.Add(bowlerModel);
                 totalHangs += week.Hangings;
             }
 
-            var busRide = await data.GetLatestBusRide(i);
-            var viewModel = new WeekViewModel()
+            var busRide = await data.GetBusRideViewModelByWeek(savedWeek);
+            var weekViewModel = new WeekViewModel()
             {
-                WeekNumber = i,
+                WeekNumber = savedWeek,
                 TotalBusRides = busRide.BusRideWeek.BusRides,
                 TotalHangings = totalHangs,
                 Bowlers = bowlers
             };
-            collection.Add(viewModel);
+            season.Add(weekViewModel);
         }
-        return collection;
+        return season;
     }
 }

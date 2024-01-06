@@ -37,7 +37,7 @@ public partial class MainViewModel(IDatabaseService data,
                 WorkingWeek = await data.GetWorkingWeek();
             }
             TitleWeek = $"Week {WorkingWeek}";
-            BusRideViewModel = await data.GetLatestBusRide(WorkingWeek);
+            BusRideViewModel = await data.GetBusRideViewModelByWeek(WorkingWeek);
 
             var bowlers = await data.GetFilteredBowlers(b => !b.IsHidden);
             var weeks = await data.GetFilteredBowlerWeeks(WorkingWeek);
