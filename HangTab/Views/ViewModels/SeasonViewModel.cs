@@ -17,13 +17,18 @@ public partial class SeasonViewModel(IDatabaseService data,
     {
         await ExecuteAsync(async () =>
         {
-            var weeks = await data.GetAllBowlerWeeks();
+            var model = new SeasonReport()
+            {
+                AllBowlers = await data.GetAllBowlers(),
+                AllBowlerWeeks = await data.GetAllBowlerWeeks(),
+                LastSavedWeek = await data.GetWorkingWeek()
+            };
 
             AllWeeks.Clear();
 
-            if (weeks.Any())
+            if (model.AllBowlerWeeks.Any())
             {
-                AllWeeks.AddRange(await LoadSeason(weeks));
+                AllWeeks.AddRange(await LoadSeason(model));
             }
         }, "");
     }
@@ -32,20 +37,17 @@ public partial class SeasonViewModel(IDatabaseService data,
     private async Task ShowWeekDetailsAsync(WeekViewModel week) =>
         await shell.GoToPageWithData(nameof(WeekDetailsPage), week);
 
-    private async Task<List<WeekViewModel>> LoadSeason(IEnumerable<BowlerWeek> allWeeks)
+    private async Task<List<WeekViewModel>> LoadSeason(SeasonReport model)
     {
-        var allBowlers = await data.GetAllBowlers();
-        var lastSavedWeek = data.GetWorkingWeek().Result;
-
         var season = new List<WeekViewModel>();
-        for (var savedWeek = lastSavedWeek - 1; savedWeek >= 1; savedWeek--)
+        for (var savedWeek = model.LastSavedWeek - 1; savedWeek >= 1; savedWeek--)
         {
             var totalHangs = 0;
             var bowlers = new List<Bowler>();
-            var workingWeeks = allWeeks.Where(bw => bw.WeekNumber == savedWeek).OrderByDescending(b => b.Hangings);
+            var workingWeeks = model.AllBowlerWeeks.Where(bw => bw.WeekNumber == savedWeek).OrderByDescending(b => b.Hangings);
             foreach (var week in workingWeeks)
             {
-                var bowler = allBowlers.First(b => b.Id == week.BowlerId);
+                var bowler = model.AllBowlers.First(b => b.Id == week.BowlerId);
                 var bowlerModel = new Bowler
                 {
                     IsSub = bowler.IsSub,
