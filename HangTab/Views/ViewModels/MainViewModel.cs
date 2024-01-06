@@ -99,14 +99,10 @@ public partial class MainViewModel(IDatabaseService data,
             await SaveZeroHangBowlerLineup();
 
             WorkingWeek++;
-            foreach (var week in MainBowlers.Select(b => b.BowlerWeek))
-            {
-                week.Hangings = 0;
-                week.WeekNumber = WorkingWeek;
-            }
             TitleWeek = $"Week {WorkingWeek}";
-            BusRideViewModel.BusRideWeek.BusRides = 0;
-            BusRideViewModel.BusRideWeek.WeekNumber = WorkingWeek;
+
+            ResetMainBowlersForNewWeek();
+            await ResetBusRidesForNewWeek();
         }, "Starting new week...");
     }
 
@@ -137,6 +133,25 @@ public partial class MainViewModel(IDatabaseService data,
             collection.Add(viewModel);
         }
         return collection;
+    }
+
+    private void ResetMainBowlersForNewWeek()
+    {
+        foreach (var week in MainBowlers.Select(b => b.BowlerWeek))
+        {
+            week.Hangings = 0;
+            week.WeekNumber = WorkingWeek;
+        }
+    }
+
+    private async Task ResetBusRidesForNewWeek()
+    {
+        BusRideViewModel.BusRideWeek.BusRides = 0;
+        BusRideViewModel.BusRideWeek.WeekNumber = WorkingWeek;
+        if (!await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
+        {
+            await shell.DisplayAlert("Update Error", "Error updating bus ride", "Ok");
+        }
     }
 
     private async Task SaveZeroHangBowlerLineup()

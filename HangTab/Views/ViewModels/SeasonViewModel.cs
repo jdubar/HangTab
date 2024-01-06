@@ -23,7 +23,7 @@ public partial class SeasonViewModel(IDatabaseService data,
 
             if (weeks.Any())
             {
-                AllWeeks.AddRange(await LoadBowlers(weeks));
+                AllWeeks.AddRange(await LoadSeason(weeks));
             }
         }, "");
     }
@@ -32,16 +32,17 @@ public partial class SeasonViewModel(IDatabaseService data,
     private async Task ShowWeekDetailsAsync(WeekViewModel week) =>
         await shell.GoToPageWithData(nameof(WeekDetailsPage), week);
 
-    private async Task<List<WeekViewModel>> LoadBowlers(IEnumerable<BowlerWeek> allWeeks)
+    private async Task<List<WeekViewModel>> LoadSeason(IEnumerable<BowlerWeek> allWeeks)
     {
         var allBowlers = await data.GetAllBowlers();
-        var lastWeek = allWeeks.OrderBy(w => w.WeekNumber).Last().WeekNumber;
+        var allBusRides = await data.GetAllBusRideWeeks();
+        var lastWeek = allBusRides.OrderBy(w => w.WeekNumber).Last().WeekNumber;
         var collection = new List<WeekViewModel>();
-        for (var i = lastWeek; i >= 1; i--)
+        for (var i = lastWeek - 1; i >= 1; i--)
         {
             var totalHangs = 0;
             var bowlers = new List<Bowler>();
-            var workingWeeks = allWeeks.Where(w => w.WeekNumber == i);
+            var workingWeeks = allWeeks.Where(w => w.WeekNumber == i).OrderByDescending(b => b.Hangings);
             foreach (var week in workingWeeks)
             {
                 var bowler = new Bowler
