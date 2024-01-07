@@ -27,4 +27,7 @@ public interface IDatabaseService
 
     Task<bool> UpdateBowlerHangingsByWeek(BowlerViewModel viewModel, int week);
     Task<bool> UpdateBusRidesByWeek(BusRideViewModel viewModel, int week);
+
+    Task<Week> GetLatestWeek();
+    Task<int> GetTotalBusRides();
 }

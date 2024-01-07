@@ -14,7 +14,7 @@ public partial class MainViewModel(IDatabaseService data,
                                    IShellService shell,
                                    IAudioManager audio) : BaseViewModel
 {
-    public ObservableRangeCollection<BowlerViewModel> MainBowlers { get; set; } = [];
+    public ObservableRangeCollection<Bowler> MainBowlers { get; set; } = [];
 
     [ObservableProperty]
     private bool _showBusRideImage;
@@ -23,7 +23,12 @@ public partial class MainViewModel(IDatabaseService data,
     private BusRideViewModel _busRideViewModel;
 
     [ObservableProperty]
+    private int _busRideTotal;
+
+    [ObservableProperty]
     private string _titleWeek = "Week 0";
+
+    private Week Week { get; set; }
 
     private int WorkingWeek { get; set; }
 
@@ -32,21 +37,15 @@ public partial class MainViewModel(IDatabaseService data,
     {
         await ExecuteAsync(async () =>
         {
-            if (WorkingWeek == 0)
-            {
-                WorkingWeek = await data.GetWorkingWeek();
-            }
-            TitleWeek = $"Week {WorkingWeek}";
-            BusRideViewModel = await data.GetBusRideViewModelByWeek(WorkingWeek);
+            Week ??= await data.GetLatestWeek();
+            BusRideTotal = await data.GetTotalBusRides();
 
-            var bowlers = await data.GetFilteredBowlers(b => !b.IsHidden);
-            var weeks = await data.GetFilteredBowlerWeeks(WorkingWeek);
+            TitleWeek = $"Week {Week.WeekNumber}";
 
             MainBowlers.Clear();
-
-            if (bowlers.Any())
+            if (Week.Bowlers.Any())
             {
-                MainBowlers.AddRange(LoadBowlers(bowlers, weeks));
+                MainBowlers.AddRange(Week.Bowlers);
             }
         }, "");
     }
@@ -54,8 +53,8 @@ public partial class MainViewModel(IDatabaseService data,
     [RelayCommand]
     private async Task BusRideAsync()
     {
-        BusRideViewModel.BusRide.TotalBusRides++;
-        BusRideViewModel.BusRideWeek.BusRides++;
+        BusRideTotal++;
+        Week.BusRides++;
 
         if (!await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
         {
@@ -106,12 +105,12 @@ public partial class MainViewModel(IDatabaseService data,
         }, "Starting new week...");
     }
 
-    private List<BowlerViewModel> LoadBowlers(IEnumerable<Bowler> bowlers, IEnumerable<BowlerWeek> weeks)
+    private List<BowlerViewModel> LoadBowlers()
     {
         var collection = new List<BowlerViewModel>();
-        var lowest = bowlers.Where(b => !b.IsSub && b.TotalHangings == bowlers.Where(b => !b.IsSub).Min(b => b.TotalHangings));
+        var lowest = Week.Bowlers.Where(b => !b.IsSub && b.TotalHangings == Week.Bowlers.Where(b => !b.IsSub).Min(b => b.TotalHangings));
 
-        foreach (var bowler in bowlers)
+        foreach (var bowler in Week.Bowlers)
         {
             var week = weeks.FirstOrDefault(w => w.BowlerId == bowler.Id);
             week ??= new BowlerWeek()

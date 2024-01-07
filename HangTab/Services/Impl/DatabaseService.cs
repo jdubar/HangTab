@@ -2,6 +2,7 @@
 using HangTab.Models;
 using HangTab.ViewModels;
 
+using System.Linq;
 using System.Linq.Expressions;
 
 namespace HangTab.Services.Impl;
@@ -60,10 +61,36 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         return viewmodel;
     }
 
-    public async Task<IEnumerable<Bowler>> GetLowestHangs()
+    public async Task<Week> GetLatestWeek()
+    {
+        var weeks = await context.GetAllAsync<Week>();
+        var week = weeks is not null && weeks.Any()
+                 ? weeks.OrderBy(w => w.WeekNumber).Last()
+                 : new();
+        if (!week.Bowlers.Any())
+        {
+            var lowestHangIds = await GetLowestHangs();
+            week.Bowlers = await GetFilteredBowlers(b => !b.IsHidden);
+            foreach (var bowler in week.Bowlers.Where(b => lowestHangIds.Contains(b.Id)))
+            {
+                bowler.IsLowestHangs = true;
+            }
+        }
+        return week;
+    }
+
+    public async Task<IEnumerable<int>> GetLowestHangs()
     {
         var bowlers = await context.GetAllAsync<Bowler>();
-        return bowlers.Where((x) => !x.IsSub && x.TotalHangings == bowlers.Min(y => y.TotalHangings));
+        return bowlers.Where((x) => !x.IsSub && x.TotalHangings == bowlers.Min(y => y.TotalHangings)).Select(b => b.Id);
+    }
+
+    public async Task<int> GetTotalBusRides()
+    {
+        var busrides = await context.GetAllAsync<BusRide>();
+        return busrides is not null && busrides.Any()
+            ? busrides.First().TotalBusRides
+            : 0;
     }
 
     public async Task<int> GetWorkingWeek()
