@@ -27,10 +27,10 @@ public partial class SettingsViewModel(IDatabaseService data, IShellService shel
         {
             await ExecuteAsync(async () =>
             {
-                if (!await data.ResetHangings())
-                {
-                    await shell.DisplayAlert("Critical Error", "Error occurred while restting data!", "Ok");
-                }
+                //if (!await data.ResetHangings())
+                //{
+                //    await shell.DisplayAlert("Critical Error", "Error occurred while restting data!", "Ok");
+                //}
             }, "Resetting hangings...");
         }
     }

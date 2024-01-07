@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.Input;
 
 using HangTab.Models;
 using HangTab.Services;
-using HangTab.ViewModels;
 
 using MvvmHelpers;
 
@@ -20,7 +19,7 @@ public partial class MainViewModel(IDatabaseService data,
     private bool _showBusRideImage;
 
     [ObservableProperty]
-    private BusRideViewModel _busRideViewModel;
+    private int _busRides;
 
     [ObservableProperty]
     private int _busRideTotal;
@@ -30,14 +29,13 @@ public partial class MainViewModel(IDatabaseService data,
 
     private Week Week { get; set; }
 
-    private int WorkingWeek { get; set; }
-
     [RelayCommand]
     private async Task InitializeDataAsync()
     {
         await ExecuteAsync(async () =>
         {
             Week ??= await data.GetLatestWeek();
+            BusRides = Week.BusRides;
             BusRideTotal = await data.GetTotalBusRides();
 
             TitleWeek = $"Week {Week.WeekNumber}";
@@ -94,80 +92,27 @@ public partial class MainViewModel(IDatabaseService data,
     {
         await ExecuteAsync(async () =>
         {
-            await SaveZeroHangBowlerLineup();// TODO: Change this to simply save all bowlers regardless of hangs
-            // TODO: Save TotalHangs to DB
-            // TODO: Create new week in DB
+            await SaveCurrentWeek();
 
-            WorkingWeek++;
-            TitleWeek = $"Week {WorkingWeek}";
+            Week = await data.StartNewWeek();
+            TitleWeek = $"Week {Week.WeekNumber}";
+            MainBowlers = Week.Bowlers.Where(b => !b.IsHidden) as ObservableRangeCollection<Bowler>;
 
-            ResetMainBowlersForNewWeek();
-            await ResetBusRidesForNewWeek();
         }, "Starting new week...");
     }
 
-    private List<BowlerViewModel> LoadBowlers()
+    private async Task SaveCurrentWeek()
     {
-        var collection = new List<BowlerViewModel>();
-        var lowest = Week.Bowlers.Where(b => !b.IsSub && b.TotalHangings == Week.Bowlers.Where(b => !b.IsSub).Min(b => b.TotalHangings));
-
-        foreach (var bowler in Week.Bowlers)
-        {
-            var week = weeks.FirstOrDefault(w => w.BowlerId == bowler.Id);
-            week ??= new BowlerWeek()
-            {
-                WeekNumber = WorkingWeek,
-                BowlerId = bowler.Id,
-                Hangings = 0
-            };
-
-            var viewModel = new BowlerViewModel()
-            {
-                Bowler = bowler,
-                BowlerWeek = week
-            };
-            if (lowest.Any(b => b.Id == bowler.Id))
-            {
-                viewModel.IsLowestHangs = true;
-            }
-            collection.Add(viewModel);
-        }
-        return collection;
-    }
-
-    private void ResetMainBowlersForNewWeek()
-    {
-        foreach (var week in MainBowlers.Select(b => b.BowlerWeek))
-        {
-            week.Hangings = 0;
-            week.WeekNumber = WorkingWeek;
-        }
-    }
-
-    private async Task ResetBusRidesForNewWeek()
-    {
-        BusRideViewModel.BusRideWeek.BusRides = 0;
-        BusRideViewModel.BusRideWeek.WeekNumber = WorkingWeek;
-        if (!await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
-        {
-            await shell.DisplayAlert("Update Error", "Error updating bus ride", "Ok");
-        }
-    }
-
-    private async Task SaveZeroHangBowlerLineup()
-    {
-        foreach (var bowler in MainBowlers.Where(bowler => bowler.TotalHangings == 0))
-        {
-            _ = await data.UpdateBowler(bowler);
-        }
+        await data.UpdateAllBowlers(MainBowlers);
+        await data.UpdateTotalHangs(Week.BusRides);
     }
 
     private void SetIsLowestHangsInMainBowlers()
     {
         foreach (var bowler in MainBowlers)
         {
-            bowler.IsLowestHangs = !bowler.Bowler.IsSub
-                                   && bowler.Bowler.TotalHangings == MainBowlers.Where(b => !b.Bowler.IsSub).Min(y => y.Bowler.TotalHangings);
+            bowler.IsLowestHangs = !bowler.IsSub
+                                   && bowler.TotalHangings == MainBowlers.Where(b => !b.IsSub).Min(y => y.TotalHangings);
         }
     }
 

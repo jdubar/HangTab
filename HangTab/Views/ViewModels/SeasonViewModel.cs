@@ -17,14 +17,14 @@ public partial class SeasonViewModel(IDatabaseService data,
     {
         await ExecuteAsync(async () =>
         {
-            var weeks = await data.GetAllBowlerWeeks();
+            //var weeks = await data.GetAllBowlerWeeks();
 
-            AllWeeks.Clear();
+            //AllWeeks.Clear();
 
-            if (weeks.Any())
-            {
-                AllWeeks.AddRange(await LoadSeason(weeks));
-            }
+            //if (weeks.Any())
+            //{
+            //    AllWeeks.AddRange(await LoadSeason(weeks));
+            //}
         }, "");
     }
 
@@ -42,27 +42,27 @@ public partial class SeasonViewModel(IDatabaseService data,
         {
             var totalHangs = 0;
             var bowlers = new List<Bowler>();
-            var workingWeeks = allWeeks.Where(bw => bw.WeekNumber == savedWeek).OrderByDescending(b => b.Hangings);
-            foreach (var week in workingWeeks)
-            {
-                var bowler = allBowlers.First(b => b.Id == week.BowlerId);
-                var bowlerModel = new Bowler
-                {
-                    IsSub = bowler.IsSub,
-                    ImageUrl = bowler.ImageUrl,
-                    FirstName = bowler.FirstName,
-                    LastName = bowler.LastName,
-                    TotalHangings = week.Hangings
-                };
-                bowlers.Add(bowlerModel);
-                totalHangs += week.Hangings;
-            }
+            //var workingWeeks = allWeeks.Where(bw => bw.WeekNumber == savedWeek).OrderByDescending(b => b.Hangings);
+            //foreach (var week in workingWeeks)
+            //{
+            //    var bowler = allBowlers.First(b => b.Id == week.BowlerId);
+            //    var bowlerModel = new Bowler
+            //    {
+            //        IsSub = bowler.IsSub,
+            //        ImageUrl = bowler.ImageUrl,
+            //        FirstName = bowler.FirstName,
+            //        LastName = bowler.LastName,
+            //        TotalHangings = week.Hangings
+            //    };
+            //    bowlers.Add(bowlerModel);
+            //    totalHangs += week.Hangings;
+            //}
 
-            var busRide = await data.GetBusRideViewModelByWeek(savedWeek);
+            //var busRide = await data.GetBusRideViewModelByWeek(savedWeek);
             var weekViewModel = new WeekViewModel()
             {
                 WeekNumber = savedWeek,
-                TotalBusRides = busRide.BusRideWeek.BusRides,
+                //TotalBusRides = busRide.BusRideWeek.BusRides,
                 TotalHangings = totalHangs,
                 Bowlers = bowlers
             };

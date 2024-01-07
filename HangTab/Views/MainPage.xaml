@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:components="clr-namespace:HangTab.Views.Components"
              xmlns:icons="clr-namespace:HangTab.Helpers"
-             xmlns:models="clr-namespace:HangTab.ViewModels"
+             xmlns:models="clr-namespace:HangTab.Models"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
              x:Class="HangTab.Views.MainPage"
@@ -60,13 +60,13 @@
                                             Orientation="Vertical"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="models:BowlerViewModel">
+                        <DataTemplate x:DataType="models:Bowler">
                             <SwipeView HeightRequest="80">
                                 <SwipeView.LeftItems>
                                     <SwipeItems>
                                         <SwipeItem BackgroundColor="{DynamicResource Tertiary}"
                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=ShowSwitchBowlerViewCommand}"
-                                                   CommandParameter="{Binding Bowler}">
+                                                   CommandParameter="{Binding .}">
                                             <SwipeItem.IconImageSource>
                                                 <FontImageSource FontFamily="GoogleFont"
                                                                  Glyph="{Static icons:GoogleFont.Switch_account}"/>
@@ -82,17 +82,17 @@
                                             StrokeThickness="4"
                                             BackgroundColor="{AppThemeBinding Dark={StaticResource Black},
                                                                               Light={StaticResource White}}"
-                                            Stroke="{Binding Bowler.IsSub, Converter={StaticResource BoolToObjectConverter}}">
+                                            Stroke="{Binding IsSub, Converter={StaticResource BoolToObjectConverter}}">
                                         <StackLayout Orientation="Horizontal">
-                                            <components:BowlerImage IsSub="{Binding Bowler.IsSub}"
-                                                                    ImageUrl="{Binding Bowler.ImageUrl}"
+                                            <components:BowlerImage IsSub="{Binding IsSub}"
+                                                                    ImageUrl="{Binding ImageUrl}"
                                                                     IsLowestHangs="{Binding IsLowestHangs}"/>
                                             <VerticalStackLayout VerticalOptions="Center"
                                                                  WidthRequest="250">
-                                                <Label Text="{Binding Bowler.FullName, FallbackValue='Unknown Bowler'}"
+                                                <Label Text="{Binding FullName, FallbackValue='Unknown Bowler'}"
                                                        FontAttributes="Bold"/>
-                                                <Label Text="{Binding BowlerWeek.Hangings, StringFormat='Hangings: {0}'}"/>
-                                                <Label Text="{Binding Bowler.TotalHangings, StringFormat='Total: {0}'}"/>
+                                                <Label Text="{Binding WeekHangings, StringFormat='Hangings: {0}'}"/>
+                                                <Label Text="{Binding TotalHangings, StringFormat='Total: {0}'}"/>
                                             </VerticalStackLayout>
                                             <ImageButton HorizontalOptions="End"
                                                          Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=HangBowlerCommand}"
@@ -140,10 +140,10 @@
                         <VerticalStackLayout VerticalOptions="Center"
                                              WidthRequest="230"
                                              Margin="20">
-                            <Label Text="{Binding BusRideViewModel.BusRideWeek.BusRides, StringFormat='Bus Rides: {0}'}"
+                            <Label Text="{Binding BusRides, StringFormat='Bus Rides: {0}'}"
                                    FontAttributes="Bold"
                                    FontSize="Body"/>
-                            <Label Text="{Binding BusRideViewModel.BusRide.TotalBusRides, StringFormat='Total: {0}'}"
+                            <Label Text="{Binding BusRideTotal, StringFormat='Total: {0}'}"
                                    FontAttributes="Bold"
                                    FontSize="Body"/>
                         </VerticalStackLayout>
