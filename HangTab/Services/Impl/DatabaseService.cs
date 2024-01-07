@@ -156,4 +156,21 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
             ? await context.UpdateItemAsync(viewModel.BusRideWeek)
             : await context.AddItemAsync(viewModel.BusRideWeek);
     }
+
+    public async Task<bool> UpdateWeek(Week week)
+    {
+        var weeks = await context.GetFilteredAsync<Week>(b => b.WeekNumber == week.WeekNumber);
+        return weeks is not null && weeks.Any()
+            ? await context.UpdateItemAsync(week)
+            : await context.AddItemAsync(week);
+    }
+
+    public async Task<Week> StartNewWeek()
+    {
+        var week = new Week()
+        {
+            // TODO: Finish StartNewWeek method
+        };
+        await context.AddItemAsync(week)
+    }
 }

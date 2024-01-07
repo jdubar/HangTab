@@ -30,4 +30,5 @@ public interface IDatabaseService
 
     Task<Week> GetLatestWeek();
     Task<int> GetTotalBusRides();
+    Task<bool> UpdateWeek(Week week);
 }

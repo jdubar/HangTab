@@ -56,7 +56,7 @@ public partial class MainViewModel(IDatabaseService data,
         BusRideTotal++;
         Week.BusRides++;
 
-        if (!await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
+        if (!await data.UpdateWeek(Week))
         {
             await shell.DisplayAlert("Update Error", "Error updating bus ride", "Ok");
         }
@@ -67,15 +67,14 @@ public partial class MainViewModel(IDatabaseService data,
     }
 
     [RelayCommand]
-    private async Task HangBowlerAsync(BowlerViewModel viewModel)
+    private async Task HangBowlerAsync(Bowler bowler)
     {
         await ExecuteAsync(async () =>
         {
-            viewModel.Bowler.TotalHangings++;
-            viewModel.BowlerWeek.Hangings++;
-            viewModel.BowlerWeek.WeekNumber = WorkingWeek;
+            bowler.TotalHangings++;
+            bowler.WeekHangings++;
 
-            if (await data.UpdateBowlerHangingsByWeek(viewModel, WorkingWeek))
+            if (await data.UpdateBowler(bowler))
             {
                 SetIsLowestHangsInMainBowlers();
             }
@@ -95,7 +94,9 @@ public partial class MainViewModel(IDatabaseService data,
     {
         await ExecuteAsync(async () =>
         {
-            await SaveZeroHangBowlerLineup();
+            await SaveZeroHangBowlerLineup();// TODO: Change this to simply save all bowlers regardless of hangs
+            // TODO: Save TotalHangs to DB
+            // TODO: Create new week in DB
 
             WorkingWeek++;
             TitleWeek = $"Week {WorkingWeek}";
@@ -155,9 +156,9 @@ public partial class MainViewModel(IDatabaseService data,
 
     private async Task SaveZeroHangBowlerLineup()
     {
-        foreach (var bowler in MainBowlers.Where(bowler => bowler.BowlerWeek.Hangings == 0))
+        foreach (var bowler in MainBowlers.Where(bowler => bowler.TotalHangings == 0))
         {
-            _ = await data.UpdateBowlerHangingsByWeek(bowler, WorkingWeek);
+            _ = await data.UpdateBowler(bowler);
         }
     }
 

@@ -9,8 +9,7 @@ public class Week : ObservableObject
 {
     private int _busRides;
 
-    [PrimaryKey]
-    public int Id { get; set; }
+    [PrimaryKey, AutoIncrement]
     public int WeekNumber { get; set; } = 1;
     public IEnumerable<Bowler> Bowlers { get; set; }
     public int BusRides
