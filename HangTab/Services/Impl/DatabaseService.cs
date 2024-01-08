@@ -29,19 +29,8 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
                  ? weeks.OrderBy(w => w.WeekNumber).Last()
                  : new();
 
-        var lowestHangIds = await GetLowestHangsIds();
         week.Bowlers = await GetFilteredBowlers(b => !b.IsHidden);
-        foreach (var bowler in week.Bowlers)
-        {
-            bowler.IsLowestHangs = lowestHangIds.Contains(bowler.Id);
-        }
         return week;
-    }
-
-    public async Task<IEnumerable<int>> GetLowestHangsIds()
-    {
-        var bowlers = await context.GetAllAsync<Bowler>();
-        return bowlers.Where((x) => !x.IsSub && x.TotalHangings == bowlers.Min(y => y.TotalHangings)).Select(b => b.Id);
     }
 
     public async Task<int> GetTotalBusRides()

@@ -1,5 +1,4 @@
 ﻿using HangTab.Models;
-using HangTab.ViewModels;
 
 using System.Linq.Expressions;
 
@@ -24,5 +23,4 @@ public interface IDatabaseService
     Task<bool> UpdateTotalHangs(int hangs);
     Task<bool> UpdateAllBowlers(IEnumerable<Bowler> bowlers);
     Task<Week> StartNewWeek();
-    Task<IEnumerable<int>> GetLowestHangsIds();
 }

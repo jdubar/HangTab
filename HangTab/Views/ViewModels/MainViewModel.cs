@@ -44,6 +44,7 @@ public partial class MainViewModel(IDatabaseService data,
             if (Week.Bowlers.Any())
             {
                 MainBowlers.AddRange(Week.Bowlers);
+                SetIsLowestHangsInMainBowlers();
             }
         }, "");
     }
@@ -109,10 +110,9 @@ public partial class MainViewModel(IDatabaseService data,
 
     private void SetIsLowestHangsInMainBowlers()
     {
-        foreach (var bowler in MainBowlers)
+        foreach (var bowler in MainBowlers.Where(bowler => !bowler.IsSub))
         {
-            bowler.IsLowestHangs = !bowler.IsSub
-                                   && bowler.TotalHangings == MainBowlers.Where(b => !b.IsSub).Min(y => y.TotalHangings);
+            bowler.IsLowestHangs = bowler.TotalHangings == MainBowlers.Min(bowler => bowler.TotalHangings);
         }
     }
 
