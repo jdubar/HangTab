@@ -28,19 +28,17 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         var week = weeks is not null && weeks.Any()
                  ? weeks.OrderBy(w => w.WeekNumber).Last()
                  : new();
-        if (!week.Bowlers.Any())
+
+        var lowestHangIds = await GetLowestHangsIds();
+        week.Bowlers = await GetFilteredBowlers(b => !b.IsHidden);
+        foreach (var bowler in week.Bowlers)
         {
-            var lowestHangIds = await GetLowestHangs();
-            week.Bowlers = await GetFilteredBowlers(b => !b.IsHidden);
-            foreach (var bowler in week.Bowlers.Where(b => lowestHangIds.Contains(b.Id)))
-            {
-                bowler.IsLowestHangs = true;
-            }
+            bowler.IsLowestHangs = lowestHangIds.Contains(bowler.Id);
         }
         return week;
     }
 
-    public async Task<IEnumerable<int>> GetLowestHangs()
+    public async Task<IEnumerable<int>> GetLowestHangsIds()
     {
         var bowlers = await context.GetAllAsync<Bowler>();
         return bowlers.Where((x) => !x.IsSub && x.TotalHangings == bowlers.Min(y => y.TotalHangings)).Select(b => b.Id);

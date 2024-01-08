@@ -34,7 +34,7 @@ public partial class MainViewModel(IDatabaseService data,
     {
         await ExecuteAsync(async () =>
         {
-            Week ??= await data.GetLatestWeek();
+            Week = await data.GetLatestWeek();
             BusRides = Week.BusRides;
             BusRideTotal = await data.GetTotalBusRides();
 

@@ -24,5 +24,5 @@ public interface IDatabaseService
     Task<bool> UpdateTotalHangs(int hangs);
     Task<bool> UpdateAllBowlers(IEnumerable<Bowler> bowlers);
     Task<Week> StartNewWeek();
-    Task<IEnumerable<int>> GetLowestHangs();
+    Task<IEnumerable<int>> GetLowestHangsIds();
 }
