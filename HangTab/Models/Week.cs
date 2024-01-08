@@ -21,7 +21,4 @@ public class Week : ObservableObject
         get => _busRides;
         set => SetProperty(ref _busRides, value);
     }
-
-    public int GetBowlerIdWithLowestHangs() =>
-        Bowlers.First(b => !b.IsSub && b.TotalHangings == Bowlers.Where(b => !b.IsSub).Min(b => b.TotalHangings)).Id;
 }
