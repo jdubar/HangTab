@@ -25,13 +25,10 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
     public async Task<IEnumerable<BowlerWeek>> GetAllBowlerWeeks() =>
         await context.GetAllAsync<BowlerWeek>();
 
-    public async Task<IEnumerable<BusRideWeek>> GetAllBusRideWeeks() =>
-        await context.GetAllAsync<BusRideWeek>();
-
     public async Task<IEnumerable<Bowler>> GetFilteredBowlers(Expression<Func<Bowler, bool>> predicate) =>
         await context.GetFilteredAsync(predicate);
 
-    public async Task<IEnumerable<BowlerWeek>> GetFilteredBowlerWeeks(int week) =>
+    public async Task<IEnumerable<BowlerWeek>> GetBowlerWeeksByWeek(int week) =>
         await context.GetFilteredAsync<BowlerWeek>(w => w.WeekNumber == week);
 
     public async Task<BusRideViewModel> GetBusRideViewModelByWeek(int week)
@@ -59,10 +56,40 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         return viewmodel;
     }
 
-    public async Task<IEnumerable<Bowler>> GetLowestHangs()
+    public async Task<IEnumerable<WeekViewModel>> GetAllWeeks()
     {
-        var bowlers = await context.GetAllAsync<Bowler>();
-        return bowlers.Where((x) => !x.IsSub && x.TotalHangings == bowlers.Min(y => y.TotalHangings));
+        var allBowlers = await GetAllBowlers();
+        var allWeeks = await GetAllBowlerWeeks();
+        var lastWeek = allWeeks.OrderBy(w => w.WeekNumber).Last().WeekNumber;
+
+        var season = new List<WeekViewModel>();
+        for (var week = lastWeek; week >= 1; week--)
+        {
+            var bowlers = allWeeks.Where(w => w.WeekNumber == week)
+                                  .Join(allBowlers,
+                                        w => w.BowlerId,
+                                        b => b.Id,
+                                        (w, b) => new Bowler()
+                                        {
+                                            IsSub = b.IsSub,
+                                            ImageUrl = b.ImageUrl,
+                                            FirstName = b.FirstName,
+                                            LastName = b.LastName,
+                                            TotalHangings = w.Hangings
+                                        })
+                                  .ToList();
+
+            var busRide = await GetBusRideViewModelByWeek(week);
+            var weekViewModel = new WeekViewModel()
+            {
+                WeekNumber = week,
+                Bowlers = bowlers,
+                TotalBusRides = busRide.BusRideWeek.BusRides,
+                TotalHangings = bowlers.Sum(w => w.TotalHangings)
+            };
+            season.Add(weekViewModel);
+        }
+        return season;
     }
 
     public async Task<int> GetWorkingWeek()
@@ -72,6 +99,7 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
             ? allWeeks.OrderBy(w => w.WeekNumber).Last().WeekNumber
             : 1;
     }
+
     public async Task<bool> IsBowlerExists(Bowler bowler)
     {
         var find = await context.GetFilteredAsync<Bowler>(b => b.FirstName == bowler.FirstName

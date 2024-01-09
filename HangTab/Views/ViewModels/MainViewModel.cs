@@ -40,7 +40,7 @@ public partial class MainViewModel(IDatabaseService data,
             BusRideViewModel = await data.GetBusRideViewModelByWeek(WorkingWeek);
 
             var bowlers = await data.GetFilteredBowlers(b => !b.IsHidden);
-            var weeks = await data.GetFilteredBowlerWeeks(WorkingWeek);
+            var weeks = await data.GetBowlerWeeksByWeek(WorkingWeek);
 
             MainBowlers.Clear();
 
