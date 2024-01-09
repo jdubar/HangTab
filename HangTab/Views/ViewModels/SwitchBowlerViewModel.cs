@@ -25,10 +25,7 @@ public partial class SwitchBowlerViewModel(IDatabaseService data, IShellService 
         await ExecuteAsync(async () =>
         {
             var bowlers = await data.GetFilteredBowlers(b => b.Id != Bowler.Id && b.IsHidden);
-            if (SwitchBowlers.Count > 0)
-            {
-                SwitchBowlers.Clear();
-            }
+            SwitchBowlers.Clear();
 
             if (bowlers.Any())
             {

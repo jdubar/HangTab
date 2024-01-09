@@ -17,15 +17,8 @@ public partial class ManageBowlerViewModel(IDatabaseService data,
         await ExecuteAsync(async () =>
         {
             var bowlers = await data.GetAllBowlers();
-            if (AllBowlers.Count > 0)
-            {
-                AllBowlers.Clear();
-            }
-
-            if (bowlers.Any())
-            {
-                AllBowlers.AddRange(bowlers);
-            }
+            AllBowlers.Clear();
+            AllBowlers.AddRange(bowlers);
         }, "");
     }
 
