@@ -51,7 +51,8 @@ public partial class SeasonViewModel(IDatabaseService data,
                                             FirstName = b.FirstName,
                                             LastName = b.LastName,
                                             TotalHangings = w.Hangings
-                                        });
+                                        })
+                                  .ToList();
 
             var busRide = await data.GetBusRideViewModelByWeek(week);
             var weekViewModel = new WeekViewModel()

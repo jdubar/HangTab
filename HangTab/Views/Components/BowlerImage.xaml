@@ -20,7 +20,7 @@
         <Border IsVisible="{Binding IsSub}"
                 StrokeShape="RoundRectangle 40,40,40,40"
                 ZIndex="2"
-                Margin="0,29,0,0"
+                Margin="0,40,0,0"
                 HeightRequest="20"
                 WidthRequest="47"
                 BackgroundColor="{AppThemeBinding Dark={StaticResource White},

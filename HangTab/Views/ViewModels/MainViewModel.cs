@@ -57,13 +57,13 @@ public partial class MainViewModel(IDatabaseService data,
         BusRideViewModel.BusRide.Total++;
         BusRideViewModel.BusRideWeek.BusRides++;
 
-        if (!await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
+        if (await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
         {
-            await shell.DisplayAlert("Update Error", "Error updating bus ride", "Ok");
+            await ShowBusRideSplashAsync();
         }
         else
         {
-            await ShowBusRideSplashAsync();
+            await shell.DisplayAlert("Update Error", "Error updating bus ride", "Ok");
         }
     }
 
@@ -109,7 +109,8 @@ public partial class MainViewModel(IDatabaseService data,
     private List<BowlerViewModel> LoadBowlers(IEnumerable<Bowler> bowlers, IEnumerable<BowlerWeek> weeks)
     {
         var collection = new List<BowlerViewModel>();
-        var lowest = bowlers.Where(b => !b.IsSub && b.TotalHangings == bowlers.Where(b => !b.IsSub).Min(b => b.TotalHangings));
+        var lowestHangBowlers = bowlers.Where(b => !b.IsSub
+                                                   && b.TotalHangings == bowlers.Where(b => !b.IsSub).Min(b => b.TotalHangings));
 
         foreach (var bowler in bowlers)
         {
@@ -124,12 +125,9 @@ public partial class MainViewModel(IDatabaseService data,
             var viewModel = new BowlerViewModel()
             {
                 Bowler = bowler,
-                BowlerWeek = week
+                BowlerWeek = week,
+                IsLowestHangs = lowestHangBowlers.Any(b => b.Id == bowler.Id)
             };
-            if (lowest.Any(b => b.Id == bowler.Id))
-            {
-                viewModel.IsLowestHangs = true;
-            }
             collection.Add(viewModel);
         }
         return collection;
