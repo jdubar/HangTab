@@ -54,7 +54,7 @@ public partial class MainViewModel(IDatabaseService data,
     [RelayCommand]
     private async Task BusRideAsync()
     {
-        BusRideViewModel.BusRide.TotalBusRides++;
+        BusRideViewModel.BusRide.Total++;
         BusRideViewModel.BusRideWeek.BusRides++;
 
         if (!await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))

@@ -53,7 +53,6 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         }
         else
         {
-            viewmodel.BusRideWeek.BusRideId = viewmodel.BusRide.Id;
             viewmodel.BusRideWeek.WeekNumber = week;
             _ = await context.AddItemAsync(viewmodel.BusRideWeek);
         }
