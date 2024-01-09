@@ -39,15 +39,8 @@ public partial class MainViewModel(IDatabaseService data,
             TitleWeek = $"Week {WorkingWeek}";
             BusRideViewModel = await data.GetBusRideViewModelByWeek(WorkingWeek);
 
-            var bowlers = await data.GetFilteredBowlers(b => !b.IsHidden);
-            var weeks = await data.GetBowlerWeeksByWeek(WorkingWeek);
-
             MainBowlers.Clear();
-
-            if (bowlers.Any())
-            {
-                MainBowlers.AddRange(LoadBowlers(bowlers, weeks));
-            }
+            MainBowlers.AddRange(await data.GetAllMainBowlers(WorkingWeek));
         }, "");
     }
 
@@ -104,33 +97,6 @@ public partial class MainViewModel(IDatabaseService data,
             ResetMainBowlersForNewWeek();
             await ResetBusRidesForNewWeek();
         }, "Starting new week...");
-    }
-
-    private List<BowlerViewModel> LoadBowlers(IEnumerable<Bowler> bowlers, IEnumerable<BowlerWeek> weeks)
-    {
-        var collection = new List<BowlerViewModel>();
-        var lowestHangBowlers = bowlers.Where(b => !b.IsSub
-                                                   && b.TotalHangings == bowlers.Where(b => !b.IsSub).Min(b => b.TotalHangings));
-
-        foreach (var bowler in bowlers)
-        {
-            var week = weeks.FirstOrDefault(w => w.BowlerId == bowler.Id);
-            week ??= new BowlerWeek()
-            {
-                WeekNumber = WorkingWeek,
-                BowlerId = bowler.Id,
-                Hangings = 0
-            };
-
-            var viewModel = new BowlerViewModel()
-            {
-                Bowler = bowler,
-                BowlerWeek = week,
-                IsLowestHangs = lowestHangBowlers.Any(b => b.Id == bowler.Id)
-            };
-            collection.Add(viewModel);
-        }
-        return collection;
     }
 
     private void ResetMainBowlersForNewWeek()

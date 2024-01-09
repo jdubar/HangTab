@@ -56,6 +56,35 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         return viewmodel;
     }
 
+    public async Task<IEnumerable<BowlerViewModel>> GetAllMainBowlers(int workingWeek)
+    {
+        var collection = new List<BowlerViewModel>();
+        var bowlers = await GetFilteredBowlers(b => !b.IsHidden);
+        var weeks = await GetBowlerWeeksByWeek(workingWeek);
+        var lowestHangBowlers = bowlers.Where(b => !b.IsSub
+                                                   && b.TotalHangings == bowlers.Where(b => !b.IsSub).Min(b => b.TotalHangings));
+
+        foreach (var bowler in bowlers)
+        {
+            var week = weeks.FirstOrDefault(w => w.BowlerId == bowler.Id);
+            week ??= new BowlerWeek()
+            {
+                WeekNumber = workingWeek,
+                BowlerId = bowler.Id,
+                Hangings = 0
+            };
+
+            var viewModel = new BowlerViewModel()
+            {
+                Bowler = bowler,
+                BowlerWeek = week,
+                IsLowestHangs = lowestHangBowlers.Any(b => b.Id == bowler.Id)
+            };
+            collection.Add(viewModel);
+        }
+        return collection;
+    }
+
     public async Task<IEnumerable<WeekViewModel>> GetAllWeeks()
     {
         var allBowlers = await GetAllBowlers();
