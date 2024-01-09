@@ -151,7 +151,7 @@
                                      HeightRequest="100"
                                      WidthRequest="100"
                                      VerticalOptions="Start"
-                                     Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=BusRideCommand}"/>
+                                     Command="{Binding BusRideCommand}"/>
                     </StackLayout>
                 </Border>
             </Grid>
@@ -164,7 +164,7 @@
                     <SwipeItems Mode="Execute">
                         <SwipeItem Text="Starting new week..."
 					               BackgroundColor="{StaticResource Success}"
-                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=StartNewWeekCommand}"/>
+                                   Command="{Binding StartNewWeekCommand}"/>
                     </SwipeItems>
                 </SwipeView.LeftItems>
                 <Grid HorizontalOptions="Center"

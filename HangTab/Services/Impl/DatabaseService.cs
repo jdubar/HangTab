@@ -41,6 +41,12 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
             : 0;
     }
 
+    public async Task<IEnumerable<Week>> GetAllWeeks()
+    {
+        var allWeeks = await context.GetAllAsync<Week>();
+        return allWeeks.OrderByDescending(w => w.WeekNumber);
+    }
+
     public async Task<int> GetWorkingWeek()
     {
         var allWeeks = await context.GetAllAsync<BusRideWeek>();
@@ -59,7 +65,7 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
     public async Task<bool> UpdateBowler(Bowler bowler) =>
         await context.UpdateItemAsync(bowler);
 
-    public async Task<bool> UpdateAllBowlers(IEnumerable<Bowler> bowlers)
+    public async Task<bool> SaveAllBowlerData(IEnumerable<Bowler> bowlers)
     {
         foreach (var bowler in bowlers)
         {
@@ -79,19 +85,53 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
             : await context.AddItemAsync(week);
     }
 
-    public async Task<bool> UpdateTotalHangs(int hangs)
+    //public async Task<bool> UpdateTotalHangs(int hangs)
+    //{
+    //    var busride = new BusRide();
+    //    var busrides = await context.GetFilteredAsync<BusRide>(b => b.Id == 1);
+    //    if (!busrides.Any())
+    //    {
+    //        await context.AddItemAsync(busride);
+    //    }
+    //    else
+    //    {
+    //        busride = busrides.First();
+    //    }
+    //    busride.TotalBusRides += hangs;
+    //    return await context.UpdateItemAsync(busride);
+    //}
+
+    public async Task<bool> IncrementTotalHangs()
     {
-        var busrides = await context.GetFilteredAsync<BusRide>(b => b.Id == 1);
-        var busride = busrides.First();
-        busride.TotalBusRides += hangs;
+        var busride = new BusRide();
+        var busrides = await context.GetAllAsync<BusRide>();
+        if (busrides.Any())
+        {
+            busride = busrides.First();
+        }
+        else
+        {
+            if (!await context.AddItemAsync(busride))
+            {
+                return false;
+            }
+        }
+        busride.TotalBusRides++;
         return await context.UpdateItemAsync(busride);
     }
 
     public async Task<Week> StartNewWeek()
     {
+        var bowlers = await GetFilteredBowlers(b => !b.IsHidden);
+        foreach (var bowler in bowlers)
+        {
+            bowler.WeekHangings = 0;
+        }
         var week = new Week()
         {
-            Bowlers = await GetAllBowlers()
+            Bowlers = bowlers,
+            BusRides = 0,
+            TotalHangingsForTheWeek = 0
         };
         return await context.AddItemAsync(week)
             ? week

@@ -92,7 +92,7 @@
                     <VerticalStackLayout VerticalOptions="Center"
                                          WidthRequest="230"
                                          Margin="10">
-                        <Label Text="{Binding WeekViewModel.TotalBusRides, StringFormat='Bus Rides: {0}'}"
+                        <Label Text="{Binding Week.TotalHangingsForTheWeek, StringFormat='Bus Rides: {0}'}"
                                FontAttributes="Bold"
                                FontSize="Body"/>
                     </VerticalStackLayout>

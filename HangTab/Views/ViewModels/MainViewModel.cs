@@ -40,12 +40,7 @@ public partial class MainViewModel(IDatabaseService data,
 
             TitleWeek = $"Week {Week.WeekNumber}";
 
-            MainBowlers.Clear();
-            if (Week.Bowlers.Any())
-            {
-                MainBowlers.AddRange(Week.Bowlers);
-                SetIsLowestHangsInMainBowlers();
-            }
+            SetMainBowlers();
         }, "");
     }
 
@@ -54,14 +49,16 @@ public partial class MainViewModel(IDatabaseService data,
     {
         BusRideTotal++;
         Week.BusRides++;
+        BusRides = Week.BusRides;
 
-        if (!await data.UpdateWeek(Week))
+        if (await data.UpdateWeek(Week)
+            && await data.IncrementTotalHangs())
         {
-            await shell.DisplayAlert("Update Error", "Error updating bus ride", "Ok");
+            await ShowBusRideSplashAsync();
         }
         else
         {
-            await ShowBusRideSplashAsync();
+            await shell.DisplayAlert("Update Error", "Error updating bus ride", "OK");
         }
     }
 
@@ -75,11 +72,12 @@ public partial class MainViewModel(IDatabaseService data,
 
             if (await data.UpdateBowler(bowler))
             {
+                Week.TotalHangingsForTheWeek += 1;
                 SetIsLowestHangsInMainBowlers();
             }
             else
             {
-                await shell.DisplayAlert("Update Error", "Error updating bowler hang count", "Ok");
+                await shell.DisplayAlert("Update Error", "Error updating bowler hang count", "OK");
             }
         }, "");
     }
@@ -93,19 +91,19 @@ public partial class MainViewModel(IDatabaseService data,
     {
         await ExecuteAsync(async () =>
         {
-            await SaveCurrentWeek();
+            if (await data.SaveAllBowlerData(MainBowlers))
+            {
+                Week = await data.StartNewWeek();
+                TitleWeek = $"Week {Week.WeekNumber}";
+                BusRides = 0;
 
-            Week = await data.StartNewWeek();
-            TitleWeek = $"Week {Week.WeekNumber}";
-            MainBowlers = Week.Bowlers.Where(b => !b.IsHidden) as ObservableRangeCollection<Bowler>;
-
+                SetMainBowlers();
+            }
+            else
+            {
+                await shell.DisplayAlert("Update Error", "Error saving bowler data", "OK");
+            }
         }, "Starting new week...");
-    }
-
-    private async Task SaveCurrentWeek()
-    {
-        await data.UpdateAllBowlers(MainBowlers);
-        await data.UpdateTotalHangs(Week.BusRides);
     }
 
     private void SetIsLowestHangsInMainBowlers()
@@ -113,6 +111,16 @@ public partial class MainViewModel(IDatabaseService data,
         foreach (var bowler in MainBowlers.Where(bowler => !bowler.IsSub))
         {
             bowler.IsLowestHangs = bowler.TotalHangings == MainBowlers.Min(bowler => bowler.TotalHangings);
+        }
+    }
+
+    private void SetMainBowlers()
+    {
+        MainBowlers.Clear();
+        if (Week.Bowlers.Any())
+        {
+            MainBowlers.AddRange(Week.Bowlers);
+            SetIsLowestHangsInMainBowlers();
         }
     }
 

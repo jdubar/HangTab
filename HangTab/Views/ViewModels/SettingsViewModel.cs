@@ -14,7 +14,7 @@ public partial class SettingsViewModel(IDatabaseService data, IShellService shel
             {
                 if (!await data.DropAllTables())
                 {
-                    await shell.DisplayAlert("Critical Error", "Error occurred while deleting data!", "Ok");
+                    await shell.DisplayAlert("Critical Error", "Error occurred while deleting data!", "OK");
                 }
             }, "Clearing all data...");
         }
@@ -29,7 +29,7 @@ public partial class SettingsViewModel(IDatabaseService data, IShellService shel
             {
                 //if (!await data.ResetHangings())
                 //{
-                //    await shell.DisplayAlert("Critical Error", "Error occurred while restting data!", "Ok");
+                //    await shell.DisplayAlert("Critical Error", "Error occurred while restting data!", "OK");
                 //}
             }, "Resetting hangings...");
         }

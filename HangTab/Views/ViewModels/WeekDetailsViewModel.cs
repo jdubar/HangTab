@@ -2,17 +2,16 @@
 using CommunityToolkit.Mvvm.Input;
 
 using HangTab.Models;
-using HangTab.ViewModels;
 
 using MvvmHelpers;
 
 namespace HangTab.Views.ViewModels;
 
-[QueryProperty(nameof(WeekViewModel), nameof(WeekViewModel))]
+[QueryProperty(nameof(Week), nameof(Week))]
 public partial class WeekDetailsViewModel : BaseViewModel
 {
     [ObservableProperty]
-    private WeekViewModel _weekViewModel;
+    private Week _week;
 
     [ObservableProperty]
     private string _titleWeek = "Week 0 Details";
@@ -23,12 +22,12 @@ public partial class WeekDetailsViewModel : BaseViewModel
     private async Task InitializeDataAsync()
     {
         await ExecuteAsync(() => {
-            TitleWeek = $"Week {WeekViewModel.WeekNumber} Details";
+            TitleWeek = $"Week {Week.WeekNumber} Details";
             BowlersList.Clear();
 
-            if (WeekViewModel.Bowlers.Any())
+            if (Week.Bowlers.Any())
             {
-                BowlersList.AddRange(WeekViewModel.Bowlers);
+                BowlersList.AddRange(Week.Bowlers);
             }
 
             return Task.CompletedTask;

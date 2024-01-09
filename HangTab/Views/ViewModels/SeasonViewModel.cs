@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 using HangTab.Models;
 using HangTab.Services;
@@ -10,26 +11,25 @@ namespace HangTab.Views.ViewModels;
 public partial class SeasonViewModel(IDatabaseService data,
                                      IShellService shell) : BaseViewModel
 {
-    public ObservableRangeCollection<WeekViewModel> AllWeeks { get; set; } = [];
+    public ObservableRangeCollection<Week> AllWeeks { get; set; } = [];
+
+    [ObservableProperty]
+    private int _totalHangs;
 
     [RelayCommand]
     private async Task InitializeDataAsync()
     {
         await ExecuteAsync(async () =>
         {
-            //var weeks = await data.GetAllBowlerWeeks();
+            var weeks = await data.GetAllWeeks();
 
-            //AllWeeks.Clear();
-
-            //if (weeks.Any())
-            //{
-            //    AllWeeks.AddRange(await LoadSeason(weeks));
-            //}
+            AllWeeks.Clear();
+            AllWeeks.AddRange(weeks);
         }, "");
     }
 
     [RelayCommand]
-    private async Task ShowWeekDetailsAsync(WeekViewModel week) =>
+    private async Task ShowWeekDetailsAsync(Week week) =>
         await shell.GoToPageWithData(nameof(WeekDetailsPage), week);
 
     private async Task<List<WeekViewModel>> LoadSeason(IEnumerable<BowlerWeek> allWeeks)

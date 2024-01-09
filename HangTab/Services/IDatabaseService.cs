@@ -20,7 +20,9 @@ public interface IDatabaseService
     Task<Week> GetLatestWeek();
     Task<int> GetTotalBusRides();
     Task<bool> UpdateWeek(Week week);
-    Task<bool> UpdateTotalHangs(int hangs);
-    Task<bool> UpdateAllBowlers(IEnumerable<Bowler> bowlers);
+    //Task<bool> UpdateTotalHangs(int hangs);
+    Task<bool> SaveAllBowlerData(IEnumerable<Bowler> bowlers);
     Task<Week> StartNewWeek();
+    Task<IEnumerable<Week>> GetAllWeeks();
+    Task<bool> IncrementTotalHangs();
 }

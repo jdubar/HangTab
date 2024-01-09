@@ -23,7 +23,7 @@ public partial class AddBowlerViewModel(IDatabaseService data,
             {
                 if (!await data.DeleteBowler(id))
                 {
-                    await shell.DisplayAlert("Delete Error", "Bowler was not deleted", "Ok");
+                    await shell.DisplayAlert("Delete Error", "Bowler was not deleted", "OK");
                     return;
                 }
                 await shell.DisplayToast("Bowler deleted");
@@ -43,7 +43,7 @@ public partial class AddBowlerViewModel(IDatabaseService data,
         var (isValid, errorMessage) = Bowler.ValidateFields();
         if (!isValid)
         {
-            await shell.DisplayAlert("Validation Error", errorMessage, "Ok");
+            await shell.DisplayAlert("Validation Error", errorMessage, "OK");
             return;
         }
 
@@ -53,7 +53,7 @@ public partial class AddBowlerViewModel(IDatabaseService data,
             busyText = "Creating bowler...";
             if (await data.IsBowlerExists(Bowler))
             {
-                await shell.DisplayAlert("Validation Error", "This bowler already exists", "Ok");
+                await shell.DisplayAlert("Validation Error", "This bowler already exists", "OK");
                 return;
             }
         }
@@ -64,7 +64,7 @@ public partial class AddBowlerViewModel(IDatabaseService data,
                 ? await data.AddBowler(Bowler)
                 : await data.UpdateBowler(Bowler)))
             {
-                await shell.DisplayAlert("Update Error", "Unable to save bowler", "Ok");
+                await shell.DisplayAlert("Update Error", "Unable to save bowler", "OK");
                 return;
             }
             await shell.DisplayToast("Bowler saved");
@@ -84,7 +84,7 @@ public partial class AddBowlerViewModel(IDatabaseService data,
             }
             else
             {
-                await shell.DisplayAlert("Error", result.Result, "Ok");
+                await shell.DisplayAlert("Error", result.Result, "OK");
             }
         }, "Setting Bowler Image");
     }

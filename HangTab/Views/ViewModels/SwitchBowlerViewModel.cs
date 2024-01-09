@@ -40,7 +40,7 @@ public partial class SwitchBowlerViewModel(IDatabaseService data, IShellService 
         if (!await ChangeBowlerHiddenStateAsync(Bowler)
             || !await ChangeBowlerHiddenStateAsync(SelectedBowler))
         {
-            await shell.DisplayAlert("Update Error", "Error updating bowler state", "Ok");
+            await shell.DisplayAlert("Update Error", "Error updating bowler state", "OK");
         }
         else
         {

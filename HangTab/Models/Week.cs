@@ -16,9 +16,12 @@ public class Week : ObservableObject
 
     [OneToMany(CascadeOperations = CascadeOperation.All)]
     public IEnumerable<Bowler> Bowlers { get; set; } = [];
+
     public int BusRides
     {
         get => _busRides;
         set => SetProperty(ref _busRides, value);
     }
+
+    public int TotalHangingsForTheWeek { get; set; }
 }
