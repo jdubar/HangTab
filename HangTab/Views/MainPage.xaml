@@ -14,7 +14,8 @@
                    HorizontalOptions="Start"
                    VerticalOptions="Center"
                    TextColor="White"
-                   FontSize="Title" />
+                   FontSize="Medium"
+                   FontAttributes="Bold"/>
         </Grid>
     </Shell.TitleView>
     <ContentPage.Resources>
