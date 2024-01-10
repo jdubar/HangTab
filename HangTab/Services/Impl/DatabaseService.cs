@@ -41,7 +41,10 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         }
         else
         {
-            _ = await context.AddItemAsync(viewmodel.BusRide);
+            if (!await context.AddItemAsync(viewmodel.BusRide))
+            {
+                return new BusRideViewModel();
+            }
         }
         var weeks = await context.GetFilteredAsync<BusRideWeek>(b => b.WeekNumber == week);
         if (weeks.Any())
@@ -51,25 +54,28 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         else
         {
             viewmodel.BusRideWeek.WeekNumber = week;
-            _ = await context.AddItemAsync(viewmodel.BusRideWeek);
+            if (!await context.AddItemAsync(viewmodel.BusRideWeek))
+            {
+                return new BusRideViewModel();
+            }
         }
         return viewmodel;
     }
 
-    public async Task<IEnumerable<BowlerViewModel>> GetAllMainBowlers(int workingWeek)
+    public async Task<IEnumerable<BowlerViewModel>> GetMainBowlersByWeek(int week)
     {
-        var collection = new List<BowlerViewModel>();
+        var mainBowlers = new List<BowlerViewModel>();
         var bowlers = await GetFilteredBowlers(b => !b.IsHidden);
-        var weeks = await GetBowlerWeeksByWeek(workingWeek);
+        var bowlerWeeks = await GetBowlerWeeksByWeek(week);
         var lowestHangBowlers = bowlers.Where(b => !b.IsSub
                                                    && b.TotalHangings == bowlers.Where(b => !b.IsSub).Min(b => b.TotalHangings));
 
         foreach (var bowler in bowlers)
         {
-            var week = weeks.FirstOrDefault(w => w.BowlerId == bowler.Id);
-            week ??= new BowlerWeek()
+            var bowlerWeek = bowlerWeeks.FirstOrDefault(w => w.BowlerId == bowler.Id);
+            bowlerWeek ??= new BowlerWeek()
             {
-                WeekNumber = workingWeek,
+                WeekNumber = week,
                 BowlerId = bowler.Id,
                 Hangings = 0
             };
@@ -77,55 +83,56 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
             var viewModel = new BowlerViewModel()
             {
                 Bowler = bowler,
-                BowlerWeek = week,
+                BowlerWeek = bowlerWeek,
                 IsLowestHangs = lowestHangBowlers.Any(b => b.Id == bowler.Id)
             };
-            collection.Add(viewModel);
+            mainBowlers.Add(viewModel);
         }
-        return collection;
+        return mainBowlers;
     }
 
     public async Task<IEnumerable<WeekViewModel>> GetAllWeeks()
     {
         var allBowlers = await GetAllBowlers();
-        var allWeeks = await GetAllBowlerWeeks();
-        var lastWeek = allWeeks is not null && allWeeks.Any()
-            ? allWeeks.OrderBy(w => w.WeekNumber).Last().WeekNumber
-            : 0;
+        var allBowlerWeeks = await GetAllBowlerWeeks();
 
         var season = new List<WeekViewModel>();
-        for (var week = lastWeek; week >= 1; week--)
+        if (allBowlerWeeks.Any() && allBowlers.Any())
         {
-            var bowlers = allWeeks.Where(w => w.WeekNumber == week)
-                                  .Join(allBowlers,
-                                        w => w.BowlerId,
-                                        b => b.Id,
-                                        (w, b) => new Bowler()
-                                        {
-                                            IsSub = b.IsSub,
-                                            ImageUrl = b.ImageUrl,
-                                            FirstName = b.FirstName,
-                                            LastName = b.LastName,
-                                            TotalHangings = w.Hangings
-                                        })
-                                  .ToList();
-
-            var busRide = await GetBusRideViewModelByWeek(week);
-            var weekViewModel = new WeekViewModel()
+            var lastWeek = GetLatestWeek().Result;
+            for (var week = lastWeek; week >= 1; week--)
             {
-                WeekNumber = week,
-                Bowlers = bowlers,
-                TotalBusRides = busRide.BusRideWeek.BusRides,
-                TotalHangings = bowlers.Sum(w => w.TotalHangings)
-            };
-            season.Add(weekViewModel);
+                var bowlers = allBowlerWeeks.Where(w => w.WeekNumber == week)
+                                            .Join(allBowlers,
+                                                w => w.BowlerId,
+                                                b => b.Id,
+                                                (w, b) => new Bowler()
+                                                {
+                                                    IsSub = b.IsSub,
+                                                    ImageUrl = b.ImageUrl,
+                                                    FirstName = b.FirstName,
+                                                    LastName = b.LastName,
+                                                    TotalHangings = w.Hangings
+                                                })
+                                            .ToList();
+
+                var busRide = await GetBusRideViewModelByWeek(week);
+                var weekViewModel = new WeekViewModel()
+                {
+                    WeekNumber = week,
+                    Bowlers = bowlers,
+                    TotalBusRides = busRide.BusRideWeek.BusRides,
+                    TotalHangings = bowlers.Sum(w => w.TotalHangings)
+                };
+                season.Add(weekViewModel);
+            }
         }
         return season;
     }
 
-    public async Task<int> GetWorkingWeek()
+    public async Task<int> GetLatestWeek()
     {
-        var allWeeks = await context.GetAllAsync<BusRideWeek>();
+        var allWeeks = await context.GetAllAsync<BowlerWeek>();
         return allWeeks is not null && allWeeks.Any()
             ? allWeeks.OrderBy(w => w.WeekNumber).Last().WeekNumber
             : 1;
@@ -146,12 +153,14 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
             foreach (var bowler in bowlers)
             {
                 bowler.TotalHangings = 0;
-                _ = await UpdateBowler(bowler);
+                if (!await UpdateBowler(bowler))
+                {
+                    return false;
+                }
             }
-            _ = await context.DropTableAsync<BowlerWeek>();
-            _ = await context.DropTableAsync<BusRide>();
-            _ = await context.DropTableAsync<BusRideWeek>();
-            return true;
+            return await context.DropTableAsync<BowlerWeek>()
+                && await context.DropTableAsync<BusRide>()
+                && await context.DropTableAsync<BusRideWeek>();
         }
         catch (Exception)
         {
@@ -168,7 +177,6 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         {
             return false;
         }
-
         var weeks = await context.GetFilteredAsync<BowlerWeek>(w => w.WeekNumber == week
                                                                     && w.BowlerId == viewModel.Bowler.Id);
         return weeks is not null && weeks.Any()

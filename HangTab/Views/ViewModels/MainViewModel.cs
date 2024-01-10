@@ -34,13 +34,13 @@ public partial class MainViewModel(IDatabaseService data,
         {
             if (WorkingWeek == 0)
             {
-                WorkingWeek = await data.GetWorkingWeek();
+                WorkingWeek = await data.GetLatestWeek();
             }
             TitleWeek = $"Week {WorkingWeek}";
             BusRideViewModel = await data.GetBusRideViewModelByWeek(WorkingWeek);
 
             MainBowlers.Clear();
-            MainBowlers.AddRange(await data.GetAllMainBowlers(WorkingWeek));
+            MainBowlers.AddRange(await data.GetMainBowlersByWeek(WorkingWeek));
         }, "");
     }
 

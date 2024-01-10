@@ -15,10 +15,10 @@ public interface IDatabaseService
     Task<IEnumerable<BowlerWeek>> GetAllBowlerWeeks();
     Task<IEnumerable<BowlerWeek>> GetBowlerWeeksByWeek(int week);
 
-    Task<IEnumerable<BowlerViewModel>> GetAllMainBowlers(int workingWeek);
+    Task<IEnumerable<BowlerViewModel>> GetMainBowlersByWeek(int week);
     Task<IEnumerable<WeekViewModel>> GetAllWeeks();
     Task<BusRideViewModel> GetBusRideViewModelByWeek(int week);
-    Task<int> GetWorkingWeek();
+    Task<int> GetLatestWeek();
 
     Task<bool> AddBowler(Bowler bowler);
     Task<bool> DeleteBowler(int id);
