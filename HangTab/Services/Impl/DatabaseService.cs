@@ -89,7 +89,9 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
     {
         var allBowlers = await GetAllBowlers();
         var allWeeks = await GetAllBowlerWeeks();
-        var lastWeek = allWeeks.OrderBy(w => w.WeekNumber).Last().WeekNumber;
+        var lastWeek = allWeeks is not null && allWeeks.Any()
+            ? allWeeks.OrderBy(w => w.WeekNumber).Last().WeekNumber
+            : 0;
 
         var season = new List<WeekViewModel>();
         for (var week = lastWeek; week >= 1; week--)
