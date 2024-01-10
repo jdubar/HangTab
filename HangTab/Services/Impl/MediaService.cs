@@ -1,5 +1,7 @@
 ﻿using HangTab.Models;
 
+using Microsoft.Maui.Graphics.Platform;
+
 namespace HangTab.Services.Impl;
 public class MediaService : IMediaService
 {
@@ -12,9 +14,9 @@ public class MediaService : IMediaService
         try
         {
             var photo = await MediaPicker.Default.PickPhotoAsync();
-            var localFilePath = SaveFileToCacheDir(photo);
+            var localFilePath = await SaveFileToCacheDir(photo);
             result.IsSuccess = true;
-            result.Result = localFilePath.Result;
+            result.Result = localFilePath;
         }
         catch (Exception ex)
         {
@@ -34,9 +36,9 @@ public class MediaService : IMediaService
             try
             {
                 var photo = await MediaPicker.Default.CapturePhotoAsync();
-                var localFilePath = SaveFileToCacheDir(photo);
+                var localFilePath = await SaveFileToCacheDir(photo);
                 result.IsSuccess = true;
-                result.Result = localFilePath.Result;
+                result.Result = localFilePath;
             }
             catch (Exception ex)
             {
@@ -52,13 +54,18 @@ public class MediaService : IMediaService
         }
     }
 
-    private async Task<string> SaveFileToCacheDir(FileResult file)
+    private static async Task<string> SaveFileToCacheDir(FileResult file)
     {
         var localFilePath = Path.Combine(FileSystem.CacheDirectory, file.FileName);
         using var sourceStream = await file.OpenReadAsync();
-        using var localFileStream = File.OpenWrite(localFilePath);
-
-        await sourceStream.CopyToAsync(localFileStream);
+        var image = PlatformImage.FromStream(sourceStream);
+        if (image is not null)
+        {
+            var newImage = image.Downsize(150, true);
+            using var localFileStream = File.OpenWrite(localFilePath);
+            newImage.Save(localFileStream);
+            await sourceStream.CopyToAsync(localFileStream);
+        }
         return localFilePath;
     }
 }
