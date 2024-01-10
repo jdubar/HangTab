@@ -1,4 +1,6 @@
-﻿using static HangTab.Services.Impl.MediaService;
+﻿using HangTab.Models;
+
+using static HangTab.Services.Impl.MediaService;
 
 namespace HangTab.Services;
 public interface IMediaService

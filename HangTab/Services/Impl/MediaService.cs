@@ -1,4 +1,6 @@
-﻿namespace HangTab.Services.Impl;
+﻿using HangTab.Models;
+
+namespace HangTab.Services.Impl;
 public class MediaService : IMediaService
 {
     public async Task<PhotoResult> PickPhotoAsync()
@@ -24,11 +26,5 @@ public class MediaService : IMediaService
             result.Result = ex.Message;
         }
         return result;
-    }
-
-    public class PhotoResult
-    {
-        public bool IsSuccess { get; set; }
-        public string Result { get; set; }
     }
 }

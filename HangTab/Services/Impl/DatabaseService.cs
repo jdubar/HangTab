@@ -22,11 +22,11 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
     public async Task<IEnumerable<Bowler>> GetAllBowlers() =>
         await context.GetAllAsync<Bowler>();
 
-    public async Task<IEnumerable<BowlerWeek>> GetAllBowlerWeeks() =>
-        await context.GetAllAsync<BowlerWeek>();
-
     public async Task<IEnumerable<Bowler>> GetFilteredBowlers(Expression<Func<Bowler, bool>> predicate) =>
         await context.GetFilteredAsync(predicate);
+
+    public async Task<IEnumerable<BowlerWeek>> GetAllBowlerWeeks() =>
+        await context.GetAllAsync<BowlerWeek>();
 
     public async Task<IEnumerable<BowlerWeek>> GetBowlerWeeksByWeek(int week) =>
         await context.GetFilteredAsync<BowlerWeek>(w => w.WeekNumber == week);
