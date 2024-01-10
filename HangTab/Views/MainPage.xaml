@@ -134,9 +134,10 @@
             <Grid HorizontalOptions="Center"
                   VerticalOptions="End"
                   HeightRequest="107">
-                <Border HeightRequest="107"
-                        WidthRequest="396"
-                        StrokeThickness="1">
+                <VerticalStackLayout>
+                    <BoxView BackgroundColor="{StaticResource Gray300}"
+                             HeightRequest="1"
+                             WidthRequest="400"/>
                     <StackLayout Orientation="Horizontal">
                         <VerticalStackLayout VerticalOptions="Center"
                                              WidthRequest="230"
@@ -154,7 +155,7 @@
                                      VerticalOptions="Start"
                                      Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=BusRideCommand}"/>
                     </StackLayout>
-                </Border>
+                </VerticalStackLayout>
             </Grid>
         </Grid>
 
