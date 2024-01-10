@@ -12,7 +12,6 @@ public class BusRideWeek : ObservableObject
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
     public int WeekNumber { get; set; }
-    public int BusRideId { get; set; }
     public int BusRides
     {
         get => _busRides;

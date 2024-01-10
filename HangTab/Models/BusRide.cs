@@ -7,13 +7,13 @@ namespace HangTab.Models;
 [Table("busride")]
 public class BusRide : ObservableObject
 {
-    private int _totalBusRides;
+    private int _total;
 
-    [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
-    public int TotalBusRides
+    [PrimaryKey]
+    public int Id { get; set; } = 1;
+    public int Total
     {
-        get => _totalBusRides;
-        set => SetProperty(ref _totalBusRides, value);
+        get => _total;
+        set => SetProperty(ref _total, value);
     }
 }

@@ -25,11 +25,7 @@ public partial class WeekDetailsViewModel : BaseViewModel
         await ExecuteAsync(() => {
             TitleWeek = $"Week {WeekViewModel.WeekNumber} Details";
             BowlersList.Clear();
-
-            if (WeekViewModel.Bowlers.Any())
-            {
-                BowlersList.AddRange(WeekViewModel.Bowlers);
-            }
+            BowlersList.AddRange(WeekViewModel.Bowlers);
 
             return Task.CompletedTask;
         }, "");
