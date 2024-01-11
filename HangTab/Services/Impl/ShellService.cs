@@ -4,6 +4,9 @@ using CommunityToolkit.Maui.Core;
 namespace HangTab.Services.Impl;
 public class ShellService : IShellService
 {
+    public async Task<string> DisplayOptionsPrompt(string title, string option1, string option2) =>
+        await Shell.Current.DisplayActionSheet(title, "Cancel", null, option1, option2);
+
     public async Task DisplayAlert(string title, string msg, string buttonText) =>
         await Shell.Current.DisplayAlert(title, msg, buttonText);
 
