@@ -25,7 +25,7 @@ public class MediaService : IMediaService
         return result;
     }
 
-    public async Task<PhotoResult> TakePhotoAsync()
+    public async Task<PhotoResult> CapturePhotoAsync()
     {
         var result = new PhotoResult()
         {
