@@ -77,14 +77,25 @@ public partial class AddBowlerViewModel(IDatabaseService data,
     {
         await ExecuteAsync(async () =>
         {
-            var result = await media.PickPhotoAsync();
-            if (result.IsSuccess)
+            const string SelectPhoto = "Select a photo";
+            const string TakePhoto = "Take a new photo";
+            var action = await shell.DisplayOptionsPrompt("Choose an option", SelectPhoto, TakePhoto);
+            if (action is not null && action != "Cancel")
             {
-                Bowler.ImageUrl = result.Result;
-            }
-            else
-            {
-                await shell.DisplayAlert("Error", result.Result, "Ok");
+                var result = action == SelectPhoto
+                           ? await media.PickPhotoAsync()
+                           : await media.CapturePhotoAsync();
+                if (result is not null)
+                {
+                    if (result.IsSuccess)
+                    {
+                        Bowler.ImageUrl = result.Result;
+                    }
+                    else
+                    {
+                        await shell.DisplayAlert("Error", result.Result, "Ok");
+                    }
+                }
             }
         }, "Setting Bowler Image");
     }
