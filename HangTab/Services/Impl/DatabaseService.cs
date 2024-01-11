@@ -104,16 +104,16 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
             {
                 var bowlers = allBowlerWeeks.Where(w => w.WeekNumber == week)
                                             .Join(allBowlers,
-                                                w => w.BowlerId,
-                                                b => b.Id,
-                                                (w, b) => new Bowler()
-                                                {
-                                                    IsSub = b.IsSub,
-                                                    ImageUrl = b.ImageUrl,
-                                                    FirstName = b.FirstName,
-                                                    LastName = b.LastName,
-                                                    TotalHangings = w.Hangings
-                                                })
+                                                  w => w.BowlerId,
+                                                  b => b.Id,
+                                                  (w, b) => new Bowler()
+                                                  {
+                                                      IsSub = b.IsSub,
+                                                      ImageUrl = b.ImageUrl,
+                                                      FirstName = b.FirstName,
+                                                      LastName = b.LastName,
+                                                      TotalHangings = w.Hangings
+                                                  })
                                             .ToList();
 
                 var busRide = await GetBusRideViewModelByWeek(week);
