@@ -32,10 +32,7 @@ public partial class MainViewModel(IDatabaseService data,
     {
         await ExecuteAsync(async () =>
         {
-            if (WorkingWeek == 0)
-            {
-                WorkingWeek = await data.GetLatestWeek();
-            }
+            WorkingWeek = await data.GetLatestWeek();
             TitleWeek = $"Week {WorkingWeek}";
             BusRideViewModel = await data.GetBusRideViewModelByWeek(WorkingWeek);
 
