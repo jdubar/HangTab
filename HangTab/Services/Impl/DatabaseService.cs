@@ -100,7 +100,7 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         if (allBowlerWeeks.Any() && allBowlers.Any())
         {
             var lastWeek = await GetLatestWeek();
-            for (var week = lastWeek; week >= 1; week--)
+            for (var week = lastWeek - 1; week >= 1; week--)
             {
                 var bowlers = allBowlerWeeks.Where(w => w.WeekNumber == week)
                                             .Join(allBowlers,
