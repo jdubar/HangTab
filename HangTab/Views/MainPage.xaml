@@ -58,16 +58,17 @@
                                 ZIndex="1">
                     <CollectionView.ItemsLayout>
                         <LinearItemsLayout ItemSpacing="4"
-                                            Orientation="Vertical"/>
+                                           Orientation="Vertical"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="models:BowlerViewModel">
-                            <SwipeView HeightRequest="80">
+                            <SwipeView>
                                 <SwipeView.LeftItems>
                                     <SwipeItems>
                                         <SwipeItem BackgroundColor="{DynamicResource Tertiary}"
                                                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=ShowSwitchBowlerViewCommand}"
-                                                   CommandParameter="{Binding Bowler}">
+                                                   CommandParameter="{Binding Bowler}"
+                                                   Text="Switch">
                                             <SwipeItem.IconImageSource>
                                                 <FontImageSource FontFamily="GoogleFont"
                                                                  Glyph="{Static icons:GoogleFont.Switch_account}"/>
