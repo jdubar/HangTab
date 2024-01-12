@@ -65,6 +65,8 @@ public partial class MainViewModel(IDatabaseService data,
             viewModel.Bowler.TotalHangings++;
             viewModel.BowlerWeek.Hangings++;
             viewModel.BowlerWeek.WeekNumber = WorkingWeek;
+            viewModel.IsEnableUndo = true;
+            viewModel.IsEnableSwitch = false;
 
             if (await data.UpdateBowlerHangingsByWeek(viewModel, WorkingWeek))
             {
@@ -94,6 +96,35 @@ public partial class MainViewModel(IDatabaseService data,
             ResetMainBowlersForNewWeek();
             await ResetBusRidesForNewWeek();
         }, "Starting new week...");
+    }
+
+    [RelayCommand]
+    private async Task UndoBowlerHang(BowlerViewModel viewModel)
+    {
+        await ExecuteAsync(async () =>
+        {
+            if (viewModel.BowlerWeek.Hangings > 0)
+            {
+                viewModel.Bowler.TotalHangings--;
+                viewModel.BowlerWeek.Hangings--;
+                viewModel.BowlerWeek.WeekNumber = WorkingWeek;
+                viewModel.IsEnableUndo = viewModel.BowlerWeek.Hangings != 0;
+                viewModel.IsEnableSwitch = viewModel.BowlerWeek.Hangings == 0;
+            }
+            else
+            {
+                viewModel.IsEnableUndo = false;
+                viewModel.IsEnableSwitch = true;
+            }
+            if (await data.UpdateBowlerHangingsByWeek(viewModel, WorkingWeek))
+            {
+                SetIsLowestHangsInMainBowlers();
+            }
+            else
+            {
+                await shell.DisplayAlert("Update Error", "Error updating bowler hang count", "Ok");
+            }
+        }, "");
     }
 
     private void ResetMainBowlersForNewWeek()
