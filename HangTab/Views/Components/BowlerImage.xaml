@@ -37,8 +37,9 @@
                                                           Light={StaticResource Black}}"
                             HorizontalOptions="Center"
                             VerticalOptions="Center"
-                            HeightRequest="50"
-                            WidthRequest="50"
+                            HeightRequest="{Binding Size}"
+                            WidthRequest="{Binding Size}"
+                            CornerRadius="{Binding Size}"
                             Margin="10"
                             ZIndex="1"/>
     </Grid>

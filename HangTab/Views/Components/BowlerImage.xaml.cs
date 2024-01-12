@@ -8,6 +8,8 @@ public partial class BowlerImage : ContentView
         BindableProperty.Create(nameof(IsLowestHangs), typeof(bool), typeof(CardView), false);
     public static readonly BindableProperty IsSubProperty =
         BindableProperty.Create(nameof(IsSub), typeof(bool), typeof(CardView), false);
+    public static readonly BindableProperty SizeProperty =
+        BindableProperty.Create(nameof(Size), typeof(int), typeof(CardView), 50);
 
     public string ImageUrl
     {
@@ -25,6 +27,12 @@ public partial class BowlerImage : ContentView
     {
         get => (bool)GetValue(IsSubProperty);
         set => SetValue(IsSubProperty, value);
+    }
+
+    public int Size
+    {
+        get => (int)GetValue(SizeProperty);
+        set => SetValue(SizeProperty, value);
     }
 
     public BowlerImage()
