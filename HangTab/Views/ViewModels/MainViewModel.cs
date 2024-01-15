@@ -142,7 +142,11 @@ public partial class MainViewModel(IDatabaseService data,
     {
         BusRideViewModel.BusRideWeek.BusRides = 0;
         BusRideViewModel.BusRideWeek.WeekNumber = WorkingWeek;
-        if (!await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
+        if (await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
+        {
+            await shell.DisplayToast($"Now beginning week {WorkingWeek}");
+        }
+        else
         {
             await shell.DisplayAlert("Update Error", "Error updating bus ride", "Ok");
         }
