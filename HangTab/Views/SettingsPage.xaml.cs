@@ -25,8 +25,6 @@ public partial class SettingsPage : ContentPage
     private void ResetHangingsOnTap(object sender, EventArgs e) =>
         _viewModel.ResetAllHangingsCommand.Execute(null);
 
-    private void SaveSeasonSettingsOnChange(object sender, EventArgs e)
-    {
+    private void SaveSeasonSettingsOnChange(object sender, EventArgs e) =>
         _viewModel?.UpdateSeasonSettingsCommand.Execute(null);
-    }
 }
