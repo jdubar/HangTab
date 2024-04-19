@@ -14,6 +14,8 @@ public partial class MainViewModel(IDatabaseService data,
                                    IShellService shell,
                                    IAudioManager audio) : BaseViewModel
 {
+    // TODO: Add cumulative hang cost per bowler
+    // TODO: Notify user somehow on new week
     public ObservableRangeCollection<BowlerViewModel> MainBowlers { get; set; } = [];
 
     [ObservableProperty]
@@ -25,16 +27,26 @@ public partial class MainViewModel(IDatabaseService data,
     [ObservableProperty]
     private string _titleWeek = "Week 0";
 
+    [ObservableProperty]
+    private SeasonSettings _seasonSettings;
+
+    [ObservableProperty]
+    private bool _isSliderVisible = true;
+
     private int WorkingWeek { get; set; }
+
 
     [RelayCommand]
     private async Task InitializeDataAsync()
     {
         await ExecuteAsync(async () =>
         {
+            SeasonSettings = await data.GetSeasonSettings();
             WorkingWeek = await data.GetLatestWeek();
-            TitleWeek = $"Week {WorkingWeek}";
+            TitleWeek = $"Week {WorkingWeek} of {SeasonSettings.TotalSeasonWeeks}";
             BusRideViewModel = await data.GetBusRideViewModelByWeek(WorkingWeek);
+
+            IsSliderVisible = IsStartNewWeekVisible();
 
             MainBowlers.Clear();
             MainBowlers.AddRange(await data.GetMainBowlersByWeek(WorkingWeek));
@@ -93,6 +105,8 @@ public partial class MainViewModel(IDatabaseService data,
             WorkingWeek++;
             TitleWeek = $"Week {WorkingWeek}";
 
+            IsSliderVisible = IsStartNewWeekVisible();
+
             ResetMainBowlersForNewWeek();
             await ResetBusRidesForNewWeek();
         }, "Starting new week...");
@@ -126,6 +140,9 @@ public partial class MainViewModel(IDatabaseService data,
             }
         }, "");
     }
+
+    private bool IsStartNewWeekVisible() =>
+        WorkingWeek < SeasonSettings.TotalSeasonWeeks;
 
     private void ResetMainBowlersForNewWeek()
     {

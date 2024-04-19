@@ -7,43 +7,22 @@
              x:Class="HangTab.Views.SettingsPage"
              x:DataType="vm:SettingsViewModel"
              Title="Settings">
-    <VerticalStackLayout>
-        <Label Text="Reset Hangings"
-               HeightRequest="60"
-               VerticalTextAlignment="Center"
-               FontSize="Title"
-               FontAttributes="Bold">
-            <Label.GestureRecognizers>
-                <TapGestureRecognizer Tapped="ResetHangingsOnTap"/>
-            </Label.GestureRecognizers>
-        </Label>
-        <BoxView BackgroundColor="LightGray"
-                 HeightRequest="1"/>
-        <Grid ColumnDefinitions="*, 60"
-              HorizontalOptions="Center"  BackgroundColor="{StaticResource Error}">
-            <StackLayout Orientation="Horizontal">
-                <Label Text="Delete All Bowlers and Data"
-                   HeightRequest="60"
-                   HorizontalOptions="Start"
-                   VerticalTextAlignment="Center"
-                   FontSize="Title"
-                   FontAttributes="Bold">
-                    <Label.GestureRecognizers>
-                        <TapGestureRecognizer Tapped="ClearAllDataOnTap"/>
-                    </Label.GestureRecognizers>
-                </Label>
-                <Image HorizontalOptions="End"
-                       WidthRequest="40"
-                       Margin="20,0,0,0"
-                       Source="skull.png">
-                    <Image.Behaviors>
-                        <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Dark={StaticResource White},
-                                                                                   Light={StaticResource Gray900}}" />
-                    </Image.Behaviors>
-                </Image>
-            </StackLayout>
-        </Grid>
-        <BoxView BackgroundColor="LightGray"
-                 HeightRequest="1"/>
-    </VerticalStackLayout>
+    <TableView Intent="Settings">
+        <TableRoot>
+            <TableSection Title="General Settings">
+                <EntryCell Label="Weeks In The Season" Keyboard="Numeric" Text="{Binding SeasonSettings.TotalSeasonWeeks}" HorizontalTextAlignment="End" PropertyChanged="SaveSeasonSettingsOnChange"/>
+            </TableSection>
+            <TableSection Title="Data Reset">
+                <TextCell Text="Start New Season" Tapped="ResetHangingsOnTap" TextColor="{AppThemeBinding Dark={StaticResource White},
+                                                                                                          Light={StaticResource Gray600}}" />
+                <ViewCell Tapped="ClearAllDataOnTap">
+                    <Grid BackgroundColor="{StaticResource Error}" >
+                        <Grid Margin="15,0" VerticalOptions="Center">
+                            <Label FontAttributes="Bold" Text="Delete All Bowlers and Data" VerticalTextAlignment="Center" />
+                        </Grid>
+                    </Grid>
+                </ViewCell>
+            </TableSection>
+        </TableRoot>
+    </TableView>
 </ContentPage>

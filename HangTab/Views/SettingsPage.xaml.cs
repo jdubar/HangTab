@@ -9,16 +9,24 @@ public partial class SettingsPage : ContentPage
     public SettingsPage(SettingsViewModel viewModel)
     {
         InitializeComponent();
+        BindingContext = viewModel;
         _viewModel = viewModel;
     }
 
-    private void ClearAllDataOnTap(object sender, TappedEventArgs e)
+    protected override void OnAppearing()
     {
-        _viewModel.DropAllTablesCommand.Execute(null);
+        base.OnAppearing();
+        _viewModel.InitializeDataCommand.Execute(null);
     }
 
-    private void ResetHangingsOnTap(object sender, TappedEventArgs e)
-    {
+    private void ClearAllDataOnTap(object sender, EventArgs e) =>
+        _viewModel.DropAllTablesCommand.Execute(null);
+
+    private void ResetHangingsOnTap(object sender, EventArgs e) =>
         _viewModel.ResetAllHangingsCommand.Execute(null);
+
+    private void SaveSeasonSettingsOnChange(object sender, EventArgs e)
+    {
+        _viewModel?.UpdateSeasonSettingsCommand.Execute(null);
     }
 }

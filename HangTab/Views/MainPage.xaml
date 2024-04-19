@@ -178,12 +178,14 @@
                     <SwipeItems Mode="Execute">
                         <SwipeItem Text="Starting new week..."
 					               BackgroundColor="{StaticResource Success}"
-                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=StartNewWeekCommand}"/>
+                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=StartNewWeekCommand}"
+                                   IsVisible="{Binding IsSliderVisible}"/>
                     </SwipeItems>
                 </SwipeView.LeftItems>
                 <Grid HorizontalOptions="Center"
                       VerticalOptions="End"
-                      HeightRequest="70">
+                      HeightRequest="70"
+                      IsVisible="{Binding IsSliderVisible}">
                     <Border HeightRequest="75"
                             WidthRequest="393"
                             StrokeThickness="4"

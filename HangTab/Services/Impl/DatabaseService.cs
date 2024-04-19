@@ -138,6 +138,14 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
             : 1;
     }
 
+    public async Task<SeasonSettings> GetSeasonSettings()
+    {
+        var settings = await context.GetAllAsync<SeasonSettings>();
+        return settings is not null && settings.Any()
+            ? settings.First()
+            : new SeasonSettings();
+    }
+
     public async Task<bool> IsBowlerExists(Bowler bowler)
     {
         var find = await context.GetFilteredAsync<Bowler>(b => b.FirstName == bowler.FirstName
@@ -194,5 +202,13 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         return busRides is not null && busRides.Any()
             ? await context.UpdateItemAsync(viewModel.BusRideWeek)
             : await context.AddItemAsync(viewModel.BusRideWeek);
+    }
+
+    public async Task<bool> UpdateSeasonSettings(SeasonSettings viewModel)
+    {
+        var settings = await context.GetAllAsync<SeasonSettings>();
+        return settings is not null && settings.Any()
+            ? await context.UpdateItemAsync(viewModel)
+            : await context.AddItemAsync(viewModel);
     }
 }
