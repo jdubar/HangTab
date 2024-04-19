@@ -146,10 +146,12 @@ public partial class MainViewModel(IDatabaseService data,
 
     private void ResetMainBowlersForNewWeek()
     {
-        foreach (var week in MainBowlers.Select(b => b.BowlerWeek))
+        foreach (var bowler in MainBowlers)
         {
-            week.Hangings = 0;
-            week.WeekNumber = WorkingWeek;
+            bowler.BowlerWeek.Hangings = 0;
+            bowler.BowlerWeek.WeekNumber = WorkingWeek;
+            bowler.IsEnableSwitch = true;
+            bowler.IsEnableUndo = false;
         }
     }
 
@@ -157,7 +159,11 @@ public partial class MainViewModel(IDatabaseService data,
     {
         BusRideViewModel.BusRideWeek.BusRides = 0;
         BusRideViewModel.BusRideWeek.WeekNumber = WorkingWeek;
-        if (!await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
+        if (await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
+        {
+            await shell.DisplayToast($"Now beginning week {WorkingWeek}");
+        }
+        else
         {
             await shell.DisplayAlert("Update Error", "Error updating bus ride", "Ok");
         }
