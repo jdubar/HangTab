@@ -12,7 +12,7 @@ public partial class ManageBowlerViewModel(IDatabaseService data,
     public ObservableRangeCollection<Bowler> AllBowlers { get; set; } = [];
 
     [RelayCommand]
-    public async Task InitializeData()
+    public async Task InitializeDataAsync()
     {
         await ExecuteAsync(async () =>
         {

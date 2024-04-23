@@ -14,10 +14,7 @@ public partial class SettingsViewModel(IDatabaseService data,
     [RelayCommand]
     private async Task InitializeDataAsync()
     {
-        await ExecuteAsync(async () =>
-        {
-            SeasonSettings = await data.GetSeasonSettings();
-        }, "");
+        SeasonSettings = await data.GetSeasonSettings();
     }
 
     [RelayCommand]

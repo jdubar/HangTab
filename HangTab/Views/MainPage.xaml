@@ -143,32 +143,52 @@
         </Grid>
 
         <Grid Grid.Row="1">
-            <Grid HorizontalOptions="Center"
-                  VerticalOptions="End"
-                  HeightRequest="107">
-                <VerticalStackLayout>
-                    <BoxView BackgroundColor="{StaticResource Gray300}"
-                             HeightRequest="1"
-                             WidthRequest="400"/>
-                    <StackLayout Orientation="Horizontal">
-                        <VerticalStackLayout VerticalOptions="Center"
-                                             WidthRequest="230"
-                                             Margin="20">
-                            <Label Text="{Binding BusRideViewModel.BusRideWeek.BusRides, StringFormat='Bus Rides: {0}'}"
-                                   FontAttributes="Bold"
-                                   FontSize="Body"/>
-                            <Label Text="{Binding BusRideViewModel.BusRide.Total, StringFormat='Total: {0}'}"
-                                   FontAttributes="Bold"
-                                   FontSize="Body"/>
-                        </VerticalStackLayout>
-                        <ImageButton Source="school_bus.png"
-                                     HeightRequest="100"
-                                     WidthRequest="100"
-                                     VerticalOptions="Start"
-                                     Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=BusRideCommand}"/>
-                    </StackLayout>
-                </VerticalStackLayout>
-            </Grid>
+            <SwipeView>
+                <SwipeView.LeftItems>
+                    <SwipeItems>
+                        <SwipeItem BackgroundColor="{DynamicResource Secondary}"
+                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=UndoBusRideCommand}"
+                                   IsVisible="{Binding IsUndoBusRideVisible}"
+                                   Text=" Undo Bus Ride">
+                            <SwipeItem.IconImageSource>
+                                <FontImageSource FontFamily="GoogleFont"
+                                                 Glyph="{Static icons:GoogleFont.Undo}"/>
+                            </SwipeItem.IconImageSource>
+                        </SwipeItem>
+                    </SwipeItems>
+                </SwipeView.LeftItems>
+                <Grid HorizontalOptions="Center"
+                      VerticalOptions="End"
+                      HeightRequest="111">
+                    <VerticalStackLayout>
+                        <Border WidthRequest="393"
+                                HeightRequest="111"
+                                StrokeThickness="4"
+                                BackgroundColor="{AppThemeBinding Dark={StaticResource Black},
+                                                                  Light={StaticResource White}}"
+                                Stroke="{AppThemeBinding Dark={StaticResource Gray500},
+                                                         Light={StaticResource Gray200}}">
+                            <StackLayout Orientation="Horizontal">
+                                <VerticalStackLayout VerticalOptions="Center"
+                                                     WidthRequest="230"
+                                                     Margin="20">
+                                    <Label Text="{Binding BusRideViewModel.BusRideWeek.BusRides, StringFormat='Bus Rides: {0}'}"
+                                           FontAttributes="Bold"
+                                           FontSize="Body"/>
+                                    <Label Text="{Binding BusRideViewModel.BusRide.Total, StringFormat='Total: {0}'}"
+                                           FontAttributes="Bold"
+                                           FontSize="Body"/>
+                                </VerticalStackLayout>
+                                <ImageButton Source="school_bus.png"
+                                             HeightRequest="100"
+                                             WidthRequest="100"
+                                             VerticalOptions="Start"
+                                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=BusRideCommand}"/>
+                            </StackLayout>
+                        </Border>
+                    </VerticalStackLayout>
+                </Grid>
+            </SwipeView>
         </Grid>
 
         <Grid Grid.Row="2">
