@@ -56,6 +56,7 @@
     <!-- Images -->
     <MauiImage Include="Resources\Images\account_circle.svg" />
     <MauiImage Include="Resources\Images\bus_splash.svg" BaseSize="818,556" />
+    <MauiImage Include="Resources\Images\confetti.svg" />
     <MauiImage Include="Resources\Images\crown.svg" />
     <MauiImage Include="Resources\Images\school_bus.svg" />
     <MauiImage Include="Resources\Images\skull.svg" />
@@ -66,17 +67,28 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Resources\Fonts\MaterialIcons-Regular.ttf" />
+    <None Remove="Resources\Images\confetti.svg" />
+    <None Remove="Resources\Images\confetti_50e44d26.gif" />
+    <None Remove="Resources\Images\confetti_520b445e.gif" />
+    <None Remove="Resources\Images\confetti_73494339.gif" />
+    <None Remove="Resources\Images\confetti_d20d4f6c.gif" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Maui" Version="8.0.1" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
     <PackageReference Include="Plugin.Maui.Audio" Version="2.1.0" />
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
+    <PackageReference Include="SkiaSharp.Extended.UI.Maui" Version="2.0.0" />
     <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
     <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.8" />
     <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.20" />
     <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.20" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Views\SeasonSummaryPage.xaml.cs">
+      <DependentUpon>SeasonSummaryPage.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <MauiXaml Update="Views\AddBowlerPage.xaml">
@@ -92,6 +104,9 @@
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
     <MauiXaml Update="Views\SeasonPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\SeasonSummaryPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
     <MauiXaml Update="Views\SettingsPage.xaml">

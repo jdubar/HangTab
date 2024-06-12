@@ -10,21 +10,23 @@ using Microsoft.Extensions.Logging;
 
 using Plugin.Maui.Audio;
 
+using SkiaSharp.Views.Maui.Controls.Hosting;
+
 namespace HangTab;
 public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
-        builder
-            .UseMauiApp<App>()
-            .UseMauiCommunityToolkit()
-            .ConfigureFonts(fonts =>
-            {
-                fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
-                fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                fonts.AddFont("MaterialIconsOutlined-Regular.otf", "GoogleFont");
-            });
+        builder.UseMauiApp<App>()
+               .UseMauiCommunityToolkit()
+               .UseSkiaSharp()
+               .ConfigureFonts(fonts =>
+               {
+                   fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
+                   fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
+                   fonts.AddFont("MaterialIconsOutlined-Regular.otf", "GoogleFont");
+               });
 
         builder.Services.AddSingleton<IDatabaseContext, DatabaseContext>();
         builder.Services.AddSingleton(AudioManager.Current);
@@ -53,6 +55,9 @@ public static class MauiProgram
 
         builder.Services.AddSingleton<WeekDetailsPage>();
         builder.Services.AddSingleton<WeekDetailsViewModel>();
+
+        builder.Services.AddSingleton<SeasonSummaryPage>();
+        builder.Services.AddSingleton<SeasonSummaryViewModel>();
 
 #if DEBUG
         builder.Logging.AddDebug();

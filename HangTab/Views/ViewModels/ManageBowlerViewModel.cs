@@ -24,5 +24,5 @@ public partial class ManageBowlerViewModel(IDatabaseService data,
 
     [RelayCommand]
     private async Task ShowAddUpdateBowlerViewAsync(Bowler bowler) =>
-        await shell.GoToPageWithData(nameof(AddBowlerPage), bowler);
+        await shell.GoToPageWithDataAsync(nameof(AddBowlerPage), bowler);
 }

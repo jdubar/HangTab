@@ -20,5 +20,5 @@ public partial class SeasonViewModel(IDatabaseService data,
 
     [RelayCommand]
     private async Task ShowWeekDetailsAsync(WeekViewModel week) =>
-        await shell.GoToPageWithData(nameof(WeekDetailsPage), week);
+        await shell.GoToPageWithDataAsync(nameof(WeekDetailsPage), week);
 }

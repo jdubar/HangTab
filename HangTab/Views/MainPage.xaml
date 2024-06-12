@@ -230,6 +230,9 @@
                     </Border>
                 </Grid>
             </SwipeView>
+            <Button Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=ShowSeasonSummaryViewCommand}"
+                    IsVisible="{Binding IsShowSummaryVisible}"
+                    Text="Click here to complete the season!" />
         </Grid>
     </Grid>
 </ContentPage>

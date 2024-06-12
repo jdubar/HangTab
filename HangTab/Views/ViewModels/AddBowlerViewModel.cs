@@ -17,17 +17,17 @@ public partial class AddBowlerViewModel(IDatabaseService data,
     [RelayCommand]
     private async Task DeleteBowlerAsync(int id)
     {
-        if (await shell.DisplayPrompt("Delete", "Are you sure you want to delete this bowler?", "Yes", "No"))
+        if (await shell.DisplayPromptAsync("Delete", "Are you sure you want to delete this bowler?", "Yes", "No"))
         {
             await ExecuteAsync(async () =>
             {
                 if (!await data.DeleteBowler(id))
                 {
-                    await shell.DisplayAlert("Delete Error", "Bowler was not deleted", "Ok");
+                    await shell.DisplayAlertAsync("Delete Error", "Bowler was not deleted", "Ok");
                     return;
                 }
-                await shell.DisplayToast("Bowler deleted");
-                await shell.ReturnToPage();
+                await shell.DisplayToastAsync("Bowler deleted");
+                await shell.ReturnToPageAsync();
             }, "Deleting bowler...");
         }
     }
@@ -43,7 +43,7 @@ public partial class AddBowlerViewModel(IDatabaseService data,
         var (isValid, errorMessage) = Bowler.ValidateFields();
         if (!isValid)
         {
-            await shell.DisplayAlert("Validation Error", errorMessage, "Ok");
+            await shell.DisplayAlertAsync("Validation Error", errorMessage, "Ok");
             return;
         }
 
@@ -53,7 +53,7 @@ public partial class AddBowlerViewModel(IDatabaseService data,
             busyText = "Creating bowler...";
             if (await data.IsBowlerExists(Bowler))
             {
-                await shell.DisplayAlert("Validation Error", "This bowler already exists", "Ok");
+                await shell.DisplayAlertAsync("Validation Error", "This bowler already exists", "Ok");
                 return;
             }
         }
@@ -64,11 +64,11 @@ public partial class AddBowlerViewModel(IDatabaseService data,
                 ? await data.AddBowler(Bowler)
                 : await data.UpdateBowler(Bowler)))
             {
-                await shell.DisplayAlert("Update Error", "Unable to save bowler", "Ok");
+                await shell.DisplayAlertAsync("Update Error", "Unable to save bowler", "Ok");
                 return;
             }
-            await shell.DisplayToast("Bowler saved");
-            await shell.ReturnToPage();
+            await shell.DisplayToastAsync("Bowler saved");
+            await shell.ReturnToPageAsync();
         }, busyText);
     }
 
@@ -86,7 +86,7 @@ public partial class AddBowlerViewModel(IDatabaseService data,
                 }
                 else
                 {
-                    await shell.DisplayAlert("Error", photo.ErrorMsg, "Ok");
+                    await shell.DisplayAlertAsync("Error", photo.ErrorMsg, "Ok");
                 }
             }
         }, "Setting Bowler Image");
