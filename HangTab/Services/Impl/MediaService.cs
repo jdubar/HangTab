@@ -14,6 +14,10 @@ public class MediaService : IMediaService
         try
         {
             var photo = await MediaPicker.Default.PickPhotoAsync();
+            if (photo is null)
+            {
+                return result;
+            }
             var localFilePath = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
             using var sourceStream = await photo.OpenReadAsync();
             var image = PlatformImage.FromStream(sourceStream);
@@ -21,7 +25,7 @@ public class MediaService : IMediaService
             {
                 var newImage = image.Downsize(150, true);
                 using var localFileStream = File.OpenWrite(localFilePath);
-                newImage.Save(localFileStream);
+                await newImage.SaveAsync(localFileStream);
                 await sourceStream.CopyToAsync(localFileStream);
             }
             result.IsSuccess = true;
