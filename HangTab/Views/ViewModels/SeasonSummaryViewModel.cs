@@ -1,9 +1,7 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Input;
+﻿using CommunityToolkit.Mvvm.Input;
 
 using HangTab.Models;
 using HangTab.Services;
-using HangTab.ViewModels;
 
 using MvvmHelpers;
 
@@ -11,7 +9,7 @@ namespace HangTab.Views.ViewModels;
 public partial class SeasonSummaryViewModel(IDatabaseService data) : BaseViewModel
 {
     public ObservableRangeCollection<Bowler> LowestHangBowlers { get; set; } = [];
-    public ObservableRangeCollection<Bowler> AllBowlers { get; set; } = [];
+    public ObservableRangeCollection<Bowler> AllOtherBowlers { get; set; } = [];
 
     [RelayCommand]
     public async Task InitializeDataAsync()
@@ -19,11 +17,21 @@ public partial class SeasonSummaryViewModel(IDatabaseService data) : BaseViewMod
         await ExecuteAsync(async () =>
         {
             var bowlers = await data.GetAllBowlers();
-            var lowestHangBowlers = bowlers.Where(b => !b.IsSub
-                                                       && b.TotalHangings == bowlers.Where(b => !b.IsSub).Min(b => b.TotalHangings));
+            if (bowlers is null)
+            {
+                return;
+            }
 
-            AllBowlers.Clear();
-            AllBowlers.AddRange(bowlers);
+            var lowestHangBowlers = bowlers.Where(b => !b.IsSub
+                                                       && b.TotalHangings == bowlers.Where(b => !b.IsSub
+                                                                                                && !b.IsHidden)
+                                                                                    .Min(b => b.TotalHangings))
+                                           .Take(3);
+
+            var otherBowlers = bowlers.Except(lowestHangBowlers).OrderBy(b => b.IsSub).ThenBy(b => b.TotalHangings);
+
+            AllOtherBowlers.Clear();
+            AllOtherBowlers.AddRange(otherBowlers);
 
             LowestHangBowlers.Clear();
             LowestHangBowlers.AddRange(lowestHangBowlers);

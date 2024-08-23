@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:models="clr-namespace:HangTab.ViewModels"
+             xmlns:models="clr-namespace:HangTab.Models"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
              xmlns:components="clr-namespace:HangTab.Views.Components"
@@ -17,94 +17,90 @@
         </ResourceDictionary>
     </ContentPage.Resources>
     <ScrollView>
-        <VerticalStackLayout
-            Spacing="25"
-            Padding="30,0"
-            VerticalOptions="Center">
+        <AbsoluteLayout>
             <skia:SKLottieView Source="confetti.json"
+                               AbsoluteLayout.LayoutFlags="All"
+                               AbsoluteLayout.LayoutBounds="0,0,1,1"
                                RepeatCount="-1"
                                RepeatMode="Restart"
-                               HeightRequest="600"
-                               WidthRequest="450"
-                               HorizontalOptions="Center" />
-            <Grid>
+                               HeightRequest="700"
+                               WidthRequest="530" />
+            <Grid AbsoluteLayout.LayoutFlags="All"
+                  AbsoluteLayout.LayoutBounds="0,0,1,1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="60"/>
+                    <RowDefinition Height="120"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <Grid Grid.Row="0">
-
-                </Grid>
-            </Grid>
-        </VerticalStackLayout>
-
-    </ScrollView>
-    <!--<Grid>
-        <Image x:Name="backgroundImage"
-               Source="confetti.png"
-               Aspect="AspectFill"
-               HorizontalOptions="Start" />
-        <VerticalStackLayout Grid.RowSpan="2"
-                             VerticalOptions="Center"
-                             HorizontalOptions="Center"
-                             IsVisible="{Binding IsBusy}">
-            <ActivityIndicator IsRunning="True"
-                               VerticalOptions="Center"
-                               HorizontalOptions="Center"/>
-            <Label Text="{Binding BusyText}"
-                   VerticalOptions="Center"
-                   HorizontalOptions="Center"/>
-        </VerticalStackLayout>
-
-        <Grid>
-            <CollectionView Grid.Row="0"
-                            ItemsSource="{Binding AllBowlers}"
-                            Margin="0,5,0,0">
-                <CollectionView.ItemsLayout>
-                    <LinearItemsLayout ItemSpacing="4"
-                                       Orientation="Vertical"/>
-                </CollectionView.ItemsLayout>
-                <CollectionView.ItemTemplate>
-                    <DataTemplate x:DataType="models:BowlerViewModel">
-                        <Grid HorizontalOptions="Center"
-                              VerticalOptions="End"
-                              HeightRequest="80">
-                            <Border WidthRequest="393"
-                                    HeightRequest="81"
-                                    StrokeThickness="4"
-                                    BackgroundColor="{AppThemeBinding Dark={StaticResource Black},
-                                                                      Light={StaticResource White}}"
-                                    Stroke="{Binding Bowler.IsSub, Converter={StaticResource BoolToObjectConverter}}">
-                                <StackLayout Orientation="Horizontal">
-                                    <components:BowlerImage IsSub="{Binding Bowler.IsSub}"
-                                                            ImageUrl="{Binding Bowler.ImageUrl}"
-                                                            IsLowestHangs="{Binding IsLowestHangs}"/>
-                                    <VerticalStackLayout VerticalOptions="Center"
-                                                         WidthRequest="250">
-                                        <Label Text="{Binding Bowler.FullName, FallbackValue='Unknown Bowler'}"
-                                               FontAttributes="Bold"/>
-                                        <Label Text="{Binding Bowler.TotalHangings, StringFormat='Total: {0}'}"/>
-                                    </VerticalStackLayout>
-                                </StackLayout>
-                            </Border>
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-                <CollectionView.EmptyView>
-                    <ContentView>
-                        <VerticalStackLayout HorizontalOptions="Center"
+                <Label Grid.Row="0"
+                       FontSize="38"
+                       HorizontalOptions="Center"
+                       Text="Congratulations!!" />
+                <CollectionView Grid.Row="1"
+                                HorizontalOptions="Center"
+                                ItemsSource="{Binding LowestHangBowlers}" >
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout ItemSpacing="4"
+                                           Orientation="Horizontal" />
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Bowler">
+                            <Grid>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="25"/>
+                                    <RowDefinition Height="70"/>
+                                    <RowDefinition Height="25"/>
+                                </Grid.RowDefinitions>
+                                <Label Grid.Row="0"
+                                       FontSize="Medium"
+                                       HorizontalOptions="CenterAndExpand"
+                                       Text="{Binding FullName}" />
+                                <components:BowlerImage Grid.Row="1"
+                                                        ImageUrl="{Binding ImageUrl}" />
+                                <Label Grid.Row="2"
+                                       FontSize="Medium"
+                                       HorizontalOptions="CenterAndExpand"
+                                       Text="{Binding TotalHangings, StringFormat='Total: {0}'}" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                </CollectionView>
+                <CollectionView Grid.Row="2"
+                                ItemsSource="{Binding AllOtherBowlers}"
+                                Margin="0,35,0,0">
+                    <CollectionView.ItemsLayout>
+                        <LinearItemsLayout ItemSpacing="4"
+                                           Orientation="Vertical"/>
+                    </CollectionView.ItemsLayout>
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="models:Bowler">
+                            <Grid HorizontalOptions="Center"
+                                  VerticalOptions="End"
+                                  HeightRequest="80">
+                                <components:CardView BowlerName="{Binding FullName}"
+                                                     IsSub="{Binding IsSub}"
+                                                     ImageUrl="{Binding ImageUrl}"
+                                                     TotalHangings="{Binding TotalHangings}">
+                                </components:CardView>
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    <CollectionView.EmptyView>
+                        <ContentView>
+                            <VerticalStackLayout HorizontalOptions="Center"
                                              VerticalOptions="Center"
                                              WidthRequest="380">
-                            <Label Text="No Bowlers Found"
+                                <Label Text="No Bowlers Found"
                                    FontSize="18"
                                    FontAttributes="Bold"
                                    HorizontalTextAlignment="Center"/>
-                            <Label Text="Create a bowler using the button above"
+                                <Label Text="Create a bowler using the button above"
                                    HorizontalTextAlignment="Center"/>
-                        </VerticalStackLayout>
-                    </ContentView>
-                </CollectionView.EmptyView>
-            </CollectionView>
-        </Grid>
-    </Grid>-->
+                            </VerticalStackLayout>
+                        </ContentView>
+                    </CollectionView.EmptyView>
+                </CollectionView>
+            </Grid>
+        </AbsoluteLayout>
+    </ScrollView>
 </ContentPage>
