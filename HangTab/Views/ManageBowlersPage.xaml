@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:icons="clr-namespace:HangTab.Helpers"
              xmlns:models="clr-namespace:HangTab.Models"
              xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
              xmlns:components="clr-namespace:HangTab.Views.Components"
