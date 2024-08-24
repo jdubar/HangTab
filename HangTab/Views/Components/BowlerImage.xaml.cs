@@ -1,6 +1,6 @@
 namespace HangTab.Views.Components;
 
-public partial class BowlerImage : ContentView
+public partial class BowlerImage
 {
     public static readonly BindableProperty ImageUrlProperty =
         BindableProperty.Create(nameof(ImageUrl), typeof(string), typeof(CardView), string.Empty);

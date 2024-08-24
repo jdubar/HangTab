@@ -35,11 +35,6 @@ public partial class AddBowlerViewModel(IDatabaseService data,
     [RelayCommand]
     private async Task SaveBowlerAsync()
     {
-        if (Bowler is null)
-        {
-            return;
-        }
-
         var (isValid, errorMessage) = Bowler.ValidateFields();
         if (!isValid)
         {

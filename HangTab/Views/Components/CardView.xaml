@@ -3,7 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:components="clr-namespace:HangTab.Views.Components"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             x:Name="this"
+             x:Name="This"
              x:Class="HangTab.Views.Components.CardView">
     <ContentView.Resources>
         <ResourceDictionary>
@@ -12,7 +12,7 @@
                                            FalseObject="{StaticResource Gray300}"/>
         </ResourceDictionary>
     </ContentView.Resources>
-    <Border BindingContext="{x:Reference this}"
+    <Border BindingContext="{x:Reference This}"
             WidthRequest="393"
             HeightRequest="81"
             StrokeThickness="4"

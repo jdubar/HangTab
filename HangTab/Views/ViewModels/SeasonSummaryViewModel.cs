@@ -23,10 +23,11 @@ public partial class SeasonSummaryViewModel(IDatabaseService data) : BaseViewMod
             }
 
             var lowestHangBowlers = bowlers.Where(b => !b.IsSub
-                                                       && b.TotalHangings == bowlers.Where(b => !b.IsSub
-                                                                                                && !b.IsHidden)
-                                                                                    .Min(b => b.TotalHangings))
-                                           .Take(3);
+                                                       && b.TotalHangings == bowlers.Where(bowler => !bowler.IsSub
+                                                                                                && !bowler.IsHidden)
+                                                                                    .Min(bowler => bowler.TotalHangings))
+                                           .Take(3)
+                                           .ToList();
 
             var otherBowlers = bowlers.Except(lowestHangBowlers).OrderBy(b => b.IsSub).ThenBy(b => b.TotalHangings);
 

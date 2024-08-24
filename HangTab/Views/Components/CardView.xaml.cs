@@ -1,5 +1,5 @@
 namespace HangTab.Views.Components;
-public partial class CardView : ContentView
+public partial class CardView
 {
     public static readonly BindableProperty BowlerNameProperty =
         BindableProperty.Create(nameof(BowlerName), typeof(string), typeof(CardView), string.Empty);

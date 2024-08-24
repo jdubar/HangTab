@@ -16,7 +16,6 @@ public partial class MainViewModel(IDatabaseService data,
 {
     // TODO: Add cumulative hang cost per bowler
     // TODO: Notify user somehow on new week
-    // TODO: Add season summary
     public ObservableRangeCollection<BowlerViewModel> MainBowlers { get; set; } = [];
 
     [ObservableProperty]
@@ -192,16 +191,15 @@ public partial class MainViewModel(IDatabaseService data,
         }
     }
 
-    private async Task<bool> SaveZeroHangBowlerLineupAsync()
+    private async Task SaveZeroHangBowlerLineupAsync()
     {
         foreach (var bowler in MainBowlers.Where(bowler => bowler.BowlerWeek.Hangings == 0))
         {
             if (!await data.UpdateBowlerHangingsByWeek(bowler, WorkingWeek))
             {
-                return false;
+                return;
             }
         }
-        return true;
     }
 
     private void SetIsLowestHangsInMainBowlers()

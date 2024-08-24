@@ -19,12 +19,7 @@ public partial class SettingsViewModel(IDatabaseService data,
 
     [RelayCommand]
     private async Task UpdateSeasonSettingsAsync()
-    {
-        if (SeasonSettings is not null)
-        {
-            await data.UpdateSeasonSettings(SeasonSettings);
-        }
-    }
+        => await data.UpdateSeasonSettings(SeasonSettings);
 
     [RelayCommand]
     private async Task DropAllTablesAsync()
@@ -44,7 +39,7 @@ public partial class SettingsViewModel(IDatabaseService data,
             {
                 if (!await data.ResetHangings())
                 {
-                    await shell.DisplayAlertAsync("Critical Error", "Error occurred while restting data!", "Ok");
+                    await shell.DisplayAlertAsync("Critical Error", "Error occurred while resetting data!", "Ok");
                 }
             }, "Resetting hangings...");
         }
