@@ -2,7 +2,7 @@ using HangTab.Views.ViewModels;
 
 namespace HangTab.Views;
 
-public partial class ManageBowlersPage : ContentPage
+public partial class ManageBowlersPage
 {
     private readonly ManageBowlerViewModel _viewModel;
 

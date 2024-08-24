@@ -2,20 +2,12 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:models="clr-namespace:HangTab.Models"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
              xmlns:components="clr-namespace:HangTab.Views.Components"
              xmlns:skia="clr-namespace:SkiaSharp.Extended.UI.Controls;assembly=SkiaSharp.Extended.UI"
              x:Class="HangTab.Views.SeasonSummaryPage"
              x:DataType="vm:SeasonSummaryViewModel"
              Title="Season Summary">
-    <ContentPage.Resources>
-        <ResourceDictionary>
-            <toolkit:BoolToObjectConverter x:Key="BoolToObjectConverter"
-                                           TrueObject="{StaticResource Success}"
-                                           FalseObject="{StaticResource Gray300}"/>
-        </ResourceDictionary>
-    </ContentPage.Resources>
     <ScrollView>
         <AbsoluteLayout>
             <skia:SKLottieView Source="confetti.json"
@@ -80,8 +72,7 @@
                                 <components:CardView BowlerName="{Binding FullName}"
                                                      IsSub="{Binding IsSub}"
                                                      ImageUrl="{Binding ImageUrl}"
-                                                     TotalHangings="{Binding TotalHangings}">
-                                </components:CardView>
+                                                     TotalHangings="{Binding TotalHangings}" />
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>

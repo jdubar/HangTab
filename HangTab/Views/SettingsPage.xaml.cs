@@ -2,7 +2,7 @@ using HangTab.Views.ViewModels;
 
 namespace HangTab.Views;
 
-public partial class SettingsPage : ContentPage
+public partial class SettingsPage
 {
     private readonly SettingsViewModel _viewModel;
 

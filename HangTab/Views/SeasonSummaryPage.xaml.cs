@@ -2,7 +2,7 @@
 
 namespace HangTab.Views;
 
-public partial class SeasonSummaryPage : ContentPage
+public partial class SeasonSummaryPage
 {
     private readonly SeasonSummaryViewModel _viewModel;
 

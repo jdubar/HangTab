@@ -2,7 +2,7 @@
 
 namespace HangTab.Views;
 
-public partial class MainPage : ContentPage
+public partial class MainPage
 {
     private readonly MainViewModel _viewModel;
 

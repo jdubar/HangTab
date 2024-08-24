@@ -4,7 +4,6 @@
              xmlns:models="clr-namespace:HangTab.Models"
              xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
              xmlns:components="clr-namespace:HangTab.Views.Components"
-             xmlns:icons="clr-namespace:HangTab.Helpers"
              x:Class="HangTab.Views.ManageBowlersPage"
              x:DataType="vm:ManageBowlerViewModel"
              Title="Manage Bowlers">
