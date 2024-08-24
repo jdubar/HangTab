@@ -19,12 +19,12 @@ public class MediaService : IMediaService
                 return result;
             }
             var localFilePath = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
-            using var sourceStream = await photo.OpenReadAsync();
+            await using var sourceStream = await photo.OpenReadAsync();
             var image = PlatformImage.FromStream(sourceStream);
             if (image is not null)
             {
                 var newImage = image.Downsize(150, true);
-                using var localFileStream = File.OpenWrite(localFilePath);
+                await using var localFileStream = File.OpenWrite(localFilePath);
                 await newImage.SaveAsync(localFileStream);
                 await sourceStream.CopyToAsync(localFileStream);
             }

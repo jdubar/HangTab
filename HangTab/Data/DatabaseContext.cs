@@ -9,9 +9,9 @@ public class DatabaseContext : IDatabaseContext, IAsyncDisposable
     private static string DatabasePath =>
         Path.Combine(FileSystem.AppDataDirectory, DatabaseFilename);
 
-    private SQLiteAsyncConnection Connection;
+    private SQLiteAsyncConnection _connection;
     private SQLiteAsyncConnection Database =>
-        (Connection ??= new SQLiteAsyncConnection(DatabasePath,
+        (_connection ??= new SQLiteAsyncConnection(DatabasePath,
             SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.SharedCache));
 
     public async Task<bool> AddItemAsync<TTable>(TTable item) where TTable : class, new() =>
@@ -61,7 +61,7 @@ public class DatabaseContext : IDatabaseContext, IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
-        await Connection.CloseAsync();
+        await _connection.CloseAsync();
         GC.SuppressFinalize(this);
     }
 }
