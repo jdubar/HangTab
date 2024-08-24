@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Shell
-    x:Class="HangTab.AppShell"
-    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:icons="clr-namespace:HangTab.Helpers"
-    xmlns:views="clr-namespace:HangTab.Views"
-    FlyoutBehavior="Disabled">
+<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+       xmlns:helpers="using:HangTab.Helpers"
+       xmlns:views="clr-namespace:HangTab.Views"
+       x:Class="HangTab.AppShell"
+       FlyoutBehavior="Disabled">
     <TabBar>
         <ShellContent Title="Home"
                       ContentTemplate="{DataTemplate views:MainPage}"
                       Route="MainPage">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="GoogleFont"
-                                 Glyph="{x:Static icons:GoogleFont.Home}"/>
+                                 Glyph="{x:Static helpers:GoogleFont.Home}"/>
             </ShellContent.Icon>
         </ShellContent>
         <ShellContent Title="Bowlers"
@@ -20,7 +19,7 @@
                       Route="ManageBowlersPage">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="GoogleFont"
-                                 Glyph="{x:Static icons:GoogleFont.Group}"/>
+                                 Glyph="{x:Static helpers:GoogleFont.Group}"/>
             </ShellContent.Icon>
         </ShellContent>
         <ShellContent Title="Season"
@@ -28,7 +27,7 @@
                       Route="SeasonPage">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="GoogleFont"
-                                 Glyph="{x:Static icons:GoogleFont.Calendar_month}"/>
+                                 Glyph="{x:Static helpers:GoogleFont.Calendar_month}"/>
             </ShellContent.Icon>
         </ShellContent>
         <ShellContent Title="Settings"
@@ -36,7 +35,7 @@
                       Route="SettingsPage">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="GoogleFont"
-                                 Glyph="{x:Static icons:GoogleFont.Settings}"/>
+                                 Glyph="{x:Static helpers:GoogleFont.Settings}"/>
             </ShellContent.Icon>
         </ShellContent>
     </TabBar>

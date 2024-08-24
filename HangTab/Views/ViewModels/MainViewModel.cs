@@ -41,10 +41,17 @@ public partial class MainViewModel(IDatabaseService data,
 
     private int WorkingWeek { get; set; }
 
+    protected bool IsInitialized { get; set; }
+
 
     [RelayCommand]
     private async Task InitializeDataAsync()
     {
+        if (IsInitialized)
+        {
+            return;
+        }
+
         SeasonSettings = await data.GetSeasonSettings();
         WorkingWeek = await data.GetLatestWeek();
         TitleWeek = $"Week {WorkingWeek} of {SeasonSettings.TotalSeasonWeeks}";
@@ -56,6 +63,7 @@ public partial class MainViewModel(IDatabaseService data,
 
         MainBowlers.Clear();
         MainBowlers.AddRange(await data.GetMainBowlersByWeek(WorkingWeek));
+        IsInitialized = true;
     }
 
     [RelayCommand]

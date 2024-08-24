@@ -11,15 +11,20 @@ public partial class ManageBowlerViewModel(IDatabaseService data,
 {
     public ObservableRangeCollection<Bowler> AllBowlers { get; set; } = [];
 
+    protected bool IsInitialized { get; set; }
+
     [RelayCommand]
     public async Task InitializeDataAsync()
     {
-        await ExecuteAsync(async () =>
+        if (IsInitialized)
         {
-            var bowlers = await data.GetAllBowlers();
-            AllBowlers.Clear();
-            AllBowlers.AddRange(bowlers);
-        }, "");
+            return;
+        }
+
+        var bowlers = await data.GetAllBowlers();
+        AllBowlers.Clear();
+        AllBowlers.AddRange(bowlers);
+        IsInitialized = true;
     }
 
     [RelayCommand]

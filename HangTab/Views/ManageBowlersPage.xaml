@@ -1,18 +1,19 @@
 <?xml version="1.0" encoding="utf-8" ?>
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:icons="clr-namespace:HangTab.Helpers"
+             xmlns:components="clr-namespace:HangTab.Views.Components"
+             xmlns:helpers="using:HangTab.Helpers"
              xmlns:models="clr-namespace:HangTab.Models"
              xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
-             xmlns:components="clr-namespace:HangTab.Views.Components"
              x:Class="HangTab.Views.ManageBowlersPage"
              x:DataType="vm:ManageBowlerViewModel"
+             x:Name="PageSelf"
              Title="Manage Bowlers">
     <ContentPage.ToolbarItems>
         <ToolbarItem Command="{Binding ShowAddUpdateBowlerViewCommand}">
             <ToolbarItem.IconImageSource>
                 <FontImageSource FontFamily="GoogleFont"
-                                 Glyph="{Static icons:GoogleFont.Person_add}" />
+                                 Glyph="{x:Static helpers:GoogleFont.Person_add}" />
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
     </ContentPage.ToolbarItems>
@@ -49,7 +50,7 @@
                                                  TotalHangings="{Binding TotalHangings}"
                                                  IsHidden="{Binding IsHidden}">
                                 <components:CardView.GestureRecognizers>
-                                    <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:ManageBowlerViewModel}}, Path=ShowAddUpdateBowlerViewCommand}"
+                                    <TapGestureRecognizer Command="{Binding Source={x:Reference PageSelf}, Path=BindingContext.ShowAddUpdateBowlerViewCommand}"
                                                           CommandParameter="{Binding .}"/>
                                 </components:CardView.GestureRecognizers>
                             </components:CardView>
