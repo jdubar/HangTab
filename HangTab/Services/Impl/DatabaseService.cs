@@ -1,9 +1,8 @@
 ﻿using System.Collections.ObjectModel;
+using System.Linq.Expressions;
 using HangTab.Data;
 using HangTab.Models;
 using HangTab.ViewModels;
-
-using System.Linq.Expressions;
 
 namespace HangTab.Services.Impl;
 public class DatabaseService(IDatabaseContext context) : IDatabaseService
@@ -35,15 +34,16 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
     public async Task<BusRideViewModel> GetBusRideViewModelByWeek(int week)
     {
         var viewmodel = new BusRideViewModel();
-        var busRides = await context.GetAllAsync<BusRide>();
-        if (busRides is null)
+        var data = await context.GetAllAsync<BusRide>();
+        if (data is null)
         {
             return viewmodel;
         }
 
+        var busRides = data.ToList();
         if (busRides.Any())
         {
-            viewmodel.BusRide = busRides.Last();
+            viewmodel.BusRide = Enumerable.Last(busRides);
         }
         else
         {
@@ -53,18 +53,18 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
             }
         }
         var weeks = await context.GetFilteredAsync<BusRideWeek>(b => b.WeekNumber == week);
-        if (weeks.Any())
-        {
-            viewmodel.BusRideWeek = weeks.Last();
-        }
-        else
+        if (weeks is null)
         {
             viewmodel.BusRideWeek.WeekNumber = week;
             if (!await context.AddItemAsync(viewmodel.BusRideWeek))
             {
                 return new BusRideViewModel();
             }
+
+            return viewmodel;
         }
+
+        viewmodel.BusRideWeek = weeks.Last();
         return viewmodel;
     }
 
@@ -74,23 +74,23 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         var bowlers = await GetFilteredBowlers(b => !b.IsHidden);
         var bowlerWeeks = await GetBowlerWeeksByWeek(week);
         var lowestHangBowlers = bowlers.Where(b => !b.IsSub
-                                                   && b.TotalHangings == bowlers.Where(b => !b.IsSub).Min(b => b.TotalHangings));
+                                                   && b.TotalHangings == bowlers.Where(bowler => !bowler.IsSub).Min(bowler => bowler.TotalHangings)).ToList();
 
         foreach (var bowler in bowlers)
         {
             var bowlerWeek = bowlerWeeks.FirstOrDefault(w => w.BowlerId == bowler.Id);
-            bowlerWeek ??= new BowlerWeek()
+            bowlerWeek ??= new BowlerWeek
             {
                 WeekNumber = week,
                 BowlerId = bowler.Id,
                 Hangings = 0
             };
 
-            var viewModel = new BowlerViewModel()
+            var viewModel = new BowlerViewModel
             {
                 Bowler = bowler,
                 BowlerWeek = bowlerWeek,
-                IsLowestHangs = lowestHangBowlers.Any(b => b.Id == bowler.Id)
+                IsLowestHangs = Enumerable.Any(lowestHangBowlers, b => b.Id == bowler.Id)
             };
             mainBowlers.Add(viewModel);
         }
@@ -112,7 +112,7 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
                                             .Join(allBowlers,
                                                   w => w.BowlerId,
                                                   b => b.Id,
-                                                  (w, b) => new Bowler()
+                                                  (w, b) => new Bowler
                                                   {
                                                       IsSub = b.IsSub,
                                                       ImageUrl = b.ImageUrl,
@@ -123,7 +123,7 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
                                             .ToList();
 
                 var busRide = await GetBusRideViewModelByWeek(week);
-                var weekViewModel = new WeekViewModel()
+                var weekViewModel = new WeekViewModel
                 {
                     WeekNumber = week,
                     Bowlers = bowlers,
@@ -138,17 +138,29 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
 
     public async Task<int> GetLatestWeek()
     {
-        var allWeeks = await context.GetAllAsync<BusRideWeek>();
-        return allWeeks is not null && allWeeks.Any()
+        var data = await context.GetAllAsync<BusRideWeek>();
+        if (data is null)
+        {
+            return 1;
+        }
+
+        var allWeeks = data.ToList();
+        return allWeeks.Any()
             ? allWeeks.OrderBy(w => w.WeekNumber).Last().WeekNumber
             : 1;
     }
 
     public async Task<SeasonSettings> GetSeasonSettings()
     {
-        var settings = await context.GetAllAsync<SeasonSettings>();
-        return settings is not null && settings.Any()
-            ? settings.First()
+        var data = await context.GetAllAsync<SeasonSettings>();
+        if (data is null)
+        {
+            return new SeasonSettings();
+        }
+
+        var settings = data.ToList();
+        return settings.Any()
+            ? Enumerable.First(settings)
             : new SeasonSettings();
     }
 
