@@ -10,11 +10,11 @@ public interface IDatabaseService
     Task<bool> DropAllTables();
     Task<bool> ResetHangings();
 
-    Task<ReadOnlyCollection<Bowler>> GetAllBowlers();
-    Task<ReadOnlyCollection<Bowler>> GetFilteredBowlers(Expression<Func<Bowler, bool>> predicate);
+    Task<IEnumerable<Bowler>> GetAllBowlers();
+    Task<IEnumerable<Bowler>> GetFilteredBowlers(Expression<Func<Bowler, bool>> predicate);
 
-    Task<ReadOnlyCollection<BowlerWeek>> GetAllBowlerWeeks();
-    Task<ReadOnlyCollection<BowlerWeek>> GetBowlerWeeksByWeek(int week);
+    Task<IEnumerable<BowlerWeek>> GetAllBowlerWeeks();
+    Task<IEnumerable<BowlerWeek>> GetBowlerWeeksByWeek(int week);
 
     Task<IEnumerable<BowlerViewModel>> GetMainBowlersByWeek(int week);
     Task<IEnumerable<WeekViewModel>> GetAllWeeks();

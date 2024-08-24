@@ -19,17 +19,17 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         && await context.DropTableAsync<BusRide>()
         && await context.DropTableAsync<BusRideWeek>();
 
-    public async Task<ReadOnlyCollection<Bowler>> GetAllBowlers() =>
-        await context.GetAllAsync<Bowler>() as ReadOnlyCollection<Bowler>;
+    public async Task<IEnumerable<Bowler>> GetAllBowlers() =>
+        await context.GetAllAsync<Bowler>();
 
-    public async Task<ReadOnlyCollection<Bowler>> GetFilteredBowlers(Expression<Func<Bowler, bool>> predicate) =>
-        await context.GetFilteredAsync(predicate) as ReadOnlyCollection<Bowler>;
+    public async Task<IEnumerable<Bowler>> GetFilteredBowlers(Expression<Func<Bowler, bool>> predicate) =>
+        await context.GetFilteredAsync(predicate);
 
-    public async Task<ReadOnlyCollection<BowlerWeek>> GetAllBowlerWeeks() =>
-        await context.GetAllAsync<BowlerWeek>() as ReadOnlyCollection<BowlerWeek>;
+    public async Task<IEnumerable<BowlerWeek>> GetAllBowlerWeeks() =>
+        await context.GetAllAsync<BowlerWeek>();
 
-    public async Task<ReadOnlyCollection<BowlerWeek>> GetBowlerWeeksByWeek(int week) =>
-        await context.GetFilteredAsync<BowlerWeek>(w => w.WeekNumber == week) as ReadOnlyCollection<BowlerWeek>;
+    public async Task<IEnumerable<BowlerWeek>> GetBowlerWeeksByWeek(int week) =>
+        await context.GetFilteredAsync<BowlerWeek>(w => w.WeekNumber == week);
 
     public async Task<BusRideViewModel> GetBusRideViewModelByWeek(int week)
     {
