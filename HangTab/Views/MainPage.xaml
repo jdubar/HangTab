@@ -210,7 +210,7 @@
                             WidthRequest="393"
                             StrokeThickness="4"
                             BackgroundColor="{AppThemeBinding Dark={StaticResource Black},
-                                                              Light={StaticResource White}}">
+                                                                                   Light={StaticResource White}}">
                         <StackLayout Orientation="Horizontal">
                             <ImageButton Margin="20"
                                          HeightRequest="58">
@@ -220,7 +220,7 @@
                                 </ImageButton.Source>
                                 <ImageButton.Behaviors>
                                     <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Dark={StaticResource White},
-                                                                                               Light={StaticResource Gray300}}" />
+                                                                                                                    Light={StaticResource Gray300}}" />
                                 </ImageButton.Behaviors>
                             </ImageButton>
                             <Label Text="Swipe right to start a new week"
@@ -230,9 +230,11 @@
                     </Border>
                 </Grid>
             </SwipeView>
-            <Button Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=ShowSeasonSummaryViewCommand}"
+            <Button BackgroundColor="{StaticResource Primary}"
+                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=ShowSeasonSummaryViewCommand}"
                     IsVisible="{Binding IsShowSummaryVisible}"
-                    Text="Click here to complete the season!" />
+                    Text="Click here to complete the season!"
+                    TextColor="{StaticResource White}" />
         </Grid>
     </Grid>
 </ContentPage>

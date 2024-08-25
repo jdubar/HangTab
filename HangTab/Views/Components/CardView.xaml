@@ -16,8 +16,6 @@
             WidthRequest="393"
             HeightRequest="81"
             StrokeThickness="4"
-            BackgroundColor="{AppThemeBinding Dark={StaticResource Black},
-                                              Light={StaticResource White}}"
             Stroke="{Binding IsSub, Converter={StaticResource BoolToObjectConverter}}">
         <StackLayout Orientation="Horizontal">
             <components:BowlerImage IsSub="{Binding IsSub}"
