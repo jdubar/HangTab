@@ -92,7 +92,7 @@
                                       HeightRequest="80">
                                     <Border WidthRequest="393"
                                             HeightRequest="81"
-                                            StrokeThickness="4"
+                                            StrokeThickness="2"
                                             BackgroundColor="{AppThemeBinding Dark={StaticResource Black},
                                                                               Light={StaticResource White}}"
                                             Stroke="{Binding Bowler.IsSub, Converter={StaticResource BoolToObjectConverter}}">
@@ -234,7 +234,14 @@
                     Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=ShowSeasonSummaryViewCommand}"
                     IsVisible="{Binding IsShowSummaryVisible}"
                     Text="Click here to complete the season!"
-                    TextColor="{StaticResource White}" />
+                    TextColor="{StaticResource White}">
+                <Button.ImageSource>
+                    <FontImageSource FontFamily="GoogleFont"
+                                     Glyph="{x:Static helpers:GoogleFont.Rewarded_ads}"
+                                     Color="Gold"
+                                     Size="44" />
+                </Button.ImageSource>
+            </Button>
         </Grid>
     </Grid>
 </ContentPage>

@@ -15,7 +15,7 @@
     <Border BindingContext="{x:Reference This}"
             WidthRequest="393"
             HeightRequest="81"
-            StrokeThickness="4"
+            StrokeThickness="2"
             Stroke="{Binding IsSub, Converter={StaticResource BoolToObjectConverter}}">
         <StackLayout Orientation="Horizontal">
             <components:BowlerImage IsSub="{Binding IsSub}"
