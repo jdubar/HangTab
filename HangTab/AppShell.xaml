@@ -7,8 +7,8 @@
        FlyoutBehavior="Disabled">
     <TabBar>
         <ShellContent Title="Home"
-                      ContentTemplate="{DataTemplate views:MainPage}"
-                      Route="MainPage">
+                      ContentTemplate="{DataTemplate views:HomePage}"
+                      Route="HomePage">
             <ShellContent.Icon>
                 <FontImageSource FontFamily="GoogleFont"
                                  Glyph="{x:Static helpers:GoogleFont.Home}"/>
@@ -22,6 +22,7 @@
                                  Glyph="{x:Static helpers:GoogleFont.Group}"/>
             </ShellContent.Icon>
         </ShellContent>
+        <ShellContent Title="" />
         <ShellContent Title="Season"
                       ContentTemplate="{DataTemplate views:SeasonPage}"
                       Route="SeasonPage">

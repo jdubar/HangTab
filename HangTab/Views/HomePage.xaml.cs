@@ -2,11 +2,11 @@
 
 namespace HangTab.Views;
 
-public partial class MainPage
+public partial class HomePage
 {
-    private readonly MainViewModel _viewModel;
+    private readonly HomeViewModel _viewModel;
 
-    public MainPage(MainViewModel viewModel)
+    public HomePage(HomeViewModel viewModel)
     {
         InitializeComponent();
         BindingContext = viewModel;

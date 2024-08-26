@@ -10,7 +10,7 @@ using MvvmHelpers;
 using Plugin.Maui.Audio;
 
 namespace HangTab.Views.ViewModels;
-public partial class MainViewModel(IDatabaseService data,
+public partial class HomeViewModel(IDatabaseService data,
                                    IShellService shell,
                                    IAudioManager audio) : BaseViewModel
 {

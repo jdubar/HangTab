@@ -6,8 +6,8 @@
              xmlns:models="clr-namespace:HangTab.ViewModels"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
-             x:Class="HangTab.Views.MainPage"
-             x:DataType="vm:MainViewModel"
+             x:Class="HangTab.Views.HomePage"
+             x:DataType="vm:HomeViewModel"
              x:Name="PageSelf">
     <Shell.TitleView>
         <Grid>
@@ -147,7 +147,7 @@
                 <SwipeView.LeftItems>
                     <SwipeItems>
                         <SwipeItem BackgroundColor="{DynamicResource Secondary}"
-                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=UndoBusRideCommand}"
+                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=UndoBusRideCommand}"
                                    IsVisible="{Binding IsUndoBusRideVisible}"
                                    Text=" Undo Bus Ride">
                             <SwipeItem.IconImageSource>
@@ -183,7 +183,7 @@
                                              HeightRequest="100"
                                              WidthRequest="100"
                                              VerticalOptions="Start"
-                                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=BusRideCommand}"/>
+                                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=BusRideCommand}"/>
                             </StackLayout>
                         </Border>
                     </VerticalStackLayout>
@@ -198,7 +198,7 @@
                     <SwipeItems Mode="Execute">
                         <SwipeItem Text="Starting new week..."
 					               BackgroundColor="{StaticResource Success}"
-                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=StartNewWeekCommand}"
+                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=StartNewWeekCommand}"
                                    IsVisible="{Binding IsSliderVisible}"/>
                     </SwipeItems>
                 </SwipeView.LeftItems>
@@ -231,7 +231,7 @@
                 </Grid>
             </SwipeView>
             <Button BackgroundColor="{StaticResource Primary}"
-                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=ShowSeasonSummaryViewCommand}"
+                    Command="{Binding Source={RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=ShowSeasonSummaryViewCommand}"
                     IsVisible="{Binding IsShowSummaryVisible}"
                     Text="Click here to complete the season!"
                     TextColor="{StaticResource White}">
