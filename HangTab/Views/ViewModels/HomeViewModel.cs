@@ -1,6 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-
 using HangTab.Models;
 using HangTab.Services;
 using HangTab.ViewModels;
@@ -14,8 +13,15 @@ public partial class HomeViewModel(IDatabaseService data,
                                    IShellService shell,
                                    IAudioManager audio) : BaseViewModel
 {
-    // TODO: Add cumulative hang cost per bowler
+    // TODO: Add cumulative hang cost per bowler (maybe)
     // TODO: Notify user somehow on new week
+    // TODO: Set const for border thickness/UI const class
+    // TODO: Add subs table to season summary
+    // TODO: Add bus ride total to season summary
+    // TODO: Add data reset button to season summary
+    // TODO: Unit tests?
+    // TODO: On bowlers view, add undo hanging option
+    // TODO: Create reusable cardview
 
     public ObservableRangeCollection<BowlerViewModel> MainBowlers { get; } = [];
 
@@ -32,13 +38,19 @@ public partial class HomeViewModel(IDatabaseService data,
     private SeasonSettings _seasonSettings;
 
     [ObservableProperty]
-    private bool _isSliderVisible = true;
+    private bool _isStartNewWeekVisible = true;
 
     [ObservableProperty]
     private bool _isShowSummaryVisible;
 
     [ObservableProperty]
     private bool _isUndoBusRideVisible;
+
+    [ObservableProperty]
+    private string _swipeIcon;
+
+    [ObservableProperty]
+    private string _swipeText;
 
     private int WorkingWeek { get; set; }
 
@@ -50,8 +62,14 @@ public partial class HomeViewModel(IDatabaseService data,
         TitleWeek = $"Week {WorkingWeek} of {SeasonSettings.TotalSeasonWeeks}";
         BusRideViewModel = await data.GetBusRideViewModelByWeek(WorkingWeek);
 
-        IsSliderVisible = IsStartNewWeekVisible();
-        IsShowSummaryVisible = !IsSliderVisible;
+        IsStartNewWeekVisible = GetSliderState();
+        IsShowSummaryVisible = !IsStartNewWeekVisible;
+        SwipeText = IsShowSummaryVisible
+            ? "Swipe right for the season summary"
+            : "Swipe right to start a new week";
+        SwipeIcon = IsShowSummaryVisible
+            ? "rewarded_ads.png"
+            : "arrow_circle_right.png";
         IsUndoBusRideVisible = IsBusRideGreaterThanZero();
 
         MainBowlers.ReplaceRange(await data.GetMainBowlersByWeek(WorkingWeek));
@@ -111,8 +129,8 @@ public partial class HomeViewModel(IDatabaseService data,
             WorkingWeek++;
             TitleWeek = $"Week {WorkingWeek} of {SeasonSettings.TotalSeasonWeeks}";
 
-            IsSliderVisible = IsStartNewWeekVisible();
-            IsShowSummaryVisible = !IsSliderVisible;
+            IsStartNewWeekVisible = GetSliderState();
+            IsShowSummaryVisible = !IsStartNewWeekVisible;
 
             ResetMainBowlersForNewWeek();
             await ResetBusRidesForNewWeekAsync();
@@ -162,7 +180,7 @@ public partial class HomeViewModel(IDatabaseService data,
     private bool IsBusRideGreaterThanZero() =>
         BusRideViewModel.BusRideWeek.BusRides > 0;
 
-    private bool IsStartNewWeekVisible() =>
+    private bool GetSliderState() =>
         WorkingWeek < SeasonSettings.TotalSeasonWeeks;
 
     private void ResetMainBowlersForNewWeek()

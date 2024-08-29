@@ -7,7 +7,8 @@
              Title="Settings">
     <TableView Intent="Settings">
         <TableRoot>
-            <TableSection Title="General Settings">
+            <TableSection Title="General Settings"
+                          TextColor="{StaticResource Primary}">
                 <EntryCell HorizontalTextAlignment="End"
                            Keyboard="Numeric" 
                            Label="Weeks In The Season"
@@ -15,7 +16,8 @@
                            PropertyChanged="SaveSeasonSettingsOnChange"
                            Text="{Binding SeasonSettings.TotalSeasonWeeks}" />
             </TableSection>
-            <TableSection Title="Data Reset">
+            <TableSection Title="Data Reset"
+                          TextColor="{StaticResource Primary}">
                 <TextCell Tapped="ResetHangingsOnTap"
                           Text="Start New Season"
                           TextColor="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Gray500}}" />

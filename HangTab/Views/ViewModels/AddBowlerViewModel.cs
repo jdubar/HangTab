@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-
+using HangTab.Messages;
 using HangTab.Models;
 using HangTab.Services;
 
@@ -73,6 +73,11 @@ public partial class AddBowlerViewModel(IDatabaseService data,
         await ExecuteAsync(async () =>
         {
             var result = await media.PickPhotoAsync();
+            if (result.HasError<PickPhotoCanceled>())
+            {
+                return;
+            }
+
             if (result.IsFailed)
             {
                 await shell.DisplayAlertAsync("Error", result.Errors[0].Message, "Ok");

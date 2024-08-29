@@ -1,43 +1,21 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-       xmlns:helpers="using:HangTab.Helpers"
        xmlns:views="clr-namespace:HangTab.Views"
        x:Class="HangTab.AppShell"
        FlyoutBehavior="Disabled">
     <TabBar>
-        <ShellContent Title="Home"
-                      ContentTemplate="{DataTemplate views:HomePage}"
-                      Route="HomePage">
-            <ShellContent.Icon>
-                <FontImageSource FontFamily="GoogleFont"
-                                 Glyph="{x:Static helpers:GoogleFont.Home}"/>
-            </ShellContent.Icon>
-        </ShellContent>
-        <ShellContent Title="Bowlers"
-                      ContentTemplate="{DataTemplate views:ManageBowlersPage}"
-                      Route="ManageBowlersPage">
-            <ShellContent.Icon>
-                <FontImageSource FontFamily="GoogleFont"
-                                 Glyph="{x:Static helpers:GoogleFont.Group}"/>
-            </ShellContent.Icon>
-        </ShellContent>
-        <ShellContent Title="" />
-        <ShellContent Title="Season"
-                      ContentTemplate="{DataTemplate views:SeasonPage}"
-                      Route="SeasonPage">
-            <ShellContent.Icon>
-                <FontImageSource FontFamily="GoogleFont"
-                                 Glyph="{x:Static helpers:GoogleFont.Calendar_month}"/>
-            </ShellContent.Icon>
-        </ShellContent>
-        <ShellContent Title="Settings"
-                      ContentTemplate="{DataTemplate views:SettingsPage}"
-                      Route="SettingsPage">
-            <ShellContent.Icon>
-                <FontImageSource FontFamily="GoogleFont"
-                                 Glyph="{x:Static helpers:GoogleFont.Settings}"/>
-            </ShellContent.Icon>
-        </ShellContent>
+        <Tab Icon="home.png" Title="Home">
+            <ShellContent ContentTemplate="{DataTemplate views:HomePage}" />
+        </Tab>
+        <Tab Icon="group.png" Title="Bowlers">
+            <ShellContent ContentTemplate="{DataTemplate views:ManageBowlersPage}" />
+        </Tab>
+        <Tab Icon="calendar_month.png" Title="Season">
+            <ShellContent ContentTemplate="{DataTemplate views:SeasonPage}" />
+        </Tab>
+        <Tab Icon="settings.png" Title="Settings">
+            <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" />
+        </Tab>
     </TabBar>
 </Shell>

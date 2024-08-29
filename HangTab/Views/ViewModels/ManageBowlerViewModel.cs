@@ -9,22 +9,12 @@ namespace HangTab.Views.ViewModels;
 public partial class ManageBowlerViewModel(IDatabaseService data,
                                            IShellService shell) : BaseViewModel
 {
-    public ObservableRangeCollection<Bowler> AllBowlers { get; set; } = [];
-
-    protected bool IsInitialized { get; set; }
+    public ObservableRangeCollection<Bowler> AllBowlers { get; } = [];
 
     [RelayCommand]
-    public async Task InitializeDataAsync()
+    private async Task InitializeDataAsync()
     {
-        if (IsInitialized)
-        {
-            return;
-        }
-
-        var bowlers = await data.GetAllBowlers();
-        AllBowlers.Clear();
-        AllBowlers.AddRange(bowlers);
-        IsInitialized = true;
+        AllBowlers.ReplaceRange(await data.GetAllBowlers());
     }
 
     [RelayCommand]

@@ -27,13 +27,14 @@
         </Border>
         <toolkit:AvatarView ImageSource="{Binding ImageUrl}"
                             BorderColor="{AppThemeBinding Dark={StaticResource Gray300},
-                                                          Light={StaticResource Black}}"
+                                                                              Light={StaticResource Black}}"
                             HorizontalOptions="Center"
                             VerticalOptions="Center"
                             HeightRequest="{Binding Size}"
                             WidthRequest="{Binding Size}"
                             CornerRadius="{Binding Size}"
                             Margin="10"
+                            Padding="{Binding PaddingValue}"
                             ZIndex="1"/>
     </Grid>
 </ContentView>

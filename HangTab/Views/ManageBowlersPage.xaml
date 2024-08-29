@@ -2,7 +2,6 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:components="clr-namespace:HangTab.Views.Components"
-             xmlns:helpers="using:HangTab.Helpers"
              xmlns:models="clr-namespace:HangTab.Models"
              xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
              x:Class="HangTab.Views.ManageBowlersPage"
@@ -10,11 +9,8 @@
              x:Name="PageSelf"
              Title="Manage Bowlers">
     <ContentPage.ToolbarItems>
-        <ToolbarItem Command="{Binding ShowAddUpdateBowlerViewCommand}">
-            <ToolbarItem.IconImageSource>
-                <FontImageSource FontFamily="GoogleFont"
-                                 Glyph="{x:Static helpers:GoogleFont.Person_add}" />
-            </ToolbarItem.IconImageSource>
+        <ToolbarItem Command="{Binding ShowAddUpdateBowlerViewCommand}"
+                     IconImageSource="person_add.png">
         </ToolbarItem>
     </ContentPage.ToolbarItems>
 

@@ -12,7 +12,7 @@
     <!-- Display name -->
     <ApplicationTitle>HangTab</ApplicationTitle>
     <!-- App Identifier -->
-    <ApplicationId>com.companyname.hangtab</ApplicationId>
+    <ApplicationId>com.toethumb.hangtab</ApplicationId>
     <ApplicationIdGuid>9d5fc498-8b8b-45ea-99d5-98d2258d23db</ApplicationIdGuid>
     <!-- Versions -->
     <ApplicationDisplayVersion>1.1</ApplicationDisplayVersion>
@@ -55,23 +55,24 @@
     <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#000000" />
     <!-- Images -->
     <MauiImage Include="Resources\Images\account_circle.svg" />
+    <MauiImage Include="Resources\Images\add_circle.svg" />
+    <MauiImage Include="Resources\Images\arrow_circle_right.svg" />
     <MauiImage Include="Resources\Images\bus_splash.svg" BaseSize="818,556" />
+    <MauiImage Include="Resources\Images\calendar_month.svg" />
     <MauiImage Include="Resources\Images\confetti.svg" />
     <MauiImage Include="Resources\Images\crown.svg" />
+    <MauiImage Include="Resources\Images\group.svg" />
+    <MauiImage Include="Resources\Images\home.svg" />
+    <MauiImage Include="Resources\Images\person_add.svg" />
+    <MauiImage Include="Resources\Images\rewarded_ads.svg" />
     <MauiImage Include="Resources\Images\school_bus.svg" />
-    <MauiImage Include="Resources\Images\skull.svg" />
-    <!-- Custom Fonts -->
+    <MauiImage Include="Resources\Images\settings.svg" />
+    <MauiImage Include="Resources\Images\switch_account.svg" />
+    <MauiImage Include="Resources\Images\undo.svg" />
+	  <!-- Custom Fonts -->
     <MauiFont Include="Resources\Fonts\*" />
     <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
     <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="Resources\Fonts\MaterialIcons-Regular.ttf" />
-    <None Remove="Resources\Images\confetti.svg" />
-    <None Remove="Resources\Images\confetti_50e44d26.gif" />
-    <None Remove="Resources\Images\confetti_520b445e.gif" />
-    <None Remove="Resources\Images\confetti_73494339.gif" />
-    <None Remove="Resources\Images\confetti_d20d4f6c.gif" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="CommunityToolkit.Maui" Version="9.0.2" />

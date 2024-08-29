@@ -41,9 +41,9 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         }
 
         var busRides = data.ToList();
-        if (busRides.Any())
+        if (busRides.Count > 0)
         {
-            viewmodel.BusRide = Enumerable.Last(busRides);
+            viewmodel.BusRide = busRides.Last();
         }
         else
         {
@@ -53,7 +53,7 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
             }
         }
         var weeks = await context.GetFilteredAsync<BusRideWeek>(b => b.WeekNumber == week);
-        if (weeks is null)
+        if (!weeks.Any())
         {
             viewmodel.BusRideWeek.WeekNumber = week;
             if (!await context.AddItemAsync(viewmodel.BusRideWeek))
@@ -159,8 +159,8 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         }
 
         var settings = data.ToList();
-        return settings.Any()
-            ? Enumerable.First(settings)
+        return settings.Count > 0
+            ? settings.First()
             : new SeasonSettings();
     }
 

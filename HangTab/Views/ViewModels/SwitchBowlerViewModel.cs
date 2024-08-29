@@ -20,7 +20,7 @@ public partial class SwitchBowlerViewModel(IDatabaseService data, IShellService 
     public ObservableRangeCollection<Bowler> SwitchBowlers { get; set; } = [];
 
     [RelayCommand]
-    public async Task InitializeDataAsync()
+    private async Task InitializeDataAsync()
     {
         await ExecuteAsync(async () =>
         {

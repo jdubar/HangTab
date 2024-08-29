@@ -2,19 +2,17 @@
 
 using Microsoft.Maui.Graphics.Platform;
 
-using Result = FluentResults.Result;
-
 namespace HangTab.Services.Impl;
 
-public class MediaPickerWrapper
+public static class MediaPickerWrapper
 {
-    public async Task<Result<FileResult>> PickPhotoAsync()
+    public static async Task<Result<FileResult>> PickPhotoAsync()
     {
         try
         {
             var result = await MediaPicker.Default.PickPhotoAsync();
             return result is null
-                ? Result.Fail("User canceled or unknown error")
+                ? new PickPhotoCanceled()
                 : Result.Ok(result);
         }
         catch (Exception e)
@@ -23,7 +21,7 @@ public class MediaPickerWrapper
         }
     }
 
-    public async Task<Result<string>> SavePhotoAsync(FileResult result, string localFileSavePath, float maxWidthOrHeight = 150)
+    public static async Task<Result<string>> SavePhotoAsync(FileResult result, string localFileSavePath, float maxWidthOrHeight = 150)
     {
         if (result is null)
         {

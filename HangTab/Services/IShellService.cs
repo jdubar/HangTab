@@ -1,6 +1,4 @@
-﻿using HangTab.Helpers;
-
-namespace HangTab.Services;
+﻿namespace HangTab.Services;
 public interface IShellService
 {
     Task<string> DisplayOptionsPromptAsync(string title, string option1, string option2);
