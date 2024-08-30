@@ -1,9 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-using HangTab.Models;
-using HangTab.Services;
-
 namespace HangTab.Views.ViewModels;
 public partial class SettingsViewModel(IDatabaseService data,
                                        IShellService shell) : BaseViewModel

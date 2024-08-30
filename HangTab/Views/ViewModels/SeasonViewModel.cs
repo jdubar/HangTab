@@ -1,8 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 
-using HangTab.Services;
-using HangTab.ViewModels;
-
 using MvvmHelpers;
 
 namespace HangTab.Views.ViewModels;

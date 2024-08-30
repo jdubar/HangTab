@@ -1,9 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-using HangTab.Models;
-using HangTab.ViewModels;
-
 using MvvmHelpers;
 
 namespace HangTab.Views.ViewModels;

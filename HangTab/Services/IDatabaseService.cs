@@ -1,7 +1,4 @@
-﻿using HangTab.Models;
-using HangTab.ViewModels;
-
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
 namespace HangTab.Services;
 public interface IDatabaseService

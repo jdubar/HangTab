@@ -1,9 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-using HangTab.Models;
-using HangTab.Services;
-
 using MvvmHelpers;
 
 namespace HangTab.Views.ViewModels;
@@ -27,7 +24,7 @@ public partial class SwitchBowlerViewModel(IDatabaseService data, IShellService 
             var bowlers = await data.GetFilteredBowlers(b => b.Id != Bowler.Id && b.IsHidden);
             SwitchBowlers.Clear();
 
-            if (bowlers.Any())
+            if (bowlers.Count > 0)
             {
                 SwitchBowlers.AddRange(bowlers);
             }

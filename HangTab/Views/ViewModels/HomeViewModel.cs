@@ -1,8 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-using HangTab.Models;
-using HangTab.Services;
-using HangTab.ViewModels;
 
 using MvvmHelpers;
 
@@ -14,7 +11,7 @@ public partial class HomeViewModel(IDatabaseService data,
                                    IAudioManager audio) : BaseViewModel
 {
     // TODO: Add cumulative hang cost per bowler (maybe)
-    // TODO: Notify user somehow on new week
+    // TODO: Notify user better somehow on new week
     // TODO: Set const for border thickness/UI const class
     // TODO: Add subs table to season summary
     // TODO: Add bus ride total to season summary
@@ -231,7 +228,7 @@ public partial class HomeViewModel(IDatabaseService data,
     private async Task ShowBusRideSplashAsync()
     {
         ShowBusRideImage = true;
-        using var player = audio.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("beepbeep.mp3"));
+        using var player = audio.CreatePlayer(await FileSystem.OpenAppPackageFileAsync(Constants.BusRideSoundFileName));
         player.Play();
         await Task.Delay(2000);
         ShowBusRideImage = false;

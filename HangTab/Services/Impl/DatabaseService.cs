@@ -1,6 +1,4 @@
 ﻿using HangTab.Data;
-using HangTab.Models;
-using HangTab.ViewModels;
 
 using System.Linq.Expressions;
 

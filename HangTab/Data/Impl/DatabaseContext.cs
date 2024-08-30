@@ -1,13 +1,11 @@
-﻿using SQLite;
+﻿using System.Linq.Expressions;
+using SQLite;
 
-using System.Linq.Expressions;
-
-namespace HangTab.Data;
+namespace HangTab.Data.Impl;
 public class DatabaseContext : IDatabaseContext, IAsyncDisposable
 {
-    private const string DatabaseFilename = "Bowling.db3";
     private static string DatabasePath =>
-        Path.Combine(FileSystem.AppDataDirectory, DatabaseFilename);
+        Path.Combine(FileSystem.AppDataDirectory, Constants.DatabaseName);
 
     private SQLiteAsyncConnection _connection;
     private SQLiteAsyncConnection Database =>

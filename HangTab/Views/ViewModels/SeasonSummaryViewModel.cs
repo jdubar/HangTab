@@ -1,8 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 
-using HangTab.Models;
-using HangTab.Services;
-
 using MvvmHelpers;
 
 namespace HangTab.Views.ViewModels;
@@ -12,7 +9,7 @@ public partial class SeasonSummaryViewModel(IDatabaseService data) : BaseViewMod
     public ObservableRangeCollection<Bowler> AllOtherBowlers { get; set; } = [];
 
     [RelayCommand]
-    public async Task InitializeDataAsync()
+    private async Task InitializeDataAsync()
     {
         await ExecuteAsync(async () =>
         {

@@ -12,7 +12,7 @@ public class BowlerWeek : ObservableObject
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
     public int WeekNumber { get; set; }
-    public int BowlerId { get; set; }
+    public int BowlerId { get; init; }
     public int Hangings
     {
         get => _hangings;

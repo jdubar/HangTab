@@ -1,6 +1,4 @@
-﻿using HangTab.Models;
-
-namespace HangTab.ViewModels;
+﻿namespace HangTab.ViewModels;
 
 public class BusRideViewModel
 {

@@ -1,6 +1,4 @@
-﻿using HangTab.Messages;
-
-using Microsoft.Maui.Graphics.Platform;
+﻿using Microsoft.Maui.Graphics.Platform;
 
 namespace HangTab.Services.Impl;
 

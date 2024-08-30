@@ -1,7 +1,5 @@
-﻿using CommunityToolkit.Maui;
-
-using HangTab.Data;
-using HangTab.Services;
+﻿using HangTab.Data;
+using HangTab.Data.Impl;
 using HangTab.Services.Impl;
 using HangTab.Views;
 using HangTab.Views.ViewModels;
