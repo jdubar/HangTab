@@ -231,7 +231,7 @@ public partial class HomeViewModel(IDatabaseService data,
     private async Task ShowBusRideSplashAsync()
     {
         ShowBusRideImage = true;
-        using var player = audio.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("beep-beep.mp3"));
+        using var player = audio.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("beepbeep.mp3"));
         player.Play();
         await Task.Delay(2000);
         ShowBusRideImage = false;
