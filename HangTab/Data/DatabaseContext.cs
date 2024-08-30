@@ -26,13 +26,13 @@ public class DatabaseContext : IDatabaseContext, IAsyncDisposable
     public async Task<bool> DropTableAsync<TTable>() where TTable : class, new() =>
         await Execute<TTable, bool>(async () => await Database.DropTableAsync<TTable>() > 0);
 
-    public async Task<IEnumerable<TTable>> GetAllAsync<TTable>() where TTable : class, new()
+    public async Task<IReadOnlyCollection<TTable>> GetAllAsync<TTable>() where TTable : class, new()
     {
         var table = await GetTableAsync<TTable>();
         return await table.ToListAsync();
     }
 
-    public async Task<IEnumerable<TTable>> GetFilteredAsync<TTable>(Expression<Func<TTable, bool>> predicate) where TTable : class, new()
+    public async Task<IReadOnlyCollection<TTable>> GetFilteredAsync<TTable>(Expression<Func<TTable, bool>> predicate) where TTable : class, new()
     {
         var table = await GetTableAsync<TTable>();
         return await table.Where(predicate).ToListAsync();
