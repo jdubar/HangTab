@@ -6,7 +6,7 @@ namespace HangTab.Tests;
 public class DatabaseServiceTests
 {
     [Theory]
-    [ClassData(typeof(TestData.TestData.BowlerTestData))]
+    [ClassData(typeof(TestData.ComplexData.BowlerTheoryData))]
     public async Task ItShouldCheckIfBowlerExists(Bowler bowler, bool expected)
     {
         // Given

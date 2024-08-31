@@ -1,11 +1,11 @@
 ﻿using HangTab.Models;
 
 namespace HangTab.Tests.TestData;
-public abstract class TestData
+public abstract class ComplexData
 {
-    public class BowlerTestData : TheoryData<Bowler, bool>
+    public class BowlerTheoryData : TheoryData<Bowler, bool>
     {
-        public BowlerTestData()
+        public BowlerTheoryData()
         {
             Add(new Bowler
             {
