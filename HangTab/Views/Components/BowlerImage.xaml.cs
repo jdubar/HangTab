@@ -1,15 +1,17 @@
 namespace HangTab.Views.Components;
 
-public partial class BowlerImage : ContentView
+public partial class BowlerImage
 {
     public static readonly BindableProperty ImageUrlProperty =
-        BindableProperty.Create(nameof(ImageUrl), typeof(string), typeof(CardView), string.Empty);
+        BindableProperty.Create(nameof(ImageUrl), typeof(string), typeof(BowlerImage), string.Empty);
     public static readonly BindableProperty IsLowestHangsProperty =
-        BindableProperty.Create(nameof(IsLowestHangs), typeof(bool), typeof(CardView), false);
+        BindableProperty.Create(nameof(IsLowestHangs), typeof(bool), typeof(BowlerImage), false);
     public static readonly BindableProperty IsSubProperty =
-        BindableProperty.Create(nameof(IsSub), typeof(bool), typeof(CardView), false);
+        BindableProperty.Create(nameof(IsSub), typeof(bool), typeof(BowlerImage), false);
     public static readonly BindableProperty SizeProperty =
-        BindableProperty.Create(nameof(Size), typeof(int), typeof(CardView), 50);
+        BindableProperty.Create(nameof(Size), typeof(int), typeof(BowlerImage), 50);
+    public static readonly BindableProperty PaddingValueProperty =
+        BindableProperty.Create(nameof(PaddingValue), typeof(int), typeof(BowlerImage), -5);
 
     public string ImageUrl
     {
@@ -33,6 +35,12 @@ public partial class BowlerImage : ContentView
     {
         get => (int)GetValue(SizeProperty);
         set => SetValue(SizeProperty, value);
+    }
+
+    public int PaddingValue
+    {
+        get => (int)GetValue(PaddingValueProperty);
+        set => SetValue(PaddingValueProperty, value);
     }
 
     public BowlerImage()

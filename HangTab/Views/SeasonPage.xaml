@@ -5,6 +5,7 @@
              xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
              x:Class="HangTab.Views.SeasonPage"
              x:DataType="vm:SeasonViewModel"
+             x:Name="PageSelf"
              Title="Season">
     <Grid>
         <VerticalStackLayout Grid.RowSpan="2"
@@ -30,7 +31,7 @@
                           VerticalOptions="End"
                           HeightRequest="80">
                         <Grid.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding Source={RelativeSource AncestorType={x:Type vm:SeasonViewModel}}, Path=ShowWeekDetailsCommand}"
+                            <TapGestureRecognizer Command="{Binding Source={x:Reference PageSelf}, Path=BindingContext.ShowWeekDetailsCommand}"
                                                   CommandParameter="{Binding .}"/>
                         </Grid.GestureRecognizers>
                         <Border WidthRequest="393"

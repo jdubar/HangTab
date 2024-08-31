@@ -9,7 +9,7 @@ public partial class BaseViewModel : ObservableObject
     [ObservableProperty]
     private string _busyText;
 
-    public async Task ExecuteAsync(Func<Task> operation, string busyText = null)
+    protected async Task ExecuteAsync(Func<Task> operation, string busyText = null)
     {
         IsBusy = true;
         BusyText = busyText ?? "Processing...";

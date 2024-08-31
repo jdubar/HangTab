@@ -2,16 +2,9 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-             x:Name="this"
+             x:Name="This"
              x:Class="HangTab.Views.Components.BowlerImage">
-    <ContentView.Resources>
-        <ResourceDictionary>
-            <toolkit:BoolToObjectConverter x:Key="BoolToObjectConverter"
-                                           TrueObject="{StaticResource Success}"
-                                           FalseObject="{StaticResource Gray300}"/>
-        </ResourceDictionary>
-    </ContentView.Resources>
-    <Grid BindingContext="{x:Reference this}">
+    <Grid BindingContext="{x:Reference This}">
         <Image IsVisible="{Binding IsLowestHangs}"
                Source="crown.png"
                ZIndex="2"
@@ -34,13 +27,14 @@
         </Border>
         <toolkit:AvatarView ImageSource="{Binding ImageUrl}"
                             BorderColor="{AppThemeBinding Dark={StaticResource Gray300},
-                                                          Light={StaticResource Black}}"
+                                                                              Light={StaticResource Black}}"
                             HorizontalOptions="Center"
                             VerticalOptions="Center"
                             HeightRequest="{Binding Size}"
                             WidthRequest="{Binding Size}"
                             CornerRadius="{Binding Size}"
                             Margin="10"
+                            Padding="{Binding PaddingValue}"
                             ZIndex="1"/>
     </Grid>
 </ContentView>

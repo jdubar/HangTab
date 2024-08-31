@@ -1,10 +1,10 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
+    <TargetFrameworks>net8.0;net8.0-android;net8.0-ios;net8.0-maccatalyst</TargetFrameworks>
     <TargetFrameworks Condition="$([MSBuild]::IsOSPlatform('windows'))">$(TargetFrameworks);net8.0-windows10.0.19041.0</TargetFrameworks>
     <!-- Uncomment to also build the tizen app. You will need to install tizen by following this: https://github.com/Samsung/Tizen.NET -->
     <!-- <TargetFrameworks>$(TargetFrameworks);net8.0-tizen</TargetFrameworks> -->
-    <OutputType>Exe</OutputType>
+    <OutputType Condition="'$(TargetFramework)' != 'net8.0'">Exe</OutputType>
     <RootNamespace>HangTab</RootNamespace>
     <UseMaui>true</UseMaui>
     <SingleProject>true</SingleProject>
@@ -12,11 +12,12 @@
     <!-- Display name -->
     <ApplicationTitle>HangTab</ApplicationTitle>
     <!-- App Identifier -->
-    <ApplicationId>com.companyname.hangtab</ApplicationId>
+    <ApplicationId>com.toethumb.hangtab</ApplicationId>
     <ApplicationIdGuid>9d5fc498-8b8b-45ea-99d5-98d2258d23db</ApplicationIdGuid>
     <!-- Versions -->
     <ApplicationDisplayVersion>1.1</ApplicationDisplayVersion>
     <ApplicationVersion>1</ApplicationVersion>
+    <PackageVersion>1.0.0</PackageVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'ios'">13.1</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'maccatalyst'">13.1</SupportedOSPlatformVersion>
     <SupportedOSPlatformVersion Condition="$([MSBuild]::GetTargetPlatformIdentifier('$(TargetFramework)')) == 'android'">21.0</SupportedOSPlatformVersion>
@@ -55,27 +56,39 @@
     <MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#000000" />
     <!-- Images -->
     <MauiImage Include="Resources\Images\account_circle.svg" />
+    <MauiImage Include="Resources\Images\add_circle.svg" />
+    <MauiImage Include="Resources\Images\arrow_circle_right.svg" />
     <MauiImage Include="Resources\Images\bus_splash.svg" BaseSize="818,556" />
+    <MauiImage Include="Resources\Images\calendar_month.svg" />
+    <MauiImage Include="Resources\Images\confetti.svg" />
     <MauiImage Include="Resources\Images\crown.svg" />
+    <MauiImage Include="Resources\Images\group.svg" />
+    <MauiImage Include="Resources\Images\home.svg" />
+    <MauiImage Include="Resources\Images\person_add.svg" />
+    <MauiImage Include="Resources\Images\rewarded_ads.svg" />
     <MauiImage Include="Resources\Images\school_bus.svg" />
-    <MauiImage Include="Resources\Images\skull.svg" />
-    <!-- Custom Fonts -->
+    <MauiImage Include="Resources\Images\settings.svg" />
+    <MauiImage Include="Resources\Images\switch_account.svg" />
+    <MauiImage Include="Resources\Images\undo.svg" />
+	  <!-- Custom Fonts -->
     <MauiFont Include="Resources\Fonts\*" />
     <!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
     <MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
   <ItemGroup>
-    <None Remove="Resources\Fonts\MaterialIcons-Regular.ttf" />
+    <MauiAsset Remove="Resources\raw\beepbeep.mp3" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="CommunityToolkit.Maui" Version="8.0.1" />
+    <PackageReference Include="CommunityToolkit.Maui" Version="9.0.2" />
     <PackageReference Include="CommunityToolkit.Mvvm" Version="8.2.2" />
-    <PackageReference Include="Plugin.Maui.Audio" Version="2.1.0" />
+    <PackageReference Include="FluentResults" Version="3.16.0" />
+    <PackageReference Include="Plugin.Maui.Audio" Version="3.0.0" />
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
+    <PackageReference Include="SkiaSharp.Extended.UI.Maui" Version="2.0.0" />
     <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
-    <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.8" />
-    <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.20" />
-    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.20" />
+    <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.9" />
+    <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.80" />
+    <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.80" />
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="8.0.0" />
   </ItemGroup>
   <ItemGroup>
@@ -92,6 +105,9 @@
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
     <MauiXaml Update="Views\SeasonPage.xaml">
+      <Generator>MSBuild:Compile</Generator>
+    </MauiXaml>
+    <MauiXaml Update="Views\SeasonSummaryPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </MauiXaml>
     <MauiXaml Update="Views\SettingsPage.xaml">

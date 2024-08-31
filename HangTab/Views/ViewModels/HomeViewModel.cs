@@ -1,23 +1,26 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-using HangTab.Models;
-using HangTab.Services;
-using HangTab.ViewModels;
-
 using MvvmHelpers;
 
 using Plugin.Maui.Audio;
 
 namespace HangTab.Views.ViewModels;
-public partial class MainViewModel(IDatabaseService data,
+public partial class HomeViewModel(IDatabaseService data,
                                    IShellService shell,
                                    IAudioManager audio) : BaseViewModel
 {
-    // TODO: Add cumulative hang cost per bowler
-    // TODO: Notify user somehow on new week
-    // TODO: Add season summary
-    public ObservableRangeCollection<BowlerViewModel> MainBowlers { get; set; } = [];
+    // TODO: Add cumulative hang cost per bowler (maybe)
+    // TODO: Notify user better somehow on new week
+    // TODO: Set const for border thickness/UI const class
+    // TODO: Add subs table to season summary
+    // TODO: Add bus ride total to season summary
+    // TODO: Add data reset button to season summary
+    // TODO: Unit tests?
+    // TODO: On bowlers view, add undo hanging option
+    // TODO: Create reusable cardview
+
+    public ObservableRangeCollection<BowlerViewModel> MainBowlers { get; } = [];
 
     [ObservableProperty]
     private bool _showBusRideImage;
@@ -32,13 +35,21 @@ public partial class MainViewModel(IDatabaseService data,
     private SeasonSettings _seasonSettings;
 
     [ObservableProperty]
-    private bool _isSliderVisible = true;
+    private bool _isStartNewWeekVisible = true;
+
+    [ObservableProperty]
+    private bool _isShowSummaryVisible;
 
     [ObservableProperty]
     private bool _isUndoBusRideVisible;
 
-    private int WorkingWeek { get; set; }
+    [ObservableProperty]
+    private string _swipeIcon;
 
+    [ObservableProperty]
+    private string _swipeText;
+
+    private int WorkingWeek { get; set; }
 
     [RelayCommand]
     private async Task InitializeDataAsync()
@@ -48,11 +59,17 @@ public partial class MainViewModel(IDatabaseService data,
         TitleWeek = $"Week {WorkingWeek} of {SeasonSettings.TotalSeasonWeeks}";
         BusRideViewModel = await data.GetBusRideViewModelByWeek(WorkingWeek);
 
-        IsSliderVisible = IsStartNewWeekVisible();
+        IsStartNewWeekVisible = GetSliderState();
+        IsShowSummaryVisible = !IsStartNewWeekVisible;
+        SwipeText = IsShowSummaryVisible
+            ? "Swipe right for the season summary"
+            : "Swipe right to start a new week";
+        SwipeIcon = IsShowSummaryVisible
+            ? "rewarded_ads.png"
+            : "arrow_circle_right.png";
         IsUndoBusRideVisible = IsBusRideGreaterThanZero();
 
-        MainBowlers.Clear();
-        MainBowlers.AddRange(await data.GetMainBowlersByWeek(WorkingWeek));
+        MainBowlers.ReplaceRange(await data.GetMainBowlersByWeek(WorkingWeek));
     }
 
     [RelayCommand]
@@ -68,9 +85,13 @@ public partial class MainViewModel(IDatabaseService data,
         }
         else
         {
-            await shell.DisplayAlert("Update Error", "Error updating bus ride", "Ok");
+            await shell.DisplayAlertAsync("Update Error", "Error updating bus ride", "Ok");
         }
     }
+
+    [RelayCommand]
+    private async Task ShowSeasonSummaryViewAsync() =>
+        await shell.GoToPageAsync(nameof(SeasonSummaryPage));
 
     [RelayCommand]
     private async Task HangBowlerAsync(BowlerViewModel viewModel)
@@ -87,13 +108,13 @@ public partial class MainViewModel(IDatabaseService data,
         }
         else
         {
-            await shell.DisplayAlert("Update Error", "Error updating bowler hang count", "Ok");
+            await shell.DisplayAlertAsync("Update Error", "Error updating bowler hang count", "Ok");
         }
     }
 
     [RelayCommand]
     private async Task ShowSwitchBowlerViewAsync(Bowler bowler) =>
-        await shell.GoToPageWithData(nameof(SwitchBowlerPage), bowler);
+        await shell.GoToPageWithDataAsync(nameof(SwitchBowlerPage), bowler);
 
     [RelayCommand]
     private async Task StartNewWeekAsync()
@@ -105,7 +126,8 @@ public partial class MainViewModel(IDatabaseService data,
             WorkingWeek++;
             TitleWeek = $"Week {WorkingWeek} of {SeasonSettings.TotalSeasonWeeks}";
 
-            IsSliderVisible = IsStartNewWeekVisible();
+            IsStartNewWeekVisible = GetSliderState();
+            IsShowSummaryVisible = !IsStartNewWeekVisible;
 
             ResetMainBowlersForNewWeek();
             await ResetBusRidesForNewWeekAsync();
@@ -134,7 +156,7 @@ public partial class MainViewModel(IDatabaseService data,
         }
         else
         {
-            await shell.DisplayAlert("Update Error", "Error updating bowler hang count", "Ok");
+            await shell.DisplayAlertAsync("Update Error", "Error updating bowler hang count", "Ok");
         }
     }
 
@@ -148,14 +170,14 @@ public partial class MainViewModel(IDatabaseService data,
 
         if (!await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
         {
-            await shell.DisplayAlert("Update Error", "Error updating bus ride", "Ok");
+            await shell.DisplayAlertAsync("Update Error", "Error updating bus ride", "Ok");
         }
     }
 
     private bool IsBusRideGreaterThanZero() =>
         BusRideViewModel.BusRideWeek.BusRides > 0;
 
-    private bool IsStartNewWeekVisible() =>
+    private bool GetSliderState() =>
         WorkingWeek < SeasonSettings.TotalSeasonWeeks;
 
     private void ResetMainBowlersForNewWeek()
@@ -175,24 +197,23 @@ public partial class MainViewModel(IDatabaseService data,
         BusRideViewModel.BusRideWeek.WeekNumber = WorkingWeek;
         if (await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
         {
-            await shell.DisplayToast($"Now beginning week {WorkingWeek}");
+            await shell.DisplayToastAsync($"Now beginning week {WorkingWeek}");
         }
         else
         {
-            await shell.DisplayAlert("Update Error", "Error updating bus ride", "Ok");
+            await shell.DisplayAlertAsync("Update Error", "Error updating bus ride", "Ok");
         }
     }
 
-    private async Task<bool> SaveZeroHangBowlerLineupAsync()
+    private async Task SaveZeroHangBowlerLineupAsync()
     {
         foreach (var bowler in MainBowlers.Where(bowler => bowler.BowlerWeek.Hangings == 0))
         {
             if (!await data.UpdateBowlerHangingsByWeek(bowler, WorkingWeek))
             {
-                return false;
+                return;
             }
         }
-        return true;
     }
 
     private void SetIsLowestHangsInMainBowlers()
@@ -207,7 +228,7 @@ public partial class MainViewModel(IDatabaseService data,
     private async Task ShowBusRideSplashAsync()
     {
         ShowBusRideImage = true;
-        using var player = audio.CreatePlayer(await FileSystem.OpenAppPackageFileAsync("beep-beep.mp3"));
+        using var player = audio.CreatePlayer(await FileSystem.OpenAppPackageFileAsync(Constants.BusRideSoundFileName));
         player.Play();
         await Task.Delay(2000);
         ShowBusRideImage = false;

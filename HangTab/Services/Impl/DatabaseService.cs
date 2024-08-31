@@ -1,6 +1,4 @@
 ﻿using HangTab.Data;
-using HangTab.Models;
-using HangTab.ViewModels;
 
 using System.Linq.Expressions;
 
@@ -19,23 +17,28 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         && await context.DropTableAsync<BusRide>()
         && await context.DropTableAsync<BusRideWeek>();
 
-    public async Task<IEnumerable<Bowler>> GetAllBowlers() =>
+    public async Task<IReadOnlyCollection<Bowler>> GetAllBowlers() =>
         await context.GetAllAsync<Bowler>();
 
-    public async Task<IEnumerable<Bowler>> GetFilteredBowlers(Expression<Func<Bowler, bool>> predicate) =>
+    public async Task<IReadOnlyCollection<Bowler>> GetFilteredBowlers(Expression<Func<Bowler, bool>> predicate) =>
         await context.GetFilteredAsync(predicate);
-
-    public async Task<IEnumerable<BowlerWeek>> GetAllBowlerWeeks() =>
-        await context.GetAllAsync<BowlerWeek>();
-
-    public async Task<IEnumerable<BowlerWeek>> GetBowlerWeeksByWeek(int week) =>
-        await context.GetFilteredAsync<BowlerWeek>(w => w.WeekNumber == week);
 
     public async Task<BusRideViewModel> GetBusRideViewModelByWeek(int week)
     {
-        var viewmodel = new BusRideViewModel();
         var busRides = await context.GetAllAsync<BusRide>();
-        if (busRides.Any())
+        if (busRides is null)
+        {
+            return new BusRideViewModel();
+        }
+
+        var busRideWeeks = await context.GetFilteredAsync<BusRideWeek>(b => b.WeekNumber == week);
+        if (busRideWeeks is null)
+        {
+            return new BusRideViewModel();
+        }
+
+        var viewmodel = new BusRideViewModel();
+        if (busRides.Count > 0)
         {
             viewmodel.BusRide = busRides.Last();
         }
@@ -46,12 +49,8 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
                 return new BusRideViewModel();
             }
         }
-        var weeks = await context.GetFilteredAsync<BusRideWeek>(b => b.WeekNumber == week);
-        if (weeks.Any())
-        {
-            viewmodel.BusRideWeek = weeks.Last();
-        }
-        else
+
+        if (busRideWeeks.Count == 0)
         {
             viewmodel.BusRideWeek.WeekNumber = week;
             if (!await context.AddItemAsync(viewmodel.BusRideWeek))
@@ -59,32 +58,47 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
                 return new BusRideViewModel();
             }
         }
+        else
+        {
+            viewmodel.BusRideWeek = busRideWeeks.Last();
+        }
+
         return viewmodel;
     }
 
     public async Task<IEnumerable<BowlerViewModel>> GetMainBowlersByWeek(int week)
     {
-        var mainBowlers = new List<BowlerViewModel>();
         var bowlers = await GetFilteredBowlers(b => !b.IsHidden);
-        var bowlerWeeks = await GetBowlerWeeksByWeek(week);
-        var lowestHangBowlers = bowlers.Where(b => !b.IsSub
-                                                   && b.TotalHangings == bowlers.Where(b => !b.IsSub).Min(b => b.TotalHangings));
+        if (bowlers is null)
+        {
+            return new List<BowlerViewModel>();
+        }
 
+        var bowlerWeeks = await context.GetFilteredAsync<BowlerWeek>(w => w.WeekNumber == week);
+        if (bowlerWeeks is null)
+        {
+            return new List<BowlerViewModel>();
+        }
+
+        var lowestHangBowlers = bowlers.Where(b => !b.IsSub
+                                                   && b.TotalHangings == bowlers.Where(bowler => !bowler.IsSub).Min(bowler => bowler.TotalHangings)).ToList();
+
+        var mainBowlers = new List<BowlerViewModel>();
         foreach (var bowler in bowlers)
         {
             var bowlerWeek = bowlerWeeks.FirstOrDefault(w => w.BowlerId == bowler.Id);
-            bowlerWeek ??= new BowlerWeek()
+            bowlerWeek ??= new BowlerWeek
             {
                 WeekNumber = week,
                 BowlerId = bowler.Id,
                 Hangings = 0
             };
 
-            var viewModel = new BowlerViewModel()
+            var viewModel = new BowlerViewModel
             {
                 Bowler = bowler,
                 BowlerWeek = bowlerWeek,
-                IsLowestHangs = lowestHangBowlers.Any(b => b.Id == bowler.Id)
+                IsLowestHangs = lowestHangBowlers.Exists(b => b.Id == bowler.Id)
             };
             mainBowlers.Add(viewModel);
         }
@@ -94,63 +108,79 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
     public async Task<IEnumerable<WeekViewModel>> GetAllWeeks()
     {
         var allBowlers = await GetAllBowlers();
-        var allBowlerWeeks = await GetAllBowlerWeeks();
+        if (allBowlers is null || allBowlers.Count <= 0)
+        {
+            return new List<WeekViewModel>();
+        }
+
+        var allBowlerWeeks = await context.GetAllAsync<BowlerWeek>();
+        if (allBowlerWeeks is null || allBowlerWeeks.Count <= 0)
+        {
+            return new List<WeekViewModel>();
+        }
 
         var season = new List<WeekViewModel>();
-        if (allBowlerWeeks.Any() && allBowlers.Any())
+        for (var week = await GetLatestWeek() - 1; week >= 1; week--)
         {
-            var lastWeek = await GetLatestWeek();
-            for (var week = lastWeek - 1; week >= 1; week--)
-            {
-                var bowlers = allBowlerWeeks.Where(w => w.WeekNumber == week)
-                                            .Join(allBowlers,
-                                                  w => w.BowlerId,
-                                                  b => b.Id,
-                                                  (w, b) => new Bowler()
-                                                  {
-                                                      IsSub = b.IsSub,
-                                                      ImageUrl = b.ImageUrl,
-                                                      FirstName = b.FirstName,
-                                                      LastName = b.LastName,
-                                                      TotalHangings = w.Hangings
-                                                  })
-                                            .ToList();
+            var bowlers = allBowlerWeeks.Where(w => w.WeekNumber == week)
+                .Join(allBowlers,
+                    w => w.BowlerId,
+                    b => b.Id,
+                    (w, b) => new Bowler
+                    {
+                        IsSub = b.IsSub,
+                        ImageUrl = b.ImageUrl,
+                        FirstName = b.FirstName,
+                        LastName = b.LastName,
+                        TotalHangings = w.Hangings
+                    })
+                .ToList();
 
-                var busRide = await GetBusRideViewModelByWeek(week);
-                var weekViewModel = new WeekViewModel()
-                {
-                    WeekNumber = week,
-                    Bowlers = bowlers,
-                    TotalBusRides = busRide.BusRideWeek.BusRides,
-                    TotalHangings = bowlers.Sum(w => w.TotalHangings)
-                };
-                season.Add(weekViewModel);
-            }
+            var busRide = await GetBusRideViewModelByWeek(week);
+            var weekViewModel = new WeekViewModel
+            {
+                WeekNumber = week,
+                Bowlers = bowlers,
+                TotalBusRides = busRide.BusRideWeek.BusRides,
+                TotalHangings = bowlers.Sum(w => w.TotalHangings)
+            };
+            season.Add(weekViewModel);
         }
+
         return season;
     }
 
     public async Task<int> GetLatestWeek()
     {
-        var allWeeks = await context.GetAllAsync<BusRideWeek>();
-        return allWeeks is not null && allWeeks.Any()
-            ? allWeeks.OrderBy(w => w.WeekNumber).Last().WeekNumber
+        var busRideWeeks = await context.GetAllAsync<BusRideWeek>();
+        if (busRideWeeks is null)
+        {
+            return 1;
+        }
+
+        return busRideWeeks.Count > 0
+            ? busRideWeeks.OrderBy(w => w.WeekNumber).Last().WeekNumber
             : 1;
     }
 
     public async Task<SeasonSettings> GetSeasonSettings()
     {
         var settings = await context.GetAllAsync<SeasonSettings>();
-        return settings is not null && settings.Any()
+        if (settings is null)
+        {
+            return new SeasonSettings();
+        }
+
+        return settings.Count > 0
             ? settings.First()
             : new SeasonSettings();
     }
 
     public async Task<bool> IsBowlerExists(Bowler bowler)
     {
-        var find = await context.GetFilteredAsync<Bowler>(b => b.FirstName == bowler.FirstName
+        var bowlers = await context.GetFilteredAsync<Bowler>(b => b.FirstName == bowler.FirstName
                                                                && b.LastName == bowler.LastName);
-        return find.Any();
+        return bowlers.Count > 0;
     }
 
     public async Task<bool> ResetHangings()
@@ -185,9 +215,10 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         {
             return false;
         }
+
         var weeks = await context.GetFilteredAsync<BowlerWeek>(w => w.WeekNumber == week
                                                                     && w.BowlerId == viewModel.Bowler.Id);
-        return weeks is not null && weeks.Any()
+        return weeks is not null && weeks.Count > 0
             ? await context.UpdateItemAsync(viewModel.BowlerWeek)
             : await context.AddItemAsync(viewModel.BowlerWeek);
     }
@@ -199,7 +230,7 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
             return false;
         }
         var busRides = await context.GetFilteredAsync<BusRideWeek>(b => b.WeekNumber == week);
-        return busRides is not null && busRides.Any()
+        return busRides is not null && busRides.Count > 0
             ? await context.UpdateItemAsync(viewModel.BusRideWeek)
             : await context.AddItemAsync(viewModel.BusRideWeek);
     }
@@ -207,7 +238,7 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
     public async Task<bool> UpdateSeasonSettings(SeasonSettings viewModel)
     {
         var settings = await context.GetAllAsync<SeasonSettings>();
-        return settings is not null && settings.Any()
+        return settings is not null && settings.Count > 0
             ? await context.UpdateItemAsync(viewModel)
             : await context.AddItemAsync(viewModel);
     }

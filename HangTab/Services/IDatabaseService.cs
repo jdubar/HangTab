@@ -1,7 +1,4 @@
-﻿using HangTab.Models;
-using HangTab.ViewModels;
-
-using System.Linq.Expressions;
+﻿using System.Linq.Expressions;
 
 namespace HangTab.Services;
 public interface IDatabaseService
@@ -9,11 +6,8 @@ public interface IDatabaseService
     Task<bool> DropAllTables();
     Task<bool> ResetHangings();
 
-    Task<IEnumerable<Bowler>> GetAllBowlers();
-    Task<IEnumerable<Bowler>> GetFilteredBowlers(Expression<Func<Bowler, bool>> predicate);
-
-    Task<IEnumerable<BowlerWeek>> GetAllBowlerWeeks();
-    Task<IEnumerable<BowlerWeek>> GetBowlerWeeksByWeek(int week);
+    Task<IReadOnlyCollection<Bowler>> GetAllBowlers();
+    Task<IReadOnlyCollection<Bowler>> GetFilteredBowlers(Expression<Func<Bowler, bool>> predicate);
 
     Task<IEnumerable<BowlerViewModel>> GetMainBowlersByWeek(int week);
     Task<IEnumerable<WeekViewModel>> GetAllWeeks();

@@ -33,7 +33,7 @@ public class Bowler : ObservableObject
     public (bool IsValid, string ErrorMessage) ValidateFields()
     {
         return string.IsNullOrWhiteSpace(FirstName)
-            ? ((bool IsValid, string ErrorMessage))(false, "First name is required.")
-            : ((bool IsValid, string ErrorMessage))(true, string.Empty);
+            ? (false, "First name is required.")
+            : (true, string.Empty);
     }
 }

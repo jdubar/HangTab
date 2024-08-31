@@ -2,7 +2,7 @@ using HangTab.Views.ViewModels;
 
 namespace HangTab.Views;
 
-public partial class SeasonPage : ContentPage
+public partial class SeasonPage
 {
     private readonly SeasonViewModel _viewModel;
 

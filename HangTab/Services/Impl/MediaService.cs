@@ -1,36 +1,17 @@
-﻿using HangTab.Models;
-
-using Microsoft.Maui.Graphics.Platform;
-
-namespace HangTab.Services.Impl;
+﻿namespace HangTab.Services.Impl;
 public class MediaService : IMediaService
 {
-    public async Task<PhotoResult> PickPhotoAsync()
+    public async Task<Result<string>> PickPhotoAsync()
     {
-        var result = new PhotoResult()
+        var result = await MediaPickerWrapper.PickPhotoAsync();
+        if (result.IsFailed)
         {
-            IsSuccess = false
-        };
-        try
-        {
-            var photo = await MediaPicker.Default.PickPhotoAsync();
-            var localFilePath = Path.Combine(FileSystem.CacheDirectory, photo.FileName);
-            using var sourceStream = await photo.OpenReadAsync();
-            var image = PlatformImage.FromStream(sourceStream);
-            if (image is not null)
-            {
-                var newImage = image.Downsize(150, true);
-                using var localFileStream = File.OpenWrite(localFilePath);
-                newImage.Save(localFileStream);
-                await sourceStream.CopyToAsync(localFileStream);
-            }
-            result.IsSuccess = true;
-            result.FilePath = localFilePath;
+            return result.ToResult();
         }
-        catch (Exception ex)
-        {
-            result.ErrorMsg = ex.Message;
-        }
-        return result;
+
+        var filePathResult = await MediaPickerWrapper.SavePhotoAsync(result.Value, FileSystem.CacheDirectory);
+        return filePathResult.IsFailed
+            ? filePathResult.ToResult()
+            : Result.Ok(filePathResult.Value);
     }
 }

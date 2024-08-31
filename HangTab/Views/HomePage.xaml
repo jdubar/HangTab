@@ -2,12 +2,12 @@
 <ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:components="clr-namespace:HangTab.Views.Components"
-             xmlns:icons="clr-namespace:HangTab.Helpers"
              xmlns:models="clr-namespace:HangTab.ViewModels"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
-             x:Class="HangTab.Views.MainPage"
-             x:DataType="vm:MainViewModel">
+             x:Class="HangTab.Views.HomePage"
+             x:DataType="vm:HomeViewModel"
+             x:Name="PageSelf">
     <Shell.TitleView>
         <Grid>
             <Label Text="{Binding TitleWeek}"
@@ -46,8 +46,7 @@
             </VerticalStackLayout>
 
             <Grid>
-                <Image x:Name="BusSplash"
-                       Source="bus_splash.png"
+                <Image Source="bus_splash.png"
                        HeightRequest="300"
                        ZIndex="2"
                        IsVisible="{Binding ShowBusRideImage}"
@@ -66,24 +65,18 @@
                                 <SwipeView.LeftItems>
                                     <SwipeItems>
                                         <SwipeItem BackgroundColor="{DynamicResource Secondary}"
-                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=UndoBowlerHangCommand}"
+                                                   Command="{Binding Source={x:Reference PageSelf}, Path=BindingContext.UndoBowlerHangCommand}"
                                                    CommandParameter="{Binding .}"
                                                    Text="Undo Hang"
+                                                   IconImageSource="undo.png"
                                                    IsVisible="{Binding IsEnableUndo}">
-                                            <SwipeItem.IconImageSource>
-                                                <FontImageSource FontFamily="GoogleFont"
-                                                                 Glyph="{Static icons:GoogleFont.Undo}"/>
-                                            </SwipeItem.IconImageSource>
                                         </SwipeItem>
                                         <SwipeItem BackgroundColor="{DynamicResource Tertiary}"
-                                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=ShowSwitchBowlerViewCommand}"
+                                                   Command="{Binding Source={x:Reference PageSelf}, Path=BindingContext.ShowSwitchBowlerViewCommand}"
                                                    CommandParameter="{Binding Bowler}"
+                                                   IconImageSource="switch_account.png"
                                                    Text="Switch"
                                                    IsVisible="{Binding IsEnableSwitch}">
-                                            <SwipeItem.IconImageSource>
-                                                <FontImageSource FontFamily="GoogleFont"
-                                                                 Glyph="{Static icons:GoogleFont.Switch_account}"/>
-                                            </SwipeItem.IconImageSource>
                                         </SwipeItem>
                                     </SwipeItems>
                                 </SwipeView.LeftItems>
@@ -92,7 +85,7 @@
                                       HeightRequest="80">
                                     <Border WidthRequest="393"
                                             HeightRequest="81"
-                                            StrokeThickness="4"
+                                            StrokeThickness="2"
                                             BackgroundColor="{AppThemeBinding Dark={StaticResource Black},
                                                                               Light={StaticResource White}}"
                                             Stroke="{Binding Bowler.IsSub, Converter={StaticResource BoolToObjectConverter}}">
@@ -108,12 +101,9 @@
                                                 <Label Text="{Binding Bowler.TotalHangings, StringFormat='Total: {0}'}"/>
                                             </VerticalStackLayout>
                                             <ImageButton HorizontalOptions="End"
-                                                         Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=HangBowlerCommand}"
+                                                         Source="add_circle.png"
+                                                         Command="{Binding Source={x:Reference PageSelf}, Path=BindingContext.HangBowlerCommand}"
                                                          CommandParameter="{Binding .}">
-                                                <ImageButton.Source>
-                                                    <FontImageSource FontFamily="GoogleFont"
-                                                                     Glyph="{Static icons:GoogleFont.Add_circle}" />
-                                                </ImageButton.Source>
                                                 <ImageButton.Behaviors>
                                                     <toolkit:IconTintColorBehavior TintColor="{StaticResource Primary}" />
                                                 </ImageButton.Behaviors>
@@ -147,13 +137,10 @@
                 <SwipeView.LeftItems>
                     <SwipeItems>
                         <SwipeItem BackgroundColor="{DynamicResource Secondary}"
-                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=UndoBusRideCommand}"
+                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=UndoBusRideCommand}"
+                                   IconImageSource="undo.png"
                                    IsVisible="{Binding IsUndoBusRideVisible}"
                                    Text=" Undo Bus Ride">
-                            <SwipeItem.IconImageSource>
-                                <FontImageSource FontFamily="GoogleFont"
-                                                 Glyph="{Static icons:GoogleFont.Undo}"/>
-                            </SwipeItem.IconImageSource>
                         </SwipeItem>
                     </SwipeItems>
                 </SwipeView.LeftItems>
@@ -163,7 +150,7 @@
                     <VerticalStackLayout>
                         <Border WidthRequest="393"
                                 HeightRequest="111"
-                                StrokeThickness="4"
+                                StrokeThickness="2"
                                 BackgroundColor="{AppThemeBinding Dark={StaticResource Black},
                                                                   Light={StaticResource White}}"
                                 Stroke="{AppThemeBinding Dark={StaticResource Gray500},
@@ -183,7 +170,7 @@
                                              HeightRequest="100"
                                              WidthRequest="100"
                                              VerticalOptions="Start"
-                                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=BusRideCommand}"/>
+                                             Command="{Binding Source={RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=BusRideCommand}"/>
                             </StackLayout>
                         </Border>
                     </VerticalStackLayout>
@@ -198,32 +185,32 @@
                     <SwipeItems Mode="Execute">
                         <SwipeItem Text="Starting new week..."
 					               BackgroundColor="{StaticResource Success}"
-                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:MainViewModel}}, Path=StartNewWeekCommand}"
-                                   IsVisible="{Binding IsSliderVisible}"/>
+                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=StartNewWeekCommand}"
+                                   IsVisible="{Binding IsStartNewWeekVisible}"/>
+                        <SwipeItem Text="Generating season summary..."
+					               BackgroundColor="{StaticResource Success}"
+                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=ShowSeasonSummaryViewCommand}"
+                                   IsVisible="{Binding IsShowSummaryVisible}"/>
                     </SwipeItems>
                 </SwipeView.LeftItems>
                 <Grid HorizontalOptions="Center"
                       VerticalOptions="End"
-                      HeightRequest="70"
-                      IsVisible="{Binding IsSliderVisible}">
-                    <Border HeightRequest="75"
+                      HeightRequest="70">
+                    <Border HeightRequest="73"
                             WidthRequest="393"
-                            StrokeThickness="4"
+                            StrokeThickness="2"
                             BackgroundColor="{AppThemeBinding Dark={StaticResource Black},
-                                                              Light={StaticResource White}}">
+                                                                                   Light={StaticResource White}}">
                         <StackLayout Orientation="Horizontal">
                             <ImageButton Margin="20"
-                                         HeightRequest="58">
-                                <ImageButton.Source>
-                                    <FontImageSource FontFamily="GoogleFont"
-                                                     Glyph="{Static icons:GoogleFont.Arrow_circle_right}" />
-                                </ImageButton.Source>
+                                         HeightRequest="58"
+                                         Source="{Binding SwipeIcon}">
                                 <ImageButton.Behaviors>
                                     <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Dark={StaticResource White},
-                                                                                               Light={StaticResource Gray300}}" />
+                                                                                                                    Light={StaticResource Gray300}}" />
                                 </ImageButton.Behaviors>
                             </ImageButton>
-                            <Label Text="Swipe right to start a new week"
+                            <Label Text="{Binding SwipeText}"
 			                       HorizontalOptions="Center"
 			                       VerticalOptions="Center" />
                         </StackLayout>

@@ -1,7 +1,5 @@
-﻿using HangTab.Models;
-
-namespace HangTab.Services;
+﻿namespace HangTab.Services;
 public interface IMediaService
 {
-    Task<PhotoResult> PickPhotoAsync();
+    Task<Result<string>> PickPhotoAsync();
 }

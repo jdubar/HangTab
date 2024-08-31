@@ -2,7 +2,7 @@ using HangTab.Views.ViewModels;
 
 namespace HangTab.Views;
 
-public partial class SwitchBowlerPage : ContentPage
+public partial class SwitchBowlerPage
 {
     private readonly SwitchBowlerViewModel _viewModel;
 

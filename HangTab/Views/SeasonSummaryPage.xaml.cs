@@ -2,12 +2,12 @@
 
 namespace HangTab.Views;
 
-public partial class MainPage : ContentPage
+public partial class SeasonSummaryPage
 {
-    private readonly MainViewModel _viewModel;
+    private readonly SeasonSummaryViewModel _viewModel;
 
-    public MainPage(MainViewModel viewModel)
-    {
+    public SeasonSummaryPage(SeasonSummaryViewModel viewModel)
+	{
         InitializeComponent();
         BindingContext = viewModel;
         _viewModel = viewModel;
