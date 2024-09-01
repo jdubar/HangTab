@@ -4,7 +4,14 @@ VisualStudioVersion = 17.7.34202.233
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HangTab", "HangTab\HangTab.csproj", "{1A50D9BA-8DBC-4E04-AABE-9FEE67BA1378}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "HangTab.Tests", "HangTab.Tests\HangTab.Tests.csproj", "{85530F3C-EFF0-4896-84A2-DED04B5AFC45}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "HangTab.Tests", "HangTab.Tests\HangTab.Tests.csproj", "{85530F3C-EFF0-4896-84A2-DED04B5AFC45}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{322A8A6A-AE81-4073-8830-6BB8ACA3BBF4}"
+	ProjectSection(SolutionItems) = preProject
+		.gitignore = .gitignore
+		.github\workflows\build.yml = .github\workflows\build.yml
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
