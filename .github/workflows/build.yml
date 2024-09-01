@@ -14,7 +14,7 @@ on:
 
 jobs:
   sonarcloud:
-    name: SonarCloud
+    name: Codecov
     runs-on: windows-latest
     steps:
       - uses: actions/checkout@v2
