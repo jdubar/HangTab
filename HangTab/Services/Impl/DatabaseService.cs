@@ -153,12 +153,7 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
     public async Task<int> GetLatestWeek()
     {
         var busRideWeeks = await context.GetAllAsync<BusRideWeek>();
-        if (busRideWeeks is null)
-        {
-            return 1;
-        }
-
-        return busRideWeeks.Count > 0
+        return busRideWeeks is not null && busRideWeeks.Count > 0
             ? busRideWeeks.OrderBy(w => w.WeekNumber).Last().WeekNumber
             : 1;
     }
@@ -176,12 +171,11 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
             : new SeasonSettings();
     }
 
-    public Task<bool> IsBowlerExists(Bowler bowler)
+    public async Task<bool> IsBowlerExists(Bowler bowler)
     {
-        return string.IsNullOrEmpty(bowler.FirstName)
-            ? Task.FromResult(false)
-            : Task.FromResult(context.GetFilteredAsync<Bowler>(b => b.FirstName == bowler.FirstName
-                                                                        && b.LastName == bowler.LastName).Result.Count > 0);
+        return !string.IsNullOrEmpty(bowler.FirstName)
+            && (await context.GetFilteredAsync<Bowler>(b => b.FirstName == bowler.FirstName 
+                                                            && b.LastName == bowler.LastName)).Count > 0;
     }
 
     public async Task<bool> ResetHangings()
