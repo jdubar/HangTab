@@ -176,11 +176,12 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
             : new SeasonSettings();
     }
 
-    public async Task<bool> IsBowlerExists(Bowler bowler)
+    public Task<bool> IsBowlerExists(Bowler bowler)
     {
-        var bowlers = await context.GetFilteredAsync<Bowler>(b => b.FirstName == bowler.FirstName
-                                                               && b.LastName == bowler.LastName);
-        return bowlers.Count > 0;
+        return string.IsNullOrEmpty(bowler.FirstName)
+            ? Task.FromResult(false)
+            : Task.FromResult(context.GetFilteredAsync<Bowler>(b => b.FirstName == bowler.FirstName
+                                                                        && b.LastName == bowler.LastName).Result.Count > 0);
     }
 
     public async Task<bool> ResetHangings()
