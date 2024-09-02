@@ -26,13 +26,8 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
     public async Task<BusRideViewModel> GetBusRideViewModelByWeek(int week)
     {
         var busRides = await context.GetAllAsync<BusRide>();
-        if (busRides is null)
-        {
-            return new BusRideViewModel();
-        }
-
         var busRideWeeks = await context.GetFilteredAsync<BusRideWeek>(b => b.WeekNumber == week);
-        if (busRideWeeks is null)
+        if (busRides is null || busRideWeeks is null)
         {
             return new BusRideViewModel();
         }
@@ -50,17 +45,17 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
             }
         }
 
-        if (busRideWeeks.Count == 0)
+        if (busRideWeeks.Count > 0)
+        {
+            viewmodel.BusRideWeek = busRideWeeks.Last();
+        }
+        else
         {
             viewmodel.BusRideWeek.WeekNumber = week;
             if (!await context.AddItemAsync(viewmodel.BusRideWeek))
             {
                 return new BusRideViewModel();
             }
-        }
-        else
-        {
-            viewmodel.BusRideWeek = busRideWeeks.Last();
         }
 
         return viewmodel;
