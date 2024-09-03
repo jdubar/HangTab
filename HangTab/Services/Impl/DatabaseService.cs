@@ -1,4 +1,5 @@
 ﻿using HangTab.Data;
+using HangTab.Extensions;
 
 using System.Linq.Expressions;
 
@@ -64,21 +65,14 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
     public async Task<IEnumerable<BowlerViewModel>> GetMainBowlersByWeek(int week)
     {
         var bowlers = await GetFilteredBowlers(b => !b.IsHidden);
-        if (bowlers is null)
-        {
-            return new List<BowlerViewModel>();
-        }
-
         var bowlerWeeks = await context.GetFilteredAsync<BowlerWeek>(w => w.WeekNumber == week);
-        if (bowlerWeeks is null)
+        if (bowlers is null || bowlerWeeks is null)
         {
             return new List<BowlerViewModel>();
         }
 
-        var lowestHangBowlers = bowlers.Where(b => !b.IsSub
-                                                   && b.TotalHangings == bowlers.Where(bowler => !bowler.IsSub).Min(bowler => bowler.TotalHangings)).ToList();
-
-        var mainBowlers = new List<BowlerViewModel>();
+        var mains = new List<BowlerViewModel>();
+        var lowestHangBowlers = bowlers.GetLowestHangBowlers();
         foreach (var bowler in bowlers)
         {
             var bowlerWeek = bowlerWeeks.FirstOrDefault(w => w.BowlerId == bowler.Id);
@@ -95,9 +89,9 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
                 BowlerWeek = bowlerWeek,
                 IsLowestHangs = lowestHangBowlers.Exists(b => b.Id == bowler.Id)
             };
-            mainBowlers.Add(viewModel);
+            mains.Add(viewModel);
         }
-        return mainBowlers;
+        return mains;
     }
 
     public async Task<IEnumerable<WeekViewModel>> GetAllWeeks()

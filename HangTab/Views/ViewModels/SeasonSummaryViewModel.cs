@@ -1,5 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.Input;
 
+using HangTab.Extensions;
+
 using MvvmHelpers;
 
 namespace HangTab.Views.ViewModels;
@@ -19,12 +21,7 @@ public partial class SeasonSummaryViewModel(IDatabaseService data) : BaseViewMod
                 return;
             }
 
-            var lowestHangBowlers = bowlers.Where(b => !b.IsSub
-                                                       && b.TotalHangings == bowlers.Where(bowler => !bowler.IsSub
-                                                                                                && !bowler.IsHidden)
-                                                                                    .Min(bowler => bowler.TotalHangings))
-                                           .Take(3)
-                                           .ToList();
+            var lowestHangBowlers = bowlers.GetLowestHangBowlers().Take(3).ToList();
 
             var otherBowlers = bowlers.Except(lowestHangBowlers).OrderBy(b => b.IsSub).ThenBy(b => b.TotalHangings);
 
