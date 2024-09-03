@@ -102,6 +102,12 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
 
     public async Task<IEnumerable<WeekViewModel>> GetAllWeeks()
     {
+        var latestWeek = await GetLatestWeek();
+        if (latestWeek <= 1)
+        {
+            return new List<WeekViewModel>();
+        }
+
         var allBowlers = await GetAllBowlers();
         if (allBowlers is null || allBowlers.Count <= 0)
         {
@@ -115,7 +121,7 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         }
 
         var season = new List<WeekViewModel>();
-        for (var week = await GetLatestWeek() - 1; week >= 1; week--)
+        for (var week = latestWeek - 1; week >= 1; week--)
         {
             var bowlers = allBowlerWeeks.Where(w => w.WeekNumber == week)
                 .Join(allBowlers,
@@ -123,6 +129,7 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
                     b => b.Id,
                     (w, b) => new Bowler
                     {
+                        Id = b.Id,
                         IsSub = b.IsSub,
                         ImageUrl = b.ImageUrl,
                         FirstName = b.FirstName,
