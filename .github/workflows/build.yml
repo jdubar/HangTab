@@ -17,7 +17,7 @@ jobs:
     name: Codecov
     runs-on: windows-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4.1.7
         with:
           # Shallow clones should be disabled for a better relevancy of analysis
           fetch-depth: 0
