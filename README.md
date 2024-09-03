@@ -1,3 +1,5 @@
+[![Build](https://github.com/jdubar/HangTab/actions/workflows/build.yml/badge.svg?branch=main)](https://github.com/jdubar/HangTab/actions/workflows/build.yml)
+[![CodeQL](https://github.com/jdubar/HangTab/actions/workflows/github-code-scanning/codeql/badge.svg)](https://github.com/jdubar/HangTab/actions/workflows/github-code-scanning/codeql)
 [![codecov](https://codecov.io/github/jdubar/HangTab/graph/badge.svg?token=EM7WH3C3B4)](https://codecov.io/github/jdubar/HangTab)
 
 # HangTab
