@@ -7,9 +7,8 @@
              x:DataType="vm:SeasonViewModel"
              x:Name="PageSelf"
              Title="Season">
-    <Grid>
-        <VerticalStackLayout Grid.RowSpan="2"
-                             VerticalOptions="Center"
+    <VerticalStackLayout>
+        <VerticalStackLayout VerticalOptions="Center"
                              HorizontalOptions="Center"
                              IsVisible="{Binding IsBusy}">
             <ActivityIndicator IsRunning="True"
@@ -19,6 +18,7 @@
                    VerticalOptions="Center"
                    HorizontalOptions="Center"/>
         </VerticalStackLayout>
+
         <CollectionView ItemsSource="{Binding AllWeeks}"
                         Margin="0,5,0,0">
             <CollectionView.ItemsLayout>
@@ -27,18 +27,13 @@
             </CollectionView.ItemsLayout>
             <CollectionView.ItemTemplate>
                 <DataTemplate x:DataType="models:WeekViewModel">
-                    <Grid HorizontalOptions="Center"
-                          VerticalOptions="End"
-                          HeightRequest="80">
-                        <Grid.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding Source={x:Reference PageSelf}, Path=BindingContext.ShowWeekDetailsCommand}"
-                                                  CommandParameter="{Binding .}"/>
-                        </Grid.GestureRecognizers>
-                        <Border WidthRequest="393"
-                                HeightRequest="81"
-                                StrokeThickness="4"
-                                BackgroundColor="{AppThemeBinding Dark={StaticResource Black},
-                                                                  Light={StaticResource White}}">
+                    <VerticalStackLayout Spacing="10"
+                                         VerticalOptions="Center">
+                        <HorizontalStackLayout HeightRequest="80">
+                            <HorizontalStackLayout.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={x:Reference PageSelf}, Path=BindingContext.ShowWeekDetailsCommand}"
+                                                      CommandParameter="{Binding .}"/>
+                            </HorizontalStackLayout.GestureRecognizers>
                             <StackLayout Orientation="Horizontal">
                                 <Label Text="{Binding WeekNumber, StringFormat='Week {0}'}"
                                        FontAttributes="Bold"
@@ -52,22 +47,26 @@
                                     <Label Text="{Binding TotalBusRides, StringFormat='Bus Rides: {0}'}"/>
                                 </VerticalStackLayout>
                             </StackLayout>
-                        </Border>
-                    </Grid>
+                        </HorizontalStackLayout>
+                        <BoxView Color="Gray"  
+                                 Margin="0,-10,0,0"                   
+                                 HeightRequest="1"  
+                                 HorizontalOptions="Fill" />
+                    </VerticalStackLayout>
                 </DataTemplate>
             </CollectionView.ItemTemplate>
             <CollectionView.EmptyView>
                 <ContentView>
                     <VerticalStackLayout HorizontalOptions="Center"
-                                                 VerticalOptions="Center"
-                                                 WidthRequest="380">
+                                         VerticalOptions="Center"
+                                         WidthRequest="380">
                         <Label Text="No Prior Weeks Found"
-                                       FontSize="18"
-                                       FontAttributes="Bold"
-                                       HorizontalTextAlignment="Center"/>
+                               FontSize="18"
+                               FontAttributes="Bold"
+                               HorizontalTextAlignment="Center"/>
                     </VerticalStackLayout>
                 </ContentView>
             </CollectionView.EmptyView>
         </CollectionView>
-    </Grid>
+    </VerticalStackLayout>
 </ContentPage>

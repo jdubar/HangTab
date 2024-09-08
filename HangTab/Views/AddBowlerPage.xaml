@@ -37,7 +37,7 @@
                     <Switch IsToggled="{Binding Bowler.IsSub, Mode=TwoWay}"
                             OnColor="{DynamicResource Success}"
                             ThumbColor="{StaticResource Primary}"
-                            VerticalOptions="Center"/>
+                            VerticalOptions="Center" />
                     <Label Text="Substitute Bowler"
                            VerticalOptions="Center"
                            FontSize="Medium"/>
@@ -46,10 +46,10 @@
                     <Switch IsToggled="{Binding Bowler.IsHidden, Mode=TwoWay}"
                             OnColor="{DynamicResource Error}"
                             ThumbColor="{StaticResource Primary}"
-                        VerticalOptions="Center"/>
+                            VerticalOptions="Center"/>
                     <Label Text="Inactive Bowler"
                            VerticalOptions="Center"
-                           FontSize="Medium"/>
+                           FontSize="Medium" />
                 </HorizontalStackLayout>
                 <StackLayout>
                     <Button Text="Save Changes"

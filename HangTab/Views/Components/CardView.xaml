@@ -2,22 +2,12 @@
 <ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:components="clr-namespace:HangTab.Views.Components"
-             xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              x:Name="This"
              x:Class="HangTab.Views.Components.CardView">
-    <ContentView.Resources>
-        <ResourceDictionary>
-            <toolkit:BoolToObjectConverter x:Key="BoolToObjectConverter"
-                                           TrueObject="{StaticResource Success}"
-                                           FalseObject="{StaticResource Gray300}"/>
-        </ResourceDictionary>
-    </ContentView.Resources>
-    <Border BindingContext="{x:Reference This}"
-            WidthRequest="393"
-            HeightRequest="81"
-            StrokeThickness="2"
-            Stroke="{Binding IsSub, Converter={StaticResource BoolToObjectConverter}}">
-        <StackLayout Orientation="Horizontal">
+    <VerticalStackLayout BindingContext="{x:Reference This}"
+                         Spacing="10"
+                         VerticalOptions="Center">
+        <HorizontalStackLayout HeightRequest="81">
             <components:BowlerImage IsSub="{Binding IsSub}"
                                     ImageUrl="{Binding ImageUrl}"/>
             <VerticalStackLayout VerticalOptions="Center"
@@ -32,6 +22,10 @@
                    VerticalOptions="Center"
                    IsVisible="{Binding IsHidden}"
                    Margin="-15,0,0,0"/>
-        </StackLayout>
-    </Border>
+        </HorizontalStackLayout>
+        <BoxView Color="Gray"  
+                 Margin="0,-10,0,0"                   
+                 HeightRequest="1"  
+                 HorizontalOptions="Fill" />
+    </VerticalStackLayout>
 </ContentView>

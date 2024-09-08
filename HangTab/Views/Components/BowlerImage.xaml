@@ -10,14 +10,15 @@
                ZIndex="2"
                WidthRequest="50"
                Margin="0,-48,0,0"/>
-        <Border IsVisible="{Binding IsSub}"
-                StrokeShape="RoundRectangle 40,40,40,40"
-                ZIndex="2"
-                Margin="0,40,0,0"
+        <Border BackgroundColor="{StaticResource Success}"
                 HeightRequest="20"
+                IsVisible="{Binding IsSub}"
+                Margin="0,40,0,0"
+                Stroke="White"
+                StrokeShape="RoundRectangle 40,40,40,40"
+                StrokeThickness="1"
                 WidthRequest="47"
-                BackgroundColor="{AppThemeBinding Dark={StaticResource White},
-                                                  Light={StaticResource Gray300}}">
+                ZIndex="2">
             <Label Text="SUB"
                    FontSize="12"
                    FontAttributes="Bold"

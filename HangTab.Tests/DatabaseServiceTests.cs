@@ -26,7 +26,7 @@ public class DatabaseServiceTests
         A.CallTo(() => ContextFake.AddItemAsync(A<Bowler>.Ignored)).Returns(true);
 
         // When
-        var actual = await DatabaseService.AddBowler(SimpleData.Bowler);
+        var actual = await DatabaseService.AddBowler(SimpleData.OneBowler);
 
         // Then
         actual.Should().BeTrue();
@@ -39,7 +39,7 @@ public class DatabaseServiceTests
         A.CallTo(() => ContextFake.DeleteItemByIdAsync<Bowler>(A<int>.Ignored)).Returns(true);
 
         // When
-        var actual = await DatabaseService.DeleteBowler(SimpleData.Bowler.Id);
+        var actual = await DatabaseService.DeleteBowler(SimpleData.OneBowler.Id);
 
         // Then
         actual.Should().BeTrue();
@@ -65,12 +65,11 @@ public class DatabaseServiceTests
     public async Task ItShouldCheckIfBowlerExists()
     {
         // Given
-        var bowlers = new List<Bowler> { SimpleData.Bowler };
-
+        var bowlers = new List<Bowler> { SimpleData.OneBowler };
         A.CallTo(() => ContextFake.GetFilteredAsync(A<Expression<Func<Bowler, bool>>>.Ignored)).Returns(bowlers);
 
         // When
-        var actual = await DatabaseService.IsBowlerExists(SimpleData.Bowler);
+        var actual = await DatabaseService.IsBowlerExists(SimpleData.OneBowler);
 
         // Then
         actual.Should().BeTrue();
@@ -80,22 +79,13 @@ public class DatabaseServiceTests
     public async Task ItShouldReturnAllBowlersFromTheDatabase()
     {
         // Given
-        var bowlers = new List<Bowler>()
-        {
-            new() { Id = 1, FirstName = "Joe", LastName = "Sample", ImageUrl = "abc.png" },
-            new() { Id = 2, FirstName = "Jason", LastName = "Smith", ImageUrl = "123.png" },
-            new() { Id = 3, FirstName = "Kenny", LastName = "Smith", ImageUrl = "daddy.png" },
-            new() { Id = 4, FirstName = "Nick", LastName = "Bertus", ImageUrl = "uh-oh.png", IsSub = true },
-            new() { Id = 5, FirstName = "Mike Jr.", LastName = "Fizzle", ImageUrl = "happy.png", IsSub = true, IsHidden = true},
-        };
-
-        A.CallTo(() => ContextFake.GetAllAsync<Bowler>()).Returns(bowlers);
+        A.CallTo(() => ContextFake.GetAllAsync<Bowler>()).Returns(SimpleData.ListOfFiveBowlers);
 
         // When
         var actual = await DatabaseService.GetAllBowlers();
 
         // Then
-        actual.Should().BeEquivalentTo(bowlers);
+        actual.Should().BeEquivalentTo(SimpleData.ListOfFiveBowlers);
     }
 
     [Fact]
@@ -104,7 +94,7 @@ public class DatabaseServiceTests
         // Given
         const int weekNumber = 1;
         var rides = new List<BusRide> { SimpleData.BusRide };
-        var bowlers = new List<Bowler> { SimpleData.Bowler };
+        var bowlers = new List<Bowler> { SimpleData.OneBowler };
         var bowlerWeeks = new List<BowlerWeek> { new() { Id = 1, BowlerId = 1, Hangings = 1, WeekNumber = 1 }, SimpleData.BowlerWeek };
         var busRideWeeks = new List<BusRideWeek> { new() { Id = 1, BusRides = 1, WeekNumber = 1 }, SimpleData.BusRideWeek };
         var expected = new List<WeekViewModel>
