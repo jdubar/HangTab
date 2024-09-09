@@ -32,10 +32,9 @@ public partial class AddBowlerViewModel(IDatabaseService data,
     [RelayCommand]
     private async Task SaveBowlerAsync()
     {
-        var (isValid, errorMessage) = Bowler.ValidateFields();
-        if (!isValid)
+        if (string.IsNullOrEmpty(Bowler.FirstName))
         {
-            await shell.DisplayAlertAsync("Validation Error", errorMessage, "Ok");
+            await shell.DisplayAlertAsync("Validation Error", "First name is required.", "Ok");
             return;
         }
 
@@ -59,6 +58,7 @@ public partial class AddBowlerViewModel(IDatabaseService data,
                 await shell.DisplayAlertAsync("Update Error", "Unable to save bowler", "Ok");
                 return;
             }
+
             await shell.DisplayToastAsync("Bowler saved");
             await shell.ReturnToPageAsync();
         }, busyText);
