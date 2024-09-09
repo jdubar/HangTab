@@ -13,6 +13,7 @@ public interface IDatabaseService
     Task<IEnumerable<WeekViewModel>> GetAllWeeks();
     Task<BusRideViewModel> GetBusRideViewModelByWeek(int week);
     Task<int> GetLatestWeek();
+    Task<int> GetBusRideTotal();
 
     Task<SeasonSettings> GetSeasonSettings();
     Task<bool> UpdateSeasonSettings(SeasonSettings viewModel);

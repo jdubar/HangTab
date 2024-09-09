@@ -3,16 +3,13 @@ using CommunityToolkit.Mvvm.Input;
 
 using MvvmHelpers;
 
-using Plugin.Maui.Audio;
-
 namespace HangTab.Views.ViewModels;
 public partial class HomeViewModel(IDatabaseService data,
                                    IShellService shell,
-                                   IAudioManager audio) : BaseViewModel
+                                   IAudioService audio) : BaseViewModel
 {
     // TODO: Add cumulative hang cost per bowler (maybe)
     // TODO: Notify user better somehow on new week
-    // TODO: Add bus ride total to season summary
     // TODO: Add data reset button to season summary
     // TODO: Unit tests?
     // TODO: On bowlers view, add undo hanging option
@@ -226,9 +223,7 @@ public partial class HomeViewModel(IDatabaseService data,
     private async Task ShowBusRideSplashAsync()
     {
         ShowBusRideImage = true;
-        using var player = audio.CreatePlayer(await FileSystem.OpenAppPackageFileAsync(Constants.BusRideSoundFileName));
-        player.Play();
-        await Task.Delay(2000);
+        await audio.PlayBusSound();
         ShowBusRideImage = false;
     }
 }

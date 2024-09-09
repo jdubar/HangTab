@@ -136,6 +136,12 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         return season;
     }
 
+    public async Task<int> GetBusRideTotal()
+    {
+        var busride = await context.GetItemByIdAsync<BusRide>(1);
+        return busride.Total;
+    }
+
     public async Task<int> GetLatestWeek()
     {
         var busRideWeeks = await context.GetAllAsync<BusRideWeek>();

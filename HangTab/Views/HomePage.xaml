@@ -91,6 +91,8 @@
                                                 <Label Text="{Binding Bowler.TotalHangings, StringFormat='Total: {0}'}"/>
                                             </VerticalStackLayout>
                                             <ImageButton HorizontalOptions="End"
+                                                         HeightRequest="60"
+                                                         WidthRequest="60"
                                                          Source="add_circle.png"
                                                          Command="{Binding Source={x:Reference PageSelf}, Path=BindingContext.HangBowlerCommand}"
                                                          CommandParameter="{Binding .}">
@@ -158,8 +160,10 @@
                         </VerticalStackLayout>
                         <ImageButton Source="school_bus.png"
                                      HeightRequest="100"
+                                     HorizontalOptions="End"
                                      WidthRequest="100"
-                                     VerticalOptions="Start"
+                                     VerticalOptions="Fill"
+                                     Margin="0,-5,10,10"
                                      Command="{Binding Source={RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=BusRideCommand}"/>
                     </HorizontalStackLayout>
                 </VerticalStackLayout>
