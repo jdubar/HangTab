@@ -12,8 +12,6 @@ public partial class HomeViewModel(IDatabaseService data,
 {
     // TODO: Add cumulative hang cost per bowler (maybe)
     // TODO: Notify user better somehow on new week
-    // TODO: Set const for border thickness/UI const class
-    // TODO: Add subs table to season summary
     // TODO: Add bus ride total to season summary
     // TODO: Add data reset button to season summary
     // TODO: Unit tests?
@@ -113,8 +111,8 @@ public partial class HomeViewModel(IDatabaseService data,
     }
 
     [RelayCommand]
-    private async Task ShowSwitchBowlerViewAsync(Bowler bowler) =>
-        await shell.GoToPageWithDataAsync(nameof(SwitchBowlerPage), bowler);
+    private async Task ShowSwitchBowlerViewAsync(Bowler bowler)
+        => await shell.GoToPageWithDataAsync(nameof(SwitchBowlerPage), bowler);
 
     [RelayCommand]
     private async Task StartNewWeekAsync()
@@ -174,11 +172,11 @@ public partial class HomeViewModel(IDatabaseService data,
         }
     }
 
-    private bool IsBusRideGreaterThanZero() =>
-        BusRideViewModel.BusRideWeek.BusRides > 0;
+    private bool IsBusRideGreaterThanZero()
+        => BusRideViewModel.BusRideWeek.BusRides > 0;
 
-    private bool GetSliderState() =>
-        WorkingWeek < SeasonSettings.TotalSeasonWeeks;
+    private bool GetSliderState()
+        => WorkingWeek < SeasonSettings.TotalSeasonWeeks;
 
     private void ResetMainBowlersForNewWeek()
     {
