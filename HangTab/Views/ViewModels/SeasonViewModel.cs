@@ -11,8 +11,7 @@ public partial class SeasonViewModel(IDatabaseService data,
     [RelayCommand]
     private async Task InitializeDataAsync()
     {
-        AllWeeks.Clear();
-        AllWeeks.AddRange(await data.GetAllWeeks());
+        AllWeeks.ReplaceRange(await data.GetAllWeeks());
     }
 
     [RelayCommand]

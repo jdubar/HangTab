@@ -14,52 +14,58 @@
         </ToolbarItem>
     </ContentPage.ToolbarItems>
 
-    <VerticalStackLayout>
-        <VerticalStackLayout VerticalOptions="Center"
-                             HorizontalOptions="Center"
-                             IsVisible="{Binding IsBusy}">
-            <ActivityIndicator IsRunning="True"
-                               VerticalOptions="Center"
-                               HorizontalOptions="Center"/>
-            <Label Text="{Binding BusyText}"
-                   VerticalOptions="Center"
-                   HorizontalOptions="Center"/>
-        </VerticalStackLayout>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-        <CollectionView ItemsSource="{Binding AllBowlers}"
+        <Grid>
+            <VerticalStackLayout VerticalOptions="Center"
+                                 HorizontalOptions="Center"
+                                 IsVisible="{Binding IsBusy}">
+                <ActivityIndicator IsRunning="True"
+                                   VerticalOptions="Center"
+                                   HorizontalOptions="Center"/>
+                <Label Text="{Binding BusyText}"
+                       VerticalOptions="Center"
+                       HorizontalOptions="Center"/>
+            </VerticalStackLayout>
+
+            <CollectionView ItemsSource="{Binding AllBowlers}"
                         Margin="0,5,0,0">
-            <CollectionView.ItemsLayout>
-                <LinearItemsLayout ItemSpacing="4"
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout ItemSpacing="4"
                                    Orientation="Vertical"/>
-            </CollectionView.ItemsLayout>
-            <CollectionView.ItemTemplate>
-                <DataTemplate x:DataType="models:Bowler">
-                    <components:CardView BowlerName="{Binding FullName}"
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="models:Bowler">
+                        <components:CardView BowlerName="{Binding FullName}"
                                          IsSub="{Binding IsSub}"
                                          ImageUrl="{Binding ImageUrl}"
                                          TotalHangings="{Binding TotalHangings}"
                                          IsHidden="{Binding IsHidden}">
-                        <components:CardView.GestureRecognizers>
-                            <TapGestureRecognizer Command="{Binding Source={x:Reference PageSelf}, Path=BindingContext.ShowAddUpdateBowlerViewCommand}"
+                            <components:CardView.GestureRecognizers>
+                                <TapGestureRecognizer Command="{Binding Source={x:Reference PageSelf}, Path=BindingContext.ShowAddUpdateBowlerViewCommand}"
                                                   CommandParameter="{Binding .}"/>
-                        </components:CardView.GestureRecognizers>
-                    </components:CardView>
-                </DataTemplate>
-            </CollectionView.ItemTemplate>
-            <CollectionView.EmptyView>
-                <ContentView>
-                    <VerticalStackLayout HorizontalOptions="Center"
+                            </components:CardView.GestureRecognizers>
+                        </components:CardView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.EmptyView>
+                    <ContentView>
+                        <VerticalStackLayout HorizontalOptions="Center"
                                          VerticalOptions="Center"
                                          WidthRequest="380">
-                        <Label Text="No Bowlers Found"
+                            <Label Text="No Bowlers Found"
                                    FontSize="18"
                                    FontAttributes="Bold"
                                    HorizontalTextAlignment="Center"/>
-                        <Label Text="Create a bowler using the button above"
+                            <Label Text="Create a bowler using the button above"
                                    HorizontalTextAlignment="Center"/>
-                    </VerticalStackLayout>
-                </ContentView>
-            </CollectionView.EmptyView>
-        </CollectionView>
-    </VerticalStackLayout>
+                        </VerticalStackLayout>
+                    </ContentView>
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </Grid>
+    </Grid>
 </ContentPage>
