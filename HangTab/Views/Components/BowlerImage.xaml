@@ -22,9 +22,7 @@
             <Label Text="SUB"
                    FontSize="12"
                    FontAttributes="Bold"
-                   HorizontalOptions="Center"
-                   TextColor="{AppThemeBinding Dark={StaticResource Success},
-                                               Light={StaticResource Black}}"/>
+                   HorizontalOptions="Center"/>
         </Border>
         <toolkit:AvatarView ImageSource="{Binding ImageUrl}"
                             BorderColor="{AppThemeBinding Dark={StaticResource Gray300},
