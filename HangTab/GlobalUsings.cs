@@ -6,4 +6,4 @@ global using HangTab.Messages;
 global using HangTab.Models;
 global using HangTab.Services;
 global using HangTab.Shared;
-global using HangTab.ViewModels;
+global using HangTab.Models.ViewModels;

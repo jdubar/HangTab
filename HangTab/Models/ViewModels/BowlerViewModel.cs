@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-namespace HangTab.ViewModels;
+namespace HangTab.Models.ViewModels;
 
 public class BowlerViewModel : ObservableObject
 {

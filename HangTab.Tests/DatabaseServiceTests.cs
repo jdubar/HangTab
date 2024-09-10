@@ -4,7 +4,7 @@ using HangTab.Services.Impl;
 
 using System.Linq.Expressions;
 using HangTab.Tests.TestData;
-using HangTab.ViewModels;
+using HangTab.Models.ViewModels;
 
 namespace HangTab.Tests;
 
