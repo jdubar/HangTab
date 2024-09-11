@@ -18,4 +18,7 @@ public partial class HomePage
         base.OnAppearing();
         _viewModel.InitializeDataCommand.Execute(null);
     }
+
+    private void SlideCompleted(object sender, EventArgs e)
+        => _viewModel.ExecuteSlideCommand.Execute(null);
 }

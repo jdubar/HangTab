@@ -171,43 +171,27 @@
         </Grid>
 
         <Grid Grid.Row="2">
-            <SwipeView Threshold="250"
-                       HeightRequest="70">
-                <SwipeView.LeftItems>
-                    <SwipeItems Mode="Execute">
-                        <SwipeItem Text="Starting new week..."
-					               BackgroundColor="{StaticResource Success}"
-                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=StartNewWeekCommand}"
-                                   IsVisible="{Binding IsStartNewWeekVisible}"/>
-                        <SwipeItem Text="Generating season summary..."
-					               BackgroundColor="{StaticResource Success}"
-                                   Command="{Binding Source={RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=ShowSeasonSummaryViewCommand}"
-                                   IsVisible="{Binding IsShowSummaryVisible}"/>
-                    </SwipeItems>
-                </SwipeView.LeftItems>
-                <VerticalStackLayout Spacing="10"   
-                                     VerticalOptions="Center"
-                                     BackgroundColor="{AppThemeBinding Dark={StaticResource Black},
-                                                                                            Light={StaticResource White}}">
-                    <BoxView Color="Gray"  
-                             Margin="0,0,0,-10"                   
-                             HeightRequest="1"  
-                             HorizontalOptions="Fill" />
-                    <HorizontalStackLayout HeightRequest="70">
-                        <ImageButton HeightRequest="70"
-                                     Margin="20,0,30,0"
-                                     Source="{Binding SwipeIcon}">
-                            <ImageButton.Behaviors>
-                                <toolkit:IconTintColorBehavior TintColor="{AppThemeBinding Dark={StaticResource White},
-                                                                                                                Light={StaticResource Gray300}}" />
-                            </ImageButton.Behaviors>
-                        </ImageButton>
-                        <Label Text="{Binding SwipeText}"
-			                    HorizontalOptions="Center"
-			                    VerticalOptions="Center" />
-                    </HorizontalStackLayout>
-                </VerticalStackLayout>
-            </SwipeView>
+            <VerticalStackLayout Spacing="25"
+                                 Padding="10,0"
+                                 VerticalOptions="Center">
+                <components:SlideControl HeightRequest="60" SlideCompleted="SlideCompleted" >
+                    <components:SlideControl.Thumb>
+                        <Border StrokeShape="RoundRectangle 60,60,60,60" StrokeThickness="0" BackgroundColor="{StaticResource Primary}" Padding="0" Margin="-20,0,0,0" HeightRequest="60" WidthRequest="60" >
+                            <Image Source="arrow_circle_right.png" Aspect="AspectFit"  VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="60" WidthRequest="60" />
+                        </Border>
+                    </components:SlideControl.Thumb>
+
+                    <components:SlideControl.TrackBar>
+                        <Border StrokeShape="RoundRectangle 60,60,60,60" StrokeThickness="2" BackgroundColor="{AppThemeBinding Dark={StaticResource Black}, Light={StaticResource White}}" Padding="0">
+                            <Label Text="{Binding SwipeText}" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" />
+                        </Border>
+                    </components:SlideControl.TrackBar>
+
+                    <components:SlideControl.FillBar>
+                        <Border  StrokeShape="RoundRectangle 60,0,60,0" StrokeThickness="0" BackgroundColor="{StaticResource Success}" Padding="0,0,20,20" />
+                    </components:SlideControl.FillBar>
+                </components:SlideControl>
+            </VerticalStackLayout>
         </Grid>
     </Grid>
 </ContentPage>

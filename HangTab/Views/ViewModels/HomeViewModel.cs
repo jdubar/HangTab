@@ -30,20 +30,12 @@ public partial class HomeViewModel(IDatabaseService data,
     private SeasonSettings _seasonSettings;
 
     [ObservableProperty]
-    private bool _isStartNewWeekVisible = true;
-
-    [ObservableProperty]
-    private bool _isShowSummaryVisible;
-
-    [ObservableProperty]
     private bool _isUndoBusRideVisible;
-
-    [ObservableProperty]
-    private string _swipeIcon;
 
     [ObservableProperty]
     private string _swipeText;
 
+    private bool _isStartNewWeekVisible = true;
     private int WorkingWeek { get; set; }
 
     [RelayCommand]
@@ -54,14 +46,8 @@ public partial class HomeViewModel(IDatabaseService data,
         TitleWeek = $"Week {WorkingWeek} of {SeasonSettings.TotalSeasonWeeks}";
         BusRideViewModel = await data.GetBusRideViewModelByWeek(WorkingWeek);
 
-        IsStartNewWeekVisible = GetSliderState();
-        IsShowSummaryVisible = !IsStartNewWeekVisible;
-        SwipeText = IsShowSummaryVisible
-            ? "Swipe right for the season summary"
-            : "Swipe right to start a new week";
-        SwipeIcon = IsShowSummaryVisible
-            ? "rewarded_ads.png"
-            : "arrow_circle_right.png";
+        SetSwipeControlProperties();
+
         IsUndoBusRideVisible = IsBusRideGreaterThanZero();
 
         MainBowlers.ReplaceRange(await data.GetMainBowlersByWeek(WorkingWeek));
@@ -85,10 +71,6 @@ public partial class HomeViewModel(IDatabaseService data,
     }
 
     [RelayCommand]
-    private async Task ShowSeasonSummaryViewAsync() =>
-        await shell.GoToPageAsync(nameof(SeasonSummaryPage));
-
-    [RelayCommand]
     private async Task HangBowlerAsync(BowlerViewModel viewModel)
     {
         viewModel.Bowler.TotalHangings++;
@@ -110,24 +92,6 @@ public partial class HomeViewModel(IDatabaseService data,
     [RelayCommand]
     private async Task ShowSwitchBowlerViewAsync(Bowler bowler)
         => await shell.GoToPageWithDataAsync(nameof(SwitchBowlerPage), bowler);
-
-    [RelayCommand]
-    private async Task StartNewWeekAsync()
-    {
-        await ExecuteAsync(async () =>
-        {
-            await SaveZeroHangBowlerLineupAsync();
-
-            WorkingWeek++;
-            TitleWeek = $"Week {WorkingWeek} of {SeasonSettings.TotalSeasonWeeks}";
-
-            IsStartNewWeekVisible = GetSliderState();
-            IsShowSummaryVisible = !IsStartNewWeekVisible;
-
-            ResetMainBowlersForNewWeek();
-            await ResetBusRidesForNewWeekAsync();
-        }, "Starting new week...");
-    }
 
     [RelayCommand]
     private async Task UndoBowlerHangAsync(BowlerViewModel viewModel)
@@ -166,6 +130,19 @@ public partial class HomeViewModel(IDatabaseService data,
         if (!await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
         {
             await shell.DisplayAlertAsync("Update Error", "Error updating bus ride", "Ok");
+        }
+    }
+
+    [RelayCommand]
+    private async Task ExecuteSlideAsync()
+    {
+        if (_isStartNewWeekVisible)
+        {
+            await StartNewWeekAsync();
+        }
+        else
+        {
+            await shell.GoToPageAsync(nameof(SeasonSummaryPage));
         }
     }
 
@@ -220,10 +197,34 @@ public partial class HomeViewModel(IDatabaseService data,
         }
     }
 
+    private void SetSwipeControlProperties()
+    {
+        _isStartNewWeekVisible = GetSliderState();
+        SwipeText = _isStartNewWeekVisible
+            ? "Swipe to save and start a new week"
+            : "Swipe for the season summary!";
+    }
+
     private async Task ShowBusRideSplashAsync()
     {
         ShowBusRideImage = true;
         await audio.PlayBusSound();
         ShowBusRideImage = false;
+    }
+
+    private async Task StartNewWeekAsync()
+    {
+        await ExecuteAsync(async () =>
+        {
+            await SaveZeroHangBowlerLineupAsync();
+
+            WorkingWeek++;
+            TitleWeek = $"Week {WorkingWeek} of {SeasonSettings.TotalSeasonWeeks}";
+
+            SetSwipeControlProperties();
+
+            ResetMainBowlersForNewWeek();
+            await ResetBusRidesForNewWeekAsync();
+        }, "Starting new week...");
     }
 }
