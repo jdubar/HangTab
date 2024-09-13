@@ -73,4 +73,20 @@ public class BowlerTests : TestBase
         // Then
         actual.Should().BeEquivalentTo(SimpleData.ListOfFiveBowlers);
     }
+
+    [Fact]
+    public async Task ItShouldReturnMainBowlersByWeekNumber()
+    {
+        // Given
+        const int week = 1;
+        var expected = SimpleData.ListOfMainBowlerViewModels;
+        A.CallTo(() => ContextFake.GetFilteredAsync(A<Expression<Func<Bowler, bool>>>.Ignored)).Returns(SimpleData.ListOfMainBowlers);
+        A.CallTo(() => ContextFake.GetFilteredAsync(A<Expression<Func<BowlerWeek, bool>>>.Ignored)).Returns(SimpleData.ListOfTwoBowlerWeeks);
+
+        // When
+        var actual = await DatabaseService.GetMainBowlersByWeek(week);
+
+        // Then
+        actual.Should().BeEquivalentTo(expected);
+    }
 }

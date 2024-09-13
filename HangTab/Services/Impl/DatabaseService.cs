@@ -65,13 +65,13 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         var bowlerWeeks = await context.GetFilteredAsync<BowlerWeek>(w => w.WeekNumber == week);
         foreach (var bowler in bowlers)
         {
-            var bowlerWeek = bowlerWeeks.FirstOrDefault(w => w.BowlerId == bowler.Id);
-            bowlerWeek ??= new BowlerWeek
-            {
-                WeekNumber = week,
-                BowlerId = bowler.Id,
-                Hangings = 0
-            };
+            var bowlerWeek = bowlerWeeks.FirstOrDefault(w => w.BowlerId == bowler.Id)
+                             ?? new BowlerWeek
+                             {
+                                 WeekNumber = week,
+                                 BowlerId = bowler.Id,
+                                 Hangings = 0
+                             };
 
             var viewModel = new BowlerViewModel
             {
