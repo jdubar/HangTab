@@ -53,9 +53,9 @@ public class BusRideTests : TestBase
         var oneBusRide = new List<BusRide> { new() { Id = 1, Total = 1 } };
         var expected = new BusRideViewModel();
         A.CallTo(() => ContextFake.GetAllAsync<BusRide>()).Returns(oneBusRide);
-        A.CallTo(() => ContextFake.AddItemAsync(new BusRide())).Returns(true);
+        A.CallTo(() => ContextFake.AddItemAsync(A<BusRide>.Ignored)).Returns(true);
         A.CallTo(() => ContextFake.GetFilteredAsync(A<Expression<Func<BusRideWeek, bool>>>.Ignored)).Returns(new List<BusRideWeek>());
-        A.CallTo(() => ContextFake.AddItemAsync(new BusRideWeek())).Returns(false);
+        A.CallTo(() => ContextFake.AddItemAsync(A<BusRideWeek>.Ignored)).Returns(false);
 
         // When
         var actual = await DatabaseService.GetBusRideViewModelByWeek(week);
@@ -76,5 +76,35 @@ public class BusRideTests : TestBase
 
         // Then
         actual.Should().Be(1);
+    }
+
+    [Fact]
+    public async Task ItShouldFailOnUpdatingBusRides()
+    {
+        // Given
+        A.CallTo(() => ContextFake.UpdateItemAsync(A<BusRide>.Ignored)).Returns(false);
+
+        // When
+        var actual = await DatabaseService.UpdateBusRidesByWeek(new BusRideViewModel(), 1);
+
+        // Then
+        actual.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task ItShouldAddBusRides()
+    {
+        // Given
+        var vm = new BusRideViewModel()
+            { BusRide = new BusRide { Id = 1, Total = 5 }, BusRideWeek = new BusRideWeek { BusRides = 1, WeekNumber = 1 } };
+        A.CallTo(() => ContextFake.UpdateItemAsync(A<BusRide>.Ignored)).Returns(true);
+        A.CallTo(() => ContextFake.GetFilteredAsync(A<Expression<Func<BusRideWeek, bool>>>.Ignored)).Returns(new List<BusRideWeek>());
+        A.CallTo(() => ContextFake.AddItemAsync(A<BusRideWeek>.Ignored)).Returns(true);
+
+        // When
+        var actual = await DatabaseService.UpdateBusRidesByWeek(vm, 1);
+
+        // Then
+        actual.Should().BeTrue();
     }
 }

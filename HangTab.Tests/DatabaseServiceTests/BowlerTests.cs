@@ -2,6 +2,8 @@ using HangTab.Models;
 using HangTab.Tests.TestData;
 
 using System.Linq.Expressions;
+using HangTab.Models.ViewModels;
+using FakeItEasy;
 
 namespace HangTab.Tests.DatabaseServiceTests;
 
@@ -88,5 +90,48 @@ public class BowlerTests : TestBase
 
         // Then
         actual.Should().BeEquivalentTo(expected);
+    }
+
+    [Fact]
+    public async Task ItShouldFailUpdatingTheBowlerForHangingsByWeek()
+    {
+        // Given
+        A.CallTo(() => ContextFake.UpdateItemAsync(A<Bowler>.Ignored)).Returns(false);
+
+        // When
+        var actual = await DatabaseService.UpdateBowlerHangingsByWeek(new BowlerViewModel(), 1);
+
+        // Then
+        actual.Should().BeFalse();
+    }
+
+    [Fact]
+    public async Task ItShouldAddTheBowlerHangingsByWeek()
+    {
+        // Given
+        A.CallTo(() => ContextFake.UpdateItemAsync(A<Bowler>.Ignored)).Returns(true);
+        A.CallTo(() => ContextFake.GetFilteredAsync(A<Expression<Func<BowlerWeek, bool>>>.Ignored)).Returns(new List<BowlerWeek>());
+        A.CallTo(() => ContextFake.AddItemAsync(A<BowlerWeek>.Ignored)).Returns(true);
+
+        // When
+        var actual = await DatabaseService.UpdateBowlerHangingsByWeek(new BowlerViewModel(), 1);
+
+        // Then
+        actual.Should().BeTrue();
+    }
+
+    [Fact]
+    public async Task ItShouldUpdateTheBowlerHangingsByWeek()
+    {
+        // Given
+        A.CallTo(() => ContextFake.UpdateItemAsync(A<Bowler>.Ignored)).Returns(true);
+        A.CallTo(() => ContextFake.GetFilteredAsync(A<Expression<Func<BowlerWeek, bool>>>.Ignored)).Returns(SimpleData.ListOfTwoBowlerWeeks);
+        A.CallTo(() => ContextFake.UpdateItemAsync(A<BowlerWeek>.Ignored)).Returns(true);
+
+        // When
+        var actual = await DatabaseService.UpdateBowlerHangingsByWeek(new BowlerViewModel(), 1);
+
+        // Then
+        actual.Should().BeTrue();
     }
 }
