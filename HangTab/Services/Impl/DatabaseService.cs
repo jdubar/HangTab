@@ -138,8 +138,8 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
 
     public async Task<int> GetBusRideTotal()
     {
-        var busride = await context.GetItemByIdAsync<BusRide>(1);
-        return busride.Total;
+        var busRide = await context.GetItemByIdAsync<BusRide>(1);
+        return busRide.Total;
     }
 
     public async Task<int> GetLatestWeek()
