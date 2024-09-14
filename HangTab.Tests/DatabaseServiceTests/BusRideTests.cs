@@ -63,4 +63,18 @@ public class BusRideTests : TestBase
         // Then
         actual.Should().BeEquivalentTo(expected);
     }
+
+    [Fact]
+    public async Task ItShouldReturnTheBusRideTotal()
+    {
+        // Given
+        var oneBusRide = new BusRide { Id = 1, Total = 1 };
+        A.CallTo(() => ContextFake.GetItemByIdAsync<BusRide>(1)).Returns(oneBusRide);
+
+        // When
+        var actual = await DatabaseService.GetBusRideTotal();
+
+        // Then
+        actual.Should().Be(1);
+    }
 }
