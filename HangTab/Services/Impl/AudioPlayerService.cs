@@ -3,6 +3,7 @@
 namespace HangTab.Services.Impl;
 public class AudioPlayerService(IAudioManager audioManager) : IAudioPlayerService
 {
+    // TODO: Create wrapper for AudioPlayerService and AudioFileStreamProvider
     private readonly Dictionary<string, IAudioPlayer> _players = new();
     private string _currentAudio = string.Empty;
 
