@@ -47,5 +47,4 @@ public class ListData
             IsLowestHangs = false,
         },
     ];
-
 }
