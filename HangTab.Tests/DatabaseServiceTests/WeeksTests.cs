@@ -90,7 +90,7 @@ public class WeeksTests : TestBase
         };
 
         A.CallTo(() => ContextFake.GetAllAsync<BusRideWeek>()).Returns(busRides);
-        A.CallTo(() => ContextFake.GetAllAsync<Bowler>()).Returns(SimpleData.ListOfFiveBowlers);
+        A.CallTo(() => ContextFake.GetAllAsync<Bowler>()).Returns(ListData.ListOfFiveBowlers);
         A.CallTo(() => ContextFake.GetAllAsync<BowlerWeek>()).Returns(new List<BowlerWeek>());
 
         // When

@@ -28,7 +28,7 @@ public class DirectDatabaseTests : TestBase
     public async Task ItShouldAttemptToResetAllBowlerHangings(bool expected)
     {
         // Given
-        A.CallTo(() => ContextFake.GetAllAsync<Bowler>()).Returns(SimpleData.ListOfFiveBowlers);
+        A.CallTo(() => ContextFake.GetAllAsync<Bowler>()).Returns(ListData.ListOfFiveBowlers);
         A.CallTo(() => ContextFake.UpdateItemAsync(A<Bowler>.Ignored)).Returns(expected);
         A.CallTo(() => ContextFake.DropTableAsync<BowlerWeek>()).Returns(true);
         A.CallTo(() => ContextFake.DropTableAsync<BusRide>()).Returns(true);
@@ -45,11 +45,8 @@ public class DirectDatabaseTests : TestBase
     public async Task ItShouldThrowOnResetAllBowlerHangings()
     {
         // Given
-        A.CallTo(() => ContextFake.GetAllAsync<Bowler>()).Returns(SimpleData.ListOfFiveBowlers);
+        A.CallTo(() => ContextFake.GetAllAsync<Bowler>()).Returns(ListData.ListOfFiveBowlers);
         A.CallTo(() => ContextFake.UpdateItemAsync(A<Bowler>.Ignored)).Throws<Exception>().Once().Then.Returns(false);
-        //A.CallTo(() => ContextFake.DropTableAsync<BowlerWeek>()).Returns(true);
-        //A.CallTo(() => ContextFake.DropTableAsync<BusRide>()).Returns(true);
-        //A.CallTo(() => ContextFake.DropTableAsync<BusRideWeek>()).Returns(true);
 
         // When
         var actual = await DatabaseService.ResetHangings();
