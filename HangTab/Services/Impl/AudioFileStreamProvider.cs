@@ -1,8 +1,8 @@
 ﻿namespace HangTab.Services.Impl;
 public class AudioFileStreamProvider : IAudioFileStreamProvider
 {
-    public Task<Stream> GetStream(string filename)
+    public async Task<Stream> GetStream(string filename)
     {
-        return FileSystem.OpenAppPackageFileAsync(filename);
+        return await FileSystem.OpenAppPackageFileAsync(filename);
     }
 }

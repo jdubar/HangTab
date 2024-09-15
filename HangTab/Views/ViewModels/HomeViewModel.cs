@@ -6,8 +6,7 @@ using MvvmHelpers;
 namespace HangTab.Views.ViewModels;
 public partial class HomeViewModel(IDatabaseService data,
                                    IShellService shell,
-                                   IAudioPlayerService audio,
-                                   IAudioFileStreamProvider audioFileStream) : BaseViewModel
+                                   IAudioService audio) : BaseViewModel
 {
     // TODO: Add cumulative hang cost per bowler (maybe)
     // TODO: Notify user better somehow on new week
@@ -209,8 +208,7 @@ public partial class HomeViewModel(IDatabaseService data,
     private async Task ShowBusRideSplashAsync()
     {
         ShowBusRideImage = true;
-        var fileStream = await audioFileStream.GetStream(Constants.BusRideSoundFileName);
-        audio.Play(Constants.BusRideSoundFileName, fileStream);
+        audio.PlayBusRideSound();
         ShowBusRideImage = false;
     }
 

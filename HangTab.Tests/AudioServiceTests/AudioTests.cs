@@ -6,12 +6,12 @@ namespace HangTab.Tests.AudioServiceTests;
 public class AudioTests
 {
     private IAudioManager AudioManagerFake { get; }
-    private AudioPlayerService AudioService { get; }
+    private AudioPlayerService AudioPlayer { get; }
 
     public AudioTests()
     {
         AudioManagerFake = A.Fake<IAudioManager>();
-        AudioService = new AudioPlayerService(AudioManagerFake);
+        AudioPlayer = new AudioPlayerService(AudioManagerFake);
     }
 
     [Fact]
@@ -22,8 +22,8 @@ public class AudioTests
         A.CallTo(() => AudioManagerFake.CreatePlayer(A<MemoryStream>.Ignored, null)).Returns(fakePlayer);
 
         var handler = A.Fake<Action>();
-        AudioService.AudioEnded += handler;
-        AudioService.Play("test.mp3", new MemoryStream());
+        AudioPlayer.AudioEnded += handler;
+        AudioPlayer.Play("test.mp3", new MemoryStream());
 
         // When
         fakePlayer.PlaybackEnded += Raise.WithEmpty();

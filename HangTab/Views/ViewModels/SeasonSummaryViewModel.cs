@@ -6,8 +6,7 @@ using HangTab.Extensions;
 using MvvmHelpers;
 
 namespace HangTab.Views.ViewModels;
-public partial class SeasonSummaryViewModel(IAudioPlayerService audio,
-                                            IAudioFileStreamProvider audioFileStream,
+public partial class SeasonSummaryViewModel(IAudioService audio,
                                             IDatabaseService data) : BaseViewModel
 {
     public ObservableRangeCollection<Bowler> LowestHangBowlers { get; set; } = [];
@@ -34,10 +33,7 @@ public partial class SeasonSummaryViewModel(IAudioPlayerService audio,
 
     [RelayCommand]
     private async Task PlayBusSound()
-    {
-        var fileStream = await audioFileStream.GetStream(Constants.BusRideSoundFileName);
-        audio.Play(Constants.BusRideSoundFileName, fileStream);
-    }
+        => audio.PlayBusRideSound();
 
     private void SetBowlerLists()
     {
