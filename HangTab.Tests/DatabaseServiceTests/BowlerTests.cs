@@ -1,9 +1,8 @@
 using HangTab.Models;
+using HangTab.Models.ViewModels;
 using HangTab.Tests.TestData;
 
 using System.Linq.Expressions;
-using HangTab.Models.ViewModels;
-using FakeItEasy;
 
 namespace HangTab.Tests.DatabaseServiceTests;
 
@@ -67,13 +66,13 @@ public class BowlerTests : TestBase
     public async Task ItShouldReturnAllBowlers()
     {
         // Given
-        A.CallTo(() => ContextFake.GetAllAsync<Bowler>()).Returns(SimpleData.ListOfFiveBowlers);
+        A.CallTo(() => ContextFake.GetAllAsync<Bowler>()).Returns(ListData.ListOfFiveBowlers);
 
         // When
         var actual = await DatabaseService.GetAllBowlers();
 
         // Then
-        actual.Should().BeEquivalentTo(SimpleData.ListOfFiveBowlers);
+        actual.Should().BeEquivalentTo(ListData.ListOfFiveBowlers);
     }
 
     [Fact]
@@ -81,9 +80,9 @@ public class BowlerTests : TestBase
     {
         // Given
         const int week = 1;
-        var expected = SimpleData.ListOfMainBowlerViewModels;
-        A.CallTo(() => ContextFake.GetFilteredAsync(A<Expression<Func<Bowler, bool>>>.Ignored)).Returns(SimpleData.ListOfMainBowlers);
-        A.CallTo(() => ContextFake.GetFilteredAsync(A<Expression<Func<BowlerWeek, bool>>>.Ignored)).Returns(SimpleData.ListOfTwoBowlerWeeks);
+        var expected = ListData.ListOfMainBowlerViewModels;
+        A.CallTo(() => ContextFake.GetFilteredAsync(A<Expression<Func<Bowler, bool>>>.Ignored)).Returns(ListData.ListOfMainBowlers);
+        A.CallTo(() => ContextFake.GetFilteredAsync(A<Expression<Func<BowlerWeek, bool>>>.Ignored)).Returns(ListData.ListOfTwoBowlerWeeks);
 
         // When
         var actual = await DatabaseService.GetMainBowlersByWeek(week);
@@ -125,7 +124,7 @@ public class BowlerTests : TestBase
     {
         // Given
         A.CallTo(() => ContextFake.UpdateItemAsync(A<Bowler>.Ignored)).Returns(true);
-        A.CallTo(() => ContextFake.GetFilteredAsync(A<Expression<Func<BowlerWeek, bool>>>.Ignored)).Returns(SimpleData.ListOfTwoBowlerWeeks);
+        A.CallTo(() => ContextFake.GetFilteredAsync(A<Expression<Func<BowlerWeek, bool>>>.Ignored)).Returns(ListData.ListOfTwoBowlerWeeks);
         A.CallTo(() => ContextFake.UpdateItemAsync(A<BowlerWeek>.Ignored)).Returns(true);
 
         // When
