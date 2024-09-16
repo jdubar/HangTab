@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-
+using HangTab.Data;
 using HangTab.Extensions;
 
 using MvvmHelpers;
@@ -32,7 +32,7 @@ public partial class SeasonSummaryViewModel(IAudioService audio,
     }
 
     [RelayCommand]
-    private async Task PlayBusSound()
+    private void PlayBusSound()
         => audio.PlayBusRideSound();
 
     private void SetBowlerLists()

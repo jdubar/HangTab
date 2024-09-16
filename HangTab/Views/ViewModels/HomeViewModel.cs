@@ -1,6 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-
+using HangTab.Data;
 using MvvmHelpers;
 
 namespace HangTab.Views.ViewModels;
@@ -62,7 +62,9 @@ public partial class HomeViewModel(IDatabaseService data,
         if (await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
         {
             IsUndoBusRideVisible = true;
-            await ShowBusRideSplashAsync();
+            ShowBusRideImage = true;
+            audio.PlayBusRideSound();
+            ShowBusRideImage = false;
         }
         else
         {
@@ -203,13 +205,6 @@ public partial class HomeViewModel(IDatabaseService data,
         SwipeText = _isStartNewWeekVisible
             ? "Swipe to save and start a new week"
             : "Swipe for the season summary!";
-    }
-
-    private async Task ShowBusRideSplashAsync()
-    {
-        ShowBusRideImage = true;
-        audio.PlayBusRideSound();
-        ShowBusRideImage = false;
     }
 
     private async Task StartNewWeekAsync()

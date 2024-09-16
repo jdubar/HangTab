@@ -1,5 +1,5 @@
 ﻿namespace HangTab.Services;
-public interface IAudioFileStreamProvider
+public interface IFileService
 {
     Task<Stream> GetStream(string filename);
 }

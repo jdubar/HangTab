@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using HangTab.Data;
 
 namespace HangTab.Views.ViewModels;
 public partial class SettingsViewModel(IDatabaseService data,

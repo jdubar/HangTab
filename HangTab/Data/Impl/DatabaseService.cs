@@ -1,28 +1,26 @@
-﻿using HangTab.Data;
-using HangTab.Extensions;
-
+﻿using HangTab.Extensions;
 using System.Linq.Expressions;
 
-namespace HangTab.Services.Impl;
+namespace HangTab.Data.Impl;
 public class DatabaseService(IDatabaseContext context) : IDatabaseService
 {
-    public async Task<bool> AddBowler(Bowler bowler) =>
-        await context.AddItemAsync(bowler);
+    public async Task<bool> AddBowler(Bowler bowler)
+        => await context.AddItemAsync(bowler);
 
-    public async Task<bool> DeleteBowler(int id) =>
-        await context.DeleteItemByIdAsync<Bowler>(id);
+    public async Task<bool> DeleteBowler(int id)
+        => await context.DeleteItemByIdAsync<Bowler>(id);
 
-    public async Task<bool> DropAllTables() =>
-        await context.DropTableAsync<Bowler>()
+    public async Task<bool> DropAllTables()
+        => await context.DropTableAsync<Bowler>()
         && await context.DropTableAsync<BowlerWeek>()
         && await context.DropTableAsync<BusRide>()
         && await context.DropTableAsync<BusRideWeek>();
 
-    public async Task<IReadOnlyCollection<Bowler>> GetAllBowlers() =>
-        await context.GetAllAsync<Bowler>();
+    public async Task<IReadOnlyCollection<Bowler>> GetAllBowlers()
+        => await context.GetAllAsync<Bowler>();
 
-    public async Task<IReadOnlyCollection<Bowler>> GetFilteredBowlers(Expression<Func<Bowler, bool>> predicate) =>
-        await context.GetFilteredAsync(predicate);
+    public async Task<IReadOnlyCollection<Bowler>> GetFilteredBowlers(Expression<Func<Bowler, bool>> predicate)
+        => await context.GetFilteredAsync(predicate);
 
     public async Task<BusRideViewModel> GetBusRideViewModelByWeek(int week)
     {
@@ -161,7 +159,7 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
     public async Task<bool> IsBowlerExists(Bowler bowler)
     {
         return !string.IsNullOrEmpty(bowler.FirstName)
-            && (await context.GetFilteredAsync<Bowler>(b => b.FirstName == bowler.FirstName 
+            && (await context.GetFilteredAsync<Bowler>(b => b.FirstName == bowler.FirstName
                                                             && b.LastName == bowler.LastName)).Count > 0;
     }
 

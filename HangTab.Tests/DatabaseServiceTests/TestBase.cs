@@ -1,5 +1,5 @@
 ﻿using HangTab.Data;
-using HangTab.Services.Impl;
+using HangTab.Data.Impl;
 
 namespace HangTab.Tests.DatabaseServiceTests;
 public class TestBase

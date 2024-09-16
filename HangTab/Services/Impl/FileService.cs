@@ -1,5 +1,5 @@
 ﻿namespace HangTab.Services.Impl;
-public class AudioFileStreamProvider : IAudioFileStreamProvider
+public class FileService : IFileService
 {
     public async Task<Stream> GetStream(string filename)
     {

@@ -1,6 +1,6 @@
 ﻿using System.Linq.Expressions;
 
-namespace HangTab.Services;
+namespace HangTab.Data;
 public interface IDatabaseService
 {
     Task<bool> DropAllTables();
