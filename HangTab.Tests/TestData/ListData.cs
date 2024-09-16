@@ -2,7 +2,7 @@
 using HangTab.Models.ViewModels;
 
 namespace HangTab.Tests.TestData;
-public class ListData
+public abstract class ListData
 {
     public static List<Bowler> ListOfFiveBowlers { get; } =
     [

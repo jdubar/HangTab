@@ -1,7 +1,5 @@
 ﻿using HangTab.Models;
 
-using System.Linq.Expressions;
-
 namespace HangTab.Tests.DatabaseServiceTests;
 public class SeasonTests : TestBase
 {
