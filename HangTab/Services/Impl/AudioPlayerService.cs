@@ -6,7 +6,7 @@ public class AudioPlayerService(IAudioManager audioManager) : IAudioPlayerServic
     private readonly Dictionary<string, IAudioPlayer> _players = new();
     private string _currentAudio = string.Empty;
 
-    public event Action? AudioEnded;
+    public event Action AudioEnded;
 
     public void Play(string name, Stream audioStream)
     {
@@ -25,7 +25,7 @@ public class AudioPlayerService(IAudioManager audioManager) : IAudioPlayerServic
         _currentAudio = name;
     }
 
-    private void PlayerOnPlaybackEnded(object? sender, EventArgs e)
+    private void PlayerOnPlaybackEnded(object sender, EventArgs e)
     {
         AudioEnded?.Invoke();
         _players[_currentAudio].PlaybackEnded -= PlayerOnPlaybackEnded;

@@ -4,16 +4,16 @@ namespace HangTab.Models.ViewModels;
 
 public class BowlerViewModel : ObservableObject
 {
-    private bool _isEnableSwitch = true;
+    private bool _isEnableSwitchBowler = true;
     private bool _isEnableUndo;
     private bool _isLowestHangs;
 
     public Bowler Bowler { get; set; } = new();
     public BowlerWeek BowlerWeek { get; init; } = new();
-    public bool IsEnableSwitch
+    public bool IsEnableSwitchBowler
     {
-        get => _isEnableSwitch;
-        set => SetProperty(ref _isEnableSwitch, value);
+        get => _isEnableSwitchBowler;
+        set => SetProperty(ref _isEnableSwitchBowler, value);
     }
     public bool IsEnableUndo
     {

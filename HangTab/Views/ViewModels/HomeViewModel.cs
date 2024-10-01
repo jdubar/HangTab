@@ -79,7 +79,7 @@ public partial class HomeViewModel(IDatabaseService data,
         viewModel.BowlerWeek.Hangings++;
         viewModel.BowlerWeek.WeekNumber = WorkingWeek;
         viewModel.IsEnableUndo = true;
-        viewModel.IsEnableSwitch = false;
+        viewModel.IsEnableSwitchBowler = false;
 
         if (await data.UpdateBowlerHangingsByWeek(viewModel, WorkingWeek))
         {
@@ -104,12 +104,12 @@ public partial class HomeViewModel(IDatabaseService data,
             viewModel.BowlerWeek.Hangings--;
             viewModel.BowlerWeek.WeekNumber = WorkingWeek;
             viewModel.IsEnableUndo = viewModel.BowlerWeek.Hangings != 0;
-            viewModel.IsEnableSwitch = viewModel.BowlerWeek.Hangings == 0;
+            viewModel.IsEnableSwitchBowler = viewModel.BowlerWeek.Hangings == 0;
         }
         else
         {
             viewModel.IsEnableUndo = false;
-            viewModel.IsEnableSwitch = true;
+            viewModel.IsEnableSwitchBowler = true;
         }
         if (await data.UpdateBowlerHangingsByWeek(viewModel, WorkingWeek))
         {
@@ -156,11 +156,12 @@ public partial class HomeViewModel(IDatabaseService data,
 
     private void ResetMainBowlersForNewWeek()
     {
+        // TODO: Display only main bowlers on new week
         foreach (var bowler in MainBowlers)
         {
             bowler.BowlerWeek.Hangings = 0;
             bowler.BowlerWeek.WeekNumber = WorkingWeek;
-            bowler.IsEnableSwitch = true;
+            bowler.IsEnableSwitchBowler = true;
             bowler.IsEnableUndo = false;
         }
     }

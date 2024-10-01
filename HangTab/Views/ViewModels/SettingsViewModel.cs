@@ -31,6 +31,7 @@ public partial class SettingsViewModel(IDatabaseService data,
     [RelayCommand]
     private async Task ResetAllHangingsAsync()
     {
+        // TODO: Return to home view after resetting bowlers
         if (await shell.DisplayPromptAsync("Reset", "Are you sure you want to start a new season and reset all bowler hangings?", "Yes", "No"))
         {
             await ExecuteAsync(async () =>

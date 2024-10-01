@@ -69,7 +69,7 @@
                                                    CommandParameter="{Binding Bowler}"
                                                    IconImageSource="switch_account.png"
                                                    Text="Switch"
-                                                   IsVisible="{Binding IsEnableSwitch}">
+                                                   IsVisible="{Binding IsEnableSwitchBowler}">
                                         </SwipeItem>
                                     </SwipeItems>
                                 </SwipeView.LeftItems>
