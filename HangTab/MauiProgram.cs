@@ -11,7 +11,7 @@ public static class MauiProgram
         builder.AddCustomServices();
         builder.InitializeViews();
 
-        builder.AddLogging();
+        builder.AddDebugLogging();
 
         return builder.Build();
     }
