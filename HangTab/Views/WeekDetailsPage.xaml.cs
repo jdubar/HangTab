@@ -1,7 +1,7 @@
 using HangTab.Views.ViewModels;
 
 namespace HangTab.Views;
-
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We won't test UI code-behind.")]
 public partial class WeekDetailsPage
 {
     private readonly WeekDetailsViewModel _viewModel;
