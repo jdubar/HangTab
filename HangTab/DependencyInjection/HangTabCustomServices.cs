@@ -3,6 +3,7 @@ using HangTab.Data.Impl;
 using HangTab.Services.Impl;
 
 namespace HangTab.DependencyInjection;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We won't test dependency injection code.")]
 public static class HangTabCustomServices
 {
     public static void AddCustomServices(this MauiAppBuilder builder)

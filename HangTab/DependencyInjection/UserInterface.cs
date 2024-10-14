@@ -2,6 +2,7 @@
 using HangTab.Views.ViewModels;
 
 namespace HangTab.DependencyInjection;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We won't test dependency injection code.")]
 public static class UserInterface
 {
     public static void InitializeViews(this MauiAppBuilder builder)
