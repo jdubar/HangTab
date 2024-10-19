@@ -3,14 +3,11 @@
 namespace HangTab.Services.Impl;
 public class ShellService : IShellService
 {
-    public async Task<string> DisplayOptionsPromptAsync(string title, string option1, string option2)
-        => await Shell.Current.DisplayActionSheet(title, "Cancel", null, option1, option2);
+    public async Task<string> DisplayOptionsPromptAsync(string title, string option1, string option2) => await Shell.Current.DisplayActionSheet(title, "Cancel", null, option1, option2);
 
-    public async Task DisplayAlertAsync(string title, string msg, string buttonText)
-        => await Shell.Current.DisplayAlert(title, msg, buttonText);
+    public async Task DisplayAlertAsync(string title, string msg, string buttonText) => await Shell.Current.DisplayAlert(title, msg, buttonText);
 
-    public async Task<bool> DisplayPromptAsync(string title, string msg, string accept, string cancel)
-        => await Shell.Current.DisplayAlert(title, msg, accept, cancel);
+    public async Task<bool> DisplayPromptAsync(string title, string msg, string accept, string cancel) => await Shell.Current.DisplayAlert(title, msg, accept, cancel);
 
     public async Task DisplayToastAsync(string text)
     {
@@ -20,8 +17,7 @@ public class ShellService : IShellService
         await toast.Show(token.Token);
     }
 
-    public async Task GoToPageAsync(ShellNavigationState state)
-        => await Shell.Current.GoToAsync(state, true);
+    public async Task GoToPageAsync(ShellNavigationState state) => await Shell.Current.GoToAsync(state, true);
 
     public async Task GoToPageWithDataAsync<TTable>(ShellNavigationState state, TTable model) where TTable : class, new()
     {
@@ -33,6 +29,5 @@ public class ShellService : IShellService
         await Shell.Current.GoToAsync(state, true, navParam);
     }
 
-    public async Task ReturnToPageAsync() =>
-        await Shell.Current.GoToAsync("..", true);
+    public async Task ReturnToPageAsync() => await Shell.Current.GoToAsync("..", true);
 }
