@@ -1,8 +1,11 @@
 ﻿using CommunityToolkit.Mvvm.Input;
+
 using HangTab.Data;
+
 using MvvmHelpers;
 
 namespace HangTab.Views.ViewModels;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We won't test UI code-behind.")]
 public partial class SeasonViewModel(IDatabaseService data,
                                      IShellService shell) : BaseViewModel
 {
@@ -15,6 +18,5 @@ public partial class SeasonViewModel(IDatabaseService data,
     }
 
     [RelayCommand]
-    private async Task ShowWeekDetailsAsync(WeekViewModel week)
-        => await shell.GoToPageWithDataAsync(nameof(WeekDetailsPage), week);
+    private async Task ShowWeekDetailsAsync(WeekViewModel week) => await shell.GoToPageWithDataAsync(nameof(WeekDetailsPage), week);
 }

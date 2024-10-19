@@ -1,8 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+
 using HangTab.Data;
 
 namespace HangTab.Views.ViewModels;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We won't test UI code-behind.")]
 public partial class SettingsViewModel(IDatabaseService data,
                                        IShellService shell) : BaseViewModel
 {
@@ -16,8 +18,7 @@ public partial class SettingsViewModel(IDatabaseService data,
     }
 
     [RelayCommand]
-    private async Task UpdateSeasonSettingsAsync()
-        => await data.UpdateSeasonSettings(SeasonSettings);
+    private async Task UpdateSeasonSettingsAsync() => await data.UpdateSeasonSettings(SeasonSettings);
 
     [RelayCommand]
     private async Task DropAllTablesAsync()

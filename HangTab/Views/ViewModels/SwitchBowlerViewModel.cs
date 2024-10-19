@@ -1,10 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+
 using HangTab.Data;
+using HangTab.Extensions;
+
 using MvvmHelpers;
 
 namespace HangTab.Views.ViewModels;
-
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We won't test UI code-behind.")]
 [QueryProperty(nameof(Bowler), nameof(Bowler))]
 public partial class SwitchBowlerViewModel(IDatabaseService data, IShellService shell) : BaseViewModel
 {
@@ -26,7 +29,7 @@ public partial class SwitchBowlerViewModel(IDatabaseService data, IShellService 
 
             if (bowlers.Count > 0)
             {
-                SwitchBowlers.AddRange(bowlers);
+                SwitchBowlers.AddBowlersToCollection(bowlers);
             }
         }, "Loading bowlers...");
     }

@@ -15,7 +15,7 @@ public class AudioTests
     }
 
     [Fact]
-    public void ItShouldPlayTheBusRideSound()
+    public void ItShouldPlayTheSound()
     {
         // Given
         var fakePlayer = A.Fake<IAudioPlayer>();

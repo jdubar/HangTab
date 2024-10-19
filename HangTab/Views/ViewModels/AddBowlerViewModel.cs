@@ -1,9 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+
 using HangTab.Data;
 
 namespace HangTab.Views.ViewModels;
-
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We won't test UI code-behind.")]
 [QueryProperty(nameof(Bowler), nameof(Bowler))]
 public partial class AddBowlerViewModel(IDatabaseService data,
                                         IShellService shell,

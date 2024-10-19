@@ -1,9 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+
 using HangTab.Data;
+using HangTab.Extensions;
+
 using MvvmHelpers;
 
 namespace HangTab.Views.ViewModels;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We won't test UI code-behind.")]
 public partial class HomeViewModel(IDatabaseService data,
                                    IShellService shell,
                                    IAudioService audio) : BaseViewModel
@@ -56,9 +60,7 @@ public partial class HomeViewModel(IDatabaseService data,
     [RelayCommand]
     private async Task BusRideAsync()
     {
-        BusRideViewModel.BusRide.Total++;
-        BusRideViewModel.BusRideWeek.BusRides++;
-
+        BusRideViewModel.AddBusRide();
         if (await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
         {
             IsUndoBusRideVisible = true;
@@ -75,8 +77,7 @@ public partial class HomeViewModel(IDatabaseService data,
     [RelayCommand]
     private async Task HangBowlerAsync(BowlerViewModel viewModel)
     {
-        viewModel.Bowler.TotalHangings++;
-        viewModel.BowlerWeek.Hangings++;
+        viewModel.AddHanging();
         viewModel.BowlerWeek.WeekNumber = WorkingWeek;
         viewModel.IsEnableUndo = true;
         viewModel.IsEnableSwitchBowler = false;
@@ -92,16 +93,14 @@ public partial class HomeViewModel(IDatabaseService data,
     }
 
     [RelayCommand]
-    private async Task ShowSwitchBowlerViewAsync(Bowler bowler)
-        => await shell.GoToPageWithDataAsync(nameof(SwitchBowlerPage), bowler);
+    private async Task ShowSwitchBowlerViewAsync(Bowler bowler) => await shell.GoToPageWithDataAsync(nameof(SwitchBowlerPage), bowler);
 
     [RelayCommand]
     private async Task UndoBowlerHangAsync(BowlerViewModel viewModel)
     {
         if (viewModel.BowlerWeek.Hangings > 0)
         {
-            viewModel.Bowler.TotalHangings--;
-            viewModel.BowlerWeek.Hangings--;
+            viewModel.UndoHanging();
             viewModel.BowlerWeek.WeekNumber = WorkingWeek;
             viewModel.IsEnableUndo = viewModel.BowlerWeek.Hangings != 0;
             viewModel.IsEnableSwitchBowler = viewModel.BowlerWeek.Hangings == 0;
@@ -124,9 +123,7 @@ public partial class HomeViewModel(IDatabaseService data,
     [RelayCommand]
     private async Task UndoBusRideAsync()
     {
-        BusRideViewModel.BusRide.Total--;
-        BusRideViewModel.BusRideWeek.BusRides--;
-
+        BusRideViewModel.UndoBusRide();
         IsUndoBusRideVisible = IsBusRideGreaterThanZero();
 
         if (!await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
@@ -148,11 +145,9 @@ public partial class HomeViewModel(IDatabaseService data,
         }
     }
 
-    private bool IsBusRideGreaterThanZero()
-        => BusRideViewModel.BusRideWeek.BusRides > 0;
+    private bool IsBusRideGreaterThanZero() => BusRideViewModel.BusRideWeek.BusRides > 0;
 
-    private bool GetSliderState()
-        => WorkingWeek < SeasonSettings.TotalSeasonWeeks;
+    private bool GetSliderState() => WorkingWeek < SeasonSettings.TotalSeasonWeeks;
 
     private void ResetMainBowlersForNewWeek()
     {
@@ -168,8 +163,7 @@ public partial class HomeViewModel(IDatabaseService data,
 
     private async Task ResetBusRidesForNewWeekAsync()
     {
-        BusRideViewModel.BusRideWeek.BusRides = 0;
-        BusRideViewModel.BusRideWeek.WeekNumber = WorkingWeek;
+        BusRideViewModel.ResetBusRidesForWeek(WorkingWeek);
         if (await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
         {
             await shell.DisplayToastAsync($"Now beginning week {WorkingWeek}");
@@ -193,10 +187,9 @@ public partial class HomeViewModel(IDatabaseService data,
 
     private void SetIsLowestHangsInMainBowlers()
     {
-        foreach (var bowler in MainBowlers)
+        foreach (var bowler in MainBowlers.Where(b => !b.Bowler.IsSub))
         {
-            bowler.IsLowestHangs = !bowler.Bowler.IsSub
-                                   && bowler.Bowler.TotalHangings == MainBowlers.Where(b => !b.Bowler.IsSub).Min(y => y.Bowler.TotalHangings);
+            bowler.IsLowestHangs = bowler.Bowler.TotalHangings == MainBowlers.Min(y => y.Bowler.TotalHangings);
         }
     }
 

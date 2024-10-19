@@ -1,10 +1,12 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
+using HangTab.Extensions;
+
 using MvvmHelpers;
 
 namespace HangTab.Views.ViewModels;
-
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We won't test UI code-behind.")]
 [QueryProperty(nameof(WeekViewModel), nameof(WeekViewModel))]
 public partial class WeekDetailsViewModel : BaseViewModel
 {
@@ -21,8 +23,7 @@ public partial class WeekDetailsViewModel : BaseViewModel
     {
         await ExecuteAsync(() => {
             TitleWeek = $"Week {WeekViewModel.WeekNumber} Details";
-            BowlersList.Clear();
-            BowlersList.AddRange(WeekViewModel.Bowlers);
+            BowlersList.AddBowlersToCollection(WeekViewModel.Bowlers);
 
             return Task.CompletedTask;
         }, "");
