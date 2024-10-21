@@ -1,4 +1,5 @@
 namespace HangTab.Views.Components;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We won't test UI code-behind.")]
 public partial class CardView
 {
     public static readonly BindableProperty BowlerNameProperty =

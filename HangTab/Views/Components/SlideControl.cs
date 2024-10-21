@@ -1,6 +1,7 @@
 ﻿using Microsoft.Maui.Layouts;
 
 namespace HangTab.Views.Components;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We won't test UI code-behind.")]
 public class SlideControl : AbsoluteLayout
 {
     private static readonly BindableProperty FillBarProperty =
