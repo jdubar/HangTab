@@ -1,7 +1,6 @@
 ﻿namespace HangTab.Services;
 public interface IShellService
 {
-    Task<string> DisplayOptionsPromptAsync(string title, string option1, string option2);
     Task DisplayAlertAsync(string title, string msg, string buttonText);
     Task<bool> DisplayPromptAsync(string title, string msg, string accept, string cancel);
     Task DisplayToastAsync(string text);

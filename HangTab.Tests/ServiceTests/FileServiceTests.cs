@@ -1,7 +1,7 @@
 ﻿using HangTab.Services;
 
-namespace HangTab.Tests.FileServiceTests;
-public class FileTests
+namespace HangTab.Tests.ServiceTests;
+public class FileServiceTests
 {
     [Fact]
     public async Task ItShouldOpenTheStream()
