@@ -1,10 +1,9 @@
 ﻿namespace HangTab.Services.Impl;
-public class AudioService(IAudioPlayerService player,
-                          IFileService fileService) : IAudioService
+public class AudioService(IAudioPlayerService player) : IAudioService
 {
-    public void PlayBusRideSound()
+    public async Task PlayBusRideSound()
     {
-        using var stream = fileService.GetStream(Constants.BusRideSoundFileName);
-        player.Play(Constants.BusRideSoundFileName, stream.Result);
+        await using var stream = await FileSystem.Current.OpenAppPackageFileAsync(Constants.BusRideSoundFileName);
+        player.Play(Constants.BusRideSoundFileName, stream);
     }
 }

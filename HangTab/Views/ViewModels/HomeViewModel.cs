@@ -65,7 +65,7 @@ public partial class HomeViewModel(IDatabaseService data,
         {
             IsUndoBusRideVisible = true;
             ShowBusRideImage = true;
-            audio.PlayBusRideSound();
+            await audio.PlayBusRideSound();
             ShowBusRideImage = false;
         }
         else

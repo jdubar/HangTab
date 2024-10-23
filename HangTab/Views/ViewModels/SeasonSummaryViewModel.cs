@@ -34,7 +34,7 @@ public partial class SeasonSummaryViewModel(IAudioService audio,
     }
 
     [RelayCommand]
-    private void PlayBusSound() => audio.PlayBusRideSound();
+    private async Task PlayBusSound() => await audio.PlayBusRideSound();
 
     private void SetBowlerLists()
     {
