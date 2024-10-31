@@ -67,8 +67,8 @@
                                         <SwipeItem BackgroundColor="{DynamicResource Tertiary}"
                                                    Command="{Binding Source={x:Reference PageSelf}, Path=BindingContext.ShowSwitchBowlerViewCommand}"
                                                    CommandParameter="{Binding Bowler}"
-                                                   IconImageSource="switch_account.png"
-                                                   Text="Switch"
+                                                   IconImageSource="group.png"
+                                                   Text="Use Sub"
                                                    IsVisible="{Binding IsEnableSwitchBowler}">
                                         </SwipeItem>
                                     </SwipeItems>

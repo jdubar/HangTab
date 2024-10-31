@@ -8,7 +8,7 @@
         <Tab Icon="home.png" Title="Home">
             <ShellContent ContentTemplate="{DataTemplate views:HomePage}" />
         </Tab>
-        <Tab Icon="group.png" Title="Bowlers">
+        <Tab Icon="groups.png" Title="Bowlers">
             <ShellContent ContentTemplate="{DataTemplate views:ManageBowlersPage}" />
         </Tab>
         <Tab Icon="calendar_month.png" Title="Season">

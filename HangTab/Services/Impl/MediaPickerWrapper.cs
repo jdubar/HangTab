@@ -40,6 +40,7 @@ public static class MediaPickerWrapper
             await using var localFileStream = File.OpenWrite(localFilePath);
             await newImage.SaveAsync(localFileStream);
             await sourceStream.CopyToAsync(localFileStream);
+            return Result.Ok(localFilePath);
         }
         catch (UnauthorizedAccessException e)
         {
@@ -53,6 +54,5 @@ public static class MediaPickerWrapper
         {
             return new DirectoryNotFoundError(e, localFilePath);
         }
-        return Result.Ok(localFilePath);
     }
 }

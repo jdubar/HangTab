@@ -18,6 +18,8 @@ public partial class HomeViewModel(IDatabaseService data,
     // TODO: Unit tests?
     // TODO: On bowlers view, add undo hanging option
     // TODO: Create reusable cardview
+    // TODO: Change "Use sub" text based on whether a sub is used or not
+    // TODO: Use sub's avatar to overlay main bowler's avatar
 
     public ObservableRangeCollection<BowlerViewModel> MainBowlers { get; } = [];
 

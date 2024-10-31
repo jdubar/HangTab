@@ -63,6 +63,7 @@
     <MauiImage Include="Resources\Images\confetti.svg" />
     <MauiImage Include="Resources\Images\crown.svg" />
     <MauiImage Include="Resources\Images\group.svg" />
+    <MauiImage Include="Resources\Images\groups.svg" />
     <MauiImage Include="Resources\Images\home.svg" />
     <MauiImage Include="Resources\Images\person_add.svg" />
     <MauiImage Include="Resources\Images\rewarded_ads.svg" />
