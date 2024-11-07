@@ -151,17 +151,8 @@ public partial class HomeViewModel(IDatabaseService data,
 
     private bool GetSliderState() => WorkingWeek < SeasonSettings.TotalSeasonWeeks;
 
-    private void ResetMainBowlersForNewWeek()
-    {
-        // TODO: Display only main bowlers on new week
-        foreach (var bowler in MainBowlers)
-        {
-            bowler.BowlerWeek.Hangings = 0;
-            bowler.BowlerWeek.WeekNumber = WorkingWeek;
-            bowler.IsEnableSwitchBowler = true;
-            bowler.IsEnableUndo = false;
-        }
-    }
+    // TODO: Display only main bowlers on new week
+    private void ResetMainBowlersForNewWeek() => MainBowlers.ResetForNewWeek(WorkingWeek);
 
     private async Task ResetBusRidesForNewWeekAsync()
     {
@@ -187,13 +178,7 @@ public partial class HomeViewModel(IDatabaseService data,
         }
     }
 
-    private void SetIsLowestHangsInMainBowlers()
-    {
-        foreach (var bowler in MainBowlers.Where(b => !b.Bowler.IsSub))
-        {
-            bowler.IsLowestHangs = bowler.Bowler.TotalHangings == MainBowlers.Min(y => y.Bowler.TotalHangings);
-        }
-    }
+    private void SetIsLowestHangsInMainBowlers() => MainBowlers.SetIsLowestHangs();
 
     private void SetSwipeControlProperties()
     {
