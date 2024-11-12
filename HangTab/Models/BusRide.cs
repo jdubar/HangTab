@@ -1,19 +1,10 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-
-using SQLite;
+﻿using SQLite;
 
 namespace HangTab.Models;
 
-[Table("busride")]
-public class BusRide : ObservableObject
+public class BusRide
 {
-    private int _total;
-
     [PrimaryKey]
-    public int Id { get; set; } = 1;
-    public int Total
-    {
-        get => _total;
-        set => SetProperty(ref _total, value);
-    }
+    public int Id { get; private init; } = 1;
+    public int Total { get; set; }
 }

@@ -1,20 +1,11 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
-
-using SQLite;
+﻿using SQLite;
 
 namespace HangTab.Models;
 
-[Table("busrideweek")]
-public class BusRideWeek : ObservableObject
+public class BusRideWeek
 {
-    private int _busRides;
-
     [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
+    public int Id { get; private init; }
     public int WeekNumber { get; set; }
-    public int BusRides
-    {
-        get => _busRides;
-        set => SetProperty(ref _busRides, value);
-    }
+    public int BusRides { get; set; }
 }

@@ -85,6 +85,7 @@
     <PackageReference Include="Refractored.MvvmHelpers" Version="1.6.2" />
     <PackageReference Include="SkiaSharp.Extended.UI.Maui" Version="2.0.0" />
     <PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
+    <PackageReference Include="SQLiteNetExtensions" Version="2.1.0" />
     <PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.9" />
     <PackageReference Include="Microsoft.Maui.Controls" Version="8.0.80" />
     <PackageReference Include="Microsoft.Maui.Controls.Compatibility" Version="8.0.80" />

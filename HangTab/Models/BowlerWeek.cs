@@ -1,21 +1,28 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using HangTab.Models.Wrappers;
 
 using SQLite;
+using SQLiteNetExtensions.Attributes;
 
 namespace HangTab.Models;
 
-[Table("bowlerweek")]
-public class BowlerWeek : ObservableObject
+public class BowlerWeek
 {
-    private int _hangings;
-
     [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
+    public int Id { get; private set; }
     public int WeekNumber { get; set; }
+    public int Hangings  { get; set; }
+
+    [ForeignKey(typeof(Bowler), Name = "Id")]
     public int BowlerId { get; set; }
-    public int Hangings
+
+    public static BowlerWeek GenerateNewFromWrapper(BowlerWeekWrapper wrapper)
     {
-        get => _hangings;
-        set => SetProperty(ref _hangings, value);
+        return new BowlerWeek
+        {
+            Id = wrapper.Id,
+            WeekNumber = wrapper.WeekNumber,
+            Hangings = wrapper.Hangings,
+            BowlerId = wrapper.BowlerId,
+        };
     }
 }

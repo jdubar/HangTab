@@ -8,6 +8,9 @@ public static class HangTabCustomServices
 {
     public static void AddCustomServices(this MauiAppBuilder builder)
     {
+        builder.Services.AddSingleton<IBowlerService, BowlerService>();
+        builder.Services.AddSingleton<IBusRideService, BusRideService>();
+
         builder.Services.AddSingleton<IDatabaseContext, DatabaseContext>();
         builder.Services.AddSingleton<IDatabaseService, DatabaseService>();
 

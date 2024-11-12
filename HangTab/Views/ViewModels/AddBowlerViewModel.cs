@@ -1,12 +1,10 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-using HangTab.Data;
-
 namespace HangTab.Views.ViewModels;
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We won't test UI code-behind.")]
 [QueryProperty(nameof(Bowler), nameof(Bowler))]
-public partial class AddBowlerViewModel(IDatabaseService data,
+public partial class AddBowlerViewModel(IBowlerService bowlerService,
                                         IShellService shell,
                                         IMediaService media) : BaseViewModel
 {
@@ -18,7 +16,7 @@ public partial class AddBowlerViewModel(IDatabaseService data,
     {
         if (await shell.DisplayPromptAsync("Delete", "Are you sure you want to delete this bowler?", "Yes", "No"))
         {
-            if (!await data.DeleteBowler(id))
+            if (!await bowlerService.Delete(id))
             {
                 await shell.DisplayAlertAsync("Delete Error", "Bowler was not deleted", "Ok");
                 return;
@@ -37,15 +35,15 @@ public partial class AddBowlerViewModel(IDatabaseService data,
             return;
         }
 
-        if (Bowler.Id == 0 && await data.IsBowlerExists(Bowler))
+        if (Bowler.Id == 0 && await bowlerService.Exists(Bowler))
         {
             await shell.DisplayAlertAsync("Validation Error", "This bowler already exists", "Ok");
             return;
         }
 
         if (!(Bowler.Id == 0
-                ? await data.AddBowler(Bowler)
-                : await data.UpdateBowler(Bowler)))
+                ? await bowlerService.Add(Bowler)
+                : await bowlerService.Update(Bowler)))
         {
             await shell.DisplayAlertAsync("Update Error", "Unable to save bowler", "Ok");
             return;

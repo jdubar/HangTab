@@ -9,7 +9,7 @@ using MvvmHelpers;
 namespace HangTab.Views.ViewModels;
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We won't test UI code-behind.")]
 [QueryProperty(nameof(Bowler), nameof(Bowler))]
-public partial class SwitchBowlerViewModel(IDatabaseService data, IShellService shell) : BaseViewModel
+public partial class SwitchBowlerViewModel(IBowlerService bowlerService, IShellService shell) : BaseViewModel
 {
     [ObservableProperty]
     private Bowler _bowler;
@@ -24,7 +24,7 @@ public partial class SwitchBowlerViewModel(IDatabaseService data, IShellService 
     {
         await ExecuteAsync(async () =>
         {
-            var bowlers = await data.GetFilteredBowlers(b => b.Id != Bowler.Id && b.IsHidden);
+            var bowlers = await bowlerService.GetFilteredBowlers(b => b.Id != Bowler.Id && b.IsHidden);
             SwitchBowlers.Clear();
 
             if (bowlers.Count > 0)
@@ -51,6 +51,6 @@ public partial class SwitchBowlerViewModel(IDatabaseService data, IShellService 
     private async Task<bool> ChangeBowlerHiddenStateAsync(Bowler bowler)
     {
         bowler.IsHidden = !bowler.IsHidden;
-        return await data.UpdateBowler(bowler);
+        return await bowlerService.Update(bowler);
     }
 }

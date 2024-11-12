@@ -4,12 +4,6 @@ using System.Linq.Expressions;
 namespace HangTab.Data.Impl;
 public class DatabaseService(IDatabaseContext context) : IDatabaseService
 {
-    public async Task<bool> AddBowler(Bowler bowler)
-        => await context.AddItemAsync(bowler);
-
-    public async Task<bool> DeleteBowler(int id)
-        => await context.DeleteItemByIdAsync<Bowler>(id);
-
     public async Task<bool> DropAllTables()
         => await context.DropTableAsync<Bowler>()
         && await context.DropTableAsync<BowlerWeek>()
@@ -134,11 +128,11 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         return season;
     }
 
-    public async Task<int> GetBusRideTotal()
-    {
-        var busRide = await context.GetItemByIdAsync<BusRide>(1);
-        return busRide.Total;
-    }
+    //public async Task<int> GetBusRideTotal()
+    //{
+    //    var busRide = await context.GetItemByIdAsync<BusRide>(1);
+    //    return busRide.Total;
+    //}
 
     public async Task<int> GetLatestWeek()
     {
@@ -154,13 +148,6 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
         return settings.Count > 0
             ? settings.First()
             : new SeasonSettings();
-    }
-
-    public async Task<bool> IsBowlerExists(Bowler bowler)
-    {
-        return !string.IsNullOrEmpty(bowler.FirstName)
-            && (await context.GetFilteredAsync<Bowler>(b => b.FirstName == bowler.FirstName
-                                                            && b.LastName == bowler.LastName)).Count > 0;
     }
 
     public async Task<bool> ResetHangings()
