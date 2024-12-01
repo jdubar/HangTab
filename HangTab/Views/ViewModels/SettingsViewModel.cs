@@ -5,20 +5,22 @@ using HangTab.Data;
 
 namespace HangTab.Views.ViewModels;
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We won't test UI code-behind.")]
-public partial class SettingsViewModel(IDatabaseService data,
-                                       IShellService shell) : BaseViewModel
+public partial class SettingsViewModel(
+    IDatabaseService data,
+    ISettingsService settings,
+    IShellService shell) : BaseViewModel
 {
     [ObservableProperty]
-    private SeasonSettings _seasonSettings;
+    private int _totalSeasonWeeks = settings.TotalSeasonWeeks;
 
     [RelayCommand]
-    private async Task InitializeDataAsync()
+    private void UpdateSeasonSettings()
     {
-        SeasonSettings = await data.GetSeasonSettings();
+        if (TotalSeasonWeeks > 0)
+        {
+            settings.TotalSeasonWeeks = TotalSeasonWeeks;
+        }
     }
-
-    [RelayCommand]
-    private async Task UpdateSeasonSettingsAsync() => await data.UpdateSeasonSettings(SeasonSettings);
 
     [RelayCommand]
     private async Task DropAllTablesAsync()

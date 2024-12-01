@@ -8,9 +8,11 @@ using MvvmHelpers;
 
 namespace HangTab.Views.ViewModels;
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We won't test UI code-behind.")]
-public partial class HomeViewModel(IDatabaseService data,
-                                   IShellService shell,
-                                   IAudioService audio) : BaseViewModel
+public partial class HomeViewModel(
+    IDatabaseService data,
+    ISettingsService settings,
+    IShellService shell,
+    IAudioService audio) : BaseViewModel
 {
     // TODO: Add cumulative hang cost per bowler (maybe)
     // TODO: Notify user better somehow on new week
@@ -33,37 +35,31 @@ public partial class HomeViewModel(IDatabaseService data,
     private string _titleWeek;
 
     [ObservableProperty]
-    private SeasonSettings _seasonSettings;
-
-    [ObservableProperty]
     private bool _isUndoBusRideVisible;
 
     [ObservableProperty]
     private string _swipeText;
 
     private bool _isStartNewWeekVisible = true;
-    private int WorkingWeek { get; set; }
 
     [RelayCommand]
     private async Task InitializeDataAsync()
     {
-        SeasonSettings = await data.GetSeasonSettings();
-        WorkingWeek = await data.GetLatestWeek();
-        TitleWeek = $"Week {WorkingWeek} of {SeasonSettings.TotalSeasonWeeks}";
-        BusRideViewModel = await data.GetBusRideViewModelByWeek(WorkingWeek);
+        TitleWeek = $"Week {settings.CurrentSeasonWeek} of {settings.TotalSeasonWeeks}";
+        BusRideViewModel = await data.GetBusRideViewModelByWeek(settings.CurrentSeasonWeek);
 
         SetSwipeControlProperties();
 
         IsUndoBusRideVisible = IsBusRideGreaterThanZero();
 
-        MainBowlers.ReplaceRange(await data.GetMainBowlersByWeek(WorkingWeek));
+        MainBowlers.ReplaceRange(await data.GetMainBowlersByWeek(settings.CurrentSeasonWeek));
     }
 
     [RelayCommand]
     private async Task BusRideAsync()
     {
         BusRideViewModel.AddBusRide();
-        if (await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
+        if (await data.UpdateBusRidesByWeek(BusRideViewModel, settings.CurrentSeasonWeek))
         {
             IsUndoBusRideVisible = true;
             ShowBusRideImage = true;
@@ -80,11 +76,11 @@ public partial class HomeViewModel(IDatabaseService data,
     private async Task HangBowlerAsync(BowlerViewModel viewModel)
     {
         viewModel.AddHanging();
-        viewModel.BowlerWeek.WeekNumber = WorkingWeek;
+        viewModel.BowlerWeek.WeekNumber = settings.CurrentSeasonWeek;
         viewModel.IsEnableUndo = true;
         viewModel.IsEnableSwitchBowler = false;
 
-        if (await data.UpdateBowlerHangingsByWeek(viewModel, WorkingWeek))
+        if (await data.UpdateBowlerHangingsByWeek(viewModel, settings.CurrentSeasonWeek))
         {
             SetIsLowestHangsInMainBowlers();
         }
@@ -103,7 +99,7 @@ public partial class HomeViewModel(IDatabaseService data,
         if (viewModel.BowlerWeek.Hangings > 0)
         {
             viewModel.UndoHanging();
-            viewModel.BowlerWeek.WeekNumber = WorkingWeek;
+            viewModel.BowlerWeek.WeekNumber = settings.CurrentSeasonWeek;
             viewModel.IsEnableUndo = viewModel.BowlerWeek.Hangings != 0;
             viewModel.IsEnableSwitchBowler = viewModel.BowlerWeek.Hangings == 0;
         }
@@ -112,7 +108,7 @@ public partial class HomeViewModel(IDatabaseService data,
             viewModel.IsEnableUndo = false;
             viewModel.IsEnableSwitchBowler = true;
         }
-        if (await data.UpdateBowlerHangingsByWeek(viewModel, WorkingWeek))
+        if (await data.UpdateBowlerHangingsByWeek(viewModel, settings.CurrentSeasonWeek))
         {
             SetIsLowestHangsInMainBowlers();
         }
@@ -128,7 +124,7 @@ public partial class HomeViewModel(IDatabaseService data,
         BusRideViewModel.UndoBusRide();
         IsUndoBusRideVisible = IsBusRideGreaterThanZero();
 
-        if (!await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
+        if (!await data.UpdateBusRidesByWeek(BusRideViewModel, settings.CurrentSeasonWeek))
         {
             await shell.DisplayAlertAsync("Update Error", "Error updating bus ride", "Ok");
         }
@@ -149,17 +145,17 @@ public partial class HomeViewModel(IDatabaseService data,
 
     private bool IsBusRideGreaterThanZero() => BusRideViewModel.BusRideWeek.BusRides > 0;
 
-    private bool GetSliderState() => WorkingWeek < SeasonSettings.TotalSeasonWeeks;
+    private bool GetSliderState() => settings.CurrentSeasonWeek < settings.TotalSeasonWeeks;
 
     // TODO: Display only main bowlers on new week
-    private void ResetMainBowlersForNewWeek() => MainBowlers.ResetForNewWeek(WorkingWeek);
+    private void ResetMainBowlersForNewWeek() => MainBowlers.ResetForNewWeek(settings.CurrentSeasonWeek);
 
     private async Task ResetBusRidesForNewWeekAsync()
     {
-        BusRideViewModel.ResetBusRidesForWeek(WorkingWeek);
-        if (await data.UpdateBusRidesByWeek(BusRideViewModel, WorkingWeek))
+        BusRideViewModel.ResetBusRidesForWeek(settings.CurrentSeasonWeek);
+        if (await data.UpdateBusRidesByWeek(BusRideViewModel, settings.CurrentSeasonWeek))
         {
-            await shell.DisplayToastAsync($"Now beginning week {WorkingWeek}");
+            await shell.DisplayToastAsync($"Now beginning week {settings.CurrentSeasonWeek}");
         }
         else
         {
@@ -171,7 +167,7 @@ public partial class HomeViewModel(IDatabaseService data,
     {
         foreach (var bowler in MainBowlers.Where(bowler => bowler.BowlerWeek.Hangings == 0))
         {
-            if (!await data.UpdateBowlerHangingsByWeek(bowler, WorkingWeek))
+            if (!await data.UpdateBowlerHangingsByWeek(bowler, settings.CurrentSeasonWeek))
             {
                 return;
             }
@@ -194,8 +190,8 @@ public partial class HomeViewModel(IDatabaseService data,
         {
             await SaveZeroHangBowlerLineupAsync();
 
-            WorkingWeek++;
-            TitleWeek = $"Week {WorkingWeek} of {SeasonSettings.TotalSeasonWeeks}";
+            settings.CurrentSeasonWeek++;
+            TitleWeek = $"Week {settings.CurrentSeasonWeek} of {settings.TotalSeasonWeeks}";
 
             SetSwipeControlProperties();
 
