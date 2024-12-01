@@ -15,9 +15,6 @@ public interface IDatabaseService
     Task<int> GetLatestWeek();
     Task<int> GetBusRideTotal();
 
-    Task<SeasonSettings> GetSeasonSettings();
-    Task<bool> UpdateSeasonSettings(SeasonSettings viewModel);
-
     Task<bool> AddBowler(Bowler bowler);
     Task<bool> DeleteBowler(int id);
     Task<bool> IsBowlerExists(Bowler bowler);

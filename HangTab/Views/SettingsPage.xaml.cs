@@ -13,12 +13,6 @@ public partial class SettingsPage
         _viewModel = viewModel;
     }
 
-    protected override void OnAppearing()
-    {
-        base.OnAppearing();
-        _viewModel.InitializeDataCommand.Execute(null);
-    }
-
     private void ClearAllDataOnTap(object sender, EventArgs e) => _viewModel.DropAllTablesCommand.Execute(null);
 
     private void ResetHangingsOnTap(object sender, EventArgs e) => _viewModel.ResetAllHangingsCommand.Execute(null);

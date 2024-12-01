@@ -14,7 +14,7 @@
                            Label="Weeks In The Season"
                            LabelColor="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Gray500}}"
                            PropertyChanged="SaveSeasonSettingsOnChange"
-                           Text="{Binding SeasonSettings.TotalSeasonWeeks}" />
+                           Text="{Binding TotalSeasonWeeks}" />
             </TableSection>
             <TableSection Title="Data Reset"
                           TextColor="{StaticResource Primary}">
