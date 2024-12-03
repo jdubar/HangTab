@@ -3,6 +3,7 @@ using HangTab.Models.ViewModels;
 using HangTab.Tests.TestData;
 
 using System.Linq.Expressions;
+using HangTab.Services.Impl;
 
 namespace HangTab.Tests.DatabaseServiceTests;
 
@@ -12,10 +13,11 @@ public class BowlerTests : TestBase
     public async Task ItShouldAddMainBowlerToTheDatabase()
     {
         // Given
+        var service = new BowlerService(ContextFake);
         A.CallTo(() => ContextFake.AddItemAsync(A<Bowler>.Ignored)).Returns(true);
 
         // When
-        var actual = await DatabaseService.AddBowler(SimpleData.OneBowler);
+        var actual = await service.Add(SimpleData.OneBowler);
 
         // Then
         actual.Should().BeTrue();
@@ -25,10 +27,11 @@ public class BowlerTests : TestBase
     public async Task ItShouldDeleteTheBowlerFromTheDatabase()
     {
         // Given
+        var service = new BowlerService(ContextFake);
         A.CallTo(() => ContextFake.DeleteItemByIdAsync<Bowler>(A<int>.Ignored)).Returns(true);
 
         // When
-        var actual = await DatabaseService.DeleteBowler(SimpleData.OneBowler.Id);
+        var actual = await service.Delete(SimpleData.OneBowler.Id);
 
         // Then
         actual.Should().BeTrue();
@@ -38,11 +41,12 @@ public class BowlerTests : TestBase
     public async Task ItShouldCheckIfBowlerExists()
     {
         // Given
+        var service = new BowlerService(ContextFake);
         var bowlers = new List<Bowler> { SimpleData.OneBowler };
         A.CallTo(() => ContextFake.GetFilteredAsync(A<Expression<Func<Bowler, bool>>>.Ignored)).Returns(bowlers);
 
         // When
-        var actual = await DatabaseService.IsBowlerExists(SimpleData.OneBowler);
+        var actual = await service.Exists(SimpleData.OneBowler);
 
         // Then
         actual.Should().BeTrue();
@@ -66,10 +70,11 @@ public class BowlerTests : TestBase
     public async Task ItShouldReturnAllBowlers()
     {
         // Given
+        var service = new BowlerService(ContextFake);
         A.CallTo(() => ContextFake.GetAllAsync<Bowler>()).Returns(ListData.ListOfFiveBowlers);
 
         // When
-        var actual = await DatabaseService.GetAllBowlers();
+        var actual = await service.GetAll();
 
         // Then
         actual.Should().BeEquivalentTo(ListData.ListOfFiveBowlers);

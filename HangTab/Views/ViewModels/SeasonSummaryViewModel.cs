@@ -8,8 +8,10 @@ using MvvmHelpers;
 
 namespace HangTab.Views.ViewModels;
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We won't test UI code-behind.")]
-public partial class SeasonSummaryViewModel(IAudioService audio,
-                                            IDatabaseService data) : BaseViewModel
+public partial class SeasonSummaryViewModel(
+    IAudioService audio,
+    IBowlerService bowlerService,
+    IDatabaseService data) : BaseViewModel
 {
     public ObservableRangeCollection<Bowler> LowestHangBowlers { get; set; } = [];
     public ObservableRangeCollection<Bowler> AllOtherBowlers { get; set; } = [];
@@ -22,7 +24,7 @@ public partial class SeasonSummaryViewModel(IAudioService audio,
     [RelayCommand]
     private async Task InitializeDataAsync()
     {
-        _bowlers = await data.GetAllBowlers();
+        _bowlers = await bowlerService.GetAll();
         if (_bowlers is null)
         {
             return;

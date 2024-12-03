@@ -1,14 +1,13 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
-using HangTab.Data;
-
 namespace HangTab.Views.ViewModels;
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We won't test UI code-behind.")]
 [QueryProperty(nameof(Bowler), nameof(Bowler))]
-public partial class AddBowlerViewModel(IDatabaseService data,
-                                        IShellService shell,
-                                        IMediaService media) : BaseViewModel
+public partial class AddBowlerViewModel(
+    IBowlerService bowlerService,
+    IShellService shellService,
+    IMediaService mediaService) : BaseViewModel
 {
     [ObservableProperty]
     private Bowler _bowler;
@@ -16,15 +15,15 @@ public partial class AddBowlerViewModel(IDatabaseService data,
     [RelayCommand]
     private async Task DeleteBowlerAsync(int id)
     {
-        if (await shell.DisplayPromptAsync("Delete", "Are you sure you want to delete this bowler?", "Yes", "No"))
+        if (await shellService.DisplayPromptAsync("Delete", "Are you sure you want to delete this bowler?", "Yes", "No"))
         {
-            if (!await data.DeleteBowler(id))
+            if (!await bowlerService.Delete(id))
             {
-                await shell.DisplayAlertAsync("Delete Error", "Bowler was not deleted", "Ok");
+                await shellService.DisplayAlertAsync("Delete Error", "Bowler was not deleted", "Ok");
                 return;
             }
-            await shell.DisplayToastAsync("Bowler deleted");
-            await shell.ReturnToPageAsync();
+            await shellService.DisplayToastAsync("Bowler deleted");
+            await shellService.ReturnToPageAsync();
         }
     }
 
@@ -33,32 +32,32 @@ public partial class AddBowlerViewModel(IDatabaseService data,
     {
         if (string.IsNullOrEmpty(Bowler.FirstName))
         {
-            await shell.DisplayAlertAsync("Validation Error", "First name is required.", "Ok");
+            await shellService.DisplayAlertAsync("Validation Error", "First name is required.", "Ok");
             return;
         }
 
-        if (Bowler.Id == 0 && await data.IsBowlerExists(Bowler))
+        if (Bowler.Id == 0 && await bowlerService.Exists(Bowler))
         {
-            await shell.DisplayAlertAsync("Validation Error", "This bowler already exists", "Ok");
+            await shellService.DisplayAlertAsync("Validation Error", "This bowler already exists", "Ok");
             return;
         }
 
         if (!(Bowler.Id == 0
-                ? await data.AddBowler(Bowler)
-                : await data.UpdateBowler(Bowler)))
+                ? await bowlerService.Add(Bowler)
+                : await bowlerService.Update(Bowler)))
         {
-            await shell.DisplayAlertAsync("Update Error", "Unable to save bowler", "Ok");
+            await shellService.DisplayAlertAsync("Update Error", "Unable to save bowler", "Ok");
             return;
         }
 
-        await shell.DisplayToastAsync("Bowler saved");
-        await shell.ReturnToPageAsync();
+        await shellService.DisplayToastAsync("Bowler saved");
+        await shellService.ReturnToPageAsync();
     }
 
     [RelayCommand]
     private async Task SelectBowlerImageAsync()
     {
-        var result = await media.PickPhotoAsync();
+        var result = await mediaService.PickPhotoAsync();
         if (result.HasError<PickPhotoCanceled>())
         {
             return;
@@ -66,7 +65,7 @@ public partial class AddBowlerViewModel(IDatabaseService data,
 
         if (result.IsFailed)
         {
-            await shell.DisplayAlertAsync("Error", result.Errors[0].Message, "Ok");
+            await shellService.DisplayAlertAsync("Error", result.Errors[0].Message, "Ok");
             return;
         }
 

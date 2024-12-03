@@ -2,22 +2,15 @@
 using System.Linq.Expressions;
 
 namespace HangTab.Data.Impl;
-public class DatabaseService(IDatabaseContext context) : IDatabaseService
+public class DatabaseService(
+    IBowlerService bowlerService,
+    IDatabaseContext context) : IDatabaseService
 {
-    public async Task<bool> AddBowler(Bowler bowler)
-        => await context.AddItemAsync(bowler);
-
-    public async Task<bool> DeleteBowler(int id)
-        => await context.DeleteItemByIdAsync<Bowler>(id);
-
     public async Task<bool> DropAllTables()
         => await context.DropTableAsync<Bowler>()
         && await context.DropTableAsync<BowlerWeek>()
         && await context.DropTableAsync<BusRide>()
         && await context.DropTableAsync<BusRideWeek>();
-
-    public async Task<IReadOnlyCollection<Bowler>> GetAllBowlers()
-        => await context.GetAllAsync<Bowler>();
 
     public async Task<IReadOnlyCollection<Bowler>> GetFilteredBowlers(Expression<Func<Bowler, bool>> predicate)
         => await context.GetFilteredAsync(predicate);
@@ -90,7 +83,7 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
             return new List<WeekViewModel>();
         }
 
-        var allBowlers = await GetAllBowlers();
+        var allBowlers = await bowlerService.GetAll();
         if (allBowlers.Count < 1)
         {
             return new List<WeekViewModel>();
@@ -148,22 +141,15 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
             : 1;
     }
 
-    public async Task<bool> IsBowlerExists(Bowler bowler)
-    {
-        return !string.IsNullOrEmpty(bowler.FirstName)
-            && (await context.GetFilteredAsync<Bowler>(b => b.FirstName == bowler.FirstName
-                                                            && b.LastName == bowler.LastName)).Count > 0;
-    }
-
     public async Task<bool> ResetHangings()
     {
         try
         {
-            var bowlers = await context.GetAllAsync<Bowler>();
+            var bowlers = await bowlerService.GetAll();
             foreach (var bowler in bowlers)
             {
                 bowler.TotalHangings = 0;
-                if (!await UpdateBowler(bowler))
+                if (!await bowlerService.Update(bowler))
                 {
                     return false;
                 }
@@ -177,9 +163,6 @@ public class DatabaseService(IDatabaseContext context) : IDatabaseService
             return false;
         }
     }
-
-    public async Task<bool> UpdateBowler(Bowler bowler) =>
-        await context.UpdateItemAsync(bowler);
 
     public async Task<bool> UpdateBowlerHangingsByWeek(BowlerViewModel viewModel, int week)
     {
