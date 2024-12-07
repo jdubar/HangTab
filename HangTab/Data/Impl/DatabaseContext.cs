@@ -1,5 +1,6 @@
-﻿using System.Linq.Expressions;
-using SQLite;
+﻿using SQLite;
+
+using System.Linq.Expressions;
 
 namespace HangTab.Data.Impl;
 public class DatabaseContext : IDatabaseContext, IAsyncDisposable

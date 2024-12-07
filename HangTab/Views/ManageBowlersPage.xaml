@@ -42,7 +42,7 @@
                         <components:CardView BowlerName="{Binding FullName}"
                                          IsSub="{Binding IsSub}"
                                          ImageUrl="{Binding ImageUrl}"
-                                         TotalHangings="{Binding TotalHangings}"
+                                         TotalHangings="{Binding Hangings}"
                                          IsHidden="{Binding IsHidden}">
                             <components:CardView.GestureRecognizers>
                                 <TapGestureRecognizer Command="{Binding Source={x:Reference PageSelf}, Path=BindingContext.ShowAddUpdateBowlerViewCommand}"

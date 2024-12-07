@@ -12,6 +12,8 @@ public static class HangTabCustomServices
         builder.Services.AddSingleton<IDatabaseService, DatabaseService>();
         builder.Services.AddSingleton<ISettingsService>(new SettingsService(Preferences.Default));
 
+        builder.Services.AddSingleton<IBowlerService, BowlerService>();
+
         builder.Services.AddSingleton<IAudioPlayerService, AudioPlayerService>();
         builder.Services.AddSingleton<IAudioService, AudioService>();
 

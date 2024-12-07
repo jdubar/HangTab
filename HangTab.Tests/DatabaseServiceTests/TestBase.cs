@@ -1,5 +1,6 @@
 ﻿using HangTab.Data;
 using HangTab.Data.Impl;
+using HangTab.Services.Impl;
 
 namespace HangTab.Tests.DatabaseServiceTests;
 public class TestBase
@@ -10,6 +11,6 @@ public class TestBase
     protected TestBase()
     {
         ContextFake = A.Fake<IDatabaseContext>();
-        DatabaseService = new DatabaseService(ContextFake);
+        DatabaseService = new DatabaseService(A.Fake<BowlerService>(), ContextFake);
     }
 }
