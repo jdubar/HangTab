@@ -42,7 +42,7 @@ public partial class SeasonSummaryViewModel(
     {
         var lowestHangBowlers = _bowlers.GetLowestHangBowlers().Take(3).ToList();
         LowestHangBowlers.AddBowlersToCollection(lowestHangBowlers);
-        var otherBowlers = _bowlers.Except(lowestHangBowlers).OrderBy(b => b.IsSub).ThenBy(b => b.TotalHangings);
+        var otherBowlers = _bowlers.Except(lowestHangBowlers).OrderBy(b => b.IsSub).ThenBy(b => b.Hangings);
         AllOtherBowlers.AddBowlersToCollection(otherBowlers);
     }
 }

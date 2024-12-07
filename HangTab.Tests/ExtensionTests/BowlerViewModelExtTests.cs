@@ -21,7 +21,7 @@ public class BowlerViewModelExtTests
         vm.AddHanging();
 
         // Then
-        vm.Bowler.TotalHangings.Should().Be(1);
+        vm.Bowler.HangCount.Should().Be(1);
         vm.BowlerWeek.Hangings.Should().Be(2);
     }
 
@@ -31,7 +31,7 @@ public class BowlerViewModelExtTests
         // Given
         var vm = new BowlerViewModel
         {
-            Bowler = { Id = 1, FirstName = "Joe", LastName = "Sample", ImageUrl = "abc.png", TotalHangings = 9 },
+            Bowler = { Id = 1, FirstName = "Joe", LastName = "Sample", ImageUrl = "abc.png", HangCount = 9 },
             BowlerWeek = { Id = 1, BowlerId = 1, Hangings = 4, WeekNumber = 1 },
             IsEnableSwitchBowler = false,
             IsEnableUndo = false,
@@ -42,7 +42,7 @@ public class BowlerViewModelExtTests
         vm.UndoHanging();
 
         // Then
-        vm.Bowler.TotalHangings.Should().Be(8);
+        vm.Bowler.HangCount.Should().Be(8);
         vm.BowlerWeek.Hangings.Should().Be(3);
     }
 
@@ -52,7 +52,7 @@ public class BowlerViewModelExtTests
         // Given
         var vm = new BowlerViewModel
         {
-            Bowler = { Id = 1, FirstName = "Joe", LastName = "Sample", ImageUrl = "abc.png", TotalHangings = 0 },
+            Bowler = { Id = 1, FirstName = "Joe", LastName = "Sample", ImageUrl = "abc.png", HangCount = 0 },
             BowlerWeek = { Id = 1, BowlerId = 1, Hangings = 4, WeekNumber = 1 },
             IsEnableSwitchBowler = false,
             IsEnableUndo = false,
@@ -63,7 +63,7 @@ public class BowlerViewModelExtTests
         vm.UndoHanging();
 
         // Then
-        vm.Bowler.TotalHangings.Should().Be(0);
+        vm.Bowler.HangCount.Should().Be(0);
         vm.BowlerWeek.Hangings.Should().Be(4);
     }
 
@@ -73,7 +73,7 @@ public class BowlerViewModelExtTests
         // Given
         var vm = new BowlerViewModel
         {
-            Bowler = { Id = 1, FirstName = "Joe", LastName = "Sample", ImageUrl = "abc.png", TotalHangings = 9 },
+            Bowler = { Id = 1, FirstName = "Joe", LastName = "Sample", ImageUrl = "abc.png", HangCount = 9 },
             BowlerWeek = { Id = 1, BowlerId = 1, Hangings = 0, WeekNumber = 1 },
             IsEnableSwitchBowler = false,
             IsEnableUndo = false,
@@ -84,7 +84,7 @@ public class BowlerViewModelExtTests
         vm.UndoHanging();
 
         // Then
-        vm.Bowler.TotalHangings.Should().Be(9);
+        vm.Bowler.HangCount.Should().Be(9);
         vm.BowlerWeek.Hangings.Should().Be(0);
     }
 }

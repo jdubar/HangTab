@@ -15,9 +15,9 @@ public abstract class ListData
 
     public static List<Bowler> ListOfMainBowlers { get; } =
     [
-        new() { Id = 1, FirstName = "Joe", LastName = "Sample", ImageUrl = "abc.png", TotalHangings = 1 },
-        new() { Id = 2, FirstName = "Jason", LastName = "Smith", ImageUrl = "123.png", TotalHangings = 3 },
-        new() { Id = 3, FirstName = "Kenny", LastName = "Smith", ImageUrl = "daddy.png", TotalHangings = 5 },
+        new() { Id = 1, FirstName = "Joe", LastName = "Sample", ImageUrl = "abc.png", HangCount = 1 },
+        new() { Id = 2, FirstName = "Jason", LastName = "Smith", ImageUrl = "123.png", HangCount = 3 },
+        new() { Id = 3, FirstName = "Kenny", LastName = "Smith", ImageUrl = "daddy.png", HangCount = 5 },
     ];
 
     public static List<BowlerWeek> ListOfTwoBowlerWeeks { get; } =
@@ -30,19 +30,19 @@ public abstract class ListData
     [
         new()
         {
-            Bowler = { Id = 1, FirstName = "Joe", LastName = "Sample", ImageUrl = "abc.png", TotalHangings = 1 },
+            Bowler = { Id = 1, FirstName = "Joe", LastName = "Sample", ImageUrl = "abc.png", HangCount = 1 },
             BowlerWeek = { Id = 1, BowlerId = 1, WeekNumber = 1, Hangings = 1 },
             IsLowestHangs = true,
         },
         new()
         {
-            Bowler = { Id = 2, FirstName = "Jason", LastName = "Smith", ImageUrl = "123.png", TotalHangings = 3 },
+            Bowler = { Id = 2, FirstName = "Jason", LastName = "Smith", ImageUrl = "123.png", HangCount = 3 },
             BowlerWeek = { BowlerId = 2, WeekNumber = 1, Hangings = 0 },
             IsLowestHangs = false,
         },
         new()
         {
-            Bowler = { Id = 3, FirstName = "Kenny", LastName = "Smith", ImageUrl = "daddy.png", TotalHangings = 5 },
+            Bowler = { Id = 3, FirstName = "Kenny", LastName = "Smith", ImageUrl = "daddy.png", HangCount = 5 },
             BowlerWeek = { Id = 2, BowlerId = 3, WeekNumber = 1, Hangings = 3 },
             IsLowestHangs = false,
         },

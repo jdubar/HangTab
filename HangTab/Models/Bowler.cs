@@ -1,32 +1,34 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using HangTab.Models.Wrappers;
 
 using SQLite;
 
+using SQLiteNetExtensions.Attributes;
+
 namespace HangTab.Models;
 
-[Table("bowler")]
-public class Bowler : ObservableObject
+public class Bowler
 {
-    private int _totalHangings;
-    private string _imageUrl = "account_circle.png";
-
     [PrimaryKey, AutoIncrement]
-    public int Id { get; set; }
-    public string ImageUrl
-    {
-        get => _imageUrl;
-        set => SetProperty(ref _imageUrl, value);
-    }
-
+    public int Id { get; private set; }
     public string FirstName { get; set; } = string.Empty;
     public string LastName { get; set; } = string.Empty;
+    public string ImageUrl { get; set; } = string.Empty;
     public bool IsSub { get; set; }
-    public bool IsHidden { get; set; }
-    public int TotalHangings
-    {
-        get => _totalHangings;
-        set => SetProperty(ref _totalHangings, value);
-    }
 
     public string FullName => $"{FirstName} {LastName}";
+
+    [ForeignKey(typeof(Lineup), Name = "Id")]
+    public int LineupId { get; set; }
+
+    public static Bowler GenerateNewFromWrapper(LineupWrapper wrapper)
+    {
+        return new Bowler
+        {
+            Id = wrapper.Id,
+            ImageUrl = wrapper.Bowler.ImageUrl,
+            FirstName = wrapper.Bowler.FirstName,
+            LastName = wrapper.Bowler.LastName,
+            LineupId = wrapper.BowlerByWeekId,
+        };
+    }
 }

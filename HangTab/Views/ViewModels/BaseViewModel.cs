@@ -10,6 +10,9 @@ public partial class BaseViewModel : ObservableObject
     [ObservableProperty]
     private string _busyText;
 
+    [ObservableProperty]
+    private string _title;
+
     protected async Task ExecuteAsync(Func<Task> operation, string busyText = null)
     {
         IsBusy = true;

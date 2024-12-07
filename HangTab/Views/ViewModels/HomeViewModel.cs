@@ -1,9 +1,10 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.Collections.ObjectModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
-
+using CommunityToolkit.Mvvm.Messaging;
 using HangTab.Data;
 using HangTab.Extensions;
-
+using HangTab.Models.Wrappers;
 using MvvmHelpers;
 
 namespace HangTab.Views.ViewModels;
@@ -12,7 +13,8 @@ public partial class HomeViewModel(
     IDatabaseService data,
     ISettingsService settings,
     IShellService shell,
-    IAudioService audio) : BaseViewModel
+    IAudioService audio,
+    IWeekService weekService) : BaseViewModel
 {
     // TODO: Add cumulative hang cost per bowler (maybe)
     // TODO: Notify user better somehow on new week
@@ -23,16 +25,21 @@ public partial class HomeViewModel(
     // TODO: Change "Use sub" text based on whether a sub is used or not
     // TODO: Use sub's avatar to overlay main bowler's avatar
 
-    public ObservableRangeCollection<BowlerViewModel> MainBowlers { get; } = [];
+    //public ObservableRangeCollection<BowlerViewModel> MainBowlers { get; } = [];
+
+    [ObservableProperty]
+    private WeekWrapper _week;
+
+    [ObservableProperty]
+    private int _busRideTotal;
+
+
 
     [ObservableProperty]
     private bool _showBusRideImage;
 
     [ObservableProperty]
     private BusRideViewModel _busRideViewModel;
-
-    [ObservableProperty]
-    private string _titleWeek;
 
     [ObservableProperty]
     private bool _isUndoBusRideVisible;
@@ -45,21 +52,34 @@ public partial class HomeViewModel(
     [RelayCommand]
     private async Task InitializeDataAsync()
     {
-        TitleWeek = $"Week {settings.CurrentSeasonWeek} of {settings.TotalSeasonWeeks}";
-        BusRideViewModel = await data.GetBusRideViewModelByWeek(settings.CurrentSeasonWeek);
+        Title = $"Week {settings.CurrentSeasonWeek} of {settings.TotalSeasonWeeks}";
+        Week = await GetCurrentWeek();
+        BusRideTotal = await weekService.GetBusRideTotal();
 
         SetSwipeControlProperties();
 
         IsUndoBusRideVisible = IsBusRideGreaterThanZero();
 
-        MainBowlers.ReplaceRange(await data.GetMainBowlersByWeek(settings.CurrentSeasonWeek));
+        WeakReferenceMessenger.Default.Register<WeekUpdateMessage>(this, (_, handler) =>
+        {
+            MainThread.BeginInvokeOnMainThread(() =>
+            {
+                Week.BusRideCount = handler.Value.BusRideCount;
+                Week.WeekNumber = handler.Value.WeekNumber;
+            });
+        });
+    }
+
+    private async Task<WeekWrapper> GetCurrentWeek()
+    {
+        var week = await weekService.Get(settings.CurrentSeasonWeek);
+        return new WeekWrapper(week);
     }
 
     [RelayCommand]
     private async Task BusRideAsync()
     {
-        BusRideViewModel.AddBusRide();
-        if (await data.UpdateBusRidesByWeek(BusRideViewModel, settings.CurrentSeasonWeek))
+        if (await weekService.AddBusRide(Week))
         {
             IsUndoBusRideVisible = true;
             ShowBusRideImage = true;
@@ -143,7 +163,7 @@ public partial class HomeViewModel(
         }
     }
 
-    private bool IsBusRideGreaterThanZero() => BusRideViewModel.BusRideWeek.BusRides > 0;
+    private bool IsBusRideGreaterThanZero() => Week.BusRideCount > 0;
 
     private bool GetSliderState() => settings.CurrentSeasonWeek < settings.TotalSeasonWeeks;
 

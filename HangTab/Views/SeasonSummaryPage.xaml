@@ -53,7 +53,7 @@
                                 <Label Grid.Row="2"
                                        FontSize="Medium"
                                        HorizontalOptions="CenterAndExpand"
-                                       Text="{Binding TotalHangings, StringFormat='Total: {0}'}" />
+                                       Text="{Binding Hangings, StringFormat='Total: {0}'}" />
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
@@ -73,7 +73,7 @@
                                 <components:CardView BowlerName="{Binding FullName}"
                                                      IsSub="{Binding IsSub}"
                                                      ImageUrl="{Binding ImageUrl}"
-                                                     TotalHangings="{Binding TotalHangings}" />
+                                                     TotalHangings="{Binding Hangings}" />
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
@@ -82,7 +82,7 @@
                             <VerticalStackLayout HorizontalOptions="Center"
                                              VerticalOptions="Center"
                                              WidthRequest="380">
-                                <Label Text="No Bowlers Found"
+                                <Label Text="No Lineup Found"
                                    FontSize="18"
                                    FontAttributes="Bold"
                                    HorizontalTextAlignment="Center"/>

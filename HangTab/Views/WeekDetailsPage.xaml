@@ -38,7 +38,7 @@
                                                      WidthRequest="250">
                                     <Label Text="{Binding FullName, FallbackValue='Unknown Bowler'}"
                                            FontAttributes="Bold"/>
-                                    <Label Text="{Binding TotalHangings, StringFormat='Hangings: {0}'}"/>
+                                    <Label Text="{Binding Hangings, StringFormat='Hangings: {0}'}"/>
                                 </VerticalStackLayout>
                             </HorizontalStackLayout>
                             <BoxView Color="Gray"  

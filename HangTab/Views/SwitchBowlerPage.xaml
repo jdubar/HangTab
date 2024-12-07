@@ -33,7 +33,7 @@
                     <components:CardView BowlerName="{Binding FullName}"
                                          IsSub="{Binding IsSub}"
                                          ImageUrl="{Binding ImageUrl}"
-                                         TotalHangings="{Binding TotalHangings}"
+                                         TotalHangings="{Binding Hangings}"
                                          IsHidden="{Binding IsHidden}"/>
                 </DataTemplate>
             </CollectionView.ItemTemplate>

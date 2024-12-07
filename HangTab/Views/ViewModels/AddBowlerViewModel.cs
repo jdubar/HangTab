@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
+using HangTab.Messages.Errors;
+
 namespace HangTab.Views.ViewModels;
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We won't test UI code-behind.")]
 [QueryProperty(nameof(Bowler), nameof(Bowler))]

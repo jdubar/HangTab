@@ -109,7 +109,7 @@ public class DatabaseService(
                         ImageUrl = b.ImageUrl,
                         FirstName = b.FirstName,
                         LastName = b.LastName,
-                        TotalHangings = w.Hangings
+                        HangCount = w.Hangings
                     })
                 .ToList();
 
@@ -119,7 +119,7 @@ public class DatabaseService(
                 WeekNumber = week,
                 Bowlers = bowlers,
                 TotalBusRides = busRide.BusRideWeek.BusRides,
-                TotalHangings = bowlers.Sum(w => w.TotalHangings)
+                TotalHangings = bowlers.Sum(w => w.Hangings)
             };
             season.Add(weekViewModel);
         }
@@ -148,7 +148,7 @@ public class DatabaseService(
             var bowlers = await bowlerService.GetAll();
             foreach (var bowler in bowlers)
             {
-                bowler.TotalHangings = 0;
+                bowler.HangCount = 0;
                 if (!await bowlerService.Update(bowler))
                 {
                     return false;

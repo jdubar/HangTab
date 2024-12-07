@@ -3,21 +3,23 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:components="clr-namespace:HangTab.Views.Components"
              xmlns:models="clr-namespace:HangTab.Models.ViewModels"
+             xmlns:modelWrapper="clr-namespace:HangTab.Models.Wrappers"
              xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
              xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
              x:Class="HangTab.Views.HomePage"
              x:DataType="vm:HomeViewModel"
-             x:Name="PageSelf">
-    <Shell.TitleView>
+             x:Name="PageSelf"
+             Title="{Binding Title}">
+    <!--<Shell.TitleView>
         <Grid>
-            <Label Text="{Binding TitleWeek}"
+            <Label Text="{Binding Title}"
                    HorizontalOptions="Start"
                    VerticalOptions="Center"
                    TextColor="White"
                    FontSize="Medium"
                    FontAttributes="Bold"/>
         </Grid>
-    </Shell.TitleView>
+    </Shell.TitleView>-->
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
@@ -45,7 +47,7 @@
                        IsVisible="{Binding ShowBusRideImage}"
                        HorizontalOptions="Center"
                        VerticalOptions="End"/>
-                <CollectionView ItemsSource="{Binding MainBowlers}"
+                <CollectionView ItemsSource="{Binding Week.Bowlers}"
                                 Margin="0,5,0,0"
                                 ZIndex="1">
                     <CollectionView.ItemsLayout>
@@ -53,7 +55,7 @@
                                            Orientation="Vertical"/>
                     </CollectionView.ItemsLayout>
                     <CollectionView.ItemTemplate>
-                        <DataTemplate x:DataType="models:BowlerViewModel">
+                        <DataTemplate x:DataType="modelWrapper:WeekWrapper">
                             <SwipeView>
                                 <SwipeView.LeftItems>
                                     <SwipeItems>
@@ -79,16 +81,16 @@
                                                            WidthRequest="393"
                                                            BackgroundColor="{AppThemeBinding Dark={StaticResource Black},
                                                                                                                     Light={StaticResource White}}">
-                                            <components:BowlerImage IsSub="{Binding Bowler.IsSub}"
+                                            <!--<components:BowlerImage IsSub="{Binding Bowler.IsSub}"
                                                                     ImageUrl="{Binding Bowler.ImageUrl}"
-                                                                    IsLowestHangs="{Binding IsLowestHangs}"/>
+                                                                    IsLowestHangs="{Binding IsLowestHangs}"/>-->
                                             <VerticalStackLayout VerticalOptions="Center"
                                                                  WidthRequest="250">
                                                 <Label Text="{Binding Bowler.FullName, FallbackValue='Unknown Bowler'}"
                                                        FontAttributes="Bold"
                                                        FontSize="18"/>
                                                 <Label Text="{Binding BowlerWeek.Hangings, StringFormat='Hangings: {0}'}"/>
-                                                <Label Text="{Binding Bowler.TotalHangings, StringFormat='Total: {0}'}"/>
+                                                <Label Text="{Binding Bowler.Hangings, StringFormat='Total: {0}'}"/>
                                             </VerticalStackLayout>
                                             <ImageButton HorizontalOptions="End"
                                                          HeightRequest="60"
@@ -151,10 +153,10 @@
                         <VerticalStackLayout VerticalOptions="Center"
                                              WidthRequest="230"
                                              Margin="20">
-                            <Label Text="{Binding BusRideViewModel.BusRideWeek.BusRides, StringFormat='Bus Rides: {0}'}"
+                            <Label Text="{Binding Week.BusRideCount, StringFormat='Bus Rides: {0}'}"
                                    FontAttributes="Bold"
                                    FontSize="Body"/>
-                            <Label Text="{Binding BusRideViewModel.BusRide.Total, StringFormat='Total: {0}'}"
+                            <Label Text="{Binding BusRideTotal, StringFormat='Total: {0}'}"
                                    FontAttributes="Bold"
                                    FontSize="Body"/>
                         </VerticalStackLayout>
