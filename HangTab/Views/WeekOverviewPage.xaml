@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<views:ContentPageBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="HangTab.Views.WeekOverviewPage"
+             xmlns:views="clr-namespace:HangTab.Views"
+             Title="WeekOverviewPage">
+     <Grid>
+     <Grid.RowDefinitions>
+         <RowDefinition Height="*"/>
+         <RowDefinition Height="110"/>
+         <RowDefinition Height="70"/>
+     </Grid.RowDefinitions>
+
+     <Grid Grid.Row="0">
+         <Grid>
+             <Image
+                 Source="bus_splash.png"
+                 HeightRequest="300"
+                 ZIndex="2"
+                 IsVisible="{Binding ShowBusRideImage}"
+                 HorizontalOptions="Center"
+                 VerticalOptions="End"/>
+             <CollectionView
+                 ItemsSource="{Binding Bowlers}"
+                 Margin="0,5,0,0"
+                 ZIndex="1">
+                 <CollectionView.ItemsLayout>
+                     <LinearItemsLayout
+                         ItemSpacing="4"
+                         Orientation="Vertical"/>
+                 </CollectionView.ItemsLayout>
+                 <CollectionView.ItemTemplate>
+                     <DataTemplate>
+                         <SwipeView>
+                             <SwipeView.LeftItems>
+                                 <SwipeItems>
+                                     <SwipeItem
+                                         BackgroundColor="{DynamicResource Tertiary}"
+                                         Command="{Binding Source={x:Reference PageSelf}, Path=BindingContext.ShowSwitchBowlerViewCommand}"
+                                         CommandParameter="{Binding Bowler}"
+                                         IconImageSource="group.png"
+                                         Text="Use Sub"
+                                         IsVisible="{Binding IsEnableSwitchBowler}">
+                                     </SwipeItem>
+                                 </SwipeItems>
+                             </SwipeView.LeftItems>
+                             <VerticalStackLayout Spacing="10"
+                                                  VerticalOptions="Center">
+                                 <HorizontalStackLayout HeightRequest="81"
+                                                        WidthRequest="393"
+                                                        BackgroundColor="{AppThemeBinding Dark={StaticResource Black},
+                                                                                                                 Light={StaticResource White}}">
+                                         <components:BowlerImage IsSub="{Binding Bowler.IsSub}"
+                                                                 ImageUrl="{Binding Bowler.ImageUrl}"
+                                                                 IsLowestHangs="{Binding IsLowestHangs}"/>
+                                         <VerticalStackLayout VerticalOptions="Center"
+                                                              WidthRequest="250">
+                                             <Label Text="{Binding Bowler.FullName, FallbackValue='Unknown Bowler'}"
+                                                    FontAttributes="Bold"
+                                                    FontSize="18"/>
+                                             <Label Text="{Binding BowlerWeek.Hangings, StringFormat='Hangings: {0}'}"/>
+                                             <Label Text="{Binding Bowler.TotalHangings, StringFormat='Total: {0}'}"/>
+                                         </VerticalStackLayout>
+                                         <ImageButton HorizontalOptions="End"
+                                                      HeightRequest="60"
+                                                      WidthRequest="60"
+                                                      Source="add_circle.png"
+                                                      Command="{Binding Source={x:Reference PageSelf}, Path=BindingContext.HangBowlerCommand}"
+                                                      CommandParameter="{Binding .}">
+                                             <ImageButton.Behaviors>
+                                                 <toolkit:IconTintColorBehavior TintColor="{StaticResource Primary}" />
+                                             </ImageButton.Behaviors>
+                                         </ImageButton>
+                                 </HorizontalStackLayout>
+                                 <BoxView Color="Gray"  
+                                          Margin="0,-10,0,0"                   
+                                          HeightRequest="1"  
+                                          HorizontalOptions="Fill" />
+                             </VerticalStackLayout>
+                         </SwipeView>
+                     </DataTemplate>
+                 </CollectionView.ItemTemplate>
+                 <CollectionView.EmptyView>
+                     <ContentView>
+                         <VerticalStackLayout HorizontalOptions="Center"
+                                              VerticalOptions="Center"
+                                              WidthRequest="380">
+                             <Label Text="No Bowlers Found"
+                                    FontSize="18"
+                                    FontAttributes="Bold"
+                                    HorizontalTextAlignment="Center"/>
+                             <Label Text="Create bowlers on the Bowlers page"
+                                    HorizontalTextAlignment="Center"/>
+                         </VerticalStackLayout>
+                     </ContentView>
+                 </CollectionView.EmptyView>
+             </CollectionView>
+         </Grid>
+     </Grid>
+
+     <Grid Grid.Row="1">
+         <SwipeView>
+             <SwipeView.LeftItems>
+                 <SwipeItems>
+                     <SwipeItem BackgroundColor="{DynamicResource Secondary}"
+                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=UndoBusRideCommand}"
+                                IconImageSource="undo.png"
+                                IsVisible="{Binding IsUndoBusRideVisible}"
+                                Text=" Undo Bus Ride">
+                     </SwipeItem>
+                 </SwipeItems>
+             </SwipeView.LeftItems>
+             <VerticalStackLayout Spacing="10"   
+                                  VerticalOptions="Center"
+                                  BackgroundColor="{AppThemeBinding Dark={StaticResource Black},
+                                                                                         Light={StaticResource White}}">
+                 <BoxView Color="Gray"  
+                          Margin="0,0,0,-10"                   
+                          HeightRequest="1"  
+                          HorizontalOptions="Fill" />
+                 <HorizontalStackLayout>
+                     <VerticalStackLayout VerticalOptions="Center"
+                                          WidthRequest="230"
+                                          Margin="20">
+                         <Label Text="{Binding BusRideViewModel.BusRideWeek.BusRides, StringFormat='Bus Rides: {0}'}"
+                                FontAttributes="Bold"
+                                FontSize="Body"/>
+                         <Label Text="{Binding BusRideViewModel.BusRide.Total, StringFormat='Total: {0}'}"
+                                FontAttributes="Bold"
+                                FontSize="Body"/>
+                     </VerticalStackLayout>
+                     <ImageButton Source="school_bus.png"
+                                  HeightRequest="100"
+                                  HorizontalOptions="End"
+                                  WidthRequest="100"
+                                  VerticalOptions="Fill"
+                                  Margin="0,-5,10,10"
+                                  Command="{Binding Source={RelativeSource AncestorType={x:Type vm:HomeViewModel}}, Path=BusRideCommand}"/>
+                 </HorizontalStackLayout>
+             </VerticalStackLayout>
+         </SwipeView>
+     </Grid>
+
+     <Grid Grid.Row="2">
+         <VerticalStackLayout Spacing="25"
+                              Padding="10,0"
+                              VerticalOptions="Center">
+             <components:SlideControl HeightRequest="60" SlideCompleted="SlideCompleted" >
+                 <components:SlideControl.Thumb>
+                     <Border StrokeShape="RoundRectangle 60,60,60,60" StrokeThickness="0" BackgroundColor="{StaticResource Primary}" Padding="0" Margin="-20,0,0,0" HeightRequest="60" WidthRequest="60" >
+                         <Image Source="arrow_circle_right.png" Aspect="AspectFit"  VerticalOptions="Center" HorizontalOptions="Center" HeightRequest="60" WidthRequest="60" />
+                     </Border>
+                 </components:SlideControl.Thumb>
+
+                 <components:SlideControl.TrackBar>
+                     <Border StrokeShape="RoundRectangle 60,60,60,60" StrokeThickness="2" BackgroundColor="{AppThemeBinding Dark={StaticResource Black}, Light={StaticResource White}}" Padding="0">
+                         <Label Text="{Binding SwipeText}" HorizontalOptions="CenterAndExpand" VerticalOptions="CenterAndExpand" />
+                     </Border>
+                 </components:SlideControl.TrackBar>
+
+                 <components:SlideControl.FillBar>
+                     <Border  StrokeShape="RoundRectangle 60,0,60,0" StrokeThickness="0" BackgroundColor="{StaticResource Success}" Padding="0,0,20,20" />
+                 </components:SlideControl.FillBar>
+             </components:SlideControl>
+         </VerticalStackLayout>
+     </Grid>
+ </Grid>
+</views:ContentPageBase>
