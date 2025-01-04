@@ -12,7 +12,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace HangTab.ViewModels;
-public partial class BowlerAddEditViewModel : ViewModelBase
+public partial class BowlerAddEditViewModel : ViewModelBase, IQueryAttributable
 {
     private readonly IBowlerService _bowlerService;
     private readonly IDialogService _dialogService;

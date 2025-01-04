@@ -16,7 +16,7 @@ internal static class BowlerMapper
         };
     }
 
-    internal static BowlerListItemViewModel Map(this Bowler bowler)
+    private static BowlerListItemViewModel Map(this Bowler bowler)
     {
         return new BowlerListItemViewModel(
             bowler.Id,

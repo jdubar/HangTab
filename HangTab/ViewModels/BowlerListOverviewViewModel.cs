@@ -80,6 +80,8 @@ public partial class BowlerListOverviewViewModel :
         Bowlers.Clear();
         Bowlers = bowlersList.ToObservableCollection();
         // -------------------------------------------
+        // Original code before groups were added
+        // -------------------------------------------
         //var bowlers = await _bowlerService.GetBowlers();
         //List<BowlerListItemViewModel> listItems = [];
         //foreach (var bowler in bowlers)
@@ -89,6 +91,7 @@ public partial class BowlerListOverviewViewModel :
 
         //Bowlers.Clear();
         //Bowlers = listItems.ToObservableCollection();
+        // -------------------------------------------
     }
 
     [RelayCommand]
