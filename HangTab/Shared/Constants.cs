@@ -1,5 +1,4 @@
 ﻿namespace HangTab.Shared;
-[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We won't test constants.")]
 public static class Constants
 {
     public static string DatabaseName => "Bowling.db3";

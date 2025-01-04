@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<views:ContentPageBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+                       xmlns:views="clr-namespace:HangTab.Views"
+                       xmlns:dataAnnotations="clr-namespace:System.ComponentModel.DataAnnotations;assembly=System.ComponentModel.Annotations"
+                       x:Class="HangTab.Views.BowlerAddEditPage"
+                       Title="BowlerAddEditPage">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="70"/>
+        </Grid.RowDefinitions>
+
+        <Grid Grid.Row="0"
+              RowDefinitions="Auto, *"
+              ColumnDefinitions="*, Auto">
+            <StackLayout Spacing="5"
+                         Padding="15"
+                         Margin="10">
+                <!--<components:BowlerImage ImageUrl="{Binding Bowler.ImageUrl, Mode=TwoWay}"
+                                        PaddingValue="-15"
+                                        Size="150"
+                                        Margin="0,0,0,-10">
+                    <components:BowlerImage.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding SelectBowlerImageCommand}"/>
+                    </components:BowlerImage.GestureRecognizers>
+                </components:BowlerImage>-->
+                <Entry Text="{Binding FirstName, Mode=TwoWay}"
+                       FontSize="Medium"
+                       Placeholder="First Name"
+                       Margin="0"/>
+                <Entry Text="{Binding LastName, Mode=TwoWay}"
+                       FontSize="Medium"
+                       Placeholder="Last Name"
+                       Margin="0"/>
+                <HorizontalStackLayout>
+                    <Switch IsToggled="{Binding IsSub, Mode=TwoWay}"
+                            OnColor="{DynamicResource Success}"
+                            ThumbColor="{StaticResource Primary}"
+                            VerticalOptions="Center" />
+                    <Label Text="Substitute Bowler"
+                           VerticalOptions="Center"
+                           FontSize="Medium"/>
+                </HorizontalStackLayout>
+                <!--<HorizontalStackLayout>
+                    <Switch IsToggled="{Binding Bowler.IsHidden, Mode=TwoWay}"
+                            OnColor="{DynamicResource Error}"
+                            ThumbColor="{StaticResource Primary}"
+                            VerticalOptions="Center"/>
+                    <Label Text="Inactive Bowler"
+                           VerticalOptions="Center"
+                           FontSize="Medium" />
+                </HorizontalStackLayout>-->
+
+                <VerticalStackLayout Margin="0,10,0,0" BindableLayout.ItemsSource="{Binding Errors}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate x:DataType="dataAnnotations:ValidationResult">
+                            <Label
+                                Text="{Binding ErrorMessage}"  />
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
+
+                <StackLayout>
+                    <Button Text="Save Changes"
+                            HorizontalOptions="FillAndExpand"
+                            Command="{Binding SubmitCommand}">
+                        <!--<Button.Triggers>
+                            <DataTrigger TargetType="Button" 
+                                         Binding="{Binding Bowler.Id}"
+                                         Value="0">
+                                <Setter Property="Text"
+                                        Value="Add Bowler"/>
+                            </DataTrigger>
+                        </Button.Triggers>-->
+                    </Button>
+                </StackLayout>
+            </StackLayout>
+        </Grid>
+        <!--<Grid Grid.Row="1"
+              RowDefinitions="Auto, *"
+              ColumnDefinitions="*, Auto">
+            <StackLayout Padding="15" Margin="10,0">
+                <Button Text="Delete Bowler"
+                        HorizontalOptions="FillAndExpand"
+                        BackgroundColor="{StaticResource Error}"
+                        TextColor="{StaticResource White}"
+                        Command="{Binding DeleteBowlerCommand}"
+                        CommandParameter="{Binding Bowler.Id}">
+                    <Button.Triggers>
+                        <DataTrigger TargetType="Button" 
+                                     Binding="{Binding Bowler.Id}"
+                                     Value="0">
+                            <Setter Property="IsVisible"
+                                    Value="false"/>
+                        </DataTrigger>
+                    </Button.Triggers>
+                </Button>
+            </StackLayout>
+        </Grid>-->
+        <Grid Grid.Row="1"  BackgroundColor="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray500}}" 
+              IsVisible="{Binding IsLoading}">
+            <ActivityIndicator IsRunning="{Binding IsLoading}" />
+        </Grid>
+    </Grid>
+</views:ContentPageBase>

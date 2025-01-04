@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<views:ContentPageBase
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:views="clr-namespace:HangTab.Views"
+    xmlns:vm="clr-namespace:HangTab.ViewModels"
+    xmlns:models="clr-namespace:HangTab.Models"
+    x:Class="HangTab.Views.BowlerOverviewPage"
+    Title="Bowlers"
+    x:DataType="vm:BowlerListOverviewViewModel">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Command="{Binding NavigateToAddBowlerCommand}"
+            IconImageSource="person_add.png" />
+    </ContentPage.ToolbarItems>
+
+    <ContentPage.Content>
+        <StackLayout Spacing="20">
+            <SearchBar
+                x:Name="searchBar"
+                Placeholder="Search by name"
+                SearchCommand="{Binding SearchBowlersCommand}"
+                SearchCommandParameter="{Binding Text, Source={x:Reference searchBar}}" />
+            <CollectionView
+                ItemsSource="{Binding Bowlers}"
+                IsGrouped="True"
+                SelectedItem="{Binding SelectedBowler}"
+                SelectionMode="Single"
+                SelectionChangedCommand="{Binding NavigateToEditSelectedBowlerCommand}">
+                <CollectionView.GroupHeaderTemplate>
+                    <DataTemplate>
+                        <!--Group Name-->
+                        <Label
+                            x:DataType="models:BowlerGroup"
+                            Text="{Binding GroupName}"
+                            Style="{StaticResource Label_Header}" />
+                    </DataTemplate>
+                </CollectionView.GroupHeaderTemplate>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Grid
+                            x:DataType="vm:BowlerListItemViewModel"
+                            Padding="5"
+                            VerticalOptions="Center">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+
+                            <!--Avatar Image-->
+                            <toolkit:AvatarView
+                                Grid.Row="0"
+                                Grid.RowSpan="2"
+                                Style="{StaticResource CachedImageProfile}"
+                                ImageSource="{Binding ImageUrl}"
+                                WidthRequest="80"
+                                HeightRequest="80"
+                                CornerRadius="40"
+                                Text="{Binding Initials}" />
+                            
+                            <!--Full Name-->
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="1"
+                                Text="{Binding FullName}"
+                                Style="{StaticResource Label_Name}" />
+                            
+                            <!--Chevron Image-->
+                            <Image
+                                Grid.Row="0"
+                                Grid.Column="2"
+                                Grid.RowSpan="2"
+                                Source="forward_chevron.png"
+                                Margin="0,0,15,0" />
+
+                            <!--Total Hangings Count-->
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                Text="Total hangings: ##"
+                                Style="{StaticResource Label_NickName}" />
+
+                            <!--Separator-->
+                            <BoxView
+                                Grid.Row="2"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="3"
+                                Style="{StaticResource BoxViewSeparator}" />
+                        </Grid>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.GroupFooterTemplate>
+                    <DataTemplate>
+                        <Label
+                            x:DataType="models:BowlerGroup"
+                            Text="{Binding Count, StringFormat='Total: {0:D}'}"
+                            Style="{StaticResource Label_Footer}" />
+                    </DataTemplate>
+                </CollectionView.GroupFooterTemplate>
+            </CollectionView>
+        </StackLayout>
+    </ContentPage.Content>
+
+    <!--<Grid>
+        <ScrollView>
+            <Grid>
+                <StackLayout>
+                    <CollectionView
+                        ItemsSource="{Binding Bowlers}"
+                        SelectedItem="{Binding SelectedBowler}"
+                        SelectionMode="Single"
+                        SelectionChangedCommand="{Binding NavigateToEditSelectedBowlerCommand}">
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <HorizontalStackLayout Spacing="10" Margin="10">
+                                    <toolkit:AvatarView ImageSource="{Binding ImageUrl}" />
+                                    <Label Text="{Binding FirstName}"
+                                           HorizontalOptions="Center" 
+                                           VerticalOptions="Center"
+                                           HorizontalTextAlignment="Center" 
+                                           VerticalTextAlignment="Center"/>
+                                </HorizontalStackLayout>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                        <CollectionView.EmptyView>
+                            <ContentView>
+                                <VerticalStackLayout HorizontalOptions="Center"
+                                                     VerticalOptions="Center"
+                                                     WidthRequest="380">
+                                    <Label Text="No Bowlers Found"
+                                           FontSize="18"
+                                           FontAttributes="Bold"
+                                           HorizontalTextAlignment="Center"/>
+                                    <Label Text="Create a bowler using the button above"
+                                           HorizontalTextAlignment="Center"/>
+                                </VerticalStackLayout>
+                            </ContentView>
+                        </CollectionView.EmptyView>
+                    </CollectionView>
+                </StackLayout>
+            </Grid>
+        </ScrollView>
+    </Grid>-->
+</views:ContentPageBase>

@@ -1,5 +1,8 @@
-﻿using System.Linq.Expressions;
+﻿using HangTab.Shared;
+
 using SQLite;
+
+using System.Linq.Expressions;
 
 namespace HangTab.Data.Impl;
 public class DatabaseContext : IDatabaseContext, IAsyncDisposable
@@ -7,7 +10,7 @@ public class DatabaseContext : IDatabaseContext, IAsyncDisposable
     private static string DatabasePath =>
         Path.Combine(FileSystem.AppDataDirectory, Constants.DatabaseName);
 
-    private SQLiteAsyncConnection _connection;
+    private SQLiteAsyncConnection? _connection;
     private SQLiteAsyncConnection Database =>
         (_connection ??= new SQLiteAsyncConnection(DatabasePath,
             SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.SharedCache));
@@ -24,13 +27,13 @@ public class DatabaseContext : IDatabaseContext, IAsyncDisposable
     public async Task<bool> DropTableAsync<TTable>() where TTable : class, new() =>
         await Execute<TTable, bool>(async () => await Database.DropTableAsync<TTable>() > 0);
 
-    public async Task<IReadOnlyCollection<TTable>> GetAllAsync<TTable>() where TTable : class, new()
+    public async Task<IEnumerable<TTable>> GetAllAsync<TTable>() where TTable : class, new()
     {
         var table = await GetTableAsync<TTable>();
         return await table.ToListAsync();
     }
 
-    public async Task<IReadOnlyCollection<TTable>> GetFilteredAsync<TTable>(Expression<Func<TTable, bool>> predicate) where TTable : class, new()
+    public async Task<IEnumerable<TTable>> GetFilteredAsync<TTable>(Expression<Func<TTable, bool>> predicate) where TTable : class, new()
     {
         var table = await GetTableAsync<TTable>();
         return await table.Where(predicate).ToListAsync();
@@ -59,7 +62,11 @@ public class DatabaseContext : IDatabaseContext, IAsyncDisposable
 
     public async ValueTask DisposeAsync()
     {
-        await _connection.CloseAsync();
+        if (_connection is not null)
+        {
+            await _connection.CloseAsync();
+        }
+
         GC.SuppressFinalize(this);
     }
 }

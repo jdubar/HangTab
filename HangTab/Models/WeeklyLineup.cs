@@ -21,5 +21,5 @@ public class WeeklyLineup
     public int BowlerId { get; set; }
 
     [OneToOne]
-    public Bowler Bowler { get; set; }
+    public Bowler Bowler { get; set; } = new();
 }

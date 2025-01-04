@@ -1,13 +1,17 @@
-﻿using HangTab.Repositories;
+﻿using CommunityToolkit.Maui;
+
+using HangTab.Data;
+using HangTab.Data.Impl;
+using HangTab.Repositories;
 using HangTab.Repositories.Impl;
+using HangTab.Services;
 using HangTab.Services.Impl;
 using HangTab.ViewModels;
-
+using HangTab.Views;
 using Microsoft.Extensions.Logging;
 
 namespace HangTab;
 
-[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We won't test UI code-behind.")]
 public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
@@ -20,7 +24,6 @@ public static class MauiProgram
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
-                fonts.AddFont("MaterialIcons-Regular.ttf", "MaterialIconsRegular");
             })
             .RegisterRepositories()
             .RegisterServices()
@@ -37,35 +40,33 @@ public static class MauiProgram
     private static MauiAppBuilder RegisterRepositories(this MauiAppBuilder builder)
     {
         builder.Services.AddTransient<IBowlerRepository, BowlerRepository>();
-        builder.Services.AddTransient<IWeekRepository, WeekRepository>();
+        builder.Services.AddTransient<IDatabaseRepository, DatabaseRepository>();
         return builder;
     }
 
     private static MauiAppBuilder RegisterServices(this MauiAppBuilder builder)
     {
-        builder.Services.AddTransient<IBowlerService, BowlerService>();
-        builder.Services.AddTransient<INavigationService, NavigationService>();
-        builder.Services.AddTransient<IWeekService, WeekService>();
-        builder.Services.AddTransient<IDialogService, DialogService>();
+        builder.Services.AddSingleton<IDatabaseContext, DatabaseContext>();
+        builder.Services.AddSingleton<ISettingsService>(new SettingsService(Preferences.Default));
 
+        builder.Services.AddTransient<IBowlerService, BowlerService>();
+        builder.Services.AddTransient<IDatabaseService, DatabaseService>();
+        builder.Services.AddTransient<IDialogService, DialogService>();
+        builder.Services.AddTransient<INavigationService, NavigationService>();
         return builder;
     }
 
     private static MauiAppBuilder RegisterViewModels(this MauiAppBuilder builder)
     {
-        builder.Services.AddSingleton<WeekOverviewViewModel>();
-        //builder.Services.AddTransient<EventDetailViewModel>();
-        //builder.Services.AddTransient<EventAddEditViewModel>();
-
+        builder.Services.AddSingleton<BowlerListOverviewViewModel>();
+        builder.Services.AddTransient<BowlerAddEditViewModel>();
         return builder;
     }
 
     private static MauiAppBuilder RegisterViews(this MauiAppBuilder builder)
     {
-        //builder.Services.AddSingleton<EventOverviewPage>();
-        //builder.Services.AddTransient<EventDetailPage>();
-        //builder.Services.AddTransient<EventAddEditPage>();
-
+        builder.Services.AddSingleton<BowlerOverviewPage>();
+        builder.Services.AddTransient<BowlerAddEditPage>();
         return builder;
     }
 }

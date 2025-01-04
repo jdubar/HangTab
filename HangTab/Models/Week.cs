@@ -12,5 +12,5 @@ public class Week
     public int BusRides  { get; set; }
 
     [OneToMany(CascadeOperations = CascadeOperation.All)]
-    public List<WeeklyLineup> Bowlers { get; set; }
+    public List<WeeklyLineup> Bowlers { get; set; } = [];
 }

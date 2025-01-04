@@ -1,21 +1,30 @@
 <?xml version="1.0" encoding="UTF-8" ?>
-<Shell xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-       xmlns:views="clr-namespace:HangTab.Views"
-       x:Class="HangTab.AppShell"
-       FlyoutBehavior="Disabled">
+<Shell
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:HangTab.Views"
+    x:Class="HangTab.AppShell"
+    FlyoutBehavior="Disabled">
+
+    <!-- <ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate views:BowlerOverviewPage}"
+        Route="MainPage" /> -->
     <TabBar>
         <Tab Icon="home.png" Title="Home">
-            <ShellContent ContentTemplate="{DataTemplate views:HomePage}" />
+            <!--<ShellContent ContentTemplate="{DataTemplate views:HomePage}" />-->
         </Tab>
         <Tab Icon="groups.png" Title="Bowlers">
-            <ShellContent ContentTemplate="{DataTemplate views:ManageBowlersPage}" />
+            <ShellContent
+                Title="Home"
+                ContentTemplate="{DataTemplate views:BowlerOverviewPage}"
+                Route="MainPage" />
         </Tab>
         <Tab Icon="calendar_month.png" Title="Season">
-            <ShellContent ContentTemplate="{DataTemplate views:SeasonPage}" />
+            <!--<ShellContent ContentTemplate="{DataTemplate views:SeasonPage}" />-->
         </Tab>
         <Tab Icon="settings.png" Title="Settings">
-            <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" />
+            <!--<ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" />-->
         </Tab>
     </TabBar>
 </Shell>
