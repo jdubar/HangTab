@@ -1,5 +1,5 @@
 ﻿namespace HangTab.Services.Impl;
-public sealed class SettingsService(IPreferences preferences) : ISettingsService
+public class SettingsService(IPreferences preferences) : ISettingsService
 {
     public decimal CostPerHang
     {

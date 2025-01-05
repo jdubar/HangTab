@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using System.ComponentModel;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using HangTab.Services;
@@ -13,10 +14,10 @@ public partial class SettingsViewModel(
     [ObservableProperty]
     private int _totalSeasonWeeks = settingsService.TotalSeasonWeeks;
 
-    [RelayCommand]
-    private void UpdateSeasonSettings()
+    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
     {
-        if (TotalSeasonWeeks > 0)
+        base.OnPropertyChanged(e);
+        if (e.PropertyName == "TotalSeasonWeeks")
         {
             settingsService.TotalSeasonWeeks = TotalSeasonWeeks;
         }

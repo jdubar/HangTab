@@ -7,24 +7,28 @@
     Title="SettingsPage">
     <TableView Intent="Settings">
         <TableRoot>
-            <TableSection Title="General Settings"
-                          TextColor="{StaticResource Primary}">
-                <EntryCell HorizontalTextAlignment="End"
-                           Keyboard="Numeric" 
-                           Label="Weeks In The Season"
-                           LabelColor="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Gray500}}"
-                           PropertyChanged="SaveSeasonSettingsOnChange"
-                           Text="{Binding TotalSeasonWeeks}">
+            <TableSection
+                Title="General Settings"
+                TextColor="{StaticResource Primary}">
+                <EntryCell
+                    HorizontalTextAlignment="End"
+                    Keyboard="Numeric"
+                    Label="Weeks In The Season"
+                    LabelColor="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Gray500}}"
+                    Text="{Binding TotalSeasonWeeks, Mode=TwoWay}">
                 </EntryCell>
             </TableSection>
-            <TableSection Title="Data Reset"
-                          TextColor="{StaticResource Primary}">
-                <TextCell Tapped="ResetHangingsOnTap"
-                          Text="Start New Season"
-                          TextColor="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Gray500}}" />
-                <TextCell Tapped="ClearAllDataOnTap"
-                          Text="Delete All Bowlers and Data"
-                          TextColor="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Gray500}}" />
+            <TableSection
+                Title="Data Reset"
+                TextColor="{StaticResource Primary}">
+                <TextCell
+                    Command="{Binding ResetAllHangingsCommand}"
+                    Text="Start New Season"
+                    TextColor="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Gray500}}" />
+                <TextCell
+                    Command="{Binding DropAllTablesCommand}"
+                    Text="Delete All Bowlers and Data"
+                    TextColor="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Gray500}}" />
             </TableSection>
         </TableRoot>
     </TableView>
