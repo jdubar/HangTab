@@ -1,5 +1,5 @@
 ﻿namespace HangTab.Services;
-internal interface ISettingsService
+public interface ISettingsService
 {
     decimal CostPerHang { get; set; }
     int CurrentSeasonWeek { get; set; }

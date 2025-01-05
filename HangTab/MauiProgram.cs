@@ -60,6 +60,7 @@ public static class MauiProgram
     {
         builder.Services.AddSingleton<BowlerListOverviewViewModel>();
         builder.Services.AddTransient<BowlerAddEditViewModel>();
+        builder.Services.AddTransient<SettingsViewModel>();
         return builder;
     }
 
@@ -67,6 +68,7 @@ public static class MauiProgram
     {
         builder.Services.AddSingleton<BowlerOverviewPage>();
         builder.Services.AddTransient<BowlerAddEditPage>();
+        builder.Services.AddTransient<SettingsPage>();
         return builder;
     }
 }

@@ -15,16 +15,13 @@
             <!--<ShellContent ContentTemplate="{DataTemplate views:HomePage}" />-->
         </Tab>
         <Tab Icon="groups.png" Title="Bowlers">
-            <ShellContent
-                Title="Home"
-                ContentTemplate="{DataTemplate views:BowlerOverviewPage}"
-                Route="MainPage" />
+            <ShellContent ContentTemplate="{DataTemplate views:BowlerOverviewPage}" />
         </Tab>
         <Tab Icon="calendar_month.png" Title="Season">
             <!--<ShellContent ContentTemplate="{DataTemplate views:SeasonPage}" />-->
         </Tab>
         <Tab Icon="settings.png" Title="Settings">
-            <!--<ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" />-->
+            <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" />
         </Tab>
     </TabBar>
 </Shell>
