@@ -5,7 +5,7 @@
     xmlns:views="clr-namespace:HangTab.Views"
     xmlns:dataAnnotations="clr-namespace:System.ComponentModel.DataAnnotations;assembly=System.ComponentModel.Annotations"
     x:Class="HangTab.Views.BowlerAddEditPage"
-    Title="BowlerAddEditPage">
+    Title="{Binding PageTitle}">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>

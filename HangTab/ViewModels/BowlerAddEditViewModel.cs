@@ -132,7 +132,7 @@ public partial class BowlerAddEditViewModel : ViewModelBase, IQueryAttributable
             IsSub = model.IsSub;
         }
 
-        PageTitle = Id > 0 ? "Edit event" : "Add event";
+        PageTitle = Id > 0 ? "Edit Bowler" : "Add Bowler";
     }
 
     private void AddBowlerViewModel_ErrorsChanged(object? sender, DataErrorsChangedEventArgs e)

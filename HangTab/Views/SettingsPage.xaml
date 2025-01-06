@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:HangTab.Views"
     x:Class="HangTab.Views.SettingsPage"
-    Title="SettingsPage">
+    Title="Settings">
     <TableView Intent="Settings">
         <TableRoot>
             <TableSection
@@ -15,7 +15,7 @@
                     Keyboard="Numeric"
                     Label="Weeks In The Season"
                     LabelColor="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Gray500}}"
-                    Text="{Binding Settings.TotalSeasonWeeks, Mode=TwoWay}">
+                    Text="{Binding TotalSeasonWeeks, Mode=TwoWay}">
                 </EntryCell>
             </TableSection>
             <TableSection

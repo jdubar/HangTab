@@ -11,7 +11,9 @@ public partial class SettingsViewModel(
     IDialogService dialogService) : ViewModelBase
 {
     [ObservableProperty]
-    private ISettingsService _settings = settingsService;
+    private int _totalSeasonWeeks = settingsService.TotalSeasonWeeks;
+
+    partial void OnTotalSeasonWeeksChanged(int value) => settingsService.TotalSeasonWeeks = value;
 
     [RelayCommand]
     private async Task DropAllTablesAsync()

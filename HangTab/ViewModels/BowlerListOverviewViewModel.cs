@@ -30,10 +30,10 @@ public partial class BowlerListOverviewViewModel :
     }
 
     private IEnumerable<Bowler> AllBowlers { get; set; } = [];
+    private List<BowlerGroup> _allBowlersInGroups = [];
 
     [ObservableProperty]
     private ObservableCollection<BowlerGroup> _bowlers = [];
-    //private ObservableCollection<BowlerListItemViewModel> _bowlers = [];
 
     [ObservableProperty]
     private BowlerListItemViewModel? _selectedBowler;
@@ -45,7 +45,8 @@ public partial class BowlerListOverviewViewModel :
     {
         if (string.IsNullOrEmpty(value))
         {
-            Task.Run(async () => { await GetBowlers(); }).Wait();
+            Bowlers.Clear();
+            Bowlers = _allBowlersInGroups.ToObservableCollection();
         }
         else
         {
@@ -76,7 +77,8 @@ public partial class BowlerListOverviewViewModel :
 
     private async Task GetBowlers()
     {
-        //AllBowlers = await _bowlerService.GetBowlers();
+        AllBowlers = await _bowlerService.GetBowlers();
+        // TODO: Remove this when the service is implemented
         AllBowlers =
         [
             new Bowler { Id = 1, FirstName = "Player", LastName = "One" },
@@ -85,40 +87,25 @@ public partial class BowlerListOverviewViewModel :
             new Bowler { Id = 4, FirstName = "Sub", LastName = "One", IsSub = true },
             new Bowler { Id = 5, FirstName = "Sub", LastName = "Two", IsSub = true },
         ];
-        var bowlersList = new List<BowlerGroup>
-        {
-            new("Regulars", AllBowlers.Where(b => !b.IsSub).Map()),
-            new("Subs", AllBowlers.Where(b => b.IsSub).Map())
-        };
+        _allBowlersInGroups =
+        [
+            new BowlerGroup("Regulars", AllBowlers.Where(b => !b.IsSub).Map()),
+            new BowlerGroup("Subs", AllBowlers.Where(b => b.IsSub).Map())
+        ];
         Bowlers.Clear();
-        Bowlers = bowlersList.ToObservableCollection();
-        // -------------------------------------------
-        // Original code before groups were added
-        // -------------------------------------------
-        //var bowlers = await _bowlerService.GetBowlers();
-        //List<BowlerListItemViewModel> listItems = [];
-        //foreach (var bowler in bowlers)
-        //{
-        //    listItems.Add(bowler.Map());
-        //}
-
-        //Bowlers.Clear();
-        //Bowlers = listItems.ToObservableCollection();
-        // -------------------------------------------
+        Bowlers = _allBowlersInGroups.ToObservableCollection();
     }
 
-    [RelayCommand]
     private Task SearchBowlers(string searchText)
     {
-        var regs = AllBowlers.Where(b => !b.IsSub && b.FullName.Contains(searchText, StringComparison.OrdinalIgnoreCase)).Map();
-        var bowlersList = new List<BowlerGroup>
+        var filteredBowlerGroups = new List<BowlerGroup>
         {
-            new("Regulars", regs),
+            new("Regulars", AllBowlers.Where(b => !b.IsSub && b.FullName.Contains(searchText, StringComparison.OrdinalIgnoreCase)).Map()),
             new("Subs", AllBowlers.Where(b => b.IsSub && b.FullName.Contains(searchText, StringComparison.OrdinalIgnoreCase)).Map())
         };
 
         Bowlers.Clear();
-        Bowlers = bowlersList.ToObservableCollection();
+        Bowlers = filteredBowlerGroups.ToObservableCollection();
         return Task.CompletedTask;
     }
 
