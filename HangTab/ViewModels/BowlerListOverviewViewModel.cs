@@ -39,7 +39,19 @@ public partial class BowlerListOverviewViewModel :
     private BowlerListItemViewModel? _selectedBowler;
 
     [ObservableProperty]
-    private string _searchText = string.Empty;
+    private string _searchText;
+
+    partial void OnSearchTextChanged(string value)
+    {
+        if (string.IsNullOrEmpty(value))
+        {
+            Task.Run(async () => { await GetBowlers(); }).Wait();
+        }
+        else
+        {
+            Task.Run(async () => { await SearchBowlers(value); }).Wait();
+        }
+    }
 
     [RelayCommand]
     private async Task NavigateToAddBowler() => await _navigationService.GoToAddBowler();
@@ -67,11 +79,11 @@ public partial class BowlerListOverviewViewModel :
         //AllBowlers = await _bowlerService.GetBowlers();
         AllBowlers =
         [
-            new() { Id = 1, FirstName = "Player", LastName = "One" },
-            new() { Id = 2, FirstName = "Player", LastName = "Two" },
-            new() { Id = 3, FirstName = "Player", LastName = "Three" },
-            new() { Id = 4, FirstName = "Sub", LastName = "One", IsSub = true },
-            new() { Id = 5, FirstName = "Sub", LastName = "Two", IsSub = true },
+            new Bowler { Id = 1, FirstName = "Player", LastName = "One" },
+            new Bowler { Id = 2, FirstName = "Player", LastName = "Two" },
+            new Bowler { Id = 3, FirstName = "Player", LastName = "Three" },
+            new Bowler { Id = 4, FirstName = "Sub", LastName = "One", IsSub = true },
+            new Bowler { Id = 5, FirstName = "Sub", LastName = "Two", IsSub = true },
         ];
         var bowlersList = new List<BowlerGroup>
         {
@@ -96,24 +108,18 @@ public partial class BowlerListOverviewViewModel :
     }
 
     [RelayCommand]
-    private async Task SearchBowlers(string searchText)
+    private Task SearchBowlers(string searchText)
     {
-        if (string.IsNullOrEmpty(searchText))
+        var regs = AllBowlers.Where(b => !b.IsSub && b.FullName.Contains(searchText, StringComparison.OrdinalIgnoreCase)).Map();
+        var bowlersList = new List<BowlerGroup>
         {
-            await GetBowlers();
-        }
-        else
-        {
-            var regs = AllBowlers.Where(b => !b.IsSub && b.FullName.Contains(searchText, StringComparison.OrdinalIgnoreCase)).Map();
-            var bowlersList = new List<BowlerGroup>
-            {
-                new("Regulars", regs),
-                new("Subs", AllBowlers.Where(b => b.IsSub && b.FullName.Contains(searchText, StringComparison.OrdinalIgnoreCase)).Map())
-            };
+            new("Regulars", regs),
+            new("Subs", AllBowlers.Where(b => b.IsSub && b.FullName.Contains(searchText, StringComparison.OrdinalIgnoreCase)).Map())
+        };
 
-            Bowlers.Clear();
-            Bowlers = bowlersList.ToObservableCollection();
-        }
+        Bowlers.Clear();
+        Bowlers = bowlersList.ToObservableCollection();
+        return Task.CompletedTask;
     }
 
     public async void Receive(BowlerAddedOrChangedMessage message)

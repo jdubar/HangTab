@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<views:ContentPageBase xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-                       xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-                       xmlns:views="clr-namespace:HangTab.Views"
-                       xmlns:dataAnnotations="clr-namespace:System.ComponentModel.DataAnnotations;assembly=System.ComponentModel.Annotations"
-                       x:Class="HangTab.Views.BowlerAddEditPage"
-                       Title="BowlerAddEditPage">
+<views:ContentPageBase
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:HangTab.Views"
+    xmlns:dataAnnotations="clr-namespace:System.ComponentModel.DataAnnotations;assembly=System.ComponentModel.Annotations"
+    x:Class="HangTab.Views.BowlerAddEditPage"
+    Title="BowlerAddEditPage">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="*"/>
