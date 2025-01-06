@@ -1,5 +1,4 @@
-﻿using System.ComponentModel;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using HangTab.Services;
@@ -12,16 +11,7 @@ public partial class SettingsViewModel(
     IDialogService dialogService) : ViewModelBase
 {
     [ObservableProperty]
-    private int _totalSeasonWeeks = settingsService.TotalSeasonWeeks;
-
-    protected override void OnPropertyChanged(PropertyChangedEventArgs e)
-    {
-        base.OnPropertyChanged(e);
-        if (e.PropertyName == "TotalSeasonWeeks")
-        {
-            settingsService.TotalSeasonWeeks = TotalSeasonWeeks;
-        }
-    }
+    private ISettingsService _settings = settingsService;
 
     [RelayCommand]
     private async Task DropAllTablesAsync()
@@ -42,6 +32,7 @@ public partial class SettingsViewModel(
     [RelayCommand]
     private async Task ResetAllHangingsAsync()
     {
+        //TODO: Implement this method
         if (await dialogService.Ask("Reset", "Are you sure you want to start a new season and reset all bowler hangings?"))
         {
             //if (await databaseService.ResetHangings())

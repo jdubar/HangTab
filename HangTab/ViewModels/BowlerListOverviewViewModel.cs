@@ -50,6 +50,7 @@ public partial class BowlerListOverviewViewModel :
         if (SelectedBowler is not null)
         {
             await _navigationService.GoToEditBowler(SelectedBowler.Map());
+            SelectedBowler = null;
         }
     }
 

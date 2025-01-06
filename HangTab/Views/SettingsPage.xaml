@@ -15,7 +15,7 @@
                     Keyboard="Numeric"
                     Label="Weeks In The Season"
                     LabelColor="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Gray500}}"
-                    Text="{Binding TotalSeasonWeeks, Mode=TwoWay}">
+                    Text="{Binding Settings.TotalSeasonWeeks, Mode=TwoWay}">
                 </EntryCell>
             </TableSection>
             <TableSection
