@@ -46,5 +46,6 @@
     <Color x:Key="Color_SecondaryGrey">#A0A0A0</Color>
     <Color x:Key="Color_ElementGrey">#414141</Color>
     <Color x:Key="Color_LightGrey">#E0E0E0</Color>
+    <Color x:Key="Error">Red</Color>
     
 </ResourceDictionary>

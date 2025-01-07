@@ -78,7 +78,7 @@
                             <Label
                                 Grid.Row="0"
                                 Grid.Column="1"
-                                Text="{Binding FullName}"
+                                Text="{Binding Name}"
                                 Style="{StaticResource Label_Name}" />
                             
                             <!--Chevron Image-->

@@ -3,9 +3,12 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:HangTab.Views"
+    xmlns:vm="clr-namespace:HangTab.ViewModels"
     x:Class="HangTab.Views.SettingsPage"
     Title="Settings">
-    <TableView Intent="Settings">
+    <TableView
+        x:DataType="vm:SettingsViewModel"
+        Intent="Settings">
         <TableRoot>
             <TableSection
                 Title="General Settings"

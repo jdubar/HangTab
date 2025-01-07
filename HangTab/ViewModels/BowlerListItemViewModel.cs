@@ -9,10 +9,7 @@ public partial class BowlerListItemViewModel : ObservableObject
     private int _id;
 
     [ObservableProperty]
-    private string _firstName = string.Empty;
-
-    [ObservableProperty]
-    private string? _lastName;
+    private string _name = string.Empty;
 
     [ObservableProperty]
     private string? _imageUrl;
@@ -21,25 +18,18 @@ public partial class BowlerListItemViewModel : ObservableObject
     private bool _isSub;
 
     [ObservableProperty]
-    private string _fullName;
-
-    [ObservableProperty]
     private string _initials;
 
     public BowlerListItemViewModel(
         int id,
-        string firstName,
+        string name,
         bool isSub,
-        string fullName,
-        string? lastName = null,
         string? imageUrl = null)
     {
         Id = id;
-        FirstName = firstName;
-        LastName = lastName;
+        Name = name;
         ImageUrl = imageUrl;
         IsSub = isSub;
-        FullName = fullName;
-        Initials = fullName.GetInitials();
+        Initials = name.GetInitials();
     }
 }

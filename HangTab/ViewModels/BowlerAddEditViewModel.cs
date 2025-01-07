@@ -10,6 +10,7 @@ using HangTab.ViewModels.Base;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using HangTab.Extensions;
 
 namespace HangTab.ViewModels;
 public partial class BowlerAddEditViewModel : ViewModelBase, IQueryAttributable
@@ -36,17 +37,17 @@ public partial class BowlerAddEditViewModel : ViewModelBase, IQueryAttributable
     private int _id;
 
     [ObservableProperty]
-    [Required]
-    [MinLength(3)]
-    [MaxLength(50)]
+    [Required(ErrorMessage="First name is a required field")]
+    [MinLength(3, ErrorMessage="First name must have at least 3 characters")]
+    [MaxLength(50, ErrorMessage="First name has a maximum of 50 characters")]
     [NotifyDataErrorInfo]
-    private string _firstName = string.Empty;
-
-    [ObservableProperty]
-    private string? _lastName;
+    private string _name = string.Empty;
 
     [ObservableProperty]
     private string? _imageUrl;
+
+    [ObservableProperty]
+    private string _initials;
 
     [ObservableProperty]
     private bool _isSub;
@@ -104,8 +105,6 @@ public partial class BowlerAddEditViewModel : ViewModelBase, IQueryAttributable
                     _bowler = await _bowlerService.GetBowler(Id);
                 }
                 MapBowler(_bowler);
-
-                ValidateAllProperties();
             });
     }
 
@@ -114,8 +113,7 @@ public partial class BowlerAddEditViewModel : ViewModelBase, IQueryAttributable
         return new Bowler
         {
             Id = Id,
-            FirstName = FirstName,
-            LastName = LastName ?? string.Empty,
+            Name = Name,
             ImageUrl = ImageUrl ?? string.Empty,
             IsSub = IsSub,
         };
@@ -126,10 +124,10 @@ public partial class BowlerAddEditViewModel : ViewModelBase, IQueryAttributable
         if (model is not null)
         {
             Id = model.Id;
-            FirstName = model.FirstName;
-            LastName = model.LastName;
+            Name = model.Name;
             ImageUrl = model.ImageUrl;
             IsSub = model.IsSub;
+            Initials = model.Name.GetInitials();
         }
 
         PageTitle = Id > 0 ? "Edit Bowler" : "Add Bowler";
@@ -148,5 +146,11 @@ public partial class BowlerAddEditViewModel : ViewModelBase, IQueryAttributable
         {
             _bowler = query["Bowler"] as Bowler;
         }
+    }
+
+    [RelayCommand]
+    private async Task SelectBowlerImage()
+    {
+        // TODO: Complete this method https://learn.microsoft.com/en-us/dotnet/maui/platform-integration/device-media/picker?view=net-maui-9.0&tabs=android
     }
 }

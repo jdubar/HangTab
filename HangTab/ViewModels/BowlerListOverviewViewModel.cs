@@ -81,11 +81,11 @@ public partial class BowlerListOverviewViewModel :
         // TODO: Remove this when the service is implemented
         AllBowlers =
         [
-            new Bowler { Id = 1, FirstName = "Player", LastName = "One" },
-            new Bowler { Id = 2, FirstName = "Player", LastName = "Two" },
-            new Bowler { Id = 3, FirstName = "Player", LastName = "Three" },
-            new Bowler { Id = 4, FirstName = "Sub", LastName = "One", IsSub = true },
-            new Bowler { Id = 5, FirstName = "Sub", LastName = "Two", IsSub = true },
+            new Bowler { Id = 1, Name = "Player One" },
+            new Bowler { Id = 2, Name = "Player Two" },
+            new Bowler { Id = 3, Name = "Player Three" },
+            new Bowler { Id = 4, Name = "Sub One", IsSub = true },
+            new Bowler { Id = 5, Name = "Sub Two", IsSub = true },
         ];
         _allBowlersInGroups =
         [
@@ -100,8 +100,8 @@ public partial class BowlerListOverviewViewModel :
     {
         var filteredBowlerGroups = new List<BowlerGroup>
         {
-            new("Regulars", AllBowlers.Where(b => !b.IsSub && b.FullName.Contains(searchText, StringComparison.OrdinalIgnoreCase)).Map()),
-            new("Subs", AllBowlers.Where(b => b.IsSub && b.FullName.Contains(searchText, StringComparison.OrdinalIgnoreCase)).Map())
+            new("Regulars", AllBowlers.Where(b => !b.IsSub && b.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)).Map()),
+            new("Subs", AllBowlers.Where(b => b.IsSub && b.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)).Map())
         };
 
         Bowlers.Clear();

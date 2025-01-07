@@ -9,10 +9,9 @@ internal static class BowlerMapper
         return new Bowler
         {
             Id = bowlerListItemViewModel.Id,
-            FirstName = bowlerListItemViewModel.FirstName,
-            LastName = bowlerListItemViewModel.LastName ?? string.Empty,
+            Name = bowlerListItemViewModel.Name,
             IsSub = bowlerListItemViewModel.IsSub,
-            ImageUrl = bowlerListItemViewModel.ImageUrl ?? string.Empty,
+            ImageUrl = bowlerListItemViewModel.ImageUrl,
         };
     }
 
@@ -20,10 +19,8 @@ internal static class BowlerMapper
     {
         return new BowlerListItemViewModel(
             bowler.Id,
-            bowler.FirstName,
+            bowler.Name,
             bowler.IsSub,
-            bowler.FullName,
-            bowler.LastName,
             bowler.ImageUrl);
     }
 
