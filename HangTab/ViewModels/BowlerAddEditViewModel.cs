@@ -11,19 +11,35 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using HangTab.Extensions;
+using HangTab.Views;
 
 namespace HangTab.ViewModels;
-public partial class BowlerAddEditViewModel : ViewModelBase, IQueryAttributable
+public partial class BowlerAddEditViewModel :
+    ViewModelBase,
+    IQueryAttributable,
+    IRecipient<BowlerImageAddedOrChangedMessage>
 {
     private readonly IBowlerService _bowlerService;
     private readonly IDialogService _dialogService;
     private readonly INavigationService _navigationService;
+    private readonly IMediaPickerService _mediaPickerService;
 
-    public BowlerAddEditViewModel(IBowlerService bowlerService, IDialogService dialogService, INavigationService navigationService)
+    private readonly AvatarSelectBottomSheet _avatarOptionsBottomSheet;
+
+    public BowlerAddEditViewModel(
+        IBowlerService bowlerService,
+        IDialogService dialogService,
+        INavigationService navigationService,
+        IMediaPickerService mediaPickerService)
     {
         _bowlerService = bowlerService;
         _dialogService = dialogService;
         _navigationService = navigationService;
+        _mediaPickerService = mediaPickerService;
+
+        _avatarOptionsBottomSheet = new AvatarSelectBottomSheet(new AvatarSelectViewModel(_dialogService, _mediaPickerService));
+
+        WeakReferenceMessenger.Default.Register(this);
 
         ErrorsChanged += AddBowlerViewModel_ErrorsChanged;
     }
@@ -54,6 +70,9 @@ public partial class BowlerAddEditViewModel : ViewModelBase, IQueryAttributable
 
     [ObservableProperty]
     private ObservableCollection<ValidationResult> _errors = [];
+
+    [RelayCommand]
+    private async Task ShowAvatarOptionsBottomSheet() => await _avatarOptionsBottomSheet.ShowAsync();
 
     [RelayCommand(CanExecute = nameof(CanSubmitBowler))]
     private async Task Submit()
@@ -92,8 +111,14 @@ public partial class BowlerAddEditViewModel : ViewModelBase, IQueryAttributable
             }
         }
     }
-
-    private bool CanSubmitBowler() => !HasErrors;
+    
+    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        if (query.Count > 0)
+        {
+            _bowler = query["Bowler"] as Bowler;
+        }
+    }
 
     public override async Task LoadAsync()
     {
@@ -108,29 +133,10 @@ public partial class BowlerAddEditViewModel : ViewModelBase, IQueryAttributable
             });
     }
 
-    private Bowler MapDataToBowler()
+    public void Receive(BowlerImageAddedOrChangedMessage message)
     {
-        return new Bowler
-        {
-            Id = Id,
-            Name = Name,
-            ImageUrl = ImageUrl ?? string.Empty,
-            IsSub = IsSub,
-        };
-    }
-
-    private void MapBowler(Bowler? model)
-    {
-        if (model is not null)
-        {
-            Id = model.Id;
-            Name = model.Name;
-            ImageUrl = model.ImageUrl;
-            IsSub = model.IsSub;
-            Initials = model.Name.GetInitials();
-        }
-
-        PageTitle = Id > 0 ? "Edit Bowler" : "Add Bowler";
+        ImageUrl = message.ImageUrl;
+        _avatarOptionsBottomSheet.DismissAsync();
     }
 
     private void AddBowlerViewModel_ErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
@@ -140,17 +146,30 @@ public partial class BowlerAddEditViewModel : ViewModelBase, IQueryAttributable
         SubmitCommand.NotifyCanExecuteChanged();
     }
 
-    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    private bool CanSubmitBowler() => !HasErrors;
+    
+    private void MapBowler(Bowler? model)
     {
-        if (query.Count > 0)
+        if (model is not null)
         {
-            _bowler = query["Bowler"] as Bowler;
+            Id = model.Id;
+            Name = model.Name;
+            ImageUrl = model.ImageUrl;
+            IsSub = model.IsSub;
+            Initials = model.Id > 0 ? model.Name.GetInitials() : string.Empty;
         }
+
+        PageTitle = Id > 0 ? "Edit Bowler" : "Add Bowler";
     }
 
-    [RelayCommand]
-    private async Task SelectBowlerImage()
+    private Bowler MapDataToBowler()
     {
-        // TODO: Complete this method https://learn.microsoft.com/en-us/dotnet/maui/platform-integration/device-media/picker?view=net-maui-9.0&tabs=android
+        return new Bowler
+        {
+            Id = Id,
+            Name = Name,
+            ImageUrl = ImageUrl ?? string.Empty,
+            IsSub = IsSub,
+        };
     }
 }

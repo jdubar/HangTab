@@ -86,15 +86,22 @@
 	<ItemGroup>
 		<PackageReference Include="CommunityToolkit.Maui" Version="10.0.0" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.21" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.22" />
 		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.0" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 		<PackageReference Include="SQLiteNetExtensions" Version="2.1.0" />
+		<PackageReference Include="The49.Maui.BottomSheet" Version="8.0.3" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<MauiXaml Update="Resources\Styles\CustomStyles.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Resources\Styles\Icons.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\AvatarSelectBottomSheet.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\BowlerAddEditPage.xaml">
 			<Generator>MSBuild:Compile</Generator>

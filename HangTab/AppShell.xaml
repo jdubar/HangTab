@@ -14,13 +14,23 @@
         <Tab Icon="home.png" Title="Home">
             <!--<ShellContent ContentTemplate="{DataTemplate views:HomePage}" />-->
         </Tab>
-        <Tab Icon="groups.png" Title="Bowlers">
+        <Tab Title="Bowlers">
+            <Tab.Icon>
+                <FontImageSource
+                    FontFamily="MaterialIcons"
+                    Glyph="{StaticResource groups}" />
+            </Tab.Icon>
             <ShellContent ContentTemplate="{DataTemplate views:BowlerOverviewPage}" />
         </Tab>
         <Tab Icon="calendar_month.png" Title="Season">
             <!--<ShellContent ContentTemplate="{DataTemplate views:SeasonPage}" />-->
         </Tab>
-        <Tab Icon="settings.png" Title="Settings">
+        <Tab Title="Settings">
+            <Tab.Icon>
+                <FontImageSource
+                    FontFamily="MaterialIcons"
+                    Glyph="{StaticResource settings}" />
+            </Tab.Icon>
             <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" />
         </Tab>
     </TabBar>

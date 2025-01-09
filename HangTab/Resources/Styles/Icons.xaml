@@ -1,0 +1,14 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="HangTab.Resources.Styles.Icons">
+    
+    <x:String x:Key="add_a_photo">&#xe439;</x:String>
+    <x:String x:Key="delete">&#xe872;</x:String>
+    <x:String x:Key="groups">&#xf233;</x:String>
+    <x:String x:Key="image">&#xe3f4;</x:String>
+    <x:String x:Key="person_add">&#xe7fe;</x:String>
+    <x:String x:Key="photo_camera">&#xe412;</x:String>
+    <x:String x:Key="settings">&#xe8b8;</x:String>
+</ResourceDictionary>

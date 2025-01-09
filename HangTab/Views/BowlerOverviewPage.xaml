@@ -11,8 +11,13 @@
     x:DataType="vm:BowlerListOverviewViewModel">
     <ContentPage.ToolbarItems>
         <ToolbarItem
-            Command="{Binding NavigateToAddBowlerCommand}"
-            IconImageSource="person_add.png" />
+            Command="{Binding NavigateToAddBowlerCommand}">
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="MaterialIcons"
+                    Glyph="{StaticResource person_add}" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
     </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
@@ -72,10 +77,12 @@
                                 WidthRequest="80"
                                 HeightRequest="80"
                                 CornerRadius="40"
-                                Text="{Binding Initials}" />
+                                Text="{Binding Initials}"
+                                FontSize="20"/>
                             
                             <!--Full Name-->
                             <Label
+                                FontSize="Large"
                                 Grid.Row="0"
                                 Grid.Column="1"
                                 Text="{Binding Name}"
@@ -93,7 +100,7 @@
                             <Label
                                 Grid.Row="1"
                                 Grid.Column="1"
-                                Text="Total hangings: ##"
+                                Text="Total hangings: 0"
                                 Style="{StaticResource Label_NickName}" />
 
                             <!--Separator-->
