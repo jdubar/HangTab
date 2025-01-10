@@ -1,6 +1,8 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
+using CommunityToolkit.Mvvm.Messaging;
 
+using HangTab.Messages;
 using HangTab.Services;
 using HangTab.ViewModels.Base;
 
@@ -22,6 +24,7 @@ public partial class SettingsViewModel(
         {
             if (await databaseService.DropAllTables())
             {
+                WeakReferenceMessenger.Default.Send(new BowlerAddedOrChangedMessage());
                 await dialogService.ToastAsync("All databases have been deleted");
             }
             else
@@ -37,6 +40,7 @@ public partial class SettingsViewModel(
         //TODO: Implement this method
         if (await dialogService.Ask("Reset", "Are you sure you want to start a new season and reset all bowler hangings?"))
         {
+            WeakReferenceMessenger.Default.Send(new BowlerAddedOrChangedMessage());
             //if (await databaseService.ResetHangings())
             //{
             //    await dialogService.ToastAsync("New season has been started");

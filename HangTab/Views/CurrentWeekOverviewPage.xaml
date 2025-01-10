@@ -5,65 +5,22 @@
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:views="clr-namespace:HangTab.Views"
     xmlns:vm="clr-namespace:HangTab.ViewModels"
-    xmlns:models="clr-namespace:HangTab.Models"
-    x:Class="HangTab.Views.BowlerOverviewPage"
-    Title="Bowlers"
-    x:DataType="vm:BowlerListOverviewViewModel">
+    x:Class="HangTab.Views.CurrentWeekOverviewPage"
+    x:DataType="vm:CurrentWeekOverviewViewModel"
+    Title="{Binding PageTitle}">
     
-    <ContentPage.Resources>
-        <Style TargetType="Grid">
-            <Setter Property="VisualStateManager.VisualStateGroups">
-                <VisualStateGroupList>
-                    <VisualStateGroup x:Name="CommonStates">
-                        <VisualState x:Name="Normal" />
-                        <VisualState x:Name="Selected">
-                            <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
-                            </VisualState.Setters>
-                        </VisualState>
-                    </VisualStateGroup>
-                </VisualStateGroupList>
-            </Setter>
-        </Style>
-    </ContentPage.Resources>
-    
-    <ContentPage.ToolbarItems>
-        <ToolbarItem
-            Command="{Binding NavigateToAddBowlerCommand}">
-            <ToolbarItem.IconImageSource>
-                <FontImageSource
-                    FontFamily="MaterialIcons"
-                    Glyph="{StaticResource person_add}" />
-            </ToolbarItem.IconImageSource>
-        </ToolbarItem>
-    </ContentPage.ToolbarItems>
-
-    <ContentPage.Content>
+    <Grid
+        RowDefinitions="*,Auto,Auto">
         <Grid
-            RowDefinitions="50,*">
-            <Border
-                StrokeShape="RoundRectangle  5"
-                Margin="5,1">
-                <SearchBar
-                    Placeholder="Search by name" 
-                    Text="{Binding SearchText, Mode=TwoWay}"/>
-            </Border>
+            Grid.Row="0">
+            <Image Source="bus_splash.png"
+                       HeightRequest="300"
+                       ZIndex="2"
+                       IsVisible="False"
+                       HorizontalOptions="Center"
+                       VerticalOptions="End" />
             <CollectionView
-                Grid.Row="1"
-                ItemsSource="{Binding Bowlers}"
-                IsGrouped="True"
-                SelectedItem="{Binding SelectedBowler}"
-                SelectionMode="Single"
-                SelectionChangedCommand="{Binding NavigateToEditSelectedBowlerCommand}">
-                <CollectionView.GroupHeaderTemplate>
-                    <DataTemplate>
-                        <!--Group Name-->
-                        <Label
-                            x:DataType="models:BowlerGroup"
-                            Text="{Binding GroupName}"
-                            Style="{StaticResource Label_Header}" />
-                    </DataTemplate>
-                </CollectionView.GroupHeaderTemplate>
+                ItemsSource="{Binding Bowlers}">
                 <CollectionView.ItemTemplate>
                     <DataTemplate>
                         <Grid
@@ -125,32 +82,23 @@
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
-                <CollectionView.GroupFooterTemplate>
-                    <DataTemplate>
-                        <Label
-                            x:DataType="models:BowlerGroup"
-                            Text="{Binding Count, StringFormat='Total: {0:D}'}"
-                            Style="{StaticResource Label_Footer}" />
-                    </DataTemplate>
-                </CollectionView.GroupFooterTemplate>
                 <CollectionView.EmptyView>
                     <ContentView>
-                        <VerticalStackLayout
-                            HorizontalOptions="Center"
-                            VerticalOptions="Center"
-                            WidthRequest="380">
-                            <Label
-                                Text="No Bowlers Found"
-                                FontSize="18"
-                                FontAttributes="Bold"
-                                HorizontalTextAlignment="Center" />
-                            <Label
-                                Text="Create a bowler using the button above"
-                                HorizontalTextAlignment="Center" />
+                        <VerticalStackLayout HorizontalOptions="Center"
+                                                VerticalOptions="Center"
+                                                WidthRequest="380">
+                            <Label Text="No Bowlers Found"
+                                    FontSize="18"
+                                    FontAttributes="Bold"
+                                    HorizontalTextAlignment="Center"/>
+                            <Label Text="Create bowlers on the Bowlers page"
+                                    HorizontalTextAlignment="Center"/>
                         </VerticalStackLayout>
                     </ContentView>
                 </CollectionView.EmptyView>
             </CollectionView>
         </Grid>
-    </ContentPage.Content>
+        
+        
+    </Grid>
 </views:ContentPageBase>

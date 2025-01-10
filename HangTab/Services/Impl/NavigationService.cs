@@ -17,5 +17,7 @@ public class NavigationService : INavigationService
         await Shell.Current.GoToAsync("bowler/edit", navigationParameter);
     }
 
-    public Task GoToOverview() => Shell.Current.GoToAsync("//overview");
+    public Task GoToBowlerOverview() => Shell.Current.GoToAsync("//bowleroverview");
+    public Task GoToCurrentWeekOverview() => Shell.Current.GoToAsync("//currentweekoverview");
+    public Task GoToSettings() => Shell.Current.GoToAsync("//settings");
 }

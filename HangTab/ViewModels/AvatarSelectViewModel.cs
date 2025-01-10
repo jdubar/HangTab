@@ -15,7 +15,7 @@ public partial class AvatarSelectViewModel(
     {
         if (await dialogService.Ask("Delete", "Remove the bowler's profile image?"))
         {
-            WeakReferenceMessenger.Default.Send(new BowlerImageAddedOrChangedMessage(string.Empty));
+            WeakReferenceMessenger.Default.Send(new BowlerImageAddedOrChangedMessage(null));
         }
     }
 

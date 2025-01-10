@@ -20,7 +20,9 @@ public partial class BowlerListOverviewViewModel :
     private readonly IBowlerService _bowlerService;
     private readonly INavigationService _navigationService;
 
-    public BowlerListOverviewViewModel(IBowlerService bowlerService, INavigationService navigationService)
+    public BowlerListOverviewViewModel(
+        IBowlerService bowlerService,
+        INavigationService navigationService)
     {
         _bowlerService = bowlerService;
         _navigationService = navigationService;
@@ -29,7 +31,19 @@ public partial class BowlerListOverviewViewModel :
         WeakReferenceMessenger.Default.Register<BowlerDeletedMessage>(this);
     }
 
-    private IEnumerable<Bowler> AllBowlers { get; set; } = [];
+    private IEnumerable<Bowler> _allBowlers = [];
+    private IEnumerable<Bowler> AllBowlers
+    {
+        get => _allBowlers;
+        set
+        {
+            SetProperty(ref _allBowlers, value);
+            if (!_allBowlers.Any())
+            {
+                Bowlers.Clear();
+            }
+        }
+    }
     private List<BowlerGroup> _allBowlersInGroups = [];
 
     [ObservableProperty]
@@ -78,22 +92,25 @@ public partial class BowlerListOverviewViewModel :
     private async Task GetBowlers()
     {
         AllBowlers = await _bowlerService.GetBowlers();
+        if (AllBowlers.Any())
+        {
+            _allBowlersInGroups =
+            [
+                new BowlerGroup("Regulars", AllBowlers.Where(b => !b.IsSub).Map()),
+                new BowlerGroup("Subs", AllBowlers.Where(b => b.IsSub).Map())
+            ];
+            Bowlers.Clear();
+            Bowlers = _allBowlersInGroups.ToObservableCollection();
+        }
         // TODO: Remove this when the service is implemented
-        AllBowlers =
-        [
-            new Bowler { Id = 1, Name = "Player One" },
-            new Bowler { Id = 2, Name = "Player Two" },
-            new Bowler { Id = 3, Name = "Player Three" },
-            new Bowler { Id = 4, Name = "Sub One", IsSub = true },
-            new Bowler { Id = 5, Name = "Sub Two", IsSub = true },
-        ];
-        _allBowlersInGroups =
-        [
-            new BowlerGroup("Regulars", AllBowlers.Where(b => !b.IsSub).Map()),
-            new BowlerGroup("Subs", AllBowlers.Where(b => b.IsSub).Map())
-        ];
-        Bowlers.Clear();
-        Bowlers = _allBowlersInGroups.ToObservableCollection();
+        //AllBowlers =
+        //[
+        //    new Bowler { Id = 1, Name = "Player One" },
+        //    new Bowler { Id = 2, Name = "Player Two" },
+        //    new Bowler { Id = 3, Name = "Player Three" },
+        //    new Bowler { Id = 4, Name = "Sub One", IsSub = true },
+        //    new Bowler { Id = 5, Name = "Sub Two", IsSub = true },
+        //];
     }
 
     private Task SearchBowlers(string searchText)
@@ -124,13 +141,11 @@ public partial class BowlerListOverviewViewModel :
 
     public void Receive(BowlerDeletedMessage message)
     {
-        ////var deletedEvent = Bowlers.FirstOrDefault(e => e.Id == message.Id);
-        //var deletedEvent = Bowlers.SelectMany(g => g..Bowlers).FirstOrDefault(e => e.Id == message.Id);
-
-        //if (deletedEvent is not null)
-        //{
-        //    //Bowlers.Remove(deletedEvent);
-        //    Bowlers.SelectMany(g => g.Bowlers).ToObservableCollection().Remove(deletedEvent);
-        //}
+        var deletedBowler = Bowlers.SelectMany(g => g).FirstOrDefault(b => b.Id == message.Id);
+        if (deletedBowler is not null)
+        {
+            Bowlers.First(g => g.Contains(deletedBowler)).Remove(deletedBowler);
+            AllBowlers = AllBowlers.Where(b => b.Id != message.Id);
+        }
     }
 }

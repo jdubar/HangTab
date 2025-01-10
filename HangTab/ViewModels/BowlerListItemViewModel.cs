@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
+using HangTab.Enums;
 using HangTab.Extensions;
 
 namespace HangTab.ViewModels;
@@ -20,16 +21,31 @@ public partial class BowlerListItemViewModel : ObservableObject
     [ObservableProperty]
     private string _initials;
 
+    [ObservableProperty]
+    private int _hangings;
+
+    [ObservableProperty]
+    private int _position;
+
+    [ObservableProperty]
+    private BowlerStatus _status;
+
     public BowlerListItemViewModel(
         int id,
         string name,
         bool isSub,
-        string? imageUrl = null)
+        int hangings = 0,
+        int position = 0,
+        string? imageUrl = null,
+        BowlerStatus status = BowlerStatus.Active)
     {
         Id = id;
         Name = name;
         ImageUrl = imageUrl;
         IsSub = isSub;
         Initials = name.GetInitials();
+        Hangings = hangings;
+        Position = position;
+        Status = status;
     }
 }

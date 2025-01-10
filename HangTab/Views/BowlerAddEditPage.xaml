@@ -7,8 +7,33 @@
     xmlns:dataAnnotations="clr-namespace:System.ComponentModel.DataAnnotations;assembly=System.ComponentModel.Annotations"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     x:Class="HangTab.Views.BowlerAddEditPage"
-    x:DataType="vm:BowlerAddEditViewModel"
-    Title="{Binding PageTitle}">
+    x:DataType="vm:BowlerAddEditViewModel">
+    
+    <Shell.TitleView>
+        <Grid>
+            <Label Text="{Binding PageTitle}"
+                   HorizontalOptions="Start"
+                   VerticalOptions="Center"
+                   TextColor="{StaticResource PrimaryDark}"
+                   FontSize="Medium"
+                   FontAttributes="Bold" />
+            <ImageButton
+                Aspect="Center"
+                HorizontalOptions="End"
+                VerticalOptions="Center"
+                IsVisible="{Binding ShowDeleteButton}"
+                CornerRadius="100"
+                Command="{Binding DeleteBowlerCommand}">
+                <ImageButton.Source>
+                    <FontImageSource
+                        FontFamily="MaterialIcons"
+                        Glyph="{StaticResource delete}"
+                        Size="20"/>
+                </ImageButton.Source>
+            </ImageButton>
+        </Grid>
+    </Shell.TitleView>
+    
     <Grid
         RowDefinitions="Auto,Auto,Auto,*,Auto"
         RowSpacing="10"
@@ -33,7 +58,8 @@
                     HeightRequest="70"
                     Margin="140,140,0,0"
                     ZIndex="2"
-                    Command="{Binding ShowAvatarOptionsBottomSheetCommand}">
+                    Command="{Binding ShowAvatarOptionsBottomSheetCommand}"
+                    CommandParameter="{x:Reference NameEntry}">
                     <ImageButton.Source>
                         <FontImageSource
                             FontFamily="MaterialIcons"
@@ -60,13 +86,15 @@
             Grid.Row="1"
             Margin="10,0"
             Spacing="10">
-            <VerticalStackLayout Spacing="5">
+            <VerticalStackLayout>
                 <Label
                     Text="Bowler Name"
                     FontAttributes="Bold" />
                 <Border
-                    StrokeShape="RoundRectangle  5">
+                    StrokeShape="RoundRectangle  5"
+                    Margin="0,5">
                     <Entry
+                        x:Name="NameEntry"
                         ClearButtonVisibility="WhileEditing"
                         Placeholder="Bowler's full name"
                         Keyboard="Text"

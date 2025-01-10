@@ -6,32 +6,42 @@
     x:Class="HangTab.AppShell"
     FlyoutBehavior="Disabled">
 
-    <!-- <ShellContent
-        Title="Home"
-        ContentTemplate="{DataTemplate views:BowlerOverviewPage}"
-        Route="MainPage" /> -->
     <TabBar>
-        <Tab Icon="home.png" Title="Home">
-            <!--<ShellContent ContentTemplate="{DataTemplate views:HomePage}" />-->
+        <Tab
+            Title="Home">
+            <Tab.Icon>
+                <FontImageSource
+                    FontFamily="MaterialIcons"
+                    Glyph="{StaticResource home}" />
+            </Tab.Icon>
+            <ShellContent
+                ContentTemplate="{DataTemplate views:CurrentWeekOverviewPage}"
+                Route="currentweekoverview"/>
         </Tab>
-        <Tab Title="Bowlers">
+        <Tab
+            Title="Bowlers">
             <Tab.Icon>
                 <FontImageSource
                     FontFamily="MaterialIcons"
                     Glyph="{StaticResource groups}" />
             </Tab.Icon>
-            <ShellContent ContentTemplate="{DataTemplate views:BowlerOverviewPage}" />
+            <ShellContent
+                ContentTemplate="{DataTemplate views:BowlerOverviewPage}"
+                Route="bowleroverview"/>
         </Tab>
         <Tab Icon="calendar_month.png" Title="Season">
             <!--<ShellContent ContentTemplate="{DataTemplate views:SeasonPage}" />-->
         </Tab>
-        <Tab Title="Settings">
+        <Tab
+            Title="Settings">
             <Tab.Icon>
                 <FontImageSource
                     FontFamily="MaterialIcons"
                     Glyph="{StaticResource settings}" />
             </Tab.Icon>
-            <ShellContent ContentTemplate="{DataTemplate views:SettingsPage}" />
+            <ShellContent
+                ContentTemplate="{DataTemplate views:SettingsPage}"
+                Route="settings"/>
         </Tab>
     </TabBar>
 </Shell>

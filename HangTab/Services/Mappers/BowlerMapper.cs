@@ -15,17 +15,19 @@ internal static class BowlerMapper
         };
     }
 
+    internal static List<BowlerListItemViewModel> Map(this IEnumerable<Bowler> bowlers)
+    {
+        return bowlers.Select(b => b.Map()).ToList();
+    }
+
     private static BowlerListItemViewModel Map(this Bowler bowler)
     {
         return new BowlerListItemViewModel(
             bowler.Id,
             bowler.Name,
             bowler.IsSub,
+            default,
+            default,
             bowler.ImageUrl);
-    }
-
-    internal static List<BowlerListItemViewModel> Map(this IEnumerable<Bowler> bowlers)
-    {
-        return bowlers.Select(b => b.Map()).ToList();
     }
 }

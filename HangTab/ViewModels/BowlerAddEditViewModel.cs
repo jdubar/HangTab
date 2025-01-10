@@ -1,17 +1,18 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Maui.Core.Platform;
+using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 
+using HangTab.Extensions;
 using HangTab.Messages;
 using HangTab.Models;
 using HangTab.Services;
 using HangTab.ViewModels.Base;
+using HangTab.Views;
 
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
-using HangTab.Extensions;
-using HangTab.Views;
 
 namespace HangTab.ViewModels;
 public partial class BowlerAddEditViewModel :
@@ -71,8 +72,36 @@ public partial class BowlerAddEditViewModel :
     [ObservableProperty]
     private ObservableCollection<ValidationResult> _errors = [];
 
+    [ObservableProperty]
+    private bool _showDeleteButton;
+
     [RelayCommand]
-    private async Task ShowAvatarOptionsBottomSheet() => await _avatarOptionsBottomSheet.ShowAsync();
+    private async Task DeleteBowler()
+    {
+        if (await _dialogService.Ask("Delete", "Are you sure you want to delete this bowler?"))
+        {
+            if (await _bowlerService.DeleteBowler(_bowler.Id))
+            {
+                WeakReferenceMessenger.Default.Send(new BowlerDeletedMessage(_bowler.Id));
+            }
+            else
+            {
+                await _dialogService.AlertAsync("Critical Error", "Error occurred while deleting the bowler!", "Ok");
+            }
+            await _navigationService.GoToBowlerOverview();
+        }
+    }
+
+    [RelayCommand]
+    private async Task ShowAvatarOptionsBottomSheet(ITextInput view, CancellationToken token)
+    {
+        if (view.IsSoftKeyboardShowing())
+        {
+            await view.HideKeyboardAsync(token);
+        }
+
+        await _avatarOptionsBottomSheet.ShowAsync();
+    }
 
     [RelayCommand(CanExecute = nameof(CanSubmitBowler))]
     private async Task Submit()
@@ -89,8 +118,7 @@ public partial class BowlerAddEditViewModel :
             if (await _bowlerService.AddBowler(model))
             {
                 WeakReferenceMessenger.Default.Send(new BowlerAddedOrChangedMessage());
-                await _dialogService.Notify("Success", "The bowler was added.");
-                await _navigationService.GoToOverview();
+                await _navigationService.GoToBowlerOverview();
             }
             else
             {
@@ -129,6 +157,12 @@ public partial class BowlerAddEditViewModel :
                 {
                     _bowler = await _bowlerService.GetBowler(Id);
                 }
+
+                if (_bowler is not null)
+                {
+                    ShowDeleteButton = true;
+                }
+
                 MapBowler(_bowler);
             });
     }
@@ -168,7 +202,7 @@ public partial class BowlerAddEditViewModel :
         {
             Id = Id,
             Name = Name,
-            ImageUrl = ImageUrl ?? string.Empty,
+            ImageUrl = ImageUrl,
             IsSub = IsSub,
         };
     }

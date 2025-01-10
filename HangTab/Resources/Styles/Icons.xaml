@@ -7,6 +7,7 @@
     <x:String x:Key="add_a_photo">&#xe439;</x:String>
     <x:String x:Key="delete">&#xe872;</x:String>
     <x:String x:Key="groups">&#xf233;</x:String>
+    <x:String x:Key="home">&#xe88a;</x:String>
     <x:String x:Key="image">&#xe3f4;</x:String>
     <x:String x:Key="person_add">&#xe7fe;</x:String>
     <x:String x:Key="photo_camera">&#xe412;</x:String>

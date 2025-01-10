@@ -48,6 +48,7 @@ public static class MauiProgram
 
         builder.Services.AddTransient<IBowlerRepository, BowlerRepository>();
         builder.Services.AddTransient<IDatabaseRepository, DatabaseRepository>();
+        builder.Services.AddTransient<IWeekRepository, WeekRepository>();
         return builder;
     }
 
@@ -61,25 +62,28 @@ public static class MauiProgram
         builder.Services.AddTransient<IDialogService, DialogService>();
         builder.Services.AddTransient<IMediaPickerService, MediaPickerService>();
         builder.Services.AddTransient<INavigationService, NavigationService>();
+        builder.Services.AddTransient<IWeekService, WeekService>();
         return builder;
     }
 
     private static MauiAppBuilder RegisterViewModels(this MauiAppBuilder builder)
     {
         builder.Services.AddSingleton<BowlerListOverviewViewModel>();
+        builder.Services.AddSingleton<CurrentWeekOverviewViewModel>();
+        builder.Services.AddSingleton<SettingsViewModel>();
 
         builder.Services.AddTransient<AvatarSelectViewModel>();
         builder.Services.AddTransient<BowlerAddEditViewModel>();
-        builder.Services.AddTransient<SettingsViewModel>();
         return builder;
     }
 
     private static MauiAppBuilder RegisterViews(this MauiAppBuilder builder)
     {
         builder.Services.AddSingleton<BowlerOverviewPage>();
+        builder.Services.AddSingleton<CurrentWeekOverviewPage>();
+        builder.Services.AddSingleton<SettingsPage>();
 
         builder.Services.AddTransient<BowlerAddEditPage>();
-        builder.Services.AddTransient<SettingsPage>();
         return builder;
     }
 }
