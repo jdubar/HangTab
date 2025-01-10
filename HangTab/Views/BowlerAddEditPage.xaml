@@ -21,14 +21,15 @@
                 Aspect="Center"
                 HorizontalOptions="End"
                 VerticalOptions="Center"
-                IsVisible="{Binding ShowDeleteButton}"
                 CornerRadius="100"
+                Margin="10,0"
+                IsVisible="{Binding ShowDeleteButton}"
                 Command="{Binding DeleteBowlerCommand}">
                 <ImageButton.Source>
                     <FontImageSource
                         FontFamily="MaterialIcons"
                         Glyph="{StaticResource delete}"
-                        Size="20"/>
+                        Size="30"/>
                 </ImageButton.Source>
             </ImageButton>
         </Grid>
