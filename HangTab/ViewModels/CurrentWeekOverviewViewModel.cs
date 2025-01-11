@@ -3,7 +3,9 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Messaging;
 
 using HangTab.Messages;
+using HangTab.Models;
 using HangTab.Services;
+using HangTab.Services.Mappers;
 using HangTab.ViewModels.Base;
 
 using System.Collections.ObjectModel;
@@ -38,6 +40,9 @@ public partial class CurrentWeekOverviewViewModel :
     private string _pageTitle = string.Empty;
 
     [ObservableProperty]
+    private Week _week;
+
+    [ObservableProperty]
     private ObservableCollection<BowlerListItemViewModel> _bowlers = [];
 
     public override async Task LoadAsync()
@@ -46,34 +51,52 @@ public partial class CurrentWeekOverviewViewModel :
 
         if (Bowlers.Count == 0)
         {
-            await Loading(GetBowlers);
+            await Loading(GetCurrentWeek);
         }
     }
 
-    private async Task GetBowlers()
+    private async Task GetCurrentWeek()
     {
-        var week = await _weekService.GetWeekByWeekNumber(_settingsService.CurrentSeasonWeek);
-        var bowlers = week.Bowlers.Join(
-             await _bowlerService.GetBowlers(),
-            w => w.BowlerId,
-            b => b.Id,
-            (w, b) => new BowlerListItemViewModel(
-                b.Id,
-                b.Name,
-                b.IsSub,
-                w.HangCount,
-                w.Position,
-                b.ImageUrl,
-                w.Status));
-
-        List<BowlerListItemViewModel> listItems = [];
-        foreach (var bowler in bowlers)
-        {
-            listItems.Add(bowler);
-        }
+        Week = await _weekService.GetWeekByWeekNumber(_settingsService.CurrentSeasonWeek);
 
         Bowlers.Clear();
-        Bowlers = listItems.ToObservableCollection();
+        Bowlers = Week.Bowlers.Map().ToObservableCollection();
+        //var bowlers = await _bowlerService.GetBowlers();
+        //var week = await _weekService.GetWeekByWeekNumber(_settingsService.CurrentSeasonWeek);
+        //if (week is null)
+        //{
+        //    var newWeek = new Week
+        //        {
+        //            WeekNumber = _settingsService.CurrentSeasonWeek,
+        //            BusRides = 0,
+        //            Bowlers = bowlers
+        //        };
+
+        //    if (await _weekService.CreateWeek(newWeek))
+        //    {
+        //        week = newWeek;
+        //    }
+        //    else
+        //    {
+        //        return; // TODO: Add error handling
+        //    }
+        //}
+
+        //var listItems = week.Bowlers.Join(
+        //    await _bowlerService.GetBowlers(),
+        //    w => w.BowlerId,
+        //    b => b.Id,
+        //    (w, b) => new BowlerListItemViewModel(
+        //        b.Id,
+        //        b.Name,
+        //        b.IsSub,
+        //        w.HangCount,
+        //        w.Position,
+        //        b.ImageUrl,
+        //        w.Status));
+
+        //Bowlers.Clear();
+        //Bowlers = listItems.ToObservableCollection();
     }
 
     public async void Receive(BowlerAddedOrChangedMessage message)

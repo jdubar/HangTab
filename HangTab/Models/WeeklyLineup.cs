@@ -11,7 +11,7 @@ public class WeeklyLineup
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
     public int Position { get; set; }
-    public BowlerStatus Status { get; set; }
+    public BowlerStatus Status { get; set; } = BowlerStatus.Active;
     public int HangCount { get; set; }
 
     [ForeignKey(typeof(Week))]
