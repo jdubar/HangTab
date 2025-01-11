@@ -102,15 +102,6 @@ public partial class BowlerListOverviewViewModel :
             Bowlers.Clear();
             Bowlers = _allBowlersInGroups.ToObservableCollection();
         }
-        // TODO: Remove this when the service is implemented
-        //AllBowlers =
-        //[
-        //    new Bowler { Id = 1, Name = "Player One" },
-        //    new Bowler { Id = 2, Name = "Player Two" },
-        //    new Bowler { Id = 3, Name = "Player Three" },
-        //    new Bowler { Id = 4, Name = "Sub One", IsSub = true },
-        //    new Bowler { Id = 5, Name = "Sub Two", IsSub = true },
-        //];
     }
 
     private Task SearchBowlers(string searchText)

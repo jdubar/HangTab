@@ -5,6 +5,7 @@
     x:Class="HangTab.Resources.Styles.Icons">
     
     <x:String x:Key="add_a_photo">&#xe439;</x:String>
+    <x:String x:Key="chevron_right">&#xe5cc;</x:String>
     <x:String x:Key="delete">&#xe872;</x:String>
     <x:String x:Key="groups">&#xf233;</x:String>
     <x:String x:Key="home">&#xe88a;</x:String>
