@@ -26,17 +26,9 @@
                         <Grid
                             x:DataType="vm:BowlerListItemViewModel"
                             Padding="5"
+                            ColumnDefinitions="Auto,*,Auto"
+                            RowDefinitions="Auto,Auto,Auto"
                             VerticalOptions="Center">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
 
                             <!--Avatar Image-->
                             <toolkit:AvatarView
@@ -90,15 +82,34 @@
                             <Label Text="No Bowlers Found"
                                     FontSize="18"
                                     FontAttributes="Bold"
-                                    HorizontalTextAlignment="Center"/>
+                                    HorizontalTextAlignment="Center" />
                             <Label Text="Create bowlers on the Bowlers page"
-                                    HorizontalTextAlignment="Center"/>
+                                    HorizontalTextAlignment="Center" />
                         </VerticalStackLayout>
                     </ContentView>
                 </CollectionView.EmptyView>
             </CollectionView>
         </Grid>
         
+        <Grid
+            Grid.Row="1"
+            ColumnDefinitions="*,Auto"
+            Padding="10,0">
+            <Label
+                FontAttributes="Bold"
+                FontSize="Body"
+                Text="{Binding Week.BusRides, StringFormat='Bus Rides: {0}'}"
+                VerticalTextAlignment="Center" />
+            <ImageButton
+                Source="school_bus.png"
+                HeightRequest="100"
+                HorizontalOptions="End"
+                WidthRequest="100"
+                VerticalOptions="Center" />
+        </Grid>
         
+        <Grid
+            Grid.Row="2">
+        </Grid>
     </Grid>
 </views:ContentPageBase>

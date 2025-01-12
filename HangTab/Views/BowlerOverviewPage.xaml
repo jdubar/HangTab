@@ -69,17 +69,9 @@
                         <Grid
                             x:DataType="vm:BowlerListItemViewModel"
                             Padding="5"
+                            ColumnDefinitions="Auto,*,Auto"
+                            RowDefinitions="Auto,Auto,Auto"
                             VerticalOptions="Center">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
 
                             <!--Avatar Image-->
                             <toolkit:AvatarView

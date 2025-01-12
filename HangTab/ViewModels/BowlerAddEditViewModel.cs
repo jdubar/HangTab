@@ -118,7 +118,7 @@ public partial class BowlerAddEditViewModel :
             if (await _bowlerService.AddBowler(model))
             {
                 WeakReferenceMessenger.Default.Send(new BowlerAddedOrChangedMessage());
-                await _navigationService.GoToBowlerOverview();
+                await _navigationService.GoBack();
             }
             else
             {
@@ -130,7 +130,6 @@ public partial class BowlerAddEditViewModel :
             if (await _bowlerService.UpdateBowler(model))
             {
                 WeakReferenceMessenger.Default.Send(new BowlerAddedOrChangedMessage());
-                await _dialogService.Notify("Success", "The bowler was updated.");
                 await _navigationService.GoBack();
             }
             else

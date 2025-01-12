@@ -9,18 +9,25 @@ public class WeekRepository(IDatabaseContext context) : IWeekRepository
     public async Task<Week> GetWeekByWeekNumber(int weekNumber)
     {
         var weeks = await context.GetFilteredAsync<Week>(w => w.WeekNumber == weekNumber);
-        return weeks is null || !weeks.Any()
-            ? await CreateWeek(weekNumber)
-            : weeks.First();
+        return weeks.Any()
+            ? weeks.First()
+            : await CreateWeek(weekNumber);
     }
     public async Task<Week> CreateWeek(int weekNumber)
     {
         var week = new Week
         {
             WeekNumber = weekNumber,
-            BusRides = 0
+            BusRides = 0,
+            Bowlers = []
         };
+
         var regulars = await context.GetFilteredAsync<Bowler>(b => !b.IsSub);
+        if (!regulars.Any())
+        {
+            return week;
+        }
+
         var lineup = regulars.Select((b, index) => new WeeklyLineup
         {
             Position = index + 1,
