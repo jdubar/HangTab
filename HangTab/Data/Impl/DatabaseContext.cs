@@ -1,6 +1,7 @@
 ﻿using HangTab.Shared;
 
 using SQLite;
+using SQLiteNetExtensionsAsync.Extensions;
 
 using System.Linq.Expressions;
 
@@ -45,7 +46,28 @@ public class DatabaseContext : IDatabaseContext, IAsyncDisposable
     public async Task<bool> UpdateItemAsync<TTable>(TTable item) where TTable : class, new() =>
         await Execute<TTable, bool>(async () => await Database.UpdateAsync(item) > 0);
 
-    private async Task CreateTableIfNotExists<TTable>() where TTable : class, new() =>
+    public async Task<TTable> GetWithChildrenAsync<TTable>(object id) where TTable : class, new() =>
+        await Execute<TTable, TTable>(async () => await Database.GetWithChildrenAsync<TTable>(id, recursive: true));
+
+    public async Task InsertWithChildrenAsync<TTable>(TTable item) where TTable : class, new()
+    {
+        await Execute<TTable, Task>(async () =>
+        {
+            await Database.InsertWithChildrenAsync(item, recursive: true);
+            return Task.CompletedTask;
+        });
+    }
+
+    public async Task UpdateWithChildrenAsync<TTable>(TTable item) where TTable : class, new()
+    {
+        await Execute<TTable, Task>(async () =>
+        {
+            await Database.UpdateWithChildrenAsync(item);
+            return Task.CompletedTask;
+        });
+    }
+
+    public async Task CreateTableIfNotExists<TTable>() where TTable : class, new() =>
         await Database.CreateTableAsync<TTable>();
 
     private async Task<AsyncTableQuery<TTable>> GetTableAsync<TTable>() where TTable : class, new()

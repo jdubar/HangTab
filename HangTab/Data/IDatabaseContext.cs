@@ -11,4 +11,10 @@ public interface IDatabaseContext
     Task<IEnumerable<TTable>> GetFilteredAsync<TTable>(Expression<Func<TTable, bool>> predicate) where TTable : class, new();
     Task<TTable> GetItemByIdAsync<TTable>(object id) where TTable : class, new();
     Task<bool> UpdateItemAsync<TTable>(TTable item) where TTable : class, new();
+
+    Task<TTable> GetWithChildrenAsync<TTable>(object id) where TTable : class, new();
+    Task InsertWithChildrenAsync<TTable>(TTable item) where TTable : class, new();
+    Task UpdateWithChildrenAsync<TTable>(TTable item) where TTable : class, new();
+
+    Task CreateTableIfNotExists<TTable>() where TTable : class, new();
 }
