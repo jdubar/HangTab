@@ -6,110 +6,132 @@
     xmlns:views="clr-namespace:HangTab.Views"
     xmlns:vm="clr-namespace:HangTab.ViewModels"
     x:Class="HangTab.Views.CurrentWeekOverviewPage"
-    x:DataType="vm:CurrentWeekOverviewViewModel"
-    Title="{Binding PageTitle}">
+    x:DataType="vm:CurrentWeekOverviewViewModel">
     
-    <Grid
-        RowDefinitions="*,Auto,Auto">
+    <Shell.TitleView>
+        <Label
+            Text="{Binding PageTitle}"
+            Style="{StaticResource Label_PageTitle}" />
+    </Shell.TitleView>
+    
+    <ContentPage.Content>
         <Grid
-            Grid.Row="0">
-            <Image Source="bus_splash.png"
-                       HeightRequest="300"
-                       ZIndex="2"
-                       IsVisible="False"
-                       HorizontalOptions="Center"
-                       VerticalOptions="End" />
-            <CollectionView
-                ItemsSource="{Binding Bowlers}">
-                <CollectionView.ItemTemplate>
-                    <DataTemplate>
-                        <Grid
-                            x:DataType="vm:BowlerListItemViewModel"
-                            Padding="5"
-                            ColumnDefinitions="Auto,*,Auto"
-                            RowDefinitions="Auto,Auto,Auto"
-                            VerticalOptions="Center">
+            RowDefinitions="*,Auto,Auto">
+            <Grid
+                Grid.Row="0">
+                <!--<Image
+                    Source="bus_splash.png"
+                    HeightRequest="300"
+                    ZIndex="2"
+                    IsVisible="False"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center" />-->
+                <CollectionView
+                    ItemsSource="{Binding CurrentWeekBowlers}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Grid
+                                x:DataType="vm:BowlerListItemViewModel"
+                                Padding="5"
+                                ColumnDefinitions="Auto,*,Auto"
+                                RowDefinitions="Auto,Auto,Auto"
+                                VerticalOptions="Center">
 
-                            <!--Avatar Image-->
-                            <toolkit:AvatarView
-                                Grid.Row="0"
-                                Grid.RowSpan="2"
-                                Style="{StaticResource CachedImageProfile}"
-                                ImageSource="{Binding ImageUrl}"
-                                WidthRequest="80"
-                                HeightRequest="80"
-                                CornerRadius="40"
-                                Text="{Binding Initials}"
-                                FontSize="20"/>
+                                <!--Avatar Image-->
+                                <toolkit:AvatarView
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Style="{StaticResource CachedAvatarProfile}"
+                                    ImageSource="{Binding ImageUrl}"
+                                    WidthRequest="60"
+                                    HeightRequest="60"
+                                    Text="{Binding Initials}" />
                             
-                            <!--Full Name-->
-                            <Label
-                                FontSize="Large"
-                                Grid.Row="0"
-                                Grid.Column="1"
-                                Text="{Binding Name}"
-                                Style="{StaticResource Label_Name}" />
+                                <!--Full Name-->
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    Text="{Binding Name}"
+                                    Style="{StaticResource Label_Name}" />
                             
-                            <!--Chevron Image-->
-                            <Image
-                                Grid.Row="0"
-                                Grid.Column="2"
-                                Grid.RowSpan="2"
-                                Source="forward_chevron.png"
-                                Margin="0,0,15,0" />
+                                <!--Hanging Stepper-->
+                                <Stepper
+                                    Grid.Row="0"
+                                    Grid.Column="2"
+                                    Grid.RowSpan="2"
+                                    WidthRequest="100"
+                                    VerticalOptions="Center"
+                                    Margin="10,0"
+                                    Minimum="0"
+                                    Value="{Binding Hangings}" />
 
-                            <!--Total Hangings Count-->
+                                <!--Total Hangings Count-->
+                                <Label
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    Text="{Binding Hangings, StringFormat='Hangings: {0:D}'}"
+                                    Style="{StaticResource Label_Hangings}" />
+
+                                <!--Separator-->
+                                <BoxView
+                                    Grid.Row="2"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="3"
+                                    Style="{StaticResource BoxViewSeparator}" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    <CollectionView.FooterTemplate>
+                        <DataTemplate>
+                            <!--Group Total-->
                             <Label
-                                Grid.Row="1"
-                                Grid.Column="1"
-                                Text="Total hangings: 0"
-                                Style="{StaticResource Label_NickName}" />
-
-                            <!--Separator-->
-                            <BoxView
-                                Grid.Row="2"
-                                Grid.Column="0"
-                                Grid.ColumnSpan="3"
-                                Style="{StaticResource BoxViewSeparator}" />
-                        </Grid>
-                    </DataTemplate>
-                </CollectionView.ItemTemplate>
-                <CollectionView.EmptyView>
-                    <ContentView>
-                        <VerticalStackLayout HorizontalOptions="Center"
-                                                VerticalOptions="Center"
-                                                WidthRequest="380">
-                            <Label Text="No Bowlers Found"
-                                    FontSize="18"
-                                    FontAttributes="Bold"
-                                    HorizontalTextAlignment="Center" />
-                            <Label Text="Create bowlers on the Bowlers page"
-                                    HorizontalTextAlignment="Center" />
-                        </VerticalStackLayout>
-                    </ContentView>
-                </CollectionView.EmptyView>
-            </CollectionView>
-        </Grid>
+                                Text="Total Bowler Hangings: 0"
+                                Style="{StaticResource Label_Footer}" />
+                        </DataTemplate>
+                    </CollectionView.FooterTemplate>
+                    <CollectionView.EmptyView>
+                        <ContentView>
+                            <VerticalStackLayout HorizontalOptions="Center"
+                                                    VerticalOptions="Center"
+                                                    WidthRequest="380">
+                                <Label Text="Your lineup is empty"
+                                        FontSize="18"
+                                        FontAttributes="Bold"
+                                        HorizontalTextAlignment="Center" />
+                                <Label Text="Create bowlers on the Bowlers page"
+                                        HorizontalTextAlignment="Center" />
+                            </VerticalStackLayout>
+                        </ContentView>
+                    </CollectionView.EmptyView>
+                </CollectionView>
+            </Grid>
         
-        <Grid
-            Grid.Row="1"
-            ColumnDefinitions="*,Auto"
-            Padding="10,0">
-            <Label
-                FontAttributes="Bold"
-                FontSize="Body"
-                Text="{Binding Week.BusRides, StringFormat='Bus Rides: {0}'}"
-                VerticalTextAlignment="Center" />
-            <ImageButton
-                Source="school_bus.png"
-                HeightRequest="100"
-                HorizontalOptions="End"
-                WidthRequest="100"
-                VerticalOptions="Center" />
-        </Grid>
+            <Grid
+                Grid.Row="1"
+                ColumnDefinitions="*,Auto"
+                Padding="10,0">
+                
+                <Border
+                    Style="{StaticResource RoundedCornerBorder}">
+                    <Grid>
+                        <Label
+                            Text="{Binding Week.BusRides, StringFormat='Bus Rides: {0}'}"
+                            Style="{StaticResource Label_Name}" />
+                
+                        <ImageButton
+                            Source="school_bus.png"
+                            HeightRequest="100"
+                            HorizontalOptions="End"
+                            WidthRequest="100"
+                            VerticalOptions="Center"
+                            Margin="0,0,10,10"/>
+                    </Grid>
+                </Border>
+            </Grid>
         
-        <Grid
-            Grid.Row="2">
+            <Grid
+                Grid.Row="2">
+            </Grid>
         </Grid>
-    </Grid>
+    </ContentPage.Content>
 </views:ContentPageBase>

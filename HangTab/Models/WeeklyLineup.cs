@@ -5,12 +5,10 @@ using SQLite;
 using SQLiteNetExtensions.Attributes;
 
 namespace HangTab.Models;
-[Table("WeeklyLineups")]
 public class WeeklyLineup
 {
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
-    public int Position { get; set; }
     public BowlerStatus Status { get; set; } = BowlerStatus.Active;
     public int HangCount { get; set; }
 

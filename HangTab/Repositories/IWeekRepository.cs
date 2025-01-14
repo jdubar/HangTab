@@ -5,6 +5,7 @@ public interface IWeekRepository
 {
     Task<Week> GetWeek(int id);
     Task<IEnumerable<Week>> GetWeeks();
-    Task<Week> GetWeekByWeekNumber(int weekNumber);
+    Task<Week> GetWeekById(int id);
     Task<Week> CreateWeek(int weekNumber);
+    Task UpdateWeek(Week week);
 }

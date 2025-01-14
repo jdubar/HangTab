@@ -25,9 +25,6 @@ public partial class BowlerListItemViewModel : ObservableObject
     private int _hangings;
 
     [ObservableProperty]
-    private int _position;
-
-    [ObservableProperty]
     private BowlerStatus _status;
 
     public BowlerListItemViewModel(
@@ -35,7 +32,6 @@ public partial class BowlerListItemViewModel : ObservableObject
         string name,
         bool isSub,
         int hangings = 0,
-        int position = 0,
         string? imageUrl = null,
         BowlerStatus status = BowlerStatus.Active)
     {
@@ -45,7 +41,6 @@ public partial class BowlerListItemViewModel : ObservableObject
         IsSub = isSub;
         Initials = name.GetInitials();
         Hangings = hangings;
-        Position = position;
         Status = status;
     }
 }

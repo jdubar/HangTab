@@ -11,12 +11,9 @@
     
     <Shell.TitleView>
         <Grid>
-            <Label Text="{Binding PageTitle}"
-                   HorizontalOptions="Start"
-                   VerticalOptions="Center"
-                   TextColor="{StaticResource PrimaryDark}"
-                   FontSize="Medium"
-                   FontAttributes="Bold" />
+            <Label
+                Text="{Binding PageTitle}"
+                Style="{StaticResource Label_PageTitle}" />
             <ImageButton
                 Aspect="Center"
                 HorizontalOptions="End"
@@ -29,7 +26,9 @@
                     <FontImageSource
                         FontFamily="MaterialIcons"
                         Glyph="{StaticResource delete}"
-                        Size="30"/>
+                        Size="30"
+                        Color="{AppThemeBinding Dark={StaticResource White},
+                                                Light={StaticResource Black}}" />
                 </ImageButton.Source>
             </ImageButton>
         </Grid>

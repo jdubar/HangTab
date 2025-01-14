@@ -49,6 +49,7 @@ public static class MauiProgram
         builder.Services.AddTransient<IBowlerRepository, BowlerRepository>();
         builder.Services.AddTransient<IDatabaseRepository, DatabaseRepository>();
         builder.Services.AddTransient<IWeekRepository, WeekRepository>();
+        builder.Services.AddTransient<IWeeklyLineupRepository, WeeklyLineupRepository>();
         return builder;
     }
 
@@ -63,6 +64,7 @@ public static class MauiProgram
         builder.Services.AddTransient<IMediaPickerService, MediaPickerService>();
         builder.Services.AddTransient<INavigationService, NavigationService>();
         builder.Services.AddTransient<IWeekService, WeekService>();
+        builder.Services.AddTransient<IWeeklyLineupService, WeeklyLineupService>();
         return builder;
     }
 

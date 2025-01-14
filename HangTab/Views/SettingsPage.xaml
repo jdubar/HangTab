@@ -5,11 +5,20 @@
     xmlns:views="clr-namespace:HangTab.Views"
     xmlns:vm="clr-namespace:HangTab.ViewModels"
     x:Class="HangTab.Views.SettingsPage"
-    Title="Settings">
+    x:DataType="vm:SettingsViewModel">
+    
+    <Shell.TitleView>
+        <Label
+            Text="Settings"
+            Style="{StaticResource Label_PageTitle}" />
+    </Shell.TitleView>
+    
     <TableView
         x:DataType="vm:SettingsViewModel"
         Intent="Settings">
         <TableRoot>
+            
+            <!--General Settings-->
             <TableSection
                 Title="General Settings"
                 TextColor="{StaticResource Primary}">
@@ -21,6 +30,8 @@
                     Text="{Binding TotalSeasonWeeks, Mode=TwoWay}">
                 </EntryCell>
             </TableSection>
+            
+            <!--Data Reset Options-->
             <TableSection
                 Title="Data Reset"
                 TextColor="{StaticResource Primary}">

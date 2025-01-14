@@ -20,92 +20,89 @@ public partial class CurrentWeekOverviewViewModel :
     private readonly IDatabaseService _databaseService;
     private readonly ISettingsService _settingsService;
     private readonly IWeekService _weekService;
+    private readonly IWeeklyLineupService _weeklyLineupService;
 
     public CurrentWeekOverviewViewModel(
         IBowlerService bowlerService,
         IDatabaseService databaseService,
         ISettingsService settingsService,
-        IWeekService weekService)
+        IWeekService weekService,
+        IWeeklyLineupService weeklyLineupService)
     {
         _bowlerService = bowlerService;
         _databaseService = databaseService;
         _settingsService = settingsService;
         _weekService = weekService;
+        _weeklyLineupService = weeklyLineupService;
 
         WeakReferenceMessenger.Default.Register<BowlerAddedOrChangedMessage>(this);
         WeakReferenceMessenger.Default.Register<BowlerDeletedMessage>(this);
     }
 
     [ObservableProperty]
-    private string _pageTitle = string.Empty;
+    private string _pageTitle;
 
     [ObservableProperty]
-    private Week _week;
+    private Week _week = new();
 
     [ObservableProperty]
-    private ObservableCollection<BowlerListItemViewModel> _bowlers = [];
+    private ObservableCollection<BowlerListItemViewModel> _currentWeekBowlers = [];
 
     public override async Task LoadAsync()
     {
-        PageTitle = $"Week {_settingsService.CurrentSeasonWeek} of {_settingsService.TotalSeasonWeeks}";
-
-        if (Bowlers.Count == 0)
+        if (CurrentWeekBowlers.Count == 0)
         {
             await Loading(GetCurrentWeek);
+            PageTitle = $"Week {Week.WeekNumber} of {_settingsService.TotalSeasonWeeks}";
         }
     }
 
     private async Task GetCurrentWeek()
     {
-        Week = await _weekService.GetWeekByWeekNumber(_settingsService.CurrentSeasonWeek);
-
-        Bowlers.Clear();
-        Bowlers = Week.Bowlers.Map().ToObservableCollection();
-        //var bowlers = await _bowlerService.GetBowlers();
-        //var week = await _weekService.GetWeekByWeekNumber(_settingsService.CurrentSeasonWeek);
-        //if (week is null)
-        //{
-        //    var newWeek = new Week
-        //        {
-        //            WeekNumber = _settingsService.CurrentSeasonWeek,
-        //            BusRides = 0,
-        //            Bowlers = bowlers
-        //        };
-
-        //    if (await _weekService.CreateWeek(newWeek))
-        //    {
-        //        week = newWeek;
-        //    }
-        //    else
-        //    {
-        //        return; // TODO: Add error handling
-        //    }
-        //}
-
-        //var listItems = week.Bowlers.Join(
-        //    await _bowlerService.GetBowlers(),
-        //    w => w.BowlerId,
-        //    b => b.Id,
-        //    (w, b) => new BowlerListItemViewModel(
-        //        b.Id,
-        //        b.Name,
-        //        b.IsSub,
-        //        w.HangCount,
-        //        w.Position,
-        //        b.ImageUrl,
-        //        w.Status));
-
-        //Bowlers.Clear();
-        //Bowlers = listItems.ToObservableCollection();
+        if (_settingsService.CurrentWeekPrimaryKey == 0)
+        {
+            Week = await _weekService.CreateWeek(1);
+            _settingsService.CurrentWeekPrimaryKey = Week.Id;
+        }
+        else
+        {
+            CurrentWeekBowlers.Clear();
+            Week = await _weekService.GetWeek(_settingsService.CurrentWeekPrimaryKey);
+            if (Week.Bowlers.Count > 0)
+            {
+                foreach (var lineup in Week.Bowlers)
+                {
+                    lineup.Bowler = await _bowlerService.GetBowlerById(lineup.BowlerId);
+                }
+                CurrentWeekBowlers = Week.Bowlers.MapWeeklyLineupToBowlerListItemViewModel().ToObservableCollection();
+            }
+        }
     }
 
     public async void Receive(BowlerAddedOrChangedMessage message)
     {
-        // TODO: Add logic
+        if (message.Id > 0)
+        {
+            var weeklyLineup = new WeeklyLineup
+            {
+                BowlerId = message.Id,
+                WeekId = Week.Id,
+            };
+            await _weeklyLineupService.AddWeeklyLineupBowler(weeklyLineup);
+            Week.Bowlers.Add(weeklyLineup);
+            await _weekService.UpdateWeek(Week);
+        }
+
+        CurrentWeekBowlers.Clear();
+        await GetCurrentWeek();
     }
 
     public void Receive(BowlerDeletedMessage message)
     {
-        // TODO: Add logic
+        var deletedBowler = CurrentWeekBowlers.FirstOrDefault(b => b.Id == message.Id);
+        if (deletedBowler is not null)
+        {
+            CurrentWeekBowlers.Remove(deletedBowler);
+        }
     }
 }

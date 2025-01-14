@@ -15,21 +15,36 @@ internal static class BowlerMapper
         };
     }
 
-    internal static List<BowlerListItemViewModel> Map(this IEnumerable<Bowler> bowlers)
+    internal static List<BowlerListItemViewModel> MapBowlerToBowlerListItemViewModel(this IEnumerable<Bowler> bowlers)
     {
         return bowlers.Select(b => b.Map()).ToList();
     }
 
-    internal static List<BowlerListItemViewModel> Map(this IEnumerable<WeeklyLineup> bowlers)
+    internal static List<BowlerListItemViewModel> MapWeeklyLineupToBowlerListItemViewModel(this IEnumerable<WeeklyLineup> weeklyLineup)
     {
-        return bowlers.Select(b => new BowlerListItemViewModel(
-            b.BowlerId,
-            b.Bowler.Name,
-            b.Bowler.IsSub,
-            b.HangCount,
-            b.Position,
-            b.Bowler.ImageUrl,
-            b.Status)).ToList();
+        return weeklyLineup.Select(wl => wl.Map()).ToList();
+    }
+
+    internal static List<WeeklyLineup> MapBowlerToWeeklyLineup(this IEnumerable<Bowler> bowlers)
+    {
+        return bowlers.Select(b => new WeeklyLineup
+        {
+            BowlerId = b.Id,
+            Bowler = b,
+            Status = Enums.BowlerStatus.Active,
+            HangCount = 0,
+        }).ToList();
+    }
+
+    private static BowlerListItemViewModel Map(this WeeklyLineup weeklyLineup)
+    {
+        return new BowlerListItemViewModel(
+            weeklyLineup.BowlerId,
+            weeklyLineup.Bowler.Name,
+            weeklyLineup.Bowler.IsSub,
+            weeklyLineup.HangCount,
+            weeklyLineup.Bowler.ImageUrl,
+            weeklyLineup.Status);
     }
 
     private static BowlerListItemViewModel Map(this Bowler bowler)
@@ -38,7 +53,6 @@ internal static class BowlerMapper
             bowler.Id,
             bowler.Name,
             bowler.IsSub,
-            default,
             default,
             bowler.ImageUrl);
     }

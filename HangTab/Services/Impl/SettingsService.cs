@@ -7,10 +7,10 @@ public class SettingsService(IPreferences preferences) : ISettingsService
         set => preferences.Set(nameof(CostPerHang), value);
     }
 
-    public int CurrentSeasonWeek
+    public int CurrentWeekPrimaryKey
     {
-        get => preferences.Get(nameof(CurrentSeasonWeek), 1);
-        set => preferences.Set(nameof(CurrentSeasonWeek), value);
+        get => preferences.Get(nameof(CurrentWeekPrimaryKey), 0);
+        set => preferences.Set(nameof(CurrentWeekPrimaryKey), value);
     }
 
     public int TotalSeasonWeeks

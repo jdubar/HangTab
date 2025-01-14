@@ -7,8 +7,31 @@
     xmlns:vm="clr-namespace:HangTab.ViewModels"
     xmlns:models="clr-namespace:HangTab.Models"
     x:Class="HangTab.Views.BowlerOverviewPage"
-    Title="Bowlers"
     x:DataType="vm:BowlerListOverviewViewModel">
+    
+    <Shell.TitleView>
+        <Grid>
+            <Label
+                Text="Bowlers"
+                Style="{StaticResource Label_PageTitle}" />
+            <ImageButton
+                Aspect="Center"
+                HorizontalOptions="End"
+                VerticalOptions="Center"
+                CornerRadius="100"
+                Margin="10,0"
+                Command="{Binding NavigateToAddBowlerCommand}">
+                <ImageButton.Source>
+                    <FontImageSource
+                        FontFamily="MaterialIcons"
+                        Glyph="{StaticResource person_add}"
+                        Size="30"
+                        Color="{AppThemeBinding Dark={StaticResource White},
+                                                Light={StaticResource Black}}" />
+                </ImageButton.Source>
+            </ImageButton>
+        </Grid>
+    </Shell.TitleView>
     
     <ContentPage.Resources>
         <Style TargetType="Grid">
@@ -18,7 +41,7 @@
                         <VisualState x:Name="Normal" />
                         <VisualState x:Name="Selected">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="{StaticResource Primary}" />
+                                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryDark}" />
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>
@@ -26,24 +49,12 @@
             </Setter>
         </Style>
     </ContentPage.Resources>
-    
-    <ContentPage.ToolbarItems>
-        <ToolbarItem
-            Command="{Binding NavigateToAddBowlerCommand}">
-            <ToolbarItem.IconImageSource>
-                <FontImageSource
-                    FontFamily="MaterialIcons"
-                    Glyph="{StaticResource person_add}" />
-            </ToolbarItem.IconImageSource>
-        </ToolbarItem>
-    </ContentPage.ToolbarItems>
 
     <ContentPage.Content>
         <Grid
             RowDefinitions="50,*">
             <Border
-                StrokeShape="RoundRectangle  5"
-                Margin="5,1">
+                Style="{StaticResource RoundedCornerBorder}">
                 <SearchBar
                     Placeholder="Search by name" 
                     Text="{Binding SearchText, Mode=TwoWay}"/>
@@ -57,11 +68,25 @@
                 SelectionChangedCommand="{Binding NavigateToEditSelectedBowlerCommand}">
                 <CollectionView.GroupHeaderTemplate>
                     <DataTemplate>
-                        <!--Group Name-->
-                        <Label
-                            x:DataType="models:BowlerGroup"
-                            Text="{Binding GroupName}"
-                            Style="{StaticResource Label_Header}" />
+                        <VerticalStackLayout>
+                            <HorizontalStackLayout>
+                                <!--Group Name-->
+                                <Label
+                                    x:DataType="models:BowlerGroup"
+                                    Text="{Binding GroupName}"
+                                    Style="{StaticResource Label_Header}" />
+                                
+                                <!--Group Total-->
+                                <Label
+                                    x:DataType="models:BowlerGroup"
+                                    Text="{Binding Count, StringFormat='Total: {0:D}'}"
+                                    Style="{StaticResource Label_Footer}" />
+                            </HorizontalStackLayout>
+                            
+                            <!--Separator-->
+                            <BoxView
+                                Style="{StaticResource BoxViewSeparator}" />
+                        </VerticalStackLayout>
                     </DataTemplate>
                 </CollectionView.GroupHeaderTemplate>
                 <CollectionView.ItemTemplate>
@@ -77,13 +102,12 @@
                             <toolkit:AvatarView
                                 Grid.Row="0"
                                 Grid.RowSpan="2"
-                                Style="{StaticResource CachedImageProfile}"
+                                Style="{StaticResource CachedAvatarProfile}"
                                 ImageSource="{Binding ImageUrl}"
                                 WidthRequest="80"
                                 HeightRequest="80"
-                                CornerRadius="40"
                                 Text="{Binding Initials}"
-                                FontSize="20"/>
+                                FontSize="20" />
                             
                             <!--Full Name-->
                             <Label
@@ -98,11 +122,14 @@
                                 Grid.Row="0"
                                 Grid.Column="2"
                                 Grid.RowSpan="2"
-                                Margin="0,10,15,0">
+                                Margin="0,10,15,0"
+                                Style="{StaticResource Image_ListArrowRight}">
                                 <Image.Source>
                                     <FontImageSource
                                         FontFamily="MaterialIcons"
-                                        Glyph="{StaticResource chevron_right}" />
+                                        Glyph="{StaticResource chevron_right}"
+                                        Color="{AppThemeBinding Dark={StaticResource White},
+                                                                Light={StaticResource Color_ElementGrey}}"/>
                                 </Image.Source>
                             </Image>
 
@@ -112,24 +139,9 @@
                                 Grid.Column="1"
                                 Text="Total hangings: 0"
                                 Style="{StaticResource Label_NickName}" />
-
-                            <!--Separator-->
-                            <BoxView
-                                Grid.Row="2"
-                                Grid.Column="0"
-                                Grid.ColumnSpan="3"
-                                Style="{StaticResource BoxViewSeparator}" />
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
-                <CollectionView.GroupFooterTemplate>
-                    <DataTemplate>
-                        <Label
-                            x:DataType="models:BowlerGroup"
-                            Text="{Binding Count, StringFormat='Total: {0:D}'}"
-                            Style="{StaticResource Label_Footer}" />
-                    </DataTemplate>
-                </CollectionView.GroupFooterTemplate>
                 <CollectionView.EmptyView>
                     <ContentView>
                         <VerticalStackLayout

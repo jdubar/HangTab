@@ -91,13 +91,13 @@ public partial class BowlerListOverviewViewModel :
 
     private async Task GetBowlers()
     {
-        AllBowlers = await _bowlerService.GetBowlers();
+        AllBowlers = await _bowlerService.GetAllBowlers();
         if (AllBowlers.Any())
         {
             _allBowlersInGroups =
             [
-                new BowlerGroup("Regulars", AllBowlers.Where(b => !b.IsSub).Map()),
-                new BowlerGroup("Subs", AllBowlers.Where(b => b.IsSub).Map())
+                new BowlerGroup("Regulars", AllBowlers.Where(b => !b.IsSub).MapBowlerToBowlerListItemViewModel()),
+                new BowlerGroup("Subs", AllBowlers.Where(b => b.IsSub).MapBowlerToBowlerListItemViewModel())
             ];
             Bowlers.Clear();
             Bowlers = _allBowlersInGroups.ToObservableCollection();
@@ -108,8 +108,8 @@ public partial class BowlerListOverviewViewModel :
     {
         var filteredBowlerGroups = new List<BowlerGroup>
         {
-            new("Regulars", AllBowlers.Where(b => !b.IsSub && b.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)).Map()),
-            new("Subs", AllBowlers.Where(b => b.IsSub && b.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)).Map())
+            new("Regulars", AllBowlers.Where(b => !b.IsSub && b.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)).MapBowlerToBowlerListItemViewModel()),
+            new("Subs", AllBowlers.Where(b => b.IsSub && b.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)).MapBowlerToBowlerListItemViewModel())
         };
 
         Bowlers.Clear();

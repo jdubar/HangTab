@@ -88,7 +88,7 @@ public partial class BowlerAddEditViewModel :
             {
                 await _dialogService.AlertAsync("Critical Error", "Error occurred while deleting the bowler!", "Ok");
             }
-            await _navigationService.GoToBowlerOverview();
+            await _navigationService.GoBack();
         }
     }
 
@@ -112,30 +112,30 @@ public partial class BowlerAddEditViewModel :
             return;
         }
 
-        var model = MapDataToBowler();
+        var bowler = MapDataToBowler();
         if (Id == 0)
         {
-            if (await _bowlerService.AddBowler(model))
+            if (await _bowlerService.AddBowler(bowler))
             {
-                WeakReferenceMessenger.Default.Send(new BowlerAddedOrChangedMessage());
-                await _navigationService.GoBack();
+                WeakReferenceMessenger.Default.Send(new BowlerAddedOrChangedMessage(bowler.Id));
             }
             else
             {
                 await _dialogService.Notify("Error", "The bowler could not be added.");
             }
+            await _navigationService.GoBack();
         }
         else
         {
-            if (await _bowlerService.UpdateBowler(model))
+            if (await _bowlerService.UpdateBowler(bowler))
             {
                 WeakReferenceMessenger.Default.Send(new BowlerAddedOrChangedMessage());
-                await _navigationService.GoBack();
             }
             else
             {
                 await _dialogService.Notify("Error", "The bowler could not be updated.");
             }
+            await _navigationService.GoBack();
         }
     }
     
@@ -154,7 +154,7 @@ public partial class BowlerAddEditViewModel :
             {
                 if (_bowler is null && Id > 0)
                 {
-                    _bowler = await _bowlerService.GetBowler(Id);
+                    _bowler = await _bowlerService.GetBowlerById(Id);
                 }
 
                 if (_bowler is not null)
