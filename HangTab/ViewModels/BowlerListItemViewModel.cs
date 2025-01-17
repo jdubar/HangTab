@@ -1,7 +1,9 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Messaging;
 
 using HangTab.Enums;
 using HangTab.Extensions;
+using HangTab.Messages;
 
 namespace HangTab.ViewModels;
 public partial class BowlerListItemViewModel : ObservableObject
@@ -23,6 +25,14 @@ public partial class BowlerListItemViewModel : ObservableObject
 
     [ObservableProperty]
     private int _hangings;
+
+    partial void OnHangingsChanged(int oldValue, int newValue)
+    {
+        if (oldValue != newValue && newValue >= 0)
+        {
+            WeakReferenceMessenger.Default.Send(new BowlerHangCountChangedMessage(Id, newValue));
+        }
+    }
 
     [ObservableProperty]
     private BowlerStatus _status;

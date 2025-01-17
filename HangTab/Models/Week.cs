@@ -3,6 +3,7 @@
 using SQLiteNetExtensions.Attributes;
 
 namespace HangTab.Models;
+[Table("Weeks")]
 public class Week
 {
     [PrimaryKey, AutoIncrement]

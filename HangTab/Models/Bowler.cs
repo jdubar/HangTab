@@ -1,6 +1,7 @@
 ﻿using SQLite;
 
 namespace HangTab.Models;
+[Table("Bowlers")]
 public class Bowler
 {
     [PrimaryKey, AutoIncrement]

@@ -17,17 +17,49 @@
     <ContentPage.Content>
         <Grid
             RowDefinitions="*,Auto,Auto">
+            
+            <!--This Week's Bowler List & Splash-->
             <Grid
                 Grid.Row="0">
-                <!--<Image
+                
+                <!--Bus Ride Splash-->
+                <Image
                     Source="bus_splash.png"
                     HeightRequest="300"
                     ZIndex="2"
                     IsVisible="False"
                     HorizontalOptions="Center"
-                    VerticalOptions="Center" />-->
+                    VerticalOptions="Center" />
+                
+                <!--Bowler List-->
                 <CollectionView
-                    ItemsSource="{Binding CurrentWeekBowlers}">
+                    ItemsSource="{Binding CurrentWeekBowlers}"
+                    Header="{Binding .}">
+                    <CollectionView.HeaderTemplate>
+                        <DataTemplate>
+                            <Grid
+                                RowDefinitions="Auto,Auto"
+                                ColumnDefinitions="Auto,*">
+                                <Border
+                                    Grid.Row="0"
+                                    StrokeShape="RoundRectangle 5,5,0,0"
+                                    Margin="0,0,0,-6.5">
+                                    
+                                    <!--Group Total-->
+                                    <Label
+                                        Text="{Binding TeamHangTotal, Mode=OneWay, StringFormat='Total Hangings: {0}'}"
+                                        Style="{StaticResource Label_Footer}" />
+                                </Border>
+                                
+                                <!--Separator-->
+                                <BoxView
+                                    Grid.Row="1"
+                                    Grid.ColumnSpan="2"
+                                    Style="{StaticResource BoxViewSeparator}" />
+                            </Grid>
+                        </DataTemplate>
+                    </CollectionView.HeaderTemplate>
+
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid
@@ -37,7 +69,54 @@
                                 RowDefinitions="Auto,Auto,Auto"
                                 VerticalOptions="Center">
 
-                                <!--Avatar Image-->
+                                <Grid
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    IsVisible="False">
+                                    <!--Active/Sub Avatar Image-->
+                                    <toolkit:AvatarView
+                                        Grid.Row="0"
+                                        Grid.RowSpan="2"
+                                        Style="{StaticResource CachedAvatarProfile}"
+                                        ImageSource="{Binding ImageUrl}"
+                                        WidthRequest="60"
+                                        HeightRequest="60"
+                                        Margin="15,10,10,10"
+                                        ZIndex="2"
+                                        Text="{Binding Initials}" />
+                                </Grid>
+                                
+                                <Grid
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    IsVisible="True">
+                                    <!--Active/Sub Avatar Image-->
+                                    <toolkit:AvatarView
+                                        Grid.Row="0"
+                                        Grid.RowSpan="2"
+                                        Style="{StaticResource CachedAvatarProfile}"
+                                        ImageSource="{Binding ImageUrl}"
+                                        WidthRequest="60"
+                                        HeightRequest="60"
+                                        Margin="15,10,10,10"
+                                        ZIndex="2"
+                                        Text="{Binding Initials}" />
+
+                                    <!--Regular Bowler Avatar Image (when subbed)-->
+                                    <!--TODO: Needs to be fixed when sub is implemented-->
+                                    <toolkit:AvatarView
+                                        Grid.Row="0"
+                                        Grid.RowSpan="2"
+                                        Style="{StaticResource CachedAvatarProfile}"
+                                        ImageSource="{Binding ImageUrl}"
+                                        WidthRequest="40"
+                                        HeightRequest="40"
+                                        Margin="40,-35,-10,0"
+                                        ZIndex="1"
+                                        Text="{Binding Initials}" />
+                                </Grid>
+                                
+                                <!--Active/Sub Avatar Image-->
                                 <toolkit:AvatarView
                                     Grid.Row="0"
                                     Grid.RowSpan="2"
@@ -45,6 +124,22 @@
                                     ImageSource="{Binding ImageUrl}"
                                     WidthRequest="60"
                                     HeightRequest="60"
+                                    Margin="15,10,10,10"
+                                    ZIndex="2"
+                                    Text="{Binding Initials}" />
+
+                                <!--Regular Bowler Avatar Image (when subbed)-->
+                                <!--TODO: Needs to be fixed when sub is implemented-->
+                                <toolkit:AvatarView
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                    Style="{StaticResource CachedAvatarProfile}"
+                                    ImageSource="{Binding ImageUrl}"
+                                    WidthRequest="40"
+                                    HeightRequest="40"
+                                    Margin="40,-35,-10,0"
+                                    ZIndex="1"
+                                    IsVisible="{Binding IsSub}"
                                     Text="{Binding Initials}" />
                             
                                 <!--Full Name-->
@@ -63,13 +158,13 @@
                                     VerticalOptions="Center"
                                     Margin="10,0"
                                     Minimum="0"
-                                    Value="{Binding Hangings}" />
+                                    Value="{Binding Hangings, Mode=TwoWay}" />
 
-                                <!--Total Hangings Count-->
+                                <!--Bowler Hangings Count-->
                                 <Label
                                     Grid.Row="1"
                                     Grid.Column="1"
-                                    Text="{Binding Hangings, StringFormat='Hangings: {0:D}'}"
+                                    Text="{Binding Hangings, StringFormat='Hangings: {0}'}"
                                     Style="{StaticResource Label_Hangings}" />
 
                                 <!--Separator-->
@@ -81,57 +176,72 @@
                             </Grid>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
-                    <CollectionView.FooterTemplate>
-                        <DataTemplate>
-                            <!--Group Total-->
-                            <Label
-                                Text="Total Bowler Hangings: 0"
-                                Style="{StaticResource Label_Footer}" />
-                        </DataTemplate>
-                    </CollectionView.FooterTemplate>
+                    
                     <CollectionView.EmptyView>
                         <ContentView>
-                            <VerticalStackLayout HorizontalOptions="Center"
-                                                    VerticalOptions="Center"
-                                                    WidthRequest="380">
-                                <Label Text="Your lineup is empty"
-                                        FontSize="18"
-                                        FontAttributes="Bold"
-                                        HorizontalTextAlignment="Center" />
-                                <Label Text="Create bowlers on the Bowlers page"
-                                        HorizontalTextAlignment="Center" />
+                            <VerticalStackLayout
+                                HorizontalOptions="Center"
+                                VerticalOptions="Center"
+                                WidthRequest="380">
+                                <Label
+                                    Text="Your lineup is empty"
+                                    FontSize="18"
+                                    FontAttributes="Bold"
+                                    HorizontalTextAlignment="Center" />
+                                <Label
+                                    Text="Create bowlers on the Bowlers page"
+                                    HorizontalTextAlignment="Center" />
                             </VerticalStackLayout>
                         </ContentView>
                     </CollectionView.EmptyView>
                 </CollectionView>
             </Grid>
         
+            <!--This Week's Bus Ride Count-->
             <Grid
                 Grid.Row="1"
                 ColumnDefinitions="*,Auto"
-                Padding="10,0">
+                Padding="5,0">
                 
                 <Border
                     Style="{StaticResource RoundedCornerBorder}">
-                    <Grid>
-                        <Label
-                            Text="{Binding Week.BusRides, StringFormat='Bus Rides: {0}'}"
-                            Style="{StaticResource Label_Name}" />
-                
-                        <ImageButton
+                    <Grid
+                        ColumnDefinitions="Auto,*,Auto">
+                        <Image
+                            Grid.Column="0"
                             Source="school_bus.png"
-                            HeightRequest="100"
-                            HorizontalOptions="End"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            Margin="15,0,20,10"
+                            HeightRequest="80" />
+
+                        <Label
+                            Grid.Column="1"
+                            Text="{Binding Week.BusRides, StringFormat='Bus Rides: {0}'}"
+                            Style="{StaticResource Label_BusRides}" />
+                
+                        <!--Bus Ride Stepper-->
+                        <Stepper
+                            Grid.Column="2"
                             WidthRequest="100"
                             VerticalOptions="Center"
-                            Margin="0,0,10,10"/>
+                            HorizontalOptions="End"
+                            Margin="10,0"
+                            Minimum="0"
+                            Value="{Binding Week.BusRides, Mode=TwoWay}" />
                     </Grid>
                 </Border>
             </Grid>
         
-            <Grid
-                Grid.Row="2">
-            </Grid>
+            <!--Submit Button-->
+            <StackLayout
+                Grid.Row="2"
+                Grid.Column="0"
+                Margin="10">
+                <Button
+                    Style="{StaticResource PrimaryButton}"
+                    Text="{Binding Week.WeekNumber, StringFormat='Complete Week {0}'}" />
+            </StackLayout>
         </Grid>
     </ContentPage.Content>
 </views:ContentPageBase>

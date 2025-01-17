@@ -61,7 +61,7 @@
             </Border>
             <CollectionView
                 Grid.Row="1"
-                ItemsSource="{Binding Bowlers}"
+                ItemsSource="{Binding Groups}"
                 IsGrouped="True"
                 SelectedItem="{Binding SelectedBowler}"
                 SelectionMode="Single"
@@ -79,8 +79,8 @@
                                 <!--Group Total-->
                                 <Label
                                     x:DataType="models:BowlerGroup"
-                                    Text="{Binding Count, StringFormat='Total: {0:D}'}"
-                                    Style="{StaticResource Label_Footer}" />
+                                    Text="{Binding Count, StringFormat='Total: {0}'}"
+                                    Style="{StaticResource Label_Header_Sub}" />
                             </HorizontalStackLayout>
                             
                             <!--Separator-->
@@ -137,8 +137,8 @@
                             <Label
                                 Grid.Row="1"
                                 Grid.Column="1"
-                                Text="Total hangings: 0"
-                                Style="{StaticResource Label_NickName}" />
+                                Text="{Binding Hangings, StringFormat='Season hangings: {0}'}"
+                                Style="{StaticResource Label_Hangings}" />
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

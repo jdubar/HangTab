@@ -14,33 +14,38 @@ namespace HangTab.ViewModels;
 public partial class CurrentWeekOverviewViewModel :
     ViewModelBase,
     IRecipient<BowlerAddedOrChangedMessage>,
-    IRecipient<BowlerDeletedMessage>
+    IRecipient<BowlerDeletedMessage>,
+    IRecipient<BowlerHangCountChangedMessage>
 {
     private readonly IBowlerService _bowlerService;
-    private readonly IDatabaseService _databaseService;
+    private readonly IDialogService _dialogService;
     private readonly ISettingsService _settingsService;
     private readonly IWeekService _weekService;
     private readonly IWeeklyLineupService _weeklyLineupService;
 
     public CurrentWeekOverviewViewModel(
         IBowlerService bowlerService,
-        IDatabaseService databaseService,
+        IDialogService dialogService,
         ISettingsService settingsService,
         IWeekService weekService,
         IWeeklyLineupService weeklyLineupService)
     {
         _bowlerService = bowlerService;
-        _databaseService = databaseService;
+        _dialogService = dialogService;
         _settingsService = settingsService;
         _weekService = weekService;
         _weeklyLineupService = weeklyLineupService;
 
         WeakReferenceMessenger.Default.Register<BowlerAddedOrChangedMessage>(this);
         WeakReferenceMessenger.Default.Register<BowlerDeletedMessage>(this);
+        WeakReferenceMessenger.Default.Register<BowlerHangCountChangedMessage>(this);
     }
 
     [ObservableProperty]
     private string _pageTitle;
+
+    [ObservableProperty]
+    private int _teamHangTotal;
 
     [ObservableProperty]
     private Week _week = new();
@@ -48,13 +53,18 @@ public partial class CurrentWeekOverviewViewModel :
     [ObservableProperty]
     private ObservableCollection<BowlerListItemViewModel> _currentWeekBowlers = [];
 
+    [ObservableProperty]
+    private BowlerListItemViewModel _selectedBowler;
+
     public override async Task LoadAsync()
     {
         if (CurrentWeekBowlers.Count == 0)
         {
             await Loading(GetCurrentWeek);
-            PageTitle = $"Week {Week.WeekNumber} of {_settingsService.TotalSeasonWeeks}";
         }
+
+        TeamHangTotal = Week.Bowlers.Sum(b => b.HangCount);
+        PageTitle = $"Week {Week.WeekNumber} of {_settingsService.TotalSeasonWeeks}";
     }
 
     private async Task GetCurrentWeek()
@@ -76,6 +86,23 @@ public partial class CurrentWeekOverviewViewModel :
                 }
                 CurrentWeekBowlers = Week.Bowlers.MapWeeklyLineupToBowlerListItemViewModel().ToObservableCollection();
             }
+        }
+    }
+
+    public async void Receive(BowlerHangCountChangedMessage message)
+    {
+        var bowler = Week.Bowlers.FirstOrDefault(wl => wl.BowlerId == message.Id);
+        if (bowler is null)
+        {
+            return;
+        }
+
+        bowler.HangCount = message.HangCount;
+        TeamHangTotal = Week.Bowlers.Sum(b => b.HangCount);
+
+        if (!await _weeklyLineupService.UpdateWeeklyLineup(bowler))
+        {
+            await _dialogService.Notify("Error", "Unable to update bowler hang count");
         }
     }
 

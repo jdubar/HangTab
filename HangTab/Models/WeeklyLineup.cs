@@ -5,6 +5,7 @@ using SQLite;
 using SQLiteNetExtensions.Attributes;
 
 namespace HangTab.Models;
+[Table("WeeklyLineups")]
 public class WeeklyLineup
 {
     [PrimaryKey, AutoIncrement]
@@ -18,6 +19,6 @@ public class WeeklyLineup
     [ForeignKey(typeof(Bowler))]
     public int BowlerId { get; set; }
 
-    [OneToOne]
+    [ManyToOne]
     public Bowler Bowler { get; set; } = new();
 }

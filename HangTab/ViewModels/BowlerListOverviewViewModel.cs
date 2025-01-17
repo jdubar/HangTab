@@ -19,16 +19,20 @@ public partial class BowlerListOverviewViewModel :
 {
     private readonly IBowlerService _bowlerService;
     private readonly INavigationService _navigationService;
+    private readonly IWeekService _weekService;
 
     public BowlerListOverviewViewModel(
         IBowlerService bowlerService,
-        INavigationService navigationService)
+        INavigationService navigationService,
+        IWeekService weekService)
     {
         _bowlerService = bowlerService;
         _navigationService = navigationService;
+        _weekService = weekService;
 
         WeakReferenceMessenger.Default.Register<BowlerAddedOrChangedMessage>(this);
         WeakReferenceMessenger.Default.Register<BowlerDeletedMessage>(this);
+        _weekService = weekService;
     }
 
     private IEnumerable<Bowler> _allBowlers = [];
@@ -40,14 +44,14 @@ public partial class BowlerListOverviewViewModel :
             SetProperty(ref _allBowlers, value);
             if (!_allBowlers.Any())
             {
-                Bowlers.Clear();
+                Groups.Clear();
             }
         }
     }
     private List<BowlerGroup> _allBowlersInGroups = [];
 
     [ObservableProperty]
-    private ObservableCollection<BowlerGroup> _bowlers = [];
+    private ObservableCollection<BowlerGroup> _groups = [];
 
     [ObservableProperty]
     private BowlerListItemViewModel? _selectedBowler;
@@ -59,8 +63,8 @@ public partial class BowlerListOverviewViewModel :
     {
         if (string.IsNullOrEmpty(value))
         {
-            Bowlers.Clear();
-            Bowlers = _allBowlersInGroups.ToObservableCollection();
+            Groups.Clear();
+            Groups = _allBowlersInGroups.ToObservableCollection();
         }
         else
         {
@@ -83,24 +87,33 @@ public partial class BowlerListOverviewViewModel :
 
     public override async Task LoadAsync()
     {
-        if (Bowlers.Count == 0)
+        if (Groups.Count == 0)
         {
             await Loading(GetBowlers);
         }
+
+        await UpdateBowlerHangCounts();
     }
 
     private async Task GetBowlers()
     {
         AllBowlers = await _bowlerService.GetAllBowlers();
-        if (AllBowlers.Any())
+        _allBowlersInGroups =
+        [
+            new BowlerGroup("Regulars", AllBowlers.Where(b => !b.IsSub).MapBowlerToBowlerListItemViewModel()),
+            new BowlerGroup("Subs", AllBowlers.Where(b => b.IsSub).MapBowlerToBowlerListItemViewModel())
+        ];
+
+        Groups.Clear();
+        Groups = _allBowlersInGroups.ToObservableCollection();
+    }
+
+    private async Task UpdateBowlerHangCounts()
+    {
+        var allWeeks = await _weekService.GetAllWeeks();
+        foreach (var group in Groups)
         {
-            _allBowlersInGroups =
-            [
-                new BowlerGroup("Regulars", AllBowlers.Where(b => !b.IsSub).MapBowlerToBowlerListItemViewModel()),
-                new BowlerGroup("Subs", AllBowlers.Where(b => b.IsSub).MapBowlerToBowlerListItemViewModel())
-            ];
-            Bowlers.Clear();
-            Bowlers = _allBowlersInGroups.ToObservableCollection();
+            group.ForEach(b => b.Hangings = allWeeks.SelectMany(w => w.Bowlers.Where(wl => wl.BowlerId == b.Id)).Sum(w => w.HangCount));
         }
     }
 
@@ -112,30 +125,23 @@ public partial class BowlerListOverviewViewModel :
             new("Subs", AllBowlers.Where(b => b.IsSub && b.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)).MapBowlerToBowlerListItemViewModel())
         };
 
-        Bowlers.Clear();
-        Bowlers = filteredBowlerGroups.ToObservableCollection();
+        Groups.Clear();
+        Groups = filteredBowlerGroups.ToObservableCollection();
         return Task.CompletedTask;
     }
 
     public async void Receive(BowlerAddedOrChangedMessage message)
     {
-        try
-        {
-            Bowlers.Clear();
-            await GetBowlers();
-        }
-        catch (Exception)
-        {
-            // TODO: handle exception
-        }
+        Groups.Clear();
+        await GetBowlers();
     }
 
     public void Receive(BowlerDeletedMessage message)
     {
-        var deletedBowler = Bowlers.SelectMany(g => g).FirstOrDefault(b => b.Id == message.Id);
+        var deletedBowler = Groups.SelectMany(g => g).FirstOrDefault(b => b.Id == message.Id);
         if (deletedBowler is not null)
         {
-            Bowlers.First(g => g.Contains(deletedBowler)).Remove(deletedBowler);
+            Groups.First(g => g.Contains(deletedBowler)).Remove(deletedBowler);
             AllBowlers = AllBowlers.Where(b => b.Id != message.Id);
         }
     }

@@ -5,7 +5,7 @@ namespace HangTab.Repositories.Impl;
 public class WeekRepository(IDatabaseContext context) : IWeekRepository
 {
     public Task<Week> GetWeek(int id) => context.GetWithChildrenAsync<Week>(id);
-    public Task<IEnumerable<Week>> GetWeeks() => context.GetAllAsync<Week>();
+    public Task<IEnumerable<Week>> GetAllWeeks() => context.GetAllWithChildrenAsync<Week>();
     public Task<Week> GetWeekById(int id) => context.GetItemByIdAsync<Week>(id);
 
     public async Task<Week> CreateWeek(int weekNumber)

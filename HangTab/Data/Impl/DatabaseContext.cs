@@ -13,8 +13,8 @@ public class DatabaseContext : IDatabaseContext, IAsyncDisposable
 
     private SQLiteAsyncConnection? _connection;
     private SQLiteAsyncConnection Database =>
-        (_connection ??= new SQLiteAsyncConnection(DatabasePath,
-            SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.SharedCache));
+        _connection ??= new SQLiteAsyncConnection(DatabasePath,
+            SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.SharedCache);
 
     public async Task<bool> AddItemAsync<TTable>(TTable item) where TTable : class, new() =>
         await Execute<TTable, bool>(async () => await Database.InsertAsync(item) > 0);
@@ -49,12 +49,19 @@ public class DatabaseContext : IDatabaseContext, IAsyncDisposable
     public async Task<TTable> GetWithChildrenAsync<TTable>(object id) where TTable : class, new() =>
         await Execute<TTable, TTable>(async () => await Database.GetWithChildrenAsync<TTable>(id, recursive: true));
 
+    public async Task<IEnumerable<TTable>> GetAllWithChildrenAsync<TTable>(Expression<Func<TTable, bool>> predicate = null) where TTable : class, new()
+    {
+        return await Execute<TTable, IEnumerable<TTable>>(async () =>
+        {
+            return await Database.GetAllWithChildrenAsync(predicate, recursive: true);
+        });
+    }
+
     public async Task InsertWithChildrenAsync<TTable>(TTable item) where TTable : class, new()
     {
         await Execute<TTable, Task>(async () =>
         {
-            await Database.InsertWithChildrenAsync(item, recursive: true);
-            return Task.CompletedTask;
+            return Database.InsertWithChildrenAsync(item, recursive: true);
         });
     }
 
@@ -62,8 +69,7 @@ public class DatabaseContext : IDatabaseContext, IAsyncDisposable
     {
         await Execute<TTable, Task>(async () =>
         {
-            await Database.UpdateWithChildrenAsync(item);
-            return Task.CompletedTask;
+            return Database.UpdateWithChildrenAsync(item);
         });
     }
 
