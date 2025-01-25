@@ -19,6 +19,6 @@ public class WeeklyLineup
     [ForeignKey(typeof(Bowler))]
     public int BowlerId { get; set; }
 
-    [ManyToOne]
+    [ManyToOne(CascadeOperations = CascadeOperation.All)]
     public Bowler Bowler { get; set; } = new();
 }

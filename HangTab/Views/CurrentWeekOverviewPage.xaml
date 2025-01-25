@@ -14,6 +14,23 @@
             Style="{StaticResource Label_PageTitle}" />
     </Shell.TitleView>
     
+    <ContentPage.Resources>
+        <Style TargetType="Grid">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryDark}" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+    
     <ContentPage.Content>
         <Grid
             RowDefinitions="*,Auto,Auto">
@@ -34,6 +51,9 @@
                 <!--Bowler List-->
                 <CollectionView
                     ItemsSource="{Binding CurrentWeekBowlers}"
+                    SelectedItem="{Binding SelectedBowler}"
+                    SelectionMode="Single"
+                    SelectionChangedCommand="{Binding NavigateToSwitchSelectedBowlerCommand}"
                     Header="{Binding .}">
                     <CollectionView.HeaderTemplate>
                         <DataTemplate>
@@ -63,11 +83,10 @@
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
                             <Grid
-                                x:DataType="vm:BowlerListItemViewModel"
+                                x:DataType="vm:CurrentWeekListItemViewModel"
                                 Padding="5"
                                 ColumnDefinitions="Auto,*,Auto"
-                                RowDefinitions="Auto,Auto,Auto"
-                                VerticalOptions="Center">
+                                RowDefinitions="Auto,Auto">
 
                                 <Grid
                                     Grid.Row="0"
@@ -141,13 +160,23 @@
                                     ZIndex="1"
                                     IsVisible="{Binding IsSub}"
                                     Text="{Binding Initials}" />
-                            
-                                <!--Full Name-->
-                                <Label
+                                
+                                <VerticalStackLayout
                                     Grid.Row="0"
                                     Grid.Column="1"
-                                    Text="{Binding Name}"
-                                    Style="{StaticResource Label_Name}" />
+                                    VerticalOptions="Center">
+                                    <!--Full Name-->
+                                    <Label
+                                        FontSize="Large"
+                                        Text="{Binding Name}"
+                                        Style="{StaticResource Label_Name}" />
+
+
+                                    <!--Bowler Hangings Count-->
+                                    <Label
+                                        Text="{Binding HangCount, StringFormat='Hangings: {0}'}"
+                                        Style="{StaticResource Label_Hangings}" />
+                                </VerticalStackLayout>
                             
                                 <!--Hanging Stepper-->
                                 <Stepper
@@ -158,14 +187,7 @@
                                     VerticalOptions="Center"
                                     Margin="10,0"
                                     Minimum="0"
-                                    Value="{Binding Hangings, Mode=TwoWay}" />
-
-                                <!--Bowler Hangings Count-->
-                                <Label
-                                    Grid.Row="1"
-                                    Grid.Column="1"
-                                    Text="{Binding Hangings, StringFormat='Hangings: {0}'}"
-                                    Style="{StaticResource Label_Hangings}" />
+                                    Value="{Binding HangCount, Mode=TwoWay}" />
 
                                 <!--Separator-->
                                 <BoxView
@@ -217,7 +239,7 @@
 
                         <Label
                             Grid.Column="1"
-                            Text="{Binding Week.BusRides, StringFormat='Bus Rides: {0}'}"
+                            Text="{Binding BusRides, StringFormat='Bus Rides: {0}'}"
                             Style="{StaticResource Label_BusRides}" />
                 
                         <!--Bus Ride Stepper-->
@@ -228,7 +250,7 @@
                             HorizontalOptions="End"
                             Margin="10,0"
                             Minimum="0"
-                            Value="{Binding Week.BusRides, Mode=TwoWay}" />
+                            Value="{Binding BusRides, Mode=TwoWay}" />
                     </Grid>
                 </Border>
             </Grid>
@@ -239,8 +261,9 @@
                 Grid.Column="0"
                 Margin="10">
                 <Button
+                    IsEnabled="{Binding IsEnableCompleteWeek}"
                     Style="{StaticResource PrimaryButton}"
-                    Text="{Binding Week.WeekNumber, StringFormat='Complete Week {0}'}" />
+                    Text="{Binding WeekNumber, StringFormat='Complete Week {0}'}" />
             </StackLayout>
         </Grid>
     </ContentPage.Content>

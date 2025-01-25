@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 
 using HangTab.Messages;
@@ -19,6 +20,7 @@ public partial class CurrentWeekOverviewViewModel :
 {
     private readonly IBowlerService _bowlerService;
     private readonly IDialogService _dialogService;
+    private readonly INavigationService _navigationService;
     private readonly ISettingsService _settingsService;
     private readonly IWeekService _weekService;
     private readonly IWeeklyLineupService _weeklyLineupService;
@@ -26,12 +28,14 @@ public partial class CurrentWeekOverviewViewModel :
     public CurrentWeekOverviewViewModel(
         IBowlerService bowlerService,
         IDialogService dialogService,
+        INavigationService navigationService,
         ISettingsService settingsService,
         IWeekService weekService,
         IWeeklyLineupService weeklyLineupService)
     {
         _bowlerService = bowlerService;
         _dialogService = dialogService;
+        _navigationService = navigationService;
         _settingsService = settingsService;
         _weekService = weekService;
         _weeklyLineupService = weeklyLineupService;
@@ -42,19 +46,51 @@ public partial class CurrentWeekOverviewViewModel :
     }
 
     [ObservableProperty]
+    private int _id;
+
+    [ObservableProperty]
+    private int _weekNumber;
+
+    [ObservableProperty]
+    private int _busRides;
+
+    async partial void OnBusRidesChanged(int value)
+    {
+        if (value >= 0)
+        {
+            CurrentWeek.BusRides = value;
+            await _weekService.UpdateWeek(CurrentWeek);
+        }
+    }
+
+    private Week CurrentWeek { get; set; }
+
+    [ObservableProperty]
     private string _pageTitle;
 
     [ObservableProperty]
     private int _teamHangTotal;
 
     [ObservableProperty]
-    private Week _week = new();
+    private ObservableCollection<CurrentWeekListItemViewModel> _currentWeekBowlers = [];
 
     [ObservableProperty]
-    private ObservableCollection<BowlerListItemViewModel> _currentWeekBowlers = [];
+    private CurrentWeekListItemViewModel _selectedBowler;
 
     [ObservableProperty]
-    private BowlerListItemViewModel _selectedBowler;
+    private bool _isEnableCompleteWeek = true;
+
+    // TODO: Add submit relay command
+
+    [RelayCommand]
+    private async Task NavigateToSwitchSelectedBowler()
+    {
+        if (SelectedBowler is not null)
+        {
+            await _navigationService.GoToSwitchBowler(SelectedBowler.MapCurrentWeekListItemViewModelToWeeklyLineup());
+            SelectedBowler = null;
+        }
+    }
 
     public override async Task LoadAsync()
     {
@@ -63,44 +99,50 @@ public partial class CurrentWeekOverviewViewModel :
             await Loading(GetCurrentWeek);
         }
 
-        TeamHangTotal = Week.Bowlers.Sum(b => b.HangCount);
-        PageTitle = $"Week {Week.WeekNumber} of {_settingsService.TotalSeasonWeeks}";
+        IsEnableCompleteWeek = CurrentWeekBowlers.Count > 0;
+        TeamHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
+        PageTitle = $"Week {WeekNumber} of {_settingsService.TotalSeasonWeeks}";
     }
 
     private async Task GetCurrentWeek()
     {
-        if (_settingsService.CurrentWeekPrimaryKey == 0)
+        CurrentWeek = _settingsService.CurrentWeekPrimaryKey == 0
+            ? await CreateFirstWeek()
+            : await _weekService.GetWeek(_settingsService.CurrentWeekPrimaryKey);
+
+        if (CurrentWeek is not null)
         {
-            Week = await _weekService.CreateWeek(1);
-            _settingsService.CurrentWeekPrimaryKey = Week.Id;
-        }
-        else
-        {
-            CurrentWeekBowlers.Clear();
-            Week = await _weekService.GetWeek(_settingsService.CurrentWeekPrimaryKey);
-            if (Week.Bowlers.Count > 0)
+            if (CurrentWeek.Bowlers.Count > 0)
             {
-                foreach (var lineup in Week.Bowlers)
-                {
-                    lineup.Bowler = await _bowlerService.GetBowlerById(lineup.BowlerId);
-                }
-                CurrentWeekBowlers = Week.Bowlers.MapWeeklyLineupToBowlerListItemViewModel().ToObservableCollection();
+                CurrentWeekBowlers.Clear();
+                CurrentWeekBowlers = CurrentWeek.Bowlers.MapBowlerToBowlerListItemViewModel().ToObservableCollection();
             }
+
+            MapWeekData(CurrentWeek);
         }
+    }
+
+    private async Task<Week> CreateFirstWeek()
+    {
+        var week = await _weekService.CreateWeek(1);
+        _settingsService.CurrentWeekPrimaryKey = week.Id;
+        return week;
     }
 
     public async void Receive(BowlerHangCountChangedMessage message)
     {
-        var bowler = Week.Bowlers.FirstOrDefault(wl => wl.BowlerId == message.Id);
+        var bowler = CurrentWeekBowlers.FirstOrDefault(b => b.BowlerId == message.Id);
         if (bowler is null)
         {
             return;
         }
 
-        bowler.HangCount = message.HangCount;
-        TeamHangTotal = Week.Bowlers.Sum(b => b.HangCount);
-
-        if (!await _weeklyLineupService.UpdateWeeklyLineup(bowler))
+        if (await _weeklyLineupService.UpdateWeeklyLineup(bowler.MapCurrentWeekListItemViewModelToWeeklyLineup()))
+        {
+            bowler.HangCount = message.HangCount;
+            TeamHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
+        }
+        else
         {
             await _dialogService.Notify("Error", "Unable to update bowler hang count");
         }
@@ -108,16 +150,16 @@ public partial class CurrentWeekOverviewViewModel :
 
     public async void Receive(BowlerAddedOrChangedMessage message)
     {
-        if (message.Id > 0)
+        if (message.Id > 0 && !message.IsSub)
         {
             var weeklyLineup = new WeeklyLineup
             {
                 BowlerId = message.Id,
-                WeekId = Week.Id,
+                WeekId = _settingsService.CurrentWeekPrimaryKey,
             };
             await _weeklyLineupService.AddWeeklyLineupBowler(weeklyLineup);
-            Week.Bowlers.Add(weeklyLineup);
-            await _weekService.UpdateWeek(Week);
+            CurrentWeekBowlers.Add(weeklyLineup.MapWeeklyLineupToCurrentWeekListItemViewModel());
+            //await _weekService.UpdateWeek(Week);
         }
 
         CurrentWeekBowlers.Clear();
@@ -126,10 +168,17 @@ public partial class CurrentWeekOverviewViewModel :
 
     public void Receive(BowlerDeletedMessage message)
     {
-        var deletedBowler = CurrentWeekBowlers.FirstOrDefault(b => b.Id == message.Id);
+        var deletedBowler = CurrentWeekBowlers.FirstOrDefault(b => b.BowlerId == message.Id);
         if (deletedBowler is not null)
         {
             CurrentWeekBowlers.Remove(deletedBowler);
         }
+    }
+
+    private void MapWeekData(Week week)
+    {
+        Id = week.Id;
+        WeekNumber = week.WeekNumber;
+        BusRides = week.BusRides;
     }
 }

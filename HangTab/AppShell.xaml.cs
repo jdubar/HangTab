@@ -10,5 +10,6 @@ public partial class AppShell : Shell
 
         Routing.RegisterRoute("bowler/add", typeof(BowlerAddEditPage));
         Routing.RegisterRoute("bowler/edit", typeof(BowlerAddEditPage));
+        Routing.RegisterRoute("bowler/switch", typeof(BowlerSwitchPage));
     }
 }

@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 
+using HangTab.Enums;
 using HangTab.Extensions;
 using HangTab.Messages;
 using HangTab.Models;
@@ -75,6 +76,15 @@ public partial class BowlerAddEditViewModel :
     [ObservableProperty]
     private bool _showDeleteButton;
 
+	[ObservableProperty]
+	private BowlerType _selectedStatus = BowlerType.Regular;
+
+    public IReadOnlyList<string> AllStatuses { get; } =
+    [
+        Enum.GetName(BowlerType.Regular),
+        Enum.GetName(BowlerType.Sub)
+    ];
+
     [RelayCommand]
     private async Task DeleteBowler()
     {
@@ -117,7 +127,7 @@ public partial class BowlerAddEditViewModel :
         {
             if (await _bowlerService.AddBowler(bowler))
             {
-                WeakReferenceMessenger.Default.Send(new BowlerAddedOrChangedMessage(bowler.Id));
+                WeakReferenceMessenger.Default.Send(new BowlerAddedOrChangedMessage(bowler.Id, bowler.IsSub));
             }
             else
             {
@@ -192,6 +202,10 @@ public partial class BowlerAddEditViewModel :
             Initials = model.Id > 0 ? model.Name.GetInitials() : string.Empty;
         }
 
+        SelectedStatus = IsSub
+            ? BowlerType.Sub
+            : BowlerType.Regular;
+
         PageTitle = Id > 0 ? "Edit Bowler" : "Add Bowler";
     }
 
@@ -202,7 +216,7 @@ public partial class BowlerAddEditViewModel :
             Id = Id,
             Name = Name,
             ImageUrl = ImageUrl,
-            IsSub = IsSub,
+            IsSub = SelectedStatus == BowlerType.Sub,
         };
     }
 }

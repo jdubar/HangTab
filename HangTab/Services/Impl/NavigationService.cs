@@ -11,10 +11,20 @@ public class NavigationService : INavigationService
     {
         var navigationParameter = new ShellNavigationQueryParameters
         {
-            { "Bowler", bowler }
+            { nameof(Bowler), bowler }
         };
 
         await Shell.Current.GoToAsync("bowler/edit", navigationParameter);
+    }
+
+    public async Task GoToSwitchBowler(WeeklyLineup weeklyLineup)
+    {
+        var navigationParameter = new ShellNavigationQueryParameters
+        {
+            { nameof(WeeklyLineup), weeklyLineup }
+        };
+
+        await Shell.Current.GoToAsync("bowler/switch", navigationParameter);
     }
 
     public Task GoToBowlerOverview() => Shell.Current.GoToAsync("//bowleroverview");

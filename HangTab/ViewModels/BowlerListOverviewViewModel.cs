@@ -80,7 +80,7 @@ public partial class BowlerListOverviewViewModel :
     {
         if (SelectedBowler is not null)
         {
-            await _navigationService.GoToEditBowler(SelectedBowler.Map());
+            await _navigationService.GoToEditBowler(SelectedBowler.MapBowlerListItemViewModelToBowler());
             SelectedBowler = null;
         }
     }
@@ -98,14 +98,17 @@ public partial class BowlerListOverviewViewModel :
     private async Task GetBowlers()
     {
         AllBowlers = await _bowlerService.GetAllBowlers();
-        _allBowlersInGroups =
-        [
-            new BowlerGroup("Regulars", AllBowlers.Where(b => !b.IsSub).MapBowlerToBowlerListItemViewModel()),
-            new BowlerGroup("Subs", AllBowlers.Where(b => b.IsSub).MapBowlerToBowlerListItemViewModel())
-        ];
+        if (AllBowlers.Any())
+        {
+            _allBowlersInGroups =
+            [
+                new BowlerGroup("Regulars", AllBowlers.Where(b => !b.IsSub).OrderBy(b => b.Name).MapBowlerToBowlerListItemViewModel()),
+                new BowlerGroup("Subs", AllBowlers.Where(b => b.IsSub).OrderBy(b => b.Name).MapBowlerToBowlerListItemViewModel())
+            ];
 
-        Groups.Clear();
-        Groups = _allBowlersInGroups.ToObservableCollection();
+            Groups.Clear();
+            Groups = _allBowlersInGroups.ToObservableCollection();
+        }
     }
 
     private async Task UpdateBowlerHangCounts()
@@ -130,19 +133,13 @@ public partial class BowlerListOverviewViewModel :
         return Task.CompletedTask;
     }
 
-    public async void Receive(BowlerAddedOrChangedMessage message)
+    public async void Receive(BowlerAddedOrChangedMessage message) => await SetGroupsList();
+
+    public async void Receive(BowlerDeletedMessage message) => await SetGroupsList();
+
+    private async Task SetGroupsList()
     {
         Groups.Clear();
         await GetBowlers();
-    }
-
-    public void Receive(BowlerDeletedMessage message)
-    {
-        var deletedBowler = Groups.SelectMany(g => g).FirstOrDefault(b => b.Id == message.Id);
-        if (deletedBowler is not null)
-        {
-            Groups.First(g => g.Contains(deletedBowler)).Remove(deletedBowler);
-            AllBowlers = AllBowlers.Where(b => b.Id != message.Id);
-        }
     }
 }

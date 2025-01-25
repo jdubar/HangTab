@@ -69,16 +69,15 @@
                 <CollectionView.GroupHeaderTemplate>
                     <DataTemplate>
                         <VerticalStackLayout>
-                            <HorizontalStackLayout>
+                            <HorizontalStackLayout
+                                x:DataType="models:BowlerGroup">
                                 <!--Group Name-->
                                 <Label
-                                    x:DataType="models:BowlerGroup"
                                     Text="{Binding GroupName}"
                                     Style="{StaticResource Label_Header}" />
                                 
                                 <!--Group Total-->
                                 <Label
-                                    x:DataType="models:BowlerGroup"
                                     Text="{Binding Count, StringFormat='Total: {0}'}"
                                     Style="{StaticResource Label_Header_Sub}" />
                             </HorizontalStackLayout>
@@ -94,9 +93,7 @@
                         <Grid
                             x:DataType="vm:BowlerListItemViewModel"
                             Padding="5"
-                            ColumnDefinitions="Auto,*,Auto"
-                            RowDefinitions="Auto,Auto,Auto"
-                            VerticalOptions="Center">
+                            ColumnDefinitions="Auto,*,Auto">
 
                             <!--Avatar Image-->
                             <toolkit:AvatarView
@@ -104,18 +101,27 @@
                                 Grid.RowSpan="2"
                                 Style="{StaticResource CachedAvatarProfile}"
                                 ImageSource="{Binding ImageUrl}"
-                                WidthRequest="80"
-                                HeightRequest="80"
+                                WidthRequest="60"
+                                HeightRequest="60"
                                 Text="{Binding Initials}"
                                 FontSize="20" />
                             
-                            <!--Full Name-->
-                            <Label
-                                FontSize="Large"
+                            <VerticalStackLayout
                                 Grid.Row="0"
                                 Grid.Column="1"
-                                Text="{Binding Name}"
-                                Style="{StaticResource Label_Name}" />
+                                VerticalOptions="Center">
+                                <!--Full Name-->
+                                <Label
+                                    FontSize="Large"
+                                    Text="{Binding Name}"
+                                    Style="{StaticResource Label_Name}" />
+                            
+
+                                <!--Total Hangings Count-->
+                                <Label
+                                    Text="{Binding Hangings, StringFormat='Season hangings: {0}'}"
+                                    Style="{StaticResource Label_Hangings}" />
+                            </VerticalStackLayout>
                             
                             <!--Chevron Image-->
                             <Image
@@ -132,13 +138,6 @@
                                                                 Light={StaticResource Color_ElementGrey}}"/>
                                 </Image.Source>
                             </Image>
-
-                                <!--Total Hangings Count-->
-                            <Label
-                                Grid.Row="1"
-                                Grid.Column="1"
-                                Text="{Binding Hangings, StringFormat='Season hangings: {0}'}"
-                                Style="{StaticResource Label_Hangings}" />
                         </Grid>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>

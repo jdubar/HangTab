@@ -15,16 +15,19 @@ public partial class BowlerListItemViewModel : ObservableObject
     private string _name = string.Empty;
 
     [ObservableProperty]
-    private string? _imageUrl;
-
-    [ObservableProperty]
     private bool _isSub;
 
     [ObservableProperty]
-    private string _initials;
+    private int _hangings;
 
     [ObservableProperty]
-    private int _hangings;
+    private int _weeklyLineupId;
+
+    [ObservableProperty]
+    private string? _imageUrl;
+    
+    [ObservableProperty]
+    private string _initials;
 
     partial void OnHangingsChanged(int oldValue, int newValue)
     {
@@ -41,16 +44,18 @@ public partial class BowlerListItemViewModel : ObservableObject
         int id,
         string name,
         bool isSub,
+        int weeklyLineupId = 0,
         int hangings = 0,
         string? imageUrl = null,
         BowlerStatus status = BowlerStatus.Active)
     {
         Id = id;
         Name = name;
-        ImageUrl = imageUrl;
         IsSub = isSub;
-        Initials = name.GetInitials();
+        WeeklyLineupId = weeklyLineupId;
         Hangings = hangings;
+        ImageUrl = imageUrl;
         Status = status;
+        Initials = name.GetInitials();
     }
 }

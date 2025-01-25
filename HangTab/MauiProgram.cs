@@ -76,6 +76,7 @@ public static class MauiProgram
 
         builder.Services.AddTransient<AvatarSelectViewModel>();
         builder.Services.AddTransient<BowlerAddEditViewModel>();
+        builder.Services.AddTransient<BowlerSwitchViewModel>();
         return builder;
     }
 
@@ -86,6 +87,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<SettingsPage>();
 
         builder.Services.AddTransient<BowlerAddEditPage>();
+        builder.Services.AddTransient<BowlerSwitchPage>();
         return builder;
     }
 }

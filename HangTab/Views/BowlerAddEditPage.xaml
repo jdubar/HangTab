@@ -4,10 +4,15 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:HangTab.Views"
     xmlns:vm="clr-namespace:HangTab.ViewModels"
+    xmlns:enums="clr-namespace:HangTab.Enums"
     xmlns:dataAnnotations="clr-namespace:System.ComponentModel.DataAnnotations;assembly=System.ComponentModel.Annotations"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     x:Class="HangTab.Views.BowlerAddEditPage"
     x:DataType="vm:BowlerAddEditViewModel">
+    
+    <ContentPage.Resources>
+         <toolkit:EnumToIntConverter x:Key="BowlerStatusConverter" />
+    </ContentPage.Resources>
     
     <Shell.TitleView>
         <Grid>
@@ -35,7 +40,7 @@
     </Shell.TitleView>
     
     <Grid
-        RowDefinitions="Auto,Auto,Auto,*,Auto"
+        RowDefinitions="Auto,115,Auto,*,Auto"
         RowSpacing="10"
         HorizontalOptions="FillAndExpand"
         VerticalOptions="FillAndExpand">
@@ -71,12 +76,14 @@
                 <!--Avatar Image-->
                 <toolkit:AvatarView
                     ImageSource="{Binding ImageUrl}"
-                    Style="{StaticResource CachedImageProfile}"
+                    Style="{StaticResource CachedAvatarProfile}"
                     Text="{Binding Initials}"
                     FontSize="42"
                     WidthRequest="200"
                     HeightRequest="200"
                     CornerRadius="100"
+                    BorderColor="{StaticResource White}"
+                    TextColor="{StaticResource White}"
                     ZIndex="1" />
             </Grid>
         </Border>
@@ -84,7 +91,7 @@
         <!--Bowler Name Entry-->
         <VerticalStackLayout
             Grid.Row="1"
-            Margin="10,0"
+            Margin="10,5"
             Spacing="10">
             <VerticalStackLayout>
                 <Label
@@ -101,43 +108,40 @@
                         ReturnType="Done"
                         Text="{Binding Name}" />
                 </Border>
+            
+                <!--Validation Errors-->
+                <VerticalStackLayout
+                    Margin="0,10"
+                    BindableLayout.ItemsSource="{Binding Errors}">
+                    <BindableLayout.ItemTemplate>
+                        <DataTemplate
+                            x:DataType="dataAnnotations:ValidationResult">
+                            <Label
+                                Style="{StaticResource ErrorLabelStyle}"
+                                Text="{Binding ErrorMessage}" />
+                        </DataTemplate>
+                    </BindableLayout.ItemTemplate>
+                </VerticalStackLayout>
             </VerticalStackLayout>
         </VerticalStackLayout>
             
-        <!--Substitute Bowler Switch-->
-        <Grid
-            Grid.Row="2"
-            RowDefinitions="Auto"
-            ColumnDefinitions="*,5*"
-            Margin="10,0">
-            
-            <Switch
-                Grid.Column="0"
-                IsToggled="{Binding IsSub, Mode=TwoWay}"
-                OnColor="{DynamicResource Success}"
-                ThumbColor="{StaticResource Primary}"
-                HorizontalOptions="Center"
-                VerticalOptions="Center" />
-            <Label
-                Grid.Column="1"
-                Text="Substitute Bowler"
-                VerticalOptions="Center"
-                FontSize="Medium" />
-        </Grid>
-            
-        <!--Validation Errors-->
+        <!--Regular/Substitute Bowler Switch-->
         <VerticalStackLayout
-            Grid.Row="3"
-            Grid.Column="0"
-            Margin="10"
-            BindableLayout.ItemsSource="{Binding Errors}">
-            <BindableLayout.ItemTemplate>
-                <DataTemplate x:DataType="dataAnnotations:ValidationResult">
-                    <Label
-                        Style="{StaticResource ErrorLabelStyle}"
-                        Text="{Binding ErrorMessage}" />
-                </DataTemplate>
-            </BindableLayout.ItemTemplate>
+            Grid.Row="2"
+            Margin="10,0"
+            Spacing="10">
+            <VerticalStackLayout>
+                <Label
+                    Text="Bowler Type"
+                    FontAttributes="Bold" />
+                <Border
+                    StrokeShape="RoundRectangle  5"
+                    Margin="0,5">
+                    <Picker
+                        ItemsSource="{Binding AllStatuses}"
+                        SelectedIndex="{Binding SelectedStatus, Converter={StaticResource BowlerStatusConverter}, ConverterParameter={x:Type enums:BowlerType}}" />
+                </Border>
+            </VerticalStackLayout>
         </VerticalStackLayout>
             
         <!--Submit Button-->
@@ -146,9 +150,8 @@
             Grid.Column="0"
             Margin="10">
             <Button
-                CornerRadius="20"
+                Style="{StaticResource PrimaryButton}"
                 Text="Save Changes"
-                HorizontalOptions="FillAndExpand"
                 Command="{Binding SubmitCommand}" />
         </StackLayout>
     </Grid>
