@@ -81,6 +81,8 @@
     <Style x:Key="RoundedCornerBorder" TargetType="Border">
         <Setter Property="StrokeShape" Value="RoundRectangle 5" />
         <Setter Property="Margin" Value="5,1" />
+        <Setter Property="BackgroundColor" Value="{AppThemeBinding Dark={StaticResource Color_ElementGrey},
+                                                                   Light={StaticResource White}}" />
     </Style>
     
     <Style x:Key="PrimaryButton" TargetType="Button">
@@ -92,6 +94,35 @@
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="VerticalOptions" Value="Center"/>
         <Setter Property="TextColor" Value="{StaticResource Error}"/>
+    </Style>
+    
+    <Style x:Key="NotificationDot_Inactive" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource InactiveBowler}" />
+        <Setter Property="HeightRequest" Value="25" />
+        <Setter Property="WidthRequest" Value="25" />
+        <Setter Property="Margin" Value="40,40,0,0" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 100" />
+    </Style>
+    
+    <Style x:Key="Notification_Sub" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource SubBowler}" />
+        <Setter Property="HeightRequest" Value="20" />
+        <Setter Property="WidthRequest" Value="48" />
+        <Setter Property="Margin" Value="0,50,0,0" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 40" />
+        <Setter Property="Stroke" Value="{AppThemeBinding Dark={StaticResource White},
+                                                          Light={StaticResource Color_ElementGrey}}" />
+        <Setter Property="StrokeThickness" Value="1" />
+    </Style>
+    
+    <Style x:Key="Image_Add" TargetType="ImageButton">
+        <Setter Property="Aspect" Value="Center" />
+        <Setter Property="BackgroundColor" Value="{StaticResource PrimaryDark}" />
+        <Setter Property="CornerRadius" Value="100" />
+        <Setter Property="WidthRequest" Value="70" />
+        <Setter Property="HeightRequest" Value="70" />
+        <Setter Property="Margin" Value="0,200,20,0" />
+        <Setter Property="HorizontalOptions" Value="End" />
     </Style>
 
 </ResourceDictionary>

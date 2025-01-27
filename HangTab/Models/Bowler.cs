@@ -8,5 +8,6 @@ public class Bowler
     public int Id { get; set; }
     public string Name { get; set; } = string.Empty;
     public string? ImageUrl { get; set; }
+    public bool IsInactive { get; set; }
     public bool IsSub { get; set; }
 }

@@ -4,16 +4,16 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:HangTab.Views"
     xmlns:vm="clr-namespace:HangTab.ViewModels"
-    xmlns:enums="clr-namespace:HangTab.Enums"
+    xmlns:converters="clr-namespace:HangTab.Converters"
     xmlns:dataAnnotations="clr-namespace:System.ComponentModel.DataAnnotations;assembly=System.ComponentModel.Annotations"
-    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     x:Class="HangTab.Views.BowlerAddEditPage"
     x:DataType="vm:BowlerAddEditViewModel">
     
     <ContentPage.Resources>
-         <toolkit:EnumToIntConverter x:Key="BowlerStatusConverter" />
+        <converters:BowlerTypeEnumToTextConverter x:Key="BowlerTypeEnumToTextConverter" />
     </ContentPage.Resources>
     
+    <!--Page titlebar-->
     <Shell.TitleView>
         <Grid>
             <Label
@@ -25,7 +25,7 @@
                 VerticalOptions="Center"
                 CornerRadius="100"
                 Margin="10,0"
-                IsVisible="{Binding ShowDeleteButton}"
+                IsVisible="{Binding IsExistingBowler}"
                 Command="{Binding DeleteBowlerCommand}">
                 <ImageButton.Source>
                     <FontImageSource
@@ -40,115 +40,137 @@
     </Shell.TitleView>
     
     <Grid
-        RowDefinitions="Auto,115,Auto,*,Auto"
+        RowDefinitions="220,Auto,Auto,Auto,*,Auto"
         RowSpacing="10"
         HorizontalOptions="FillAndExpand"
         VerticalOptions="FillAndExpand">
             
         <!--Avatar Image/Update Avatar Button-->
-        <Border
+        <Grid
             Grid.Row="0"
             Grid.ColumnSpan="3"
-            BackgroundColor="{StaticResource Primary}"
-            ZIndex="2">
-            <Grid>
-                <!--Update Avatar Button-->
-                <ImageButton
-                    Aspect="Center"
-                    BackgroundColor="{StaticResource PrimaryDark}"
-                    HorizontalOptions="Center"
-                    VerticalOptions="Center"
-                    CornerRadius="100"
-                    WidthRequest="70"
-                    HeightRequest="70"
-                    Margin="140,140,0,0"
-                    ZIndex="2"
-                    Command="{Binding ShowAvatarOptionsBottomSheetCommand}"
-                    CommandParameter="{x:Reference NameEntry}">
-                    <ImageButton.Source>
-                        <FontImageSource
-                            FontFamily="MaterialIcons"
-                            Glyph="{StaticResource add_a_photo}"
-                            Size="40"/>
-                    </ImageButton.Source>
-                </ImageButton>
-                
-                <!--Avatar Image-->
-                <toolkit:AvatarView
-                    ImageSource="{Binding ImageUrl}"
-                    Style="{StaticResource CachedAvatarProfile}"
-                    Text="{Binding Initials}"
-                    FontSize="42"
-                    WidthRequest="200"
-                    HeightRequest="200"
-                    CornerRadius="100"
-                    BorderColor="{StaticResource White}"
-                    TextColor="{StaticResource White}"
-                    ZIndex="1" />
-            </Grid>
-        </Border>
+            BackgroundColor="{StaticResource Color_LightGrey}">
+            
+            <!--Update Avatar Image Button-->
+            <ImageButton
+                Style="{StaticResource Image_Add}"
+                ZIndex="2"
+                Command="{Binding ShowAvatarOptionsBottomSheetCommand}"
+                CommandParameter="{x:Reference NameEntry}">
+                <ImageButton.Source>
+                    <FontImageSource
+                        FontFamily="MaterialIcons"
+                        Glyph="{StaticResource add_a_photo}"
+                        Size="40"/>
+                </ImageButton.Source>
+            </ImageButton>
+            
+            <!--Avatar Image-->
+            <Image
+                Source="{Binding ImageUrl, TargetNullValue='person.png'}"
+                ZIndex="1"/>
+        </Grid>
             
         <!--Bowler Name Entry-->
         <VerticalStackLayout
             Grid.Row="1"
-            Margin="10,5"
-            Spacing="10">
-            <VerticalStackLayout>
-                <Label
-                    Text="Bowler Name"
-                    FontAttributes="Bold" />
-                <Border
-                    StrokeShape="RoundRectangle  5"
-                    Margin="0,5">
-                    <Entry
-                        x:Name="NameEntry"
-                        ClearButtonVisibility="WhileEditing"
-                        Placeholder="Bowler's full name"
-                        Keyboard="Text"
-                        ReturnType="Done"
-                        Text="{Binding Name}" />
-                </Border>
-            
-                <!--Validation Errors-->
-                <VerticalStackLayout
-                    Margin="0,10"
-                    BindableLayout.ItemsSource="{Binding Errors}">
-                    <BindableLayout.ItemTemplate>
-                        <DataTemplate
-                            x:DataType="dataAnnotations:ValidationResult">
-                            <Label
-                                Style="{StaticResource ErrorLabelStyle}"
-                                Text="{Binding ErrorMessage}" />
-                        </DataTemplate>
-                    </BindableLayout.ItemTemplate>
-                </VerticalStackLayout>
-            </VerticalStackLayout>
+            Margin="10,20,10,0">
+            <Grid
+                ColumnDefinitions="Auto,*">
+                <Image
+                    Grid.Column="0"
+                    Margin="5,0">
+                    <Image.Source>
+                        <FontImageSource
+                            FontFamily="MaterialIcons"
+                            Glyph="{StaticResource person}"
+                            Size="30"
+                            Color="{AppThemeBinding Dark={StaticResource White},
+                                                    Light={StaticResource Black}}" />
+                    </Image.Source>
+                </Image>
+                <Entry
+                    Grid.Column="1"
+                    x:Name="NameEntry"
+                    ClearButtonVisibility="WhileEditing"
+                    Placeholder="Name"
+                    Keyboard="Text"
+                    ReturnType="Done"
+                    Text="{Binding Name}" />
+            </Grid>
         </VerticalStackLayout>
-            
-        <!--Regular/Substitute Bowler Switch-->
-        <VerticalStackLayout
+        
+        <!--Bowler Type Picker-->
+        <Grid
             Grid.Row="2"
             Margin="10,0"
-            Spacing="10">
-            <VerticalStackLayout>
-                <Label
-                    Text="Bowler Type"
-                    FontAttributes="Bold" />
-                <Border
-                    StrokeShape="RoundRectangle  5"
-                    Margin="0,5">
-                    <Picker
-                        ItemsSource="{Binding AllStatuses}"
-                        SelectedIndex="{Binding SelectedStatus, Converter={StaticResource BowlerStatusConverter}, ConverterParameter={x:Type enums:BowlerType}}" />
-                </Border>
-            </VerticalStackLayout>
+            ColumnDefinitions="Auto,*">
+            <Image
+                Grid.Column="0"
+                Margin="5,0">
+                <Image.Source>
+                    <FontImageSource
+                        FontFamily="MaterialIcons"
+                        Glyph="{StaticResource group}"
+                        Size="30"
+                        Color="{AppThemeBinding Dark={StaticResource White},
+                                                Light={StaticResource Black}}" />
+                </Image.Source>
+            </Image>
+            <Picker
+                Grid.Column="1"
+                Title="Bowler type"
+                ItemsSource="{Binding AllTypes}"
+                ItemDisplayBinding="{Binding .,Converter={StaticResource BowlerTypeEnumToTextConverter}}"
+                SelectedIndex="{Binding SelectedType}" />
+        </Grid>
+        
+        <!--Deactivate Bowler Switch-->
+        <HorizontalStackLayout
+            Grid.Row="3"
+            Margin="10,0"
+            VerticalOptions="Center"
+            IsVisible="{Binding IsExistingBowler}">
+            <Image
+                Grid.Column="0"
+                Margin="5,0">
+                <Image.Source>
+                    <FontImageSource
+                        FontFamily="MaterialIcons"
+                        Glyph="{StaticResource person_off}"
+                        Size="30"
+                        Color="{AppThemeBinding Dark={StaticResource White},
+                                                Light={StaticResource Black}}" />
+                </Image.Source>
+            </Image>
+            
+            <Label
+                Text="Deactivate bowler"
+                FontAttributes="Bold"
+                VerticalOptions="Center"/>
+            <Switch
+                IsToggled="{Binding IsInactive, Mode=TwoWay}" />
+        </HorizontalStackLayout>
+                    
+        <!--Validation Errors List-->
+        <VerticalStackLayout
+            Grid.Row="4"
+            Margin="40,0,0,0"
+            BindableLayout.ItemsSource="{Binding Errors}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate
+                    x:DataType="dataAnnotations:ValidationResult">
+                    <Label
+                        Style="{StaticResource ErrorLabelStyle}"
+                        Text="{Binding ErrorMessage}" />
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
         </VerticalStackLayout>
             
         <!--Submit Button-->
         <StackLayout
-            Grid.Row="4"
-            Grid.Column="0"
-            Margin="10">
+                Grid.Row="5"
+                Margin="10">
             <Button
                 Style="{StaticResource PrimaryButton}"
                 Text="Save Changes"

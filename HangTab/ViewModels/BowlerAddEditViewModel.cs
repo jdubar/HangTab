@@ -55,9 +55,9 @@ public partial class BowlerAddEditViewModel :
     private int _id;
 
     [ObservableProperty]
-    [Required(ErrorMessage="First name is a required field")]
-    [MinLength(3, ErrorMessage="First name must have at least 3 characters")]
-    [MaxLength(50, ErrorMessage="First name has a maximum of 50 characters")]
+    [Required(ErrorMessage="Bowler name is a required field")]
+    [MinLength(3, ErrorMessage="The bowler's name must have at least 3 characters")]
+    [MaxLength(50, ErrorMessage="Bowler's name has a maximum of 50 characters")]
     [NotifyDataErrorInfo]
     private string _name = string.Empty;
 
@@ -68,22 +68,43 @@ public partial class BowlerAddEditViewModel :
     private string _initials;
 
     [ObservableProperty]
+    private bool _isInactive;
+
+    [ObservableProperty]
     private bool _isSub;
 
     [ObservableProperty]
     private ObservableCollection<ValidationResult> _errors = [];
 
     [ObservableProperty]
-    private bool _showDeleteButton;
+    private bool _isExistingBowler;
 
 	[ObservableProperty]
-	private BowlerType _selectedStatus = BowlerType.Regular;
+    [Required(ErrorMessage="Bowler type is a required field")]
+    [Range((int)BowlerType.Regular, (int)BowlerType.Sub, ErrorMessage="You must select a bowler type")]
+    [NotifyDataErrorInfo]
+    private int _selectedType = -1;
 
-    public IReadOnlyList<string> AllStatuses { get; } =
-    [
-        Enum.GetName(BowlerType.Regular),
-        Enum.GetName(BowlerType.Sub)
-    ];
+    public IReadOnlyList<BowlerType> AllTypes { get; } = Enum.GetValues(typeof(BowlerType)).Cast<BowlerType>().ToList();
+    
+    public override async Task LoadAsync()
+    {
+        await Loading(
+            async () =>
+            {
+                if (_bowler is null && Id > 0)
+                {
+                    _bowler = await _bowlerService.GetBowlerById(Id);
+                }
+
+                if (_bowler is not null)
+                {
+                    IsExistingBowler = true;
+                }
+
+                MapBowler(_bowler);
+            });
+    }
 
     [RelayCommand]
     private async Task DeleteBowler()
@@ -148,39 +169,6 @@ public partial class BowlerAddEditViewModel :
             await _navigationService.GoBack();
         }
     }
-    
-    public void ApplyQueryAttributes(IDictionary<string, object> query)
-    {
-        if (query.Count > 0)
-        {
-            _bowler = query["Bowler"] as Bowler;
-        }
-    }
-
-    public override async Task LoadAsync()
-    {
-        await Loading(
-            async () =>
-            {
-                if (_bowler is null && Id > 0)
-                {
-                    _bowler = await _bowlerService.GetBowlerById(Id);
-                }
-
-                if (_bowler is not null)
-                {
-                    ShowDeleteButton = true;
-                }
-
-                MapBowler(_bowler);
-            });
-    }
-
-    public void Receive(BowlerImageAddedOrChangedMessage message)
-    {
-        ImageUrl = message.ImageUrl;
-        _avatarOptionsBottomSheet.DismissAsync();
-    }
 
     private void AddBowlerViewModel_ErrorsChanged(object? sender, DataErrorsChangedEventArgs e)
     {
@@ -190,24 +178,6 @@ public partial class BowlerAddEditViewModel :
     }
 
     private bool CanSubmitBowler() => !HasErrors;
-    
-    private void MapBowler(Bowler? model)
-    {
-        if (model is not null)
-        {
-            Id = model.Id;
-            Name = model.Name;
-            ImageUrl = model.ImageUrl;
-            IsSub = model.IsSub;
-            Initials = model.Id > 0 ? model.Name.GetInitials() : string.Empty;
-        }
-
-        SelectedStatus = IsSub
-            ? BowlerType.Sub
-            : BowlerType.Regular;
-
-        PageTitle = Id > 0 ? "Edit Bowler" : "Add Bowler";
-    }
 
     private Bowler MapDataToBowler()
     {
@@ -216,7 +186,42 @@ public partial class BowlerAddEditViewModel :
             Id = Id,
             Name = Name,
             ImageUrl = ImageUrl,
-            IsSub = SelectedStatus == BowlerType.Sub,
+            IsInactive = IsInactive,
+            IsSub = SelectedType == (int)BowlerType.Sub,
         };
+    }    
+    private void MapBowler(Bowler? model)
+    {
+        if (model is not null)
+        {
+            Id = model.Id;
+            Name = model.Name;
+            ImageUrl = model.ImageUrl;
+            IsInactive = model.IsInactive;
+            IsSub = model.IsSub;
+            Initials = model.Id > 0 ? model.Name.GetInitials() : string.Empty;
+
+            SelectedType = model.IsSub
+                ? (int)BowlerType.Sub
+                : (int)BowlerType.Regular;
+        }
+
+        PageTitle = Id > 0
+            ? "Edit Bowler"
+            : "Add Bowler";
+    }
+        
+    public void ApplyQueryAttributes(IDictionary<string, object> query)
+    {
+        if (query.Count > 0)
+        {
+            _bowler = query["Bowler"] as Bowler;
+        }
+    }
+
+    public void Receive(BowlerImageAddedOrChangedMessage message)
+    {
+        ImageUrl = message.ImageUrl;
+        _avatarOptionsBottomSheet.DismissAsync();
     }
 }
