@@ -62,10 +62,10 @@ public partial class BowlerAddEditViewModel :
     private string _name = string.Empty;
 
     [ObservableProperty]
-    private string? _imageUrl;
+    private string? _imageUrl = string.Empty;
 
     [ObservableProperty]
-    private string _initials;
+    private string _initials = string.Empty;
 
     [ObservableProperty]
     private bool _isInactive;
@@ -109,6 +109,12 @@ public partial class BowlerAddEditViewModel :
     [RelayCommand]
     private async Task DeleteBowler()
     {
+        if (_bowler is null)
+        {
+            await _dialogService.AlertAsync("Error", "No bowler selected to delete.", "Ok");
+            return;
+        }
+
         if (await _dialogService.Ask("Delete", "Are you sure you want to delete this bowler?"))
         {
             if (await _bowlerService.DeleteBowler(_bowler.Id))

@@ -18,7 +18,6 @@ public partial class CurrentWeekOverviewViewModel :
     IRecipient<BowlerDeletedMessage>,
     IRecipient<BowlerHangCountChangedMessage>
 {
-    private readonly IBowlerService _bowlerService;
     private readonly IDialogService _dialogService;
     private readonly INavigationService _navigationService;
     private readonly ISettingsService _settingsService;
@@ -26,14 +25,12 @@ public partial class CurrentWeekOverviewViewModel :
     private readonly IWeeklyLineupService _weeklyLineupService;
 
     public CurrentWeekOverviewViewModel(
-        IBowlerService bowlerService,
         IDialogService dialogService,
         INavigationService navigationService,
         ISettingsService settingsService,
         IWeekService weekService,
         IWeeklyLineupService weeklyLineupService)
     {
-        _bowlerService = bowlerService;
         _dialogService = dialogService;
         _navigationService = navigationService;
         _settingsService = settingsService;
@@ -63,10 +60,10 @@ public partial class CurrentWeekOverviewViewModel :
         }
     }
 
-    private Week CurrentWeek { get; set; }
+    private Week CurrentWeek { get; set; } = new Week();
 
     [ObservableProperty]
-    private string _pageTitle;
+    private string _pageTitle = string.Empty;
 
     [ObservableProperty]
     private int _teamHangTotal;
@@ -75,7 +72,7 @@ public partial class CurrentWeekOverviewViewModel :
     private ObservableCollection<CurrentWeekListItemViewModel> _currentWeekBowlers = [];
 
     [ObservableProperty]
-    private CurrentWeekListItemViewModel _selectedBowler;
+    private CurrentWeekListItemViewModel? _selectedBowler = default!;
 
     [ObservableProperty]
     private bool _isEnableCompleteWeek = true;
@@ -83,7 +80,7 @@ public partial class CurrentWeekOverviewViewModel :
     [ObservableProperty]
     private bool _playPopperAnimation;
 
-    // TODO: Add submit relay command
+    // TODO: Add Complete Week (submit) relay command
 
     [RelayCommand]
     private async Task NavigateToSwitchSelectedBowler()
@@ -170,7 +167,6 @@ public partial class CurrentWeekOverviewViewModel :
             };
             await _weeklyLineupService.AddWeeklyLineupBowler(weeklyLineup);
             CurrentWeekBowlers.Add(weeklyLineup.MapWeeklyLineupToCurrentWeekListItemViewModel());
-            //await _weekService.UpdateWeek(Week);
         }
 
         CurrentWeekBowlers.Clear();

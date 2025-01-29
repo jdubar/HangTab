@@ -55,7 +55,7 @@ public partial class BowlerListOverviewViewModel :
     private BowlerListItemViewModel? _selectedBowler;
 
     [ObservableProperty]
-    private string _searchText;
+    private string _searchText = string.Empty;
 
     partial void OnSearchTextChanged(string value)
     {

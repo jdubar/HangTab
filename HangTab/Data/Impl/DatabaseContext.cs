@@ -49,7 +49,7 @@ public class DatabaseContext : IDatabaseContext, IAsyncDisposable
     public async Task<TTable> GetWithChildrenAsync<TTable>(object id) where TTable : class, new() =>
         await Execute<TTable, TTable>(async () => await Database.GetWithChildrenAsync<TTable>(id, recursive: true));
 
-    public async Task<IEnumerable<TTable>> GetAllWithChildrenAsync<TTable>(Expression<Func<TTable, bool>> predicate = null) where TTable : class, new()
+    public async Task<IEnumerable<TTable>> GetAllWithChildrenAsync<TTable>(Expression<Func<TTable, bool>>? predicate = null) where TTable : class, new()
     {
         return await Execute<TTable, IEnumerable<TTable>>(async () =>
         {
@@ -59,17 +59,17 @@ public class DatabaseContext : IDatabaseContext, IAsyncDisposable
 
     public async Task InsertWithChildrenAsync<TTable>(TTable item) where TTable : class, new()
     {
-        await Execute<TTable, Task>(async () =>
+        await Execute<TTable, Task>(() =>
         {
-            return Database.InsertWithChildrenAsync(item, recursive: true);
+            return Task.FromResult(Database.InsertWithChildrenAsync(item, recursive: true));
         });
     }
 
     public async Task UpdateWithChildrenAsync<TTable>(TTable item) where TTable : class, new()
     {
-        await Execute<TTable, Task>(async () =>
+        await Execute<TTable, Task>(() =>
         {
-            return Database.UpdateWithChildrenAsync(item);
+            return Task.FromResult(Database.UpdateWithChildrenAsync(item));
         });
     }
 
