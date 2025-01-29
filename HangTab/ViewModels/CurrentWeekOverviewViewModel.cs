@@ -80,6 +80,9 @@ public partial class CurrentWeekOverviewViewModel :
     [ObservableProperty]
     private bool _isEnableCompleteWeek = true;
 
+    [ObservableProperty]
+    private bool _playPopperAnimation;
+
     // TODO: Add submit relay command
 
     [RelayCommand]
@@ -115,7 +118,7 @@ public partial class CurrentWeekOverviewViewModel :
             if (CurrentWeek.Bowlers.Count > 0)
             {
                 CurrentWeekBowlers.Clear();
-                CurrentWeekBowlers = CurrentWeek.Bowlers.MapBowlerToBowlerListItemViewModel().ToObservableCollection();
+                CurrentWeekBowlers = CurrentWeek.Bowlers.Where(b => !b.Bowler.IsInactive).MapBowlerToBowlerListItemViewModel().ToObservableCollection();
             }
 
             MapWeekData(CurrentWeek);
@@ -139,8 +142,16 @@ public partial class CurrentWeekOverviewViewModel :
 
         if (await _weeklyLineupService.UpdateWeeklyLineup(bowler.MapCurrentWeekListItemViewModelToWeeklyLineup()))
         {
-            bowler.HangCount = message.HangCount;
+            var newHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
+            var isIncrease = newHangTotal > TeamHangTotal;
             TeamHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
+
+            if (isIncrease)
+            {
+                PlayPopperAnimation = true;
+                await Task.Delay(1000);
+                PlayPopperAnimation = false;
+            }
         }
         else
         {

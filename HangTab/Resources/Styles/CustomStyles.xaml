@@ -59,7 +59,7 @@
                                                          Light={StaticResource Color_LightGrey}}" />
         <Setter Property="HeightRequest" Value="1" />
         <Setter Property="HorizontalOptions" Value="FillAndExpand" />
-        <Setter Property="Margin" Value="0,5,0,0" />
+        <Setter Property="Margin" Value="0,5" />
     </Style>
     
     <Style x:Key="CachedAvatarProfile" TargetType="toolkit:AvatarView">
@@ -68,7 +68,7 @@
         <Setter Property="HeightRequest" Value="80" />
         <Setter Property="WidthRequest" Value="80" />
         <Setter Property="CornerRadius" Value="40" />
-        <Setter Property="Margin" Value="10" />
+        <Setter Property="Margin" Value="10,10,0,10" />
         <Setter Property="FontSize" Value="20" />
         <Setter Property="BorderColor" Value="{AppThemeBinding Dark={StaticResource White},
                                                                Light={StaticResource Color_ElementGrey}}" />
@@ -108,7 +108,7 @@
         <Setter Property="BackgroundColor" Value="{StaticResource SubBowler}" />
         <Setter Property="HeightRequest" Value="20" />
         <Setter Property="WidthRequest" Value="48" />
-        <Setter Property="Margin" Value="0,50,0,0" />
+        <Setter Property="Margin" Value="10,50,0,0" />
         <Setter Property="StrokeShape" Value="RoundRectangle 40" />
         <Setter Property="Stroke" Value="{AppThemeBinding Dark={StaticResource White},
                                                           Light={StaticResource Color_ElementGrey}}" />

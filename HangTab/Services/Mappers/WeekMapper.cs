@@ -15,6 +15,7 @@ internal static class WeekMapper
             wl.HangCount,
             wl.Bowler.Name,
             wl.Bowler.ImageUrl,
+            wl.Bowler.IsSub,
             wl.Bowler.Name.GetInitials());
     }
 

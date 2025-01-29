@@ -37,6 +37,9 @@ public partial class CurrentWeekListItemViewModel : ObservableObject
     private string? _imageUrl;
 
     [ObservableProperty]
+    private bool _isSub;
+
+    [ObservableProperty]
     private string _initials;
 
     public CurrentWeekListItemViewModel(
@@ -47,6 +50,7 @@ public partial class CurrentWeekListItemViewModel : ObservableObject
         int hangCount,
         string name,
         string imageUrl,
+        bool isSub,
         string initials)
     {
         WeekId = weekId;
@@ -56,6 +60,7 @@ public partial class CurrentWeekListItemViewModel : ObservableObject
         HangCount = hangCount;
         Name = name;
         ImageUrl = imageUrl;
+        IsSub = isSub;
         Initials = initials;
     }
 }

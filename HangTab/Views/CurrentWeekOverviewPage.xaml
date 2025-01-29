@@ -22,7 +22,9 @@
                         <VisualState x:Name="Normal" />
                         <VisualState x:Name="Selected">
                             <VisualState.Setters>
-                                <Setter Property="BackgroundColor" Value="{StaticResource PrimaryDark}" />
+                                <Setter
+                                    Property="BackgroundColor"
+                                    Value="{StaticResource PrimaryDark}" />
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>
@@ -33,7 +35,7 @@
     
     <ContentPage.Content>
         <Grid
-            RowDefinitions="*,Auto,Auto">
+            RowDefinitions="*,30,Auto,Auto">
             
             <!--This Week's Bowler List & Splash-->
             <Grid
@@ -53,154 +55,78 @@
                     ItemsSource="{Binding CurrentWeekBowlers}"
                     SelectedItem="{Binding SelectedBowler}"
                     SelectionMode="Single"
-                    SelectionChangedCommand="{Binding NavigateToSwitchSelectedBowlerCommand}"
-                    Header="{Binding .}">
-                    <CollectionView.HeaderTemplate>
-                        <DataTemplate>
-                            <Grid
-                                RowDefinitions="Auto,Auto"
-                                ColumnDefinitions="Auto,*">
-                                <Border
-                                    Grid.Row="0"
-                                    StrokeShape="RoundRectangle 5,5,0,0"
-                                    Margin="0,0,0,-6.5">
-                                    
-                                    <!--Group Total-->
-                                    <Label
-                                        Text="{Binding TeamHangTotal, Mode=OneWay, StringFormat='Total Hangings: {0}'}"
-                                        Style="{StaticResource Label_Footer}" />
-                                </Border>
-                                
-                                <!--Separator-->
-                                <BoxView
-                                    Grid.Row="1"
-                                    Grid.ColumnSpan="2"
-                                    Style="{StaticResource BoxViewSeparator}" />
-                            </Grid>
-                        </DataTemplate>
-                    </CollectionView.HeaderTemplate>
+                    SelectionChangedCommand="{Binding NavigateToSwitchSelectedBowlerCommand}">
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
-                            <Grid
-                                x:DataType="vm:CurrentWeekListItemViewModel"
-                                Padding="5"
-                                ColumnDefinitions="Auto,*,Auto"
-                                RowDefinitions="Auto,Auto">
-
+                            <Border
+                                Margin="5,2"
+                                StrokeShape="RoundRectangle 5"
+                                BackgroundColor="{AppThemeBinding Dark={StaticResource Color_ElementGrey},
+                                                                  Light={StaticResource White}}">
                                 <Grid
-                                    Grid.Row="0"
-                                    Grid.RowSpan="2"
-                                    IsVisible="False">
-                                    <!--Active/Sub Avatar Image-->
+                                    x:DataType="vm:CurrentWeekListItemViewModel"
+                                    Padding="5"
+                                    ColumnDefinitions="Auto,*,Auto"
+                                    RowDefinitions="Auto,Auto">
+
+                                    <!--Bowler Is A Substitute-->
+                                    <Border
+                                        Style="{StaticResource Notification_Sub}"
+                                        IsVisible="{Binding IsSub}"
+                                        ZIndex="2">
+                                        <Label
+                                            Text="SUB"
+                                            FontSize="12"
+                                            FontAttributes="Bold"
+                                            TextColor="{StaticResource White}"
+                                            HorizontalOptions="Center" />
+                                    </Border>
+                                
+                                    <!--Avatar Image-->
                                     <toolkit:AvatarView
-                                        Grid.Row="0"
-                                        Grid.RowSpan="2"
                                         Style="{StaticResource CachedAvatarProfile}"
                                         ImageSource="{Binding ImageUrl}"
                                         WidthRequest="60"
                                         HeightRequest="60"
-                                        Margin="15,10,10,10"
-                                        ZIndex="2"
-                                        Text="{Binding Initials}" />
-                                </Grid>
+                                        Text="{Binding Initials}"
+                                        FontSize="20" />
                                 
-                                <Grid
-                                    Grid.Row="0"
-                                    Grid.RowSpan="2"
-                                    IsVisible="True">
-                                    <!--Active/Sub Avatar Image-->
-                                    <toolkit:AvatarView
+                                    <VerticalStackLayout
                                         Grid.Row="0"
-                                        Grid.RowSpan="2"
-                                        Style="{StaticResource CachedAvatarProfile}"
-                                        ImageSource="{Binding ImageUrl}"
-                                        WidthRequest="60"
-                                        HeightRequest="60"
-                                        Margin="15,10,10,10"
-                                        ZIndex="2"
-                                        Text="{Binding Initials}" />
-
-                                    <!--Regular Bowler Avatar Image (when subbed)-->
-                                    <!--TODO: Needs to be fixed when sub is implemented-->
-                                    <toolkit:AvatarView
-                                        Grid.Row="0"
-                                        Grid.RowSpan="2"
-                                        Style="{StaticResource CachedAvatarProfile}"
-                                        ImageSource="{Binding ImageUrl}"
-                                        WidthRequest="40"
-                                        HeightRequest="40"
-                                        Margin="40,-35,-10,0"
-                                        ZIndex="1"
-                                        Text="{Binding Initials}" />
-                                </Grid>
-                                
-                                <!--Active/Sub Avatar Image-->
-                                <toolkit:AvatarView
-                                    Grid.Row="0"
-                                    Grid.RowSpan="2"
-                                    Style="{StaticResource CachedAvatarProfile}"
-                                    ImageSource="{Binding ImageUrl}"
-                                    WidthRequest="60"
-                                    HeightRequest="60"
-                                    Margin="15,10,10,10"
-                                    ZIndex="2"
-                                    Text="{Binding Initials}" />
-
-                                <!--Regular Bowler Avatar Image (when subbed)-->
-                                <!--TODO: Needs to be fixed when sub is implemented-->
-                                <toolkit:AvatarView
-                                    Grid.Row="0"
-                                    Grid.RowSpan="2"
-                                    Style="{StaticResource CachedAvatarProfile}"
-                                    ImageSource="{Binding ImageUrl}"
-                                    WidthRequest="40"
-                                    HeightRequest="40"
-                                    Margin="40,-35,-10,0"
-                                    ZIndex="1"
-                                    IsVisible="{Binding IsSub}"
-                                    Text="{Binding Initials}" />
-                                
-                                <VerticalStackLayout
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    VerticalOptions="Center">
-                                    <!--Full Name-->
-                                    <Label
-                                        FontSize="Large"
-                                        Text="{Binding Name}"
-                                        Style="{StaticResource Label_Name}" />
+                                        Grid.Column="1"
+                                        VerticalOptions="Center">
+                                        <!--Full Name-->
+                                        <Label
+                                            FontSize="Large"
+                                            Text="{Binding Name}"
+                                            Style="{StaticResource Label_Name}" />
 
 
-                                    <!--Bowler Hangings Count-->
-                                    <Label
-                                        Text="{Binding HangCount, StringFormat='Hangings: {0}'}"
-                                        Style="{StaticResource Label_Hangings}" />
-                                </VerticalStackLayout>
+                                        <!--Bowler Hangings Count-->
+                                        <Label
+                                            Text="{Binding HangCount, StringFormat='Hangings: {0}'}"
+                                            Style="{StaticResource Label_Hangings}" />
+                                    </VerticalStackLayout>
                             
-                                <!--Hanging Stepper-->
-                                <Stepper
-                                    Grid.Row="0"
-                                    Grid.Column="2"
-                                    Grid.RowSpan="2"
-                                    WidthRequest="100"
-                                    VerticalOptions="Center"
-                                    Margin="10,0"
-                                    Minimum="0"
-                                    Value="{Binding HangCount, Mode=TwoWay}" />
-
-                                <!--Separator-->
-                                <BoxView
-                                    Grid.Row="2"
-                                    Grid.Column="0"
-                                    Grid.ColumnSpan="3"
-                                    Style="{StaticResource BoxViewSeparator}" />
-                            </Grid>
+                                    <!--Hanging Stepper-->
+                                    <Stepper
+                                        Grid.Row="0"
+                                        Grid.Column="2"
+                                        Grid.RowSpan="2"
+                                        WidthRequest="100"
+                                        VerticalOptions="Center"
+                                        Margin="10,0"
+                                        Minimum="0"
+                                        Value="{Binding HangCount, Mode=TwoWay}" />
+                                </Grid>
+                            </Border>
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                     
                     <CollectionView.EmptyView>
-                        <ContentView>
+                        <Grid
+                            HeightRequest="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=Height}">
                             <VerticalStackLayout
                                 HorizontalOptions="Center"
                                 VerticalOptions="Center"
@@ -214,16 +140,45 @@
                                     Text="Create bowlers on the Bowlers page"
                                     HorizontalTextAlignment="Center" />
                             </VerticalStackLayout>
-                        </ContentView>
+                        </Grid>
                     </CollectionView.EmptyView>
                 </CollectionView>
+            </Grid>
+            
+            <Grid
+                Grid.Row="1">
+                <Grid
+                    ColumnDefinitions="Auto,*">
+                    <Border
+                        Grid.Column="0"
+                        Grid.ColumnSpan="3"
+                        Style="{StaticResource RoundedCornerBorder}"
+                        ZIndex="1">
+                        
+                        <HorizontalStackLayout>
+                            <!--Group Total-->
+                            <Label
+                                VerticalOptions="Center"
+                                Text="{Binding TeamHangTotal, Mode=OneWay, StringFormat='Total Hangings: {0}'}"
+                                Style="{StaticResource Label_Footer}" />
+                        </HorizontalStackLayout>
+                    </Border>
+                    <Image
+                        Grid.Column="1"
+                        Source="popper_anim.gif"
+                        IsVisible="{Binding PlayPopperAnimation}"
+                        HeightRequest="40"
+                        HorizontalOptions="Center"
+                        Margin="-50,0,0,5"
+                        IsAnimationPlaying="{Binding PlayPopperAnimation}"
+                        ZIndex="2" />
+                </Grid>
             </Grid>
         
             <!--This Week's Bus Ride Count-->
             <Grid
-                Grid.Row="1"
-                ColumnDefinitions="*,Auto"
-                Padding="5,0">
+                Grid.Row="2"
+                ColumnDefinitions="*,Auto">
                 
                 <Border
                     Style="{StaticResource RoundedCornerBorder}">
@@ -257,9 +212,9 @@
         
             <!--Submit Button-->
             <StackLayout
-                Grid.Row="2"
+                Grid.Row="3"
                 Grid.Column="0"
-                Margin="10">
+                Margin="5">
                 <Button
                     IsEnabled="{Binding IsEnableCompleteWeek}"
                     Style="{StaticResource PrimaryButton}"

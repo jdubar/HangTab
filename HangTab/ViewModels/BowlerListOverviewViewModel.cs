@@ -4,7 +4,6 @@ using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 
 using HangTab.Messages;
-using HangTab.Models;
 using HangTab.Services;
 using HangTab.Services.Mappers;
 using HangTab.ViewModels.Base;
@@ -35,8 +34,8 @@ public partial class BowlerListOverviewViewModel :
         _weekService = weekService;
     }
 
-    private IEnumerable<Bowler> _allBowlers = [];
-    private IEnumerable<Bowler> AllBowlers
+    private IEnumerable<BowlerListItemViewModel> _allBowlers = [];
+    private IEnumerable<BowlerListItemViewModel> AllBowlers
     {
         get => _allBowlers;
         set
@@ -44,14 +43,13 @@ public partial class BowlerListOverviewViewModel :
             SetProperty(ref _allBowlers, value);
             if (!_allBowlers.Any())
             {
-                Groups.Clear();
+                Bowlers.Clear();
             }
         }
     }
-    private List<BowlerGroup> _allBowlersInGroups = [];
 
     [ObservableProperty]
-    private ObservableCollection<BowlerGroup> _groups = [];
+    private ObservableCollection<BowlerListItemViewModel> _bowlers = [];
 
     [ObservableProperty]
     private BowlerListItemViewModel? _selectedBowler;
@@ -63,8 +61,8 @@ public partial class BowlerListOverviewViewModel :
     {
         if (string.IsNullOrEmpty(value))
         {
-            Groups.Clear();
-            Groups = _allBowlersInGroups.ToObservableCollection();
+            Bowlers.Clear();
+            Bowlers = AllBowlers.OrderBy(b => b.Name).ToObservableCollection();
         }
         else
         {
@@ -87,7 +85,7 @@ public partial class BowlerListOverviewViewModel :
 
     public override async Task LoadAsync()
     {
-        if (Groups.Count == 0)
+        if (Bowlers.Count == 0)
         {
             await Loading(GetBowlers);
         }
@@ -97,49 +95,38 @@ public partial class BowlerListOverviewViewModel :
 
     private async Task GetBowlers()
     {
-        AllBowlers = await _bowlerService.GetAllBowlers();
-        if (AllBowlers.Any())
+        var allBowlers = await _bowlerService.GetAllBowlers();
+        if (allBowlers.Any())
         {
-            _allBowlersInGroups =
-            [
-                new BowlerGroup("Regulars", AllBowlers.Where(b => !b.IsSub).OrderBy(b => b.Name).MapBowlerToBowlerListItemViewModel()),
-                new BowlerGroup("Subs", AllBowlers.Where(b => b.IsSub).OrderBy(b => b.Name).MapBowlerToBowlerListItemViewModel())
-            ];
-
-            Groups.Clear();
-            Groups = _allBowlersInGroups.ToObservableCollection();
+            Bowlers.Clear();
+            AllBowlers = allBowlers.OrderBy(b => b.Name).MapBowlerToBowlerListItemViewModel();
+            Bowlers = AllBowlers.ToObservableCollection();
         }
     }
 
     private async Task UpdateBowlerHangCounts()
     {
-        var allWeeks = await _weekService.GetAllWeeks();
-        foreach (var group in Groups)
+        if (Bowlers.Count > 0)
         {
-            group.ForEach(b => b.Hangings = allWeeks.SelectMany(w => w.Bowlers.Where(wl => wl.BowlerId == b.Id)).Sum(w => w.HangCount));
+            var allWeeks = await _weekService.GetAllWeeks();
+            Bowlers.ToList().ForEach(b => b.Hangings = allWeeks.SelectMany(w => w.Bowlers.Where(wl => wl.BowlerId == b.Id)).Sum(w => w.HangCount));
         }
     }
 
     private Task SearchBowlers(string searchText)
     {
-        var filteredBowlerGroups = new List<BowlerGroup>
-        {
-            new("Regulars", AllBowlers.Where(b => !b.IsSub && b.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)).MapBowlerToBowlerListItemViewModel()),
-            new("Subs", AllBowlers.Where(b => b.IsSub && b.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)).MapBowlerToBowlerListItemViewModel())
-        };
-
-        Groups.Clear();
-        Groups = filteredBowlerGroups.ToObservableCollection();
+        Bowlers.Clear();
+        Bowlers = AllBowlers.Where(b => b.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)).ToObservableCollection();
         return Task.CompletedTask;
     }
 
-    public async void Receive(BowlerAddedOrChangedMessage message) => await SetGroupsList();
+    public async void Receive(BowlerAddedOrChangedMessage message) => await UpdateBowlerList();
 
-    public async void Receive(BowlerDeletedMessage message) => await SetGroupsList();
+    public async void Receive(BowlerDeletedMessage message) => await UpdateBowlerList();
 
-    private async Task SetGroupsList()
+    private async Task UpdateBowlerList()
     {
-        Groups.Clear();
+        Bowlers.Clear();
         await GetBowlers();
     }
 }
