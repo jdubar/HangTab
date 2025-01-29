@@ -18,6 +18,7 @@ public partial class CurrentWeekOverviewViewModel :
     IRecipient<BowlerDeletedMessage>,
     IRecipient<BowlerHangCountChangedMessage>
 {
+    private readonly IAudioService _audioService;
     private readonly IDialogService _dialogService;
     private readonly INavigationService _navigationService;
     private readonly ISettingsService _settingsService;
@@ -25,12 +26,14 @@ public partial class CurrentWeekOverviewViewModel :
     private readonly IWeeklyLineupService _weeklyLineupService;
 
     public CurrentWeekOverviewViewModel(
+        IAudioService audioService,
         IDialogService dialogService,
         INavigationService navigationService,
         ISettingsService settingsService,
         IWeekService weekService,
         IWeeklyLineupService weeklyLineupService)
     {
+        _audioService = audioService;
         _dialogService = dialogService;
         _navigationService = navigationService;
         _settingsService = settingsService;
@@ -55,6 +58,14 @@ public partial class CurrentWeekOverviewViewModel :
     {
         if (value >= 0)
         {
+            if (CurrentWeek.BusRides < value)
+            {
+                PlayBusRideAnimation = true;
+                _audioService.PlayBusRideSound();
+                await Task.Delay(3000);
+                PlayBusRideAnimation = false;
+            }
+
             CurrentWeek.BusRides = value;
             await _weekService.UpdateWeek(CurrentWeek);
         }
@@ -79,6 +90,9 @@ public partial class CurrentWeekOverviewViewModel :
 
     [ObservableProperty]
     private bool _playPopperAnimation;
+
+    [ObservableProperty]
+    private bool _playBusRideAnimation;
 
     // TODO: Add Complete Week (submit) relay command
 

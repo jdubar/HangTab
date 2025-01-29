@@ -46,7 +46,7 @@
                     Source="bus_splash.png"
                     HeightRequest="300"
                     ZIndex="2"
-                    IsVisible="False"
+                    IsVisible="{Binding PlayBusRideAnimation}"
                     HorizontalOptions="Center"
                     VerticalOptions="Center" />
                 

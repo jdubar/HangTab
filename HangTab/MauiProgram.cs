@@ -11,6 +11,8 @@ using HangTab.Views;
 
 using Microsoft.Extensions.Logging;
 
+using Plugin.Maui.Audio;
+
 using The49.Maui.BottomSheet;
 
 namespace HangTab;
@@ -55,6 +57,7 @@ public static class MauiProgram
 
     private static MauiAppBuilder RegisterServices(this MauiAppBuilder builder)
     {
+        builder.Services.AddSingleton<IAudioService>(new AudioService(AudioManager.Current));
         builder.Services.AddSingleton<IDatabaseContext, DatabaseContext>();
         builder.Services.AddSingleton<ISettingsService>(new SettingsService(Preferences.Default));
 
