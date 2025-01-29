@@ -62,7 +62,7 @@ public partial class BowlerAddEditViewModel :
     private string _name = string.Empty;
 
     [ObservableProperty]
-    private string? _imageUrl = string.Empty;
+    private string? _imageUrl = null;
 
     [ObservableProperty]
     private string _initials = string.Empty;
