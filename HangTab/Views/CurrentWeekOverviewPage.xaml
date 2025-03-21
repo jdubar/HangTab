@@ -145,6 +145,7 @@
                 </CollectionView>
             </Grid>
             
+            <!--Total hangings this week-->
             <Grid
                 Grid.Row="1">
                 <Grid
@@ -158,9 +159,8 @@
                         <HorizontalStackLayout>
                             <!--Group Total-->
                             <Label
-                                VerticalOptions="Center"
                                 Text="{Binding TeamHangTotal, Mode=OneWay, StringFormat='Total Hangings: {0}'}"
-                                Style="{StaticResource Label_Footer}" />
+                                Style="{StaticResource Label_TotalHangings}" />
                         </HorizontalStackLayout>
                     </Border>
                     <Image

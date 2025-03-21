@@ -15,54 +15,44 @@
     
     <!--Page titlebar-->
     <Shell.TitleView>
-        <Grid>
-            <Label
-                Text="{Binding PageTitle}"
-                Style="{StaticResource Label_PageTitle}" />
-            <ImageButton
-                Aspect="Center"
-                HorizontalOptions="End"
-                VerticalOptions="Center"
-                CornerRadius="100"
-                Margin="10,0"
-                IsVisible="{Binding IsExistingBowler}"
-                Command="{Binding DeleteBowlerCommand}">
-                <ImageButton.Source>
-                    <FontImageSource
-                        FontFamily="MaterialIcons"
-                        Glyph="{StaticResource delete}"
-                        Size="30"
-                        Color="{AppThemeBinding Dark={StaticResource White},
-                                                Light={StaticResource Black}}" />
-                </ImageButton.Source>
-            </ImageButton>
-        </Grid>
+        <Label
+            Text="{Binding PageTitle}"
+            Style="{StaticResource Label_PageTitle}" />
     </Shell.TitleView>
     
     <Grid
-        RowDefinitions="220,Auto,Auto,Auto,*,Auto"
+        RowDefinitions="Auto,Auto,Auto,Auto,*,Auto,Auto"
         RowSpacing="10"
-        HorizontalOptions="FillAndExpand"
-        VerticalOptions="FillAndExpand">
+        HorizontalOptions="Fill"
+        VerticalOptions="Fill">
             
         <!--Avatar Image/Update Avatar Button-->
         <Grid
             Grid.Row="0"
+            HeightRequest="220"
             Grid.ColumnSpan="3"
             BackgroundColor="{StaticResource Color_LightGrey}">
             
             <!--Update Avatar Image Button-->
             <ImageButton
-                Style="{StaticResource Image_Add}"
+                Style="{StaticResource FAB}"
                 ZIndex="2"
+                Margin="0,200,20,0"
                 Command="{Binding ShowAvatarOptionsBottomSheetCommand}"
                 CommandParameter="{x:Reference NameEntry}">
                 <ImageButton.Source>
                     <FontImageSource
                         FontFamily="MaterialIcons"
                         Glyph="{StaticResource add_a_photo}"
-                        Size="40"/>
+                        Size="40"
+                        Color="{StaticResource White}" />
                 </ImageButton.Source>
+                <ImageButton.Shadow>
+                    <Shadow Brush="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray950}}"
+                            Offset="0,8"
+                            Radius="16"
+                            Opacity="0.9" />
+                </ImageButton.Shadow>
             </ImageButton>
             
             <!--Avatar Image-->
@@ -85,8 +75,8 @@
                             FontFamily="MaterialIcons"
                             Glyph="{StaticResource person}"
                             Size="30"
-                            Color="{AppThemeBinding Dark={StaticResource White},
-                                                    Light={StaticResource Black}}" />
+                            Color="{AppThemeBinding Dark={StaticResource PrimaryDarkText},
+                                                    Light={StaticResource PrimaryText}}" />
                     </Image.Source>
                 </Image>
                 <Entry
@@ -113,21 +103,22 @@
                         FontFamily="MaterialIcons"
                         Glyph="{StaticResource group}"
                         Size="30"
-                        Color="{AppThemeBinding Dark={StaticResource White},
-                                                Light={StaticResource Black}}" />
+                        Color="{AppThemeBinding Dark={StaticResource PrimaryDarkText},
+                                                Light={StaticResource PrimaryText}}" />
                 </Image.Source>
             </Image>
             <Picker
                 Grid.Column="1"
-                Title="Bowler type"
+                Title="Select a bowler type"
                 ItemsSource="{Binding AllTypes}"
                 ItemDisplayBinding="{Binding .,Converter={StaticResource BowlerTypeEnumToTextConverter}}"
                 SelectedIndex="{Binding SelectedType}" />
         </Grid>
         
         <!--Deactivate Bowler Switch-->
-        <HorizontalStackLayout
+        <Grid
             Grid.Row="3"
+            ColumnDefinitions="Auto,Auto,*,Auto"
             Margin="10,0"
             VerticalOptions="Center"
             IsVisible="{Binding IsExistingBowler}">
@@ -139,18 +130,23 @@
                         FontFamily="MaterialIcons"
                         Glyph="{StaticResource person_off}"
                         Size="30"
-                        Color="{AppThemeBinding Dark={StaticResource White},
-                                                Light={StaticResource Black}}" />
+                        Color="{AppThemeBinding Dark={StaticResource PrimaryDarkText},
+                                                Light={StaticResource PrimaryText}}" />
                 </Image.Source>
             </Image>
             
             <Label
+                Grid.Column="1"
                 Text="Deactivate bowler"
                 FontAttributes="Bold"
-                VerticalOptions="Center"/>
+                VerticalOptions="Center"
+                TextColor="{AppThemeBinding Dark={StaticResource PrimaryDarkText},
+                                            Light={StaticResource PrimaryText}}"/>
             <Switch
-                IsToggled="{Binding IsInactive, Mode=TwoWay}" />
-        </HorizontalStackLayout>
+                Grid.Column="3"
+                IsToggled="{Binding IsInactive, Mode=TwoWay}"
+                HorizontalOptions="End" />
+        </Grid>
                     
         <!--Validation Errors List-->
         <VerticalStackLayout
@@ -167,10 +163,22 @@
             </BindableLayout.ItemTemplate>
         </VerticalStackLayout>
             
-        <!--Submit Button-->
+        <!--Delete Button-->
         <StackLayout
                 Grid.Row="5"
-                Margin="10">
+                Margin="10,0">
+            <Button
+                Style="{StaticResource PrimaryButton}"
+                BackgroundColor="{StaticResource Error}"
+                Text="Delete Bowler"
+                IsVisible="{Binding IsExistingBowler}"
+                Command="{Binding DeleteBowlerCommand}" />
+        </StackLayout>
+        
+        <!--Submit Button-->
+        <StackLayout
+                Grid.Row="6"
+                Margin="10,0,10,10">
             <Button
                 Style="{StaticResource PrimaryButton}"
                 Text="Save Changes"

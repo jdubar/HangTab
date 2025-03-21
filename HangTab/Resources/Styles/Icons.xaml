@@ -5,6 +5,8 @@
     x:Class="HangTab.Resources.Styles.Icons">
     
     <x:String x:Key="add_a_photo">&#xe439;</x:String>
+    <x:String x:Key="brightness_4">&#xe3a9;</x:String>
+    <x:String x:Key="calendar_month">&#xebcc;</x:String>
     <x:String x:Key="chevron_right">&#xe5cc;</x:String>
     <x:String x:Key="close">&#xe5cd;</x:String>
     <x:String x:Key="delete">&#xe872;</x:String>
@@ -16,5 +18,7 @@
     <x:String x:Key="person_add">&#xe7fe;</x:String>
     <x:String x:Key="person_off">&#xe510;</x:String>
     <x:String x:Key="photo_camera">&#xe412;</x:String>
+    <x:String x:Key="play_arrow">&#xe037;</x:String>
     <x:String x:Key="settings">&#xe8b8;</x:String>
+    <x:String x:Key="tune">&#xe429;</x:String>
 </ResourceDictionary>

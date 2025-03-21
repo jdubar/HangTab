@@ -11,27 +11,9 @@
     
     <!--Page titlebar-->
     <Shell.TitleView>
-        <Grid>
-            <Label
-                Text="All Bowlers"
-                Style="{StaticResource Label_PageTitle}" />
-            <ImageButton
-                Aspect="Center"
-                HorizontalOptions="End"
-                VerticalOptions="Center"
-                CornerRadius="100"
-                Margin="10,0"
-                Command="{Binding NavigateToAddBowlerCommand}">
-                <ImageButton.Source>
-                    <FontImageSource
-                        FontFamily="MaterialIcons"
-                        Glyph="{StaticResource person_add}"
-                        Size="30"
-                        Color="{AppThemeBinding Dark={StaticResource White},
-                                                Light={StaticResource Black}}" />
-                </ImageButton.Source>
-            </ImageButton>
-        </Grid>
+        <Label
+            Text="All Bowlers"
+            Style="{StaticResource Label_PageTitle}" />
     </Shell.TitleView>
     
     <ContentPage.Resources>
@@ -66,10 +48,7 @@
                         Placeholder="Search by name" 
                         Margin="0,0,0,-1"
                         Text="{Binding SearchText, Mode=TwoWay}"
-                        PlaceholderColor="{AppThemeBinding Dark={StaticResource White},
-                                                           Light={StaticResource Color_ElementGrey}}"
-                        TextColor="{AppThemeBinding Dark={StaticResource White},
-                                                    Light={StaticResource Color_ElementGrey}}" />
+                        Style="{StaticResource SearchBar}" />
                 </Border>
                 <BoxView
                     Style="{StaticResource BoxViewSeparator}" />
@@ -87,7 +66,7 @@
                             Margin="5,2"
                             StrokeShape="RoundRectangle 5"
                             BackgroundColor="{AppThemeBinding Dark={StaticResource Color_ElementGrey},
-                                                              Light={StaticResource White}}">
+                                                                Light={StaticResource White}}">
                             <Grid
                                 x:DataType="vm:BowlerListItemViewModel"
                                 ColumnDefinitions="Auto,*,Auto,Auto">
@@ -188,6 +167,26 @@
                     </Grid>
                 </CollectionView.EmptyView>
             </CollectionView>
+            <ImageButton
+                Grid.Row="1"
+                Style="{StaticResource FAB}"
+                Command="{Binding NavigateToAddBowlerCommand}"
+                VerticalOptions="End"
+                Margin="0,0,20,22">
+                <ImageButton.Source>
+                    <FontImageSource
+                        FontFamily="MaterialIcons"
+                        Glyph="{StaticResource person_add}"
+                        Size="40"
+                        Color="{StaticResource White}" />
+                </ImageButton.Source>
+                <ImageButton.Shadow>
+                    <Shadow Brush="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray950}}"
+                            Offset="0,8"
+                            Radius="16"
+                            Opacity="0.9" />
+                </ImageButton.Shadow>
+            </ImageButton>
         </Grid>
     </ContentPage.Content>
 </views:ContentPageBase>

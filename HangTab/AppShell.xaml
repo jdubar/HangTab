@@ -3,8 +3,13 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:views="clr-namespace:HangTab.Views"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     x:Class="HangTab.AppShell"
     FlyoutBehavior="Disabled">
+    <Shell.Behaviors>
+        <toolkit:StatusBarBehavior
+            StatusBarColor="{AppThemeBinding Dark={StaticResource PrimaryDark}, Light={StaticResource Primary}}" />
+    </Shell.Behaviors>
 
     <TabBar>
         <Tab
