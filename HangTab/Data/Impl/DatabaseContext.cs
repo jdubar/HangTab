@@ -1,6 +1,4 @@
-﻿using HangTab.Shared;
-
-using SQLite;
+﻿using SQLite;
 using SQLiteNetExtensionsAsync.Extensions;
 
 using System.Linq.Expressions;
@@ -9,12 +7,11 @@ namespace HangTab.Data.Impl;
 public class DatabaseContext : IDatabaseContext, IAsyncDisposable
 {
     private static string DatabasePath =>
-        Path.Combine(FileSystem.AppDataDirectory, Constants.DatabaseName);
+        Path.Combine(FileSystem.AppDataDirectory, Constants.Database.FileName);
 
     private SQLiteAsyncConnection? _connection;
     private SQLiteAsyncConnection Database =>
-        _connection ??= new SQLiteAsyncConnection(DatabasePath,
-            SQLiteOpenFlags.Create | SQLiteOpenFlags.ReadWrite | SQLiteOpenFlags.SharedCache);
+        _connection ??= new SQLiteAsyncConnection(DatabasePath, Constants.Database.OpenFlags);
 
     public async Task<bool> AddItemAsync<TTable>(TTable item) where TTable : class, new() =>
         await Execute<TTable, bool>(async () => await Database.InsertAsync(item) > 0);
