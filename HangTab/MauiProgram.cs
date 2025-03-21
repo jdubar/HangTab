@@ -22,6 +22,7 @@ public static class MauiProgram
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder();
+
         builder
             .UseMauiApp<App>()
             .UseBottomSheet()
@@ -66,6 +67,7 @@ public static class MauiProgram
         builder.Services.AddTransient<IDialogService, DialogService>();
         builder.Services.AddTransient<IMediaPickerService, MediaPickerService>();
         builder.Services.AddTransient<INavigationService, NavigationService>();
+        builder.Services.AddTransient<IThemeService, ThemeService>();
         builder.Services.AddTransient<IWeekService, WeekService>();
         builder.Services.AddTransient<IWeeklyLineupService, WeeklyLineupService>();
         return builder;

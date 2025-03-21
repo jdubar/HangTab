@@ -18,4 +18,10 @@ public class SettingsService(IPreferences preferences) : ISettingsService
         get => preferences.Get(nameof(TotalSeasonWeeks), 34);
         set => preferences.Set(nameof(TotalSeasonWeeks), value);
     }
+
+    public int Theme
+    {
+        get => preferences.Get(nameof(Theme), 0);
+        set => preferences.Set(nameof(Theme), value);
+    }
 }
