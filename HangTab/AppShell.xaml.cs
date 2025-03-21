@@ -1,4 +1,5 @@
-﻿using HangTab.Views;
+﻿using HangTab.Constants;
+using HangTab.Views;
 
 namespace HangTab;
 
@@ -8,8 +9,8 @@ public partial class AppShell : Shell
     {
         InitializeComponent();
 
-        Routing.RegisterRoute("bowler/add", typeof(BowlerAddEditPage));
-        Routing.RegisterRoute("bowler/edit", typeof(BowlerAddEditPage));
-        Routing.RegisterRoute("bowler/switch", typeof(BowlerSwitchPage));
+        Routing.RegisterRoute(Routes.BowlerAdd, typeof(BowlerAddEditPage));
+        Routing.RegisterRoute(Routes.BowlerEdit, typeof(BowlerAddEditPage));
+        Routing.RegisterRoute(Routes.BowlerSwitch, typeof(BowlerSwitchPage));
     }
 }

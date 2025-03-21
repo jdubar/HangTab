@@ -1,11 +1,12 @@
-﻿using HangTab.Models;
+﻿using HangTab.Constants;
+using HangTab.Models;
 
 namespace HangTab.Services.Impl;
 public class NavigationService : INavigationService
 {
     public Task GoBack() => Shell.Current.GoToAsync("..");
 
-    public async Task GoToAddBowler() => await Shell.Current.GoToAsync("bowler/add");
+    public async Task GoToAddBowler() => await Shell.Current.GoToAsync(Routes.BowlerAdd);
 
     public async Task GoToEditBowler(Bowler bowler)
     {
@@ -14,7 +15,7 @@ public class NavigationService : INavigationService
             { nameof(Bowler), bowler }
         };
 
-        await Shell.Current.GoToAsync("bowler/edit", navigationParameter);
+        await Shell.Current.GoToAsync(Routes.BowlerEdit, navigationParameter);
     }
 
     public async Task GoToSwitchBowler(WeeklyLineup weeklyLineup)
@@ -24,10 +25,10 @@ public class NavigationService : INavigationService
             { nameof(WeeklyLineup), weeklyLineup }
         };
 
-        await Shell.Current.GoToAsync("bowler/switch", navigationParameter);
+        await Shell.Current.GoToAsync(Routes.BowlerSwitch, navigationParameter);
     }
 
-    public Task GoToBowlerOverview() => Shell.Current.GoToAsync("//bowleroverview");
-    public Task GoToCurrentWeekOverview() => Shell.Current.GoToAsync("//currentweekoverview");
-    public Task GoToSettings() => Shell.Current.GoToAsync("//settings");
+    public Task GoToBowlerOverview() => Shell.Current.GoToAsync(Routes.BowlerOverview);
+    public Task GoToCurrentWeekOverview() => Shell.Current.GoToAsync(Routes.CurrentWeekOverview);
+    public Task GoToSettings() => Shell.Current.GoToAsync(Routes.Settings);
 }
