@@ -13,7 +13,7 @@
     <Shell.TitleView>
         <Label
             Text="All Bowlers"
-            Style="{StaticResource Label_PageTitle}" />
+            Style="{StaticResource PageTitle}" />
     </Shell.TitleView>
     
     <ContentPage.Resources>
@@ -26,7 +26,7 @@
                             <VisualState.Setters>
                                 <Setter
                                     Property="BackgroundColor"
-                                    Value="{StaticResource PrimaryDark}" />
+                                    Value="{DynamicResource PrimaryColor}" />
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>
@@ -51,7 +51,7 @@
                         Style="{StaticResource SearchBar}" />
                 </Border>
                 <BoxView
-                    Style="{StaticResource BoxViewSeparator}" />
+                    Style="{StaticResource Divider}" />
             </StackLayout>
             
             <CollectionView
@@ -64,9 +64,7 @@
                     <DataTemplate>
                         <Border
                             Margin="5,2"
-                            StrokeShape="RoundRectangle 5"
-                            BackgroundColor="{AppThemeBinding Dark={StaticResource Color_ElementGrey},
-                                                                Light={StaticResource White}}">
+                            Style="{StaticResource RoundedCornerBorder}">
                             <Grid
                                 x:DataType="vm:BowlerListItemViewModel"
                                 ColumnDefinitions="Auto,*,Auto,Auto">
@@ -99,13 +97,13 @@
                                             Text="SUB"
                                             FontSize="12"
                                             FontAttributes="Bold"
-                                            TextColor="{StaticResource White}"
+                                            TextColor="{DynamicResource PrimaryContrastTextColor}"
                                             HorizontalOptions="Center" />
                                     </Border>
                                 
                                     <!--Avatar Image-->
                                     <toolkit:AvatarView
-                                        Style="{StaticResource CachedAvatarProfile}"
+                                        Style="{StaticResource BowlerAvatar}"
                                         ImageSource="{Binding ImageUrl}"
                                         WidthRequest="60"
                                         HeightRequest="60"
@@ -122,7 +120,7 @@
                                     <Label
                                         FontSize="Large"
                                         Text="{Binding Name}"
-                                        Style="{StaticResource Label_Name}" />
+                                        Style="{StaticResource BowlerName}" />
                             
                                     <!--Total Hangings Count-->
                                     <Label
@@ -134,14 +132,12 @@
                                 <Image
                                     Grid.Row="0"
                                     Grid.Column="3"
-                                    Margin="15,0"
-                                    Style="{StaticResource Image_ListArrowRight}">
+                                    Margin="15,0">
                                     <Image.Source>
                                         <FontImageSource
                                             FontFamily="MaterialIcons"
                                             Glyph="{StaticResource chevron_right}"
-                                            Color="{AppThemeBinding Dark={StaticResource White},
-                                                                    Light={StaticResource Color_ElementGrey}}"/>
+                                            Color="{DynamicResource PrimaryColor}"/>
                                     </Image.Source>
                                 </Image>
                             </Grid>
@@ -178,10 +174,10 @@
                         FontFamily="MaterialIcons"
                         Glyph="{StaticResource person_add}"
                         Size="40"
-                        Color="{StaticResource White}" />
+                        Color="{DynamicResource PrimaryContrastTextColor}" />
                 </ImageButton.Source>
                 <ImageButton.Shadow>
-                    <Shadow Brush="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray950}}"
+                    <Shadow Brush="{DynamicResource ControlShadowColor}"
                             Offset="0,8"
                             Radius="16"
                             Opacity="0.9" />

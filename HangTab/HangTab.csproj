@@ -86,15 +86,14 @@
   </ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Maui" Version="11.0.0" />
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.3.2" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.30" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.1" />
+		<PackageReference Include="CommunityToolkit.Maui" Version="11.1.0" />
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.50" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.3" />
 		<PackageReference Include="Plugin.Maui.Audio" Version="3.0.1" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 		<PackageReference Include="SQLiteNetExtensions" Version="2.1.0" />
 		<PackageReference Include="SQLiteNetExtensions.Async" Version="2.1.0" />
-		<PackageReference Include="SQLitePCLRaw.bundle_green" Version="2.1.9" />
 		<PackageReference Include="The49.Maui.BottomSheet" Version="8.0.3" />
 	</ItemGroup>
 
@@ -103,6 +102,12 @@
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Resources\Styles\Icons.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Themes\DarkTheme.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Themes\LightTheme.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\AvatarSelectBottomSheet.xaml">

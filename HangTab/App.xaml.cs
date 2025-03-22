@@ -1,15 +1,48 @@
-﻿namespace HangTab
+﻿using HangTab.Enums;
+using HangTab.Services;
+
+namespace HangTab;
+
+public partial class App : Application
 {
-    public partial class App : Application
+    private readonly IServiceProvider _serviceProvider;
+
+    public App(IServiceProvider serviceProvider)
     {
-        public App()
+        InitializeComponent();
+
+        _serviceProvider = serviceProvider;
+
+        SetCurrentUserSelectedTheme();
+    }
+
+    protected override Window CreateWindow(IActivationState? activationState)
+    {
+        return new Window(new AppShell());
+    }
+
+    private void SetCurrentUserSelectedTheme()
+    {
+        var settingsService = _serviceProvider.GetService<ISettingsService>();
+        if (settingsService is null)
         {
-            InitializeComponent();
+            return;
         }
 
-        protected override Window CreateWindow(IActivationState? activationState)
+        if (settingsService.Theme == (int)Theme.Light)
         {
-            return new Window(new AppShell());
+            return;
+        }
+
+        var themeService = _serviceProvider.GetService<IThemeService>();
+        if (themeService is null)
+        {
+            return;
+        }
+
+        if (settingsService.Theme == (int)Theme.Dark)
+        {
+            themeService.SetDarkTheme();
         }
     }
 }

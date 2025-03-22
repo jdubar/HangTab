@@ -40,7 +40,7 @@
                 Command="{Binding SelectBowlerImageFromCameraCommand}">
                 <ImageButton.Source>
                     <FontImageSource
-                        Color="{StaticResource Primary}"
+                        Color="{DynamicResource PrimaryColor}"
                         FontFamily="MaterialIcons"
                         Glyph="{StaticResource photo_camera}"
                         Size="40"/>
@@ -57,7 +57,7 @@
                 Command="{Binding SelectBowlerImageFromGalleryCommand}">
                 <ImageButton.Source>
                     <FontImageSource
-                        Color="{StaticResource Primary}"
+                        Color="{DynamicResource PrimaryColor}"
                         FontFamily="MaterialIcons"
                         Glyph="{StaticResource image}"
                         Size="40"/>
@@ -74,7 +74,7 @@
                 Command="{Binding DeleteBowlerImageCommand}">
                 <ImageButton.Source>
                     <FontImageSource
-                        Color="{StaticResource Primary}"
+                        Color="{DynamicResource PrimaryColor}"
                         FontFamily="MaterialIcons"
                         Glyph="{StaticResource delete}"
                         Size="40"/>

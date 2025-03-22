@@ -11,7 +11,7 @@
     <Shell.TitleView>
         <Label
             Text="{Binding PageTitle}"
-            Style="{StaticResource Label_PageTitle}" />
+            Style="{StaticResource PageTitle}" />
     </Shell.TitleView>
     
     <ContentPage.Resources>
@@ -24,7 +24,7 @@
                             <VisualState.Setters>
                                 <Setter
                                     Property="BackgroundColor"
-                                    Value="{StaticResource PrimaryDark}" />
+                                    Value="{DynamicResource PrimaryColor}" />
                             </VisualState.Setters>
                         </VisualState>
                     </VisualStateGroup>
@@ -61,9 +61,7 @@
                         <DataTemplate>
                             <Border
                                 Margin="5,2"
-                                StrokeShape="RoundRectangle 5"
-                                BackgroundColor="{AppThemeBinding Dark={StaticResource Color_ElementGrey},
-                                                                  Light={StaticResource White}}">
+                                Style="{StaticResource RoundedCornerBorder}">
                                 <Grid
                                     x:DataType="vm:CurrentWeekListItemViewModel"
                                     Padding="5"
@@ -79,13 +77,13 @@
                                             Text="SUB"
                                             FontSize="12"
                                             FontAttributes="Bold"
-                                            TextColor="{StaticResource White}"
+                                            TextColor="{DynamicResource PrimaryContrastTextColor}"
                                             HorizontalOptions="Center" />
                                     </Border>
                                 
                                     <!--Avatar Image-->
                                     <toolkit:AvatarView
-                                        Style="{StaticResource CachedAvatarProfile}"
+                                        Style="{StaticResource BowlerAvatar}"
                                         ImageSource="{Binding ImageUrl}"
                                         WidthRequest="60"
                                         HeightRequest="60"
@@ -100,8 +98,7 @@
                                         <Label
                                             FontSize="Large"
                                             Text="{Binding Name}"
-                                            Style="{StaticResource Label_Name}" />
-
+                                            Style="{StaticResource BowlerName}" />
 
                                         <!--Bowler Hangings Count-->
                                         <Label
@@ -160,7 +157,7 @@
                             <!--Group Total-->
                             <Label
                                 Text="{Binding TeamHangTotal, Mode=OneWay, StringFormat='Total Hangings: {0}'}"
-                                Style="{StaticResource Label_TotalHangings}" />
+                                Style="{StaticResource TotalHangings}" />
                         </HorizontalStackLayout>
                     </Border>
                     <Image
@@ -195,7 +192,7 @@
                         <Label
                             Grid.Column="1"
                             Text="{Binding BusRides, StringFormat='Bus Rides: {0}'}"
-                            Style="{StaticResource Label_BusRides}" />
+                            Style="{StaticResource BusRides}" />
                 
                         <!--Bus Ride Stepper-->
                         <Stepper

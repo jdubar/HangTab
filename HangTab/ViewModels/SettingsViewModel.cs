@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 
+using HangTab.Enums;
 using HangTab.Messages;
 using HangTab.Services;
 using HangTab.ViewModels.Base;
@@ -9,13 +10,42 @@ using HangTab.ViewModels.Base;
 namespace HangTab.ViewModels;
 public partial class SettingsViewModel(
     IDatabaseService databaseService,
+    IDialogService dialogService,
     ISettingsService settingsService,
-    IDialogService dialogService) : ViewModelBase
+    IThemeService themeService) : ViewModelBase
 {
     [ObservableProperty]
-    private int _totalSeasonWeeks = settingsService.TotalSeasonWeeks;
-
+    private int _totalSeasonWeeks;
     partial void OnTotalSeasonWeeksChanged(int value) => settingsService.TotalSeasonWeeks = value;
+
+    
+    [ObservableProperty]
+    private bool _darkThemeEnabled;
+    partial void OnDarkThemeEnabledChanged(bool value)
+    {
+        if (value)
+        {
+            settingsService.Theme = (int)Theme.Dark;
+            themeService.SetDarkTheme();
+        }
+        else
+        {
+            settingsService.Theme = (int)Theme.Light;
+            themeService.SetLightTheme();
+        }
+    }
+
+    public override async Task LoadAsync()
+    {
+        await Loading(
+            () =>
+            {
+                TotalSeasonWeeks = settingsService.TotalSeasonWeeks;
+                DarkThemeEnabled = settingsService.Theme == (int)Theme.Dark;
+                return Task.CompletedTask;
+            });
+
+    }
 
     [RelayCommand]
     private async Task DropAllTablesAsync()

@@ -17,7 +17,7 @@
     <Shell.TitleView>
         <Label
             Text="{Binding PageTitle}"
-            Style="{StaticResource Label_PageTitle}" />
+            Style="{StaticResource PageTitle}" />
     </Shell.TitleView>
     
     <Grid
@@ -31,7 +31,7 @@
             Grid.Row="0"
             HeightRequest="220"
             Grid.ColumnSpan="3"
-            BackgroundColor="{StaticResource Color_LightGrey}">
+            BackgroundColor="{DynamicResource AvatarBackgroundColor}">
             
             <!--Update Avatar Image Button-->
             <ImageButton
@@ -45,10 +45,10 @@
                         FontFamily="MaterialIcons"
                         Glyph="{StaticResource add_a_photo}"
                         Size="40"
-                        Color="{StaticResource White}" />
+                        Color="{DynamicResource PrimaryContrastTextColor}" />
                 </ImageButton.Source>
                 <ImageButton.Shadow>
-                    <Shadow Brush="{AppThemeBinding Light={StaticResource Gray300}, Dark={StaticResource Gray950}}"
+                    <Shadow Brush="{DynamicResource ControlShadowColor}"
                             Offset="0,8"
                             Radius="16"
                             Opacity="0.9" />
@@ -75,8 +75,7 @@
                             FontFamily="MaterialIcons"
                             Glyph="{StaticResource person}"
                             Size="30"
-                            Color="{AppThemeBinding Dark={StaticResource PrimaryDarkText},
-                                                    Light={StaticResource PrimaryText}}" />
+                            Color="{DynamicResource PrimaryTextColor}" />
                     </Image.Source>
                 </Image>
                 <Entry
@@ -103,8 +102,7 @@
                         FontFamily="MaterialIcons"
                         Glyph="{StaticResource group}"
                         Size="30"
-                        Color="{AppThemeBinding Dark={StaticResource PrimaryDarkText},
-                                                Light={StaticResource PrimaryText}}" />
+                        Color="{DynamicResource PrimaryTextColor}" />
                 </Image.Source>
             </Image>
             <Picker
@@ -130,8 +128,7 @@
                         FontFamily="MaterialIcons"
                         Glyph="{StaticResource person_off}"
                         Size="30"
-                        Color="{AppThemeBinding Dark={StaticResource PrimaryDarkText},
-                                                Light={StaticResource PrimaryText}}" />
+                        Color="{DynamicResource PrimaryTextColor}" />
                 </Image.Source>
             </Image>
             
@@ -140,8 +137,7 @@
                 Text="Deactivate bowler"
                 FontAttributes="Bold"
                 VerticalOptions="Center"
-                TextColor="{AppThemeBinding Dark={StaticResource PrimaryDarkText},
-                                            Light={StaticResource PrimaryText}}"/>
+                TextColor="{DynamicResource PrimaryTextColor}"/>
             <Switch
                 Grid.Column="3"
                 IsToggled="{Binding IsInactive, Mode=TwoWay}"
@@ -157,7 +153,7 @@
                 <DataTemplate
                     x:DataType="dataAnnotations:ValidationResult">
                     <Label
-                        Style="{StaticResource ErrorLabelStyle}"
+                        Style="{StaticResource ErrorLabel}"
                         Text="{Binding ErrorMessage}" />
                 </DataTemplate>
             </BindableLayout.ItemTemplate>
@@ -169,7 +165,7 @@
                 Margin="10,0">
             <Button
                 Style="{StaticResource PrimaryButton}"
-                BackgroundColor="{StaticResource Error}"
+                BackgroundColor="{DynamicResource Error}"
                 Text="Delete Bowler"
                 IsVisible="{Binding IsExistingBowler}"
                 Command="{Binding DeleteBowlerCommand}" />
