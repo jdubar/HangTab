@@ -5,5 +5,9 @@ namespace HangTab.Repositories.Impl;
 public class DatabaseRepository(IDatabaseContext context) : IDatabaseRepository
 {
     public async Task<bool> DropAllTables()
-        => await context.DropTableAsync<Bowler>(); // TODO: Add other tables
+    {
+        return await context.DropTableAsync<Bowler>()
+            && await context.DropTableAsync<Week>()
+            && await context.DropTableAsync<WeeklyLineup>();
+    }
 }
