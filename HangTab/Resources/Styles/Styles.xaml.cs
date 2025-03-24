@@ -1,8 +1,8 @@
 ﻿namespace HangTab.Resources.Styles;
 
-public partial class CustomStyles : ResourceDictionary
+public partial class Styles : ResourceDictionary
 {
-    public CustomStyles()
+    public Styles()
     {
         InitializeComponent();
     }

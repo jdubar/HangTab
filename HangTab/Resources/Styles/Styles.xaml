@@ -4,7 +4,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="HangTab.Resources.Styles.CustomStyles">
+    x:Class="HangTab.Resources.Styles.Styles">
 
     <!--Labels-->
     <Style x:Key="BaseLabel" TargetType="Label">
@@ -21,6 +21,7 @@
         <Setter Property="FontSize" Value="20" />
         <Setter Property="HorizontalOptions" Value="Start" />
         <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="TextColor" Value="{DynamicResource PrimaryContrastTextColor}" />
     </Style>
     
     <Style x:Key="TotalHangings" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
@@ -154,8 +155,8 @@
     </Style>
     
     <Style TargetType="Shell" ApplyToDerivedTypes="True">
-        <Setter Property="Shell.BackgroundColor" Value="{DynamicResource White}" />
-        <Setter Property="Shell.ForegroundColor" Value="{DynamicResource PrimaryTextColor}" />
+        <Setter Property="Shell.BackgroundColor" Value="{DynamicResource PrimaryColor}" />
+        <Setter Property="Shell.ForegroundColor" Value="{DynamicResource PrimaryContrastTextColor}" />
         <Setter Property="Shell.TitleColor" Value="{DynamicResource SurfaceColor}" />
         <!--<Setter Property="Shell.DisabledColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray950}}" />-->
         <Setter Property="Shell.UnselectedColor" Value="{DynamicResource TextColor}" />
