@@ -80,7 +80,10 @@ public partial class CurrentWeekOverviewViewModel :
     private int _teamHangTotal;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(BusRideStepperEnabled))]
     private ObservableCollection<CurrentWeekListItemViewModel> _currentWeekBowlers = [];
+
+    public bool BusRideStepperEnabled => CurrentWeekBowlers.Count > 0;
 
     [ObservableProperty]
     private CurrentWeekListItemViewModel? _selectedBowler = default!;

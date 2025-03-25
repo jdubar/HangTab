@@ -198,6 +198,7 @@
                         <Stepper
                             Grid.Column="2"
                             WidthRequest="100"
+                            IsEnabled="{Binding BusRideStepperEnabled}"
                             VerticalOptions="Center"
                             HorizontalOptions="End"
                             Margin="10,0"
