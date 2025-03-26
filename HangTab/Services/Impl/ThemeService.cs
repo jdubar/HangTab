@@ -1,11 +1,13 @@
 ﻿using HangTab.Enums;
-using HangTab.Resources.Styles;
 using HangTab.Themes;
 
 namespace HangTab.Services.Impl;
 
 public class ThemeService : IThemeService
 {
+    private static readonly LightTheme LightTheme = [];
+    private static readonly DarkTheme DarkTheme = [];
+
     public void SetLightTheme() => ResetTheme(Theme.Light);
     public void SetDarkTheme() => ResetTheme(Theme.Dark);
     
@@ -19,18 +21,16 @@ public class ThemeService : IThemeService
         var mergedDictionaries = Application.Current.Resources.MergedDictionaries;
         if (mergedDictionaries is not null)
         {
-            mergedDictionaries.Clear();
-
             if (theme == Theme.Dark)
             {
-                mergedDictionaries.Add(new DarkTheme());
+                mergedDictionaries.Remove(LightTheme);
+                mergedDictionaries.Add(DarkTheme);
             }
             else
             {
-                mergedDictionaries.Add(new LightTheme());
+                mergedDictionaries.Remove(DarkTheme);
+                mergedDictionaries.Add(LightTheme);
             }
-            mergedDictionaries.Add(new Icons());
-            mergedDictionaries.Add(new CustomStyles());
         }
     }
 }
