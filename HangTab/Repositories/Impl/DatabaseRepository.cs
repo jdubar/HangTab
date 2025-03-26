@@ -10,4 +10,13 @@ public class DatabaseRepository(IDatabaseContext context) : IDatabaseRepository
             && await context.DropTableAsync<Week>()
             && await context.DropTableAsync<WeeklyLineup>();
     }
+
+    public Task InitializeDatabase()
+    {
+        return Task.WhenAll(
+            context.CreateTableIfNotExists<Bowler>(),
+            context.CreateTableIfNotExists<Week>(),
+            context.CreateTableIfNotExists<WeeklyLineup>()
+        );
+    }
 }

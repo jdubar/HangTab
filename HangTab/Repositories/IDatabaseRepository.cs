@@ -2,4 +2,5 @@
 public interface IDatabaseRepository
 {
     Task<bool> DropAllTables();
+    Task InitializeDatabase();
 }
