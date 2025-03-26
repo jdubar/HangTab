@@ -8,7 +8,7 @@
     FlyoutBehavior="Disabled">
     <Shell.Behaviors>
         <toolkit:StatusBarBehavior
-            StatusBarColor="{StaticResource StatusBarColor}" />
+            StatusBarColor="#113B5E" />
     </Shell.Behaviors>
 
     <TabBar>
