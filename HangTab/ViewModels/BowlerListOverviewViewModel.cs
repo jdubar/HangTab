@@ -31,7 +31,6 @@ public partial class BowlerListOverviewViewModel :
 
         WeakReferenceMessenger.Default.Register<BowlerAddedOrChangedMessage>(this);
         WeakReferenceMessenger.Default.Register<BowlerDeletedMessage>(this);
-        _weekService = weekService;
     }
 
     private IEnumerable<BowlerListItemViewModel> _allBowlers = [];
@@ -56,7 +55,7 @@ public partial class BowlerListOverviewViewModel :
 
     [ObservableProperty]
     private string _searchText = string.Empty;
-
+    // TODO: Add inactive notification to bowlers
     partial void OnSearchTextChanged(string value)
     {
         if (string.IsNullOrEmpty(value))
