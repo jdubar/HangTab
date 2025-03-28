@@ -1,4 +1,5 @@
-﻿using CommunityToolkit.Maui.Core.Platform;
+﻿using CommunityToolkit.Maui.Core;
+using CommunityToolkit.Maui.Core.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -9,6 +10,7 @@ using HangTab.Messages;
 using HangTab.Models;
 using HangTab.Services;
 using HangTab.ViewModels.Base;
+using HangTab.ViewModels.Popups;
 using HangTab.Views;
 
 using System.Collections.ObjectModel;
@@ -25,6 +27,7 @@ public partial class BowlerAddEditViewModel :
     private readonly IDialogService _dialogService;
     private readonly INavigationService _navigationService;
     private readonly IMediaPickerService _mediaPickerService;
+    private readonly IPopupService _popupService;
 
     private readonly AvatarSelectBottomSheet _avatarOptionsBottomSheet;
 
@@ -32,12 +35,14 @@ public partial class BowlerAddEditViewModel :
         IBowlerService bowlerService,
         IDialogService dialogService,
         INavigationService navigationService,
-        IMediaPickerService mediaPickerService)
+        IMediaPickerService mediaPickerService,
+        IPopupService popupService)
     {
         _bowlerService = bowlerService;
         _dialogService = dialogService;
         _navigationService = navigationService;
         _mediaPickerService = mediaPickerService;
+        _popupService = popupService;
 
         _avatarOptionsBottomSheet = new AvatarSelectBottomSheet(new AvatarSelectViewModel(_dialogService, _mediaPickerService));
 
@@ -138,6 +143,20 @@ public partial class BowlerAddEditViewModel :
         }
 
         await _avatarOptionsBottomSheet.ShowAsync();
+    }
+
+    [RelayCommand]
+    private async Task ShowBowlerTypePicker()
+    {
+        var result = await _popupService.ShowPopupAsync<BowlerTypePopupViewModel>(onPresenting: vm => vm.RadioSubstituteOption = SelectedType == (int)BowlerType.Sub);
+        if (result is null)
+        {
+            return;
+        }
+
+        SelectedType = (bool)result
+            ? (int)BowlerType.Sub
+            : (int)BowlerType.Regular;
     }
 
     [RelayCommand(CanExecute = nameof(CanSubmitBowler))]

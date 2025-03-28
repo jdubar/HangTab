@@ -7,7 +7,9 @@ using HangTab.Repositories.Impl;
 using HangTab.Services;
 using HangTab.Services.Impl;
 using HangTab.ViewModels;
+using HangTab.ViewModels.Popups;
 using HangTab.Views;
+using HangTab.Views.Popups;
 
 using Microsoft.Extensions.Logging;
 
@@ -21,15 +23,13 @@ public static class MauiProgram
 {
     public static MauiApp CreateMauiApp()
     {
-        var builder = MauiApp.CreateBuilder();
-
-        builder
+        var builder = MauiApp.CreateBuilder()
             .UseMauiApp<App>()
-            .UseBottomSheet()
             .UseMauiCommunityToolkit(options =>
             {
                 options.SetShouldEnableSnackbarOnWindows(true);
             })
+            .UseBottomSheet()
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -39,7 +39,8 @@ public static class MauiProgram
             .RegisterRepositories()
             .RegisterServices()
             .RegisterViewModels()
-            .RegisterViews();
+            .RegisterViews()
+            .RegisterPopups();
 
 #if DEBUG
         builder.Logging.AddDebug();
@@ -96,6 +97,14 @@ public static class MauiProgram
 
         builder.Services.AddTransient<BowlerAddEditPage>();
         builder.Services.AddTransient<BowlerSwitchPage>();
+        return builder;
+    }
+
+    private static MauiAppBuilder RegisterPopups(this MauiAppBuilder builder)
+    {
+        builder.Services.AddTransientPopup<BowlerTypePopup, BowlerTypePopupViewModel>();
+        builder.Services.AddTransientPopup<DataResetPopUp, DataResetPopUpViewModel>();
+        builder.Services.AddTransientPopup<StartNewSeasonPopup, StartNewSeasonPopupViewModel>();
         return builder;
     }
 }
