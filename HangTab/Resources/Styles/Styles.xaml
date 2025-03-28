@@ -10,11 +10,16 @@
     <Style x:Key="BaseLabel" TargetType="Label">
         <Setter Property="FontAttributes" Value="Bold" />
         <Setter Property="FontSize" Value="15" />
-        <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}" />
+        <Setter Property="TextColor" Value="{DynamicResource TextPrimaryColor}" />
     </Style>
     
     <Style x:Key="Header" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
         <Setter Property="Padding" Value="10,10,10,0" />
+    </Style>
+    
+    <Style x:Key="SettingsHeader" TargetType="Label" BasedOn="{StaticResource Header}">
+        <Setter Property="Padding" Value="10,10,10,0" />
+        <Setter Property="Margin" Value="0,0,0,10" />
     </Style>
     
     <Style x:Key="PageTitle" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
@@ -44,7 +49,7 @@
     <Style x:Key="Label_Hangings" TargetType="Label">
         <Setter Property="VerticalTextAlignment" Value="Center" />
         <Setter Property="Margin" Value="22,0" />
-        <Setter Property="TextColor" Value="{DynamicResource SecondaryTextColor}" />
+        <Setter Property="TextColor" Value="{DynamicResource TextPrimaryColor}" />
     </Style>
     
     <Style x:Key="ErrorLabel" TargetType="Label">
@@ -71,7 +76,7 @@
         <Setter Property="FontSize" Value="20" />
         <Setter Property="FontAttributes" Value="Bold" />
         <Setter Property="BorderColor" Value="{DynamicResource BorderColor}" />
-        <Setter Property="TextColor" Value="{DynamicResource PrimaryTextColor}" />
+        <Setter Property="TextColor" Value="{DynamicResource TextPrimaryColor}" />
         <Setter Property="BackgroundColor" Value="{DynamicResource PageBackgroundColor}" />
     </Style>
     
@@ -109,6 +114,19 @@
         <Setter Property="HorizontalOptions" Value="Fill" />
         <Setter Property="TextColor" Value="{DynamicResource PrimaryContrastTextColor}" />
     </Style>
+    
+    <Style x:Key="SecondaryButton" TargetType="Button">
+        <Setter Property="BackgroundColor" Value="Transparent" />
+        <Setter Property="TextColor" Value="{DynamicResource TextPrimaryColor}" />
+    </Style>
+
+    <!--Associated with FAB style below-->
+    <Shadow
+        Brush="Black"
+        x:Key="Shadow"
+        Offset="0,5"
+        Radius="12"
+        Opacity="0.75" />
 
     <Style x:Key="FAB" TargetType="ImageButton">
         <Setter Property="Aspect" Value="Center" />
@@ -117,6 +135,7 @@
         <Setter Property="WidthRequest" Value="70" />
         <Setter Property="HeightRequest" Value="70" />
         <Setter Property="HorizontalOptions" Value="End" />
+        <Setter Property="Shadow" Value="{StaticResource Shadow}"/>
     </Style>
     
     <Style TargetType="Switch">
@@ -149,22 +168,73 @@
         <Setter Property="BackgroundColor" Value="{DynamicResource PageBackgroundColor}" />
     </Style>
     
-    <Style x:Key="SearchBar" TargetType="SearchBar">
-        <Setter Property="PlaceholderColor" Value="{DynamicResource SecondaryTextColor}" />
-        <Setter Property="TextColor" Value="{DynamicResource SecondaryTextColor}" />
+    <Style TargetType="Shell" ApplyToDerivedTypes="True">
+        <Setter Property="BackgroundColor" Value="{DynamicResource PrimaryColor}" />
+        <Setter Property="ForegroundColor" Value="{DynamicResource PrimaryContrastTextColor}" />
+        <Setter Property="TitleColor" Value="{DynamicResource SurfaceColor}" />
+        <!--<Setter Property="Shell.DisabledColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray950}}" />-->
+        <Setter Property="UnselectedColor" Value="{DynamicResource TextPrimaryColor}" />
+        <Setter Property="NavBarHasShadow" Value="True" />
+        <Setter Property="TabBarBackgroundColor" Value="{DynamicResource TabBarBackgroundColor}" />
+        <Setter Property="TabBarForegroundColor" Value="{DynamicResource TabBarSelectedColor}" />
+        <Setter Property="TabBarTitleColor" Value="{DynamicResource TabBarSelectedColor}" />
+        <Setter Property="TabBarUnselectedColor" Value="{DynamicResource TextPrimaryColor}" />
     </Style>
     
-    <Style TargetType="Shell" ApplyToDerivedTypes="True">
-        <Setter Property="Shell.BackgroundColor" Value="{DynamicResource PrimaryColor}" />
-        <Setter Property="Shell.ForegroundColor" Value="{DynamicResource PrimaryContrastTextColor}" />
-        <Setter Property="Shell.TitleColor" Value="{DynamicResource SurfaceColor}" />
-        <!--<Setter Property="Shell.DisabledColor" Value="{AppThemeBinding Light={StaticResource Gray200}, Dark={StaticResource Gray950}}" />-->
-        <Setter Property="Shell.UnselectedColor" Value="{DynamicResource TextColor}" />
-        <Setter Property="Shell.NavBarHasShadow" Value="True" />
-        <Setter Property="Shell.TabBarBackgroundColor" Value="{DynamicResource PageBackgroundColor}" />
-        <Setter Property="Shell.TabBarForegroundColor" Value="{DynamicResource PrimaryColor}" />
-        <Setter Property="Shell.TabBarTitleColor" Value="{DynamicResource PrimaryColor}" />
-        <Setter Property="Shell.TabBarUnselectedColor" Value="{DynamicResource TextColor}" />
+    <!--Searchbar Style-->
+    <Style x:Key="SearchBarFrame" TargetType="Border">
+        <Setter Property="Stroke" Value="{DynamicResource BorderColor}" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 40" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="Padding" Value="1,1,1,-3"/>
+        <Setter Property="Margin" Value="10"/>
+        <Setter Property="Background" Value="Transparent"/>
+    </Style>
+
+    <Style TargetType="SearchBar">
+        <Setter Property="TextColor" Value="{DynamicResource TextPrimaryColor}" />
+        <Setter Property="PlaceholderColor" Value="{DynamicResource TextPrimaryColor}" />
+        <Setter Property="CancelButtonColor" Value="{DynamicResource TextPrimaryColor}" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource SearchBarBackgroundColor}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="MinimumHeightRequest" Value="44"/>
+        <Setter Property="MinimumWidthRequest" Value="44"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource BorderColor}" />
+                            <Setter Property="PlaceholderColor" Value="{DynamicResource BorderColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+        
+    <Style TargetType="Picker">
+        <Setter Property="TextColor" Value="{DynamicResource TextPrimaryColor}" />
+        <Setter Property="TitleColor" Value="{DynamicResource TextPrimaryColor}" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource PageBackgroundColor}" />
+        <Setter Property="FontSize" Value="14"/>
+        <Setter Property="MinimumHeightRequest" Value="44"/>
+        <Setter Property="MinimumWidthRequest" Value="44"/>
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal" />
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="TextColor" Value="{DynamicResource Black}" />
+                            <Setter Property="TitleColor" Value="{DynamicResource Black}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
     </Style>
 
 </ResourceDictionary>

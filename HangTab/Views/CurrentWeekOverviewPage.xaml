@@ -132,10 +132,12 @@
                                     Text="Your lineup is empty"
                                     FontSize="18"
                                     FontAttributes="Bold"
-                                    HorizontalTextAlignment="Center" />
+                                    HorizontalTextAlignment="Center"
+                                    TextColor="{DynamicResource TextPrimaryColor}"/>
                                 <Label
                                     Text="Create bowlers on the Bowlers page"
-                                    HorizontalTextAlignment="Center" />
+                                    HorizontalTextAlignment="Center"
+                                    TextColor="{DynamicResource TextPrimaryColor}"/>
                             </VerticalStackLayout>
                         </Grid>
                     </CollectionView.EmptyView>

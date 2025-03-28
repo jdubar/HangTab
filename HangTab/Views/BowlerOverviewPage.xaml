@@ -43,13 +43,14 @@
             <StackLayout
                 Grid.Row="0">
                 <Border
-                    Style="{StaticResource RoundedCornerBorder}">
+                    Margin="5,5,5,1"
+                    Style="{StaticResource SearchBarFrame}">
                     <SearchBar
                         Placeholder="Search by name" 
                         Margin="0,0,0,-1"
-                        Text="{Binding SearchText, Mode=TwoWay}"
-                        Style="{StaticResource SearchBar}" />
+                        Text="{Binding SearchText, Mode=TwoWay}" />
                 </Border>
+                
                 <BoxView
                     Style="{StaticResource Divider}" />
             </StackLayout>
@@ -137,7 +138,7 @@
                                         <FontImageSource
                                             FontFamily="MaterialIcons"
                                             Glyph="{StaticResource chevron_right}"
-                                            Color="{DynamicResource PrimaryColor}"/>
+                                            Color="{DynamicResource TextPrimaryColor}"/>
                                     </Image.Source>
                                 </Image>
                             </Grid>
@@ -154,11 +155,13 @@
                                 Text="No Bowlers Found"
                                 FontSize="18"
                                 FontAttributes="Bold"
-                                HorizontalTextAlignment="Center" />
+                                HorizontalTextAlignment="Center"
+                                TextColor="{DynamicResource TextPrimaryColor}"/>
                             <Label
                                 Grid.Row="1"
-                                Text="Create a bowler using the button above"
-                                HorizontalTextAlignment="Center" />
+                                Text="Create a bowler using the button below"
+                                HorizontalTextAlignment="Center"
+                                TextColor="{DynamicResource TextPrimaryColor}"/>
                         </VerticalStackLayout>
                     </Grid>
                 </CollectionView.EmptyView>
@@ -176,12 +179,6 @@
                         Size="40"
                         Color="{DynamicResource PrimaryContrastTextColor}" />
                 </ImageButton.Source>
-                <ImageButton.Shadow>
-                    <Shadow Brush="{DynamicResource ControlShadowColor}"
-                            Offset="0,8"
-                            Radius="16"
-                            Opacity="0.9" />
-                </ImageButton.Shadow>
             </ImageButton>
         </Grid>
     </ContentPage.Content>

@@ -5,6 +5,7 @@
     xmlns:views="clr-namespace:HangTab.Views"
     xmlns:vm="clr-namespace:HangTab.ViewModels"
     xmlns:converters="clr-namespace:HangTab.Converters"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:dataAnnotations="clr-namespace:System.ComponentModel.DataAnnotations;assembly=System.ComponentModel.Annotations"
     x:Class="HangTab.Views.BowlerAddEditPage"
     x:DataType="vm:BowlerAddEditViewModel">
@@ -47,12 +48,6 @@
                         Size="40"
                         Color="{DynamicResource PrimaryContrastTextColor}" />
                 </ImageButton.Source>
-                <ImageButton.Shadow>
-                    <Shadow Brush="{DynamicResource ControlShadowColor}"
-                            Offset="0,8"
-                            Radius="16"
-                            Opacity="0.9" />
-                </ImageButton.Shadow>
             </ImageButton>
             
             <!--Avatar Image-->
@@ -75,7 +70,7 @@
                             FontFamily="MaterialIcons"
                             Glyph="{StaticResource person}"
                             Size="30"
-                            Color="{DynamicResource PrimaryTextColor}" />
+                            Color="{DynamicResource TextPrimaryColor}" />
                     </Image.Source>
                 </Image>
                 <Entry
@@ -85,7 +80,9 @@
                     Placeholder="Name"
                     Keyboard="Text"
                     ReturnType="Done"
-                    Text="{Binding Name}" />
+                    Text="{Binding Name}"
+                    TextColor="{DynamicResource TextPrimaryColor}"
+                    PlaceholderColor="{DynamicResource TextPrimaryColor}"/>
             </Grid>
         </VerticalStackLayout>
         
@@ -102,7 +99,7 @@
                         FontFamily="MaterialIcons"
                         Glyph="{StaticResource group}"
                         Size="30"
-                        Color="{DynamicResource PrimaryTextColor}" />
+                        Color="{DynamicResource TextPrimaryColor}" />
                 </Image.Source>
             </Image>
             <Picker
@@ -110,7 +107,12 @@
                 Title="Select a bowler type"
                 ItemsSource="{Binding AllTypes}"
                 ItemDisplayBinding="{Binding .,Converter={StaticResource BowlerTypeEnumToTextConverter}}"
-                SelectedIndex="{Binding SelectedType}" />
+                SelectedIndex="{Binding SelectedType}">
+                <Picker.GestureRecognizers>
+                    <TapGestureRecognizer
+                        Command="{Binding ShowBowlerTypePickerCommand}" />
+                </Picker.GestureRecognizers>
+            </Picker>
         </Grid>
         
         <!--Deactivate Bowler Switch-->
@@ -128,7 +130,7 @@
                         FontFamily="MaterialIcons"
                         Glyph="{StaticResource person_off}"
                         Size="30"
-                        Color="{DynamicResource PrimaryTextColor}" />
+                        Color="{DynamicResource TextPrimaryColor}" />
                 </Image.Source>
             </Image>
             
@@ -137,7 +139,7 @@
                 Text="Deactivate bowler"
                 FontAttributes="Bold"
                 VerticalOptions="Center"
-                TextColor="{DynamicResource PrimaryTextColor}"/>
+                TextColor="{DynamicResource TextPrimaryColor}"/>
             <Switch
                 Grid.Column="3"
                 IsToggled="{Binding IsInactive, Mode=TwoWay}"

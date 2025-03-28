@@ -108,11 +108,10 @@
     </toolkit:Popup.Resources>
     
     <VerticalStackLayout
-        Spacing="10"
         RadioButtonGroup.GroupName="bowlertype">
         <Label
             Text="Select the bowler type"
-            Margin="10,10,10,5"
+            Margin="10,10,10,15"
             Style="{StaticResource Header}" />
         
         <RadioButton
@@ -122,7 +121,7 @@
             TextColor="{DynamicResource TextPrimaryColor}" />
         
         <RadioButton
-            Margin="10,0"
+            Margin="10,0,10,10"
             Content="Substitute bowler"
             IsChecked="{Binding RadioSubstituteOption}"
             TextColor="{DynamicResource TextPrimaryColor}" />
