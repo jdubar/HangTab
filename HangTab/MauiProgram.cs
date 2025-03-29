@@ -104,6 +104,7 @@ public static class MauiProgram
     {
         builder.Services.AddTransientPopup<BowlerTypePopup, BowlerTypePopupViewModel>();
         builder.Services.AddTransientPopup<DataResetPopUp, DataResetPopUpViewModel>();
+        builder.Services.AddTransientPopup<DeleteBowlerPopup, DeleteBowlerPopupViewModel>();
         builder.Services.AddTransientPopup<StartNewSeasonPopup, StartNewSeasonPopupViewModel>();
         return builder;
     }

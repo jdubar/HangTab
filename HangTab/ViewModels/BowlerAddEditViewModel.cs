@@ -90,7 +90,7 @@ public partial class BowlerAddEditViewModel :
     [NotifyDataErrorInfo]
     private int _selectedType = -1;
 
-    public IReadOnlyList<BowlerType> AllTypes { get; } = Enum.GetValues(typeof(BowlerType)).Cast<BowlerType>().ToList();
+    public IReadOnlyList<BowlerType> AllTypes { get; } = Enum.GetValues<BowlerType>().ToList();
     
     public override async Task LoadAsync()
     {
@@ -120,18 +120,22 @@ public partial class BowlerAddEditViewModel :
             return;
         }
 
-        if (await _dialogService.Ask("Delete", "Are you sure you want to delete this bowler?"))
+        var result = await _popupService.ShowPopupAsync<DeleteBowlerPopupViewModel>();
+        if (result is null)
         {
-            if (await _bowlerService.DeleteBowler(_bowler.Id))
-            {
-                WeakReferenceMessenger.Default.Send(new BowlerDeletedMessage(_bowler.Id));
-            }
-            else
-            {
-                await _dialogService.AlertAsync("Critical Error", "Error occurred while deleting the bowler!", "Ok");
-            }
-            await _navigationService.GoBack();
+            return;
         }
+
+        if (await _bowlerService.DeleteBowler(_bowler.Id))
+        {
+            WeakReferenceMessenger.Default.Send(new BowlerDeletedMessage(_bowler.Id));
+        }
+        else
+        {
+            await _dialogService.AlertAsync("Critical Error", "Error occurred while deleting the bowler!", "Ok");
+        }
+
+        await _navigationService.GoBack();
     }
 
     [RelayCommand]
@@ -177,7 +181,7 @@ public partial class BowlerAddEditViewModel :
             }
             else
             {
-                await _dialogService.Notify("Error", "The bowler could not be added.");
+                await _dialogService.AlertAsync("Error", "The bowler could not be added.", "Ok");
             }
             await _navigationService.GoBack();
         }
@@ -189,7 +193,7 @@ public partial class BowlerAddEditViewModel :
             }
             else
             {
-                await _dialogService.Notify("Error", "The bowler could not be updated.");
+                await _dialogService.AlertAsync("Error", "The bowler could not be updated.", "Ok");
             }
             await _navigationService.GoBack();
         }

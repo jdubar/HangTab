@@ -1,7 +1,7 @@
 ﻿using HangTab.ViewModels.Base;
 
 namespace HangTab.Views;
-public class ContentPageBase : ContentPage
+public partial class ContentPageBase : ContentPage
 {
     protected override async void OnAppearing()
     {

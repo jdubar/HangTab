@@ -169,7 +169,7 @@ public partial class CurrentWeekOverviewViewModel :
         }
         else
         {
-            await _dialogService.Notify("Error", "Unable to update bowler hang count");
+            await _dialogService.AlertAsync("Error", "Unable to update bowler hang count", "Ok");
         }
     }
 

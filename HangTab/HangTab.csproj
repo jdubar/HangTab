@@ -131,6 +131,9 @@
 		<MauiXaml Update="Views\Popups\DataResetPopUp.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Views\Popups\DeleteBowlerPopup.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\Popups\StartNewSeasonPopup.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
