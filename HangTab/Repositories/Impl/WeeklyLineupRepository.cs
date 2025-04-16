@@ -7,6 +7,7 @@ public class WeeklyLineupRepository(IDatabaseContext context) : IWeeklyLineupRep
     public Task<bool> AddWeeklyLineupBowler(WeeklyLineup weeklyLineup) => context.AddItemAsync(weeklyLineup);
     public Task<IEnumerable<WeeklyLineup>> GetAllWeeklyLineupsByWeekId(int id) => context.GetAllWithChildrenAsync<WeeklyLineup>(wl => wl.WeekId == id);
     public Task<IEnumerable<WeeklyLineup>> GetAllWeeklyLineups() => context.GetAllAsync<WeeklyLineup>();
+    public Task<WeeklyLineup> GetWeeklyLineupById(int id) => context.GetItemByIdAsync<WeeklyLineup>(id);
     public Task<IEnumerable<WeeklyLineup>> GetWeeklyLineupsByWeekId(int weekId) => context.GetFilteredAsync<WeeklyLineup>(wl => wl.WeekId == weekId);
     public Task<bool> UpdateWeeklyLineup(WeeklyLineup weeklyLineup) => context.UpdateItemAsync(weeklyLineup);
 }

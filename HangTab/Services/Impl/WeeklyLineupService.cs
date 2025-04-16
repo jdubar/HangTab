@@ -7,6 +7,7 @@ public class WeeklyLineupService(IWeeklyLineupRepository weeklyLineupRepository)
     public Task<bool> AddWeeklyLineupBowler(WeeklyLineup weeklyLineup) => weeklyLineupRepository.AddWeeklyLineupBowler(weeklyLineup);
     public Task<IEnumerable<WeeklyLineup>> GetAllWeeklyLineupsByWeekId(int id) => weeklyLineupRepository.GetAllWeeklyLineupsByWeekId(id);
     public Task<IEnumerable<WeeklyLineup>> GetAllWeeklyLineups() => weeklyLineupRepository.GetAllWeeklyLineups();
+    public Task<WeeklyLineup> GetWeeklyLineupById(int id) => weeklyLineupRepository.GetWeeklyLineupById(id);
     public Task<IEnumerable<WeeklyLineup>> GetWeeklyLineupsByWeekId(int weekId) => weeklyLineupRepository.GetWeeklyLineupsByWeekId(weekId);
     public Task<bool> UpdateWeeklyLineup(WeeklyLineup weeklyLineup) => weeklyLineupRepository.UpdateWeeklyLineup(weeklyLineup);
 }
