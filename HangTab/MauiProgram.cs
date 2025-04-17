@@ -53,10 +53,10 @@ public static class MauiProgram
     {
         builder.Services.AddSingleton<IMediaPickerRepository>(new MediaPickerRepository(MediaPicker.Default));
 
-        builder.Services.AddTransient<IBowlerRepository, BowlerRepository>();
+        builder.Services.AddTransient<IPersonRepository, PersonRepository>();
         builder.Services.AddTransient<IDatabaseRepository, DatabaseRepository>();
         builder.Services.AddTransient<IWeekRepository, WeekRepository>();
-        builder.Services.AddTransient<IWeeklyLineupRepository, WeeklyLineupRepository>();
+        builder.Services.AddTransient<IBowlerRepository, BowlerRepository>();
         return builder;
     }
 
@@ -66,14 +66,14 @@ public static class MauiProgram
         builder.Services.AddSingleton<IDatabaseContext, DatabaseContext>();
         builder.Services.AddSingleton<ISettingsService>(new SettingsService(Preferences.Default));
 
-        builder.Services.AddTransient<IBowlerService, BowlerService>();
+        builder.Services.AddTransient<IPersonService, PersonService>();
         builder.Services.AddTransient<IDatabaseService, DatabaseService>();
         builder.Services.AddTransient<IDialogService, DialogService>();
         builder.Services.AddTransient<IMediaPickerService, MediaPickerService>();
         builder.Services.AddTransient<INavigationService, NavigationService>();
         builder.Services.AddTransient<IThemeService, ThemeService>();
         builder.Services.AddTransient<IWeekService, WeekService>();
-        builder.Services.AddTransient<IWeeklyLineupService, WeeklyLineupService>();
+        builder.Services.AddTransient<IBowlerService, BowlerService>();
         return builder;
     }
 
