@@ -146,6 +146,8 @@ public partial class CurrentWeekOverviewViewModel :
         return week;
     }
 
+    // TODO: Add submit command with confirmation dialog
+
     public async void Receive(BowlerHangCountChangedMessage message)
     {
         var bowler = CurrentWeekBowlers.FirstOrDefault(b => b.BowlerId == message.Id);

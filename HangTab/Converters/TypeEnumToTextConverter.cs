@@ -3,20 +3,19 @@
 using System.Globalization;
 
 namespace HangTab.Converters;
-public class BowlerStatusEnumToTextConverter : IValueConverter
+public class BowlerTypeEnumToTextConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is not BowlerStatus type)
+        if (value is not BowlerType type)
         {
             return string.Empty;
         }
 
         return type switch
         {
-            BowlerStatus.Active => "Active bowler",
-            BowlerStatus.Blind => "Blind bowler",
-            BowlerStatus.UsingSub => "Select a sub",
+            BowlerType.Regular => "Regular bowler",
+            BowlerType.Sub => "Sub",
             _ => string.Empty
         };
     }

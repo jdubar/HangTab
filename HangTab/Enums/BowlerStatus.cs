@@ -3,5 +3,5 @@ public enum BowlerStatus
 {
     Active,
     Blind,
-    SelectSub,
+    UsingSub,
 }

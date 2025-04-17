@@ -14,7 +14,7 @@ internal static class WeekMapper
             wl.Status,
             wl.HangCount,
             wl.Bowler.Name,
-            wl.Bowler.ImageUrl,
+            wl.Bowler.ImageUrl ?? string.Empty,
             wl.Bowler.IsSub,
             wl.Bowler.Name.GetInitials());
     }
@@ -28,6 +28,14 @@ internal static class WeekMapper
             BowlerId = cw.BowlerId,
             Status = cw.Status,
             HangCount = cw.HangCount,
+            Bowler = new Bowler
+            {
+                Id = cw.BowlerId,
+                Name = cw.Name,
+                ImageUrl = cw.ImageUrl,
+                IsSub = cw.IsSub,
+                IsInactive = false,
+            },
         };
     }
 
