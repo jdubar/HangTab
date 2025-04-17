@@ -16,16 +16,16 @@ public partial class BowlerListOverviewViewModel :
     IRecipient<BowlerAddedOrChangedMessage>,
     IRecipient<BowlerDeletedMessage>
 {
-    private readonly IBowlerService _bowlerService;
+    private readonly IPersonService _personService;
     private readonly INavigationService _navigationService;
     private readonly IWeekService _weekService;
 
     public BowlerListOverviewViewModel(
-        IBowlerService bowlerService,
+        IPersonService personService,
         INavigationService navigationService,
         IWeekService weekService)
     {
-        _bowlerService = bowlerService;
+        _personService = personService;
         _navigationService = navigationService;
         _weekService = weekService;
 
@@ -94,11 +94,11 @@ public partial class BowlerListOverviewViewModel :
 
     private async Task GetBowlers()
     {
-        var allBowlers = await _bowlerService.GetAllBowlers();
-        if (allBowlers.Any())
+        var people = await _personService.GetAllPeople();
+        if (people.Any())
         {
             Bowlers.Clear();
-            AllBowlers = allBowlers.OrderBy(b => b.Name).MapBowlerToBowlerListItemViewModel();
+            AllBowlers = people.OrderBy(b => b.Name).MapBowlerToBowlerListItemViewModel();
             Bowlers = AllBowlers.ToObservableCollection();
         }
     }
@@ -108,7 +108,7 @@ public partial class BowlerListOverviewViewModel :
         if (Bowlers.Count > 0)
         {
             var allWeeks = await _weekService.GetAllWeeks();
-            Bowlers.ToList().ForEach(b => b.Hangings = allWeeks.SelectMany(w => w.Bowlers.Where(wl => wl.BowlerId == b.Id)).Sum(w => w.HangCount));
+            Bowlers.ToList().ForEach(b => b.Hangings = allWeeks.SelectMany(w => w.Bowlers.Where(b => b.PersonId == b.Id)).Sum(w => w.HangCount));
         }
     }
 

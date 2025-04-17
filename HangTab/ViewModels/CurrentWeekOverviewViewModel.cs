@@ -23,7 +23,7 @@ public partial class CurrentWeekOverviewViewModel :
     private readonly INavigationService _navigationService;
     private readonly ISettingsService _settingsService;
     private readonly IWeekService _weekService;
-    private readonly IWeeklyLineupService _weeklyLineupService;
+    private readonly IBowlerService _bowlerService;
 
     public CurrentWeekOverviewViewModel(
         IAudioService audioService,
@@ -31,14 +31,14 @@ public partial class CurrentWeekOverviewViewModel :
         INavigationService navigationService,
         ISettingsService settingsService,
         IWeekService weekService,
-        IWeeklyLineupService weeklyLineupService)
+        IBowlerService bowlerService)
     {
         _audioService = audioService;
         _dialogService = dialogService;
         _navigationService = navigationService;
         _settingsService = settingsService;
         _weekService = weekService;
-        _weeklyLineupService = weeklyLineupService;
+        _bowlerService = bowlerService;
 
         WeakReferenceMessenger.Default.Register<BowlerAddedOrChangedMessage>(this);
         WeakReferenceMessenger.Default.Register<BowlerDeletedMessage>(this);
@@ -104,7 +104,7 @@ public partial class CurrentWeekOverviewViewModel :
     {
         if (SelectedBowler is not null)
         {
-            await _navigationService.GoToSwitchBowler(SelectedBowler.MapCurrentWeekListItemViewModelToWeeklyLineup());
+            await _navigationService.GoToSwitchBowler(WeekMapper.MapCurrentWeekListItemViewModelToBowler(SelectedBowler));
             SelectedBowler = null;
         }
     }
@@ -132,7 +132,7 @@ public partial class CurrentWeekOverviewViewModel :
             if (CurrentWeek.Bowlers.Count > 0)
             {
                 CurrentWeekBowlers.Clear();
-                CurrentWeekBowlers = CurrentWeek.Bowlers.Where(b => !b.Bowler.IsInactive).MapBowlerToBowlerListItemViewModel().ToObservableCollection();
+                CurrentWeekBowlers = WeekMapper.MapBowlerToBowlerListItemViewModel(CurrentWeek.Bowlers.Where(b => !b.Person.IsInactive)).ToObservableCollection();
             }
 
             MapWeekData(CurrentWeek);
@@ -156,7 +156,7 @@ public partial class CurrentWeekOverviewViewModel :
             return;
         }
 
-        if (await _weeklyLineupService.UpdateWeeklyLineup(bowler.MapCurrentWeekListItemViewModelToWeeklyLineup()))
+        if (await _bowlerService.UpdateBowler(WeekMapper.MapCurrentWeekListItemViewModelToBowler(bowler)))
         {
             var newHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
             var isIncrease = newHangTotal > TeamHangTotal;
@@ -179,13 +179,13 @@ public partial class CurrentWeekOverviewViewModel :
     {
         if (message.Id > 0 && !message.IsSub)
         {
-            var weeklyLineup = new WeeklyLineup
+            var bowler = new Bowler
             {
-                BowlerId = message.Id,
+                PersonId = message.Id,
                 WeekId = _settingsService.CurrentWeekPrimaryKey,
             };
-            await _weeklyLineupService.AddWeeklyLineupBowler(weeklyLineup);
-            CurrentWeekBowlers.Add(weeklyLineup.MapWeeklyLineupToCurrentWeekListItemViewModel());
+            await _bowlerService.AddBowler(bowler);
+            CurrentWeekBowlers.Add(bowler.MapBowlerToCurrentWeekListItemViewModel());
         }
 
         CurrentWeekBowlers.Clear();
@@ -204,7 +204,7 @@ public partial class CurrentWeekOverviewViewModel :
     private void MapWeekData(Week week)
     {
         Id = week.Id;
-        WeekNumber = week.WeekNumber;
+        WeekNumber = week.Number;
         BusRides = week.BusRides;
     }
 }

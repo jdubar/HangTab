@@ -24,7 +24,7 @@ public partial class BowlerListItemViewModel : ObservableObject
     private int _hangings;
 
     [ObservableProperty]
-    private int _weeklyLineupId;
+    private int _bowlerId;
 
     [ObservableProperty]
     private string? _imageUrl;
@@ -41,23 +41,23 @@ public partial class BowlerListItemViewModel : ObservableObject
     }
 
     [ObservableProperty]
-    private BowlerStatus _status;
+    private Status _status;
 
     public BowlerListItemViewModel(
         int id,
         string name,
         bool isInactive,
         bool isSub,
-        int weeklyLineupId = 0,
+        int bowlerId = 0,
         int hangings = 0,
         string? imageUrl = null,
-        BowlerStatus status = BowlerStatus.Active)
+        Status status = Status.Active)
     {
         Id = id;
         Name = name;
         IsInactive = isInactive;
         IsSub = isSub;
-        WeeklyLineupId = weeklyLineupId;
+        BowlerId = bowlerId;
         Hangings = hangings;
         ImageUrl = imageUrl;
         Status = status;

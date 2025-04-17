@@ -12,7 +12,7 @@ public class WeekRepository(IDatabaseContext context) : IWeekRepository
     {
         var week = new Week
         {
-            WeekNumber = weekNumber
+            Number = weekNumber
         };
 
         await context.AddItemAsync(week);

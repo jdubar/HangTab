@@ -1,5 +1,5 @@
 ﻿namespace HangTab.Enums;
-public enum BowlerStatus
+public enum Status
 {
     Active,
     Blind,

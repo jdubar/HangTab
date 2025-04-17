@@ -6,17 +6,17 @@ public class DatabaseRepository(IDatabaseContext context) : IDatabaseRepository
 {
     public async Task<bool> DropAllTables()
     {
-        return await context.DropTableAsync<Bowler>()
+        return await context.DropTableAsync<Person>()
             && await context.DropTableAsync<Week>()
-            && await context.DropTableAsync<WeeklyLineup>();
+            && await context.DropTableAsync<Bowler>();
     }
 
     public Task InitializeDatabase()
     {
         return Task.WhenAll(
-            context.CreateTableIfNotExists<Bowler>(),
+            context.CreateTableIfNotExists<Person>(),
             context.CreateTableIfNotExists<Week>(),
-            context.CreateTableIfNotExists<WeeklyLineup>()
+            context.CreateTableIfNotExists<Bowler>()
         );
     }
 }

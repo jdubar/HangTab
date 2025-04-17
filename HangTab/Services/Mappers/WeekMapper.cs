@@ -5,30 +5,30 @@ using HangTab.ViewModels;
 namespace HangTab.Services.Mappers;
 internal static class WeekMapper
 {
-    internal static CurrentWeekListItemViewModel MapWeeklyLineupToCurrentWeekListItemViewModel(this WeeklyLineup wl)
+    internal static CurrentWeekListItemViewModel MapBowlerToCurrentWeekListItemViewModel(this Bowler wl)
     {
         return new CurrentWeekListItemViewModel(
             wl.WeekId,
             wl.Id,
-            wl.BowlerId,
+            wl.PersonId,
             wl.Status,
             wl.HangCount,
-            wl.Bowler.Name,
-            wl.Bowler.ImageUrl ?? string.Empty,
-            wl.Bowler.IsSub,
-            wl.Bowler.Name.GetInitials());
+            wl.Person.Name,
+            wl.Person.ImageUrl ?? string.Empty,
+            wl.Person.IsSub,
+            wl.Person.Name.GetInitials());
     }
 
-    internal static WeeklyLineup MapCurrentWeekListItemViewModelToWeeklyLineup(this CurrentWeekListItemViewModel cw)
+    internal static Bowler MapCurrentWeekListItemViewModelToBowler(this CurrentWeekListItemViewModel cw)
     {
-        return new WeeklyLineup
+        return new Bowler
         {
-            Id = cw.WeeklyLineupId,
+            Id = cw.BowlerId,
             WeekId = cw.WeekId,
-            BowlerId = cw.BowlerId,
+            PersonId = cw.PersonId,
             Status = cw.Status,
             HangCount = cw.HangCount,
-            Bowler = new Bowler
+            Person = new Person
             {
                 Id = cw.BowlerId,
                 Name = cw.Name,
@@ -44,13 +44,13 @@ internal static class WeekMapper
         return new Week
         {
             Id = cw.Id,
-            WeekNumber = cw.WeekNumber,
+            Number = cw.WeekNumber,
             BusRides = cw.BusRides,
         };
     }
 
-    internal static List<CurrentWeekListItemViewModel> MapBowlerToBowlerListItemViewModel(this IEnumerable<WeeklyLineup> bowlers)
+    internal static List<CurrentWeekListItemViewModel> MapBowlerToBowlerListItemViewModel(this IEnumerable<Bowler> bowlers)
     {
-        return bowlers.Select(b => b.MapWeeklyLineupToCurrentWeekListItemViewModel()).ToList();
+        return bowlers.Select(b => b.MapBowlerToCurrentWeekListItemViewModel()).ToList();
     }
 }

@@ -8,21 +8,21 @@ public class NavigationService : INavigationService
 
     public async Task GoToAddBowler() => await Shell.Current.GoToAsync(Routes.BowlerAdd);
 
-    public async Task GoToEditBowler(Bowler bowler)
+    public async Task GoToEditBowler(Person person)
     {
         var navigationParameter = new ShellNavigationQueryParameters
         {
-            { nameof(Bowler), bowler }
+            { nameof(Person), person }
         };
 
         await Shell.Current.GoToAsync(Routes.BowlerEdit, navigationParameter);
     }
 
-    public async Task GoToSwitchBowler(WeeklyLineup weeklyLineup)
+    public async Task GoToSwitchBowler(Bowler bowler)
     {
         var navigationParameter = new ShellNavigationQueryParameters
         {
-            { nameof(WeeklyLineup), weeklyLineup }
+            { nameof(Bowler), bowler }
         };
 
         await Shell.Current.GoToAsync(Routes.BowlerSwitch, navigationParameter);

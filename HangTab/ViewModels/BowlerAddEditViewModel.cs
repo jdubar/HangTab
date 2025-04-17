@@ -23,7 +23,7 @@ public partial class BowlerAddEditViewModel :
     IQueryAttributable,
     IRecipient<BowlerImageAddedOrChangedMessage>
 {
-    private readonly IBowlerService _bowlerService;
+    private readonly IPersonService _bowlerService;
     private readonly IDialogService _dialogService;
     private readonly INavigationService _navigationService;
     private readonly IMediaPickerService _mediaPickerService;
@@ -32,7 +32,7 @@ public partial class BowlerAddEditViewModel :
     private readonly AvatarSelectBottomSheet _avatarOptionsBottomSheet;
 
     public BowlerAddEditViewModel(
-        IBowlerService bowlerService,
+        IPersonService bowlerService,
         IDialogService dialogService,
         INavigationService navigationService,
         IMediaPickerService mediaPickerService,
@@ -51,7 +51,7 @@ public partial class BowlerAddEditViewModel :
         ErrorsChanged += AddBowlerViewModel_ErrorsChanged;
     }
 
-    private Bowler? _bowler;
+    private Person? _bowler;
 
     [ObservableProperty]
     private string _pageTitle = string.Empty;
@@ -99,7 +99,7 @@ public partial class BowlerAddEditViewModel :
             {
                 if (_bowler is null && Id > 0)
                 {
-                    _bowler = await _bowlerService.GetBowlerById(Id);
+                    _bowler = await _bowlerService.GetPersonById(Id);
                 }
 
                 if (_bowler is not null)
@@ -126,7 +126,7 @@ public partial class BowlerAddEditViewModel :
             return;
         }
 
-        if (await _bowlerService.DeleteBowler(_bowler.Id))
+        if (await _bowlerService.DeletePerson(_bowler.Id))
         {
             WeakReferenceMessenger.Default.Send(new BowlerDeletedMessage(_bowler.Id));
         }
@@ -175,7 +175,7 @@ public partial class BowlerAddEditViewModel :
         var bowler = MapDataToBowler();
         if (Id == 0)
         {
-            if (await _bowlerService.AddBowler(bowler))
+            if (await _bowlerService.AddPerson(bowler))
             {
                 WeakReferenceMessenger.Default.Send(new BowlerAddedOrChangedMessage(bowler.Id, bowler.IsSub));
             }
@@ -187,7 +187,7 @@ public partial class BowlerAddEditViewModel :
         }
         else
         {
-            if (await _bowlerService.UpdateBowler(bowler))
+            if (await _bowlerService.UpdatePerson(bowler))
             {
                 WeakReferenceMessenger.Default.Send(new BowlerAddedOrChangedMessage());
             }
@@ -208,9 +208,9 @@ public partial class BowlerAddEditViewModel :
 
     private bool CanSubmitBowler() => !HasErrors;
 
-    private Bowler MapDataToBowler()
+    private Person MapDataToBowler()
     {
-        return new Bowler
+        return new Person
         {
             Id = Id,
             Name = Name,
@@ -219,7 +219,7 @@ public partial class BowlerAddEditViewModel :
             IsSub = SelectedType == (int)BowlerType.Sub,
         };
     }    
-    private void MapBowler(Bowler? model)
+    private void MapBowler(Person? model)
     {
         if (model is not null)
         {
@@ -244,7 +244,7 @@ public partial class BowlerAddEditViewModel :
     {
         if (query.Count > 0)
         {
-            _bowler = query["Bowler"] as Bowler;
+            _bowler = query["Bowler"] as Person;
         }
     }
 

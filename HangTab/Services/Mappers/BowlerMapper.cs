@@ -4,9 +4,9 @@ using HangTab.ViewModels;
 namespace HangTab.Services.Mappers;
 internal static class BowlerMapper
 {
-    internal static Bowler MapBowlerListItemViewModelToBowler(this BowlerListItemViewModel bowlerListItemViewModel)
+    internal static Person MapBowlerListItemViewModelToBowler(this BowlerListItemViewModel bowlerListItemViewModel)
     {
-        return new Bowler
+        return new Person
         {
             Id = bowlerListItemViewModel.Id,
             Name = bowlerListItemViewModel.Name,
@@ -16,60 +16,60 @@ internal static class BowlerMapper
         };
     }
 
+    internal static List<BowlerListItemViewModel> MapBowlerToBowlerListItemViewModel(this IEnumerable<Person> people)
+    {
+        return people.Select(b => b.Map()).ToList();
+    }
+
     internal static List<BowlerListItemViewModel> MapBowlerToBowlerListItemViewModel(this IEnumerable<Bowler> bowlers)
     {
-        return bowlers.Select(b => b.Map()).ToList();
+        return bowlers.Select(wl => wl.MapBowlerToBowlerListItemViewModel()).ToList();
     }
 
-    internal static List<BowlerListItemViewModel> MapWeeklyLineupToBowlerListItemViewModel(this IEnumerable<WeeklyLineup> weeklyLineup)
+    internal static List<Bowler> MapPeopleToBowlers(this IEnumerable<Person> people)
     {
-        return weeklyLineup.Select(wl => wl.MapWeeklyLineupToBowlerListItemViewModel()).ToList();
-    }
-
-    internal static List<WeeklyLineup> MapBowlerToWeeklyLineup(this IEnumerable<Bowler> bowlers)
-    {
-        return bowlers.Select(b => new WeeklyLineup
+        return people.Select(b => new Bowler
         {
-            BowlerId = b.Id,
-            Bowler = b,
-            Status = Enums.BowlerStatus.Active,
+            PersonId = b.Id,
+            Person = b,
+            Status = Enums.Status.Active,
             HangCount = 0,
         }).ToList();
     }
 
-    internal static WeeklyLineup MapCurrentWeekListItemViewModelToBowler(this CurrentWeekListItemViewModel vm)
+    internal static Bowler MapCurrentWeekListItemViewModelToBowler(this CurrentWeekListItemViewModel vm)
     {
-        return new WeeklyLineup
+        return new Bowler
         {
-            Id = vm.WeeklyLineupId,
-            BowlerId = vm.BowlerId,
+            Id = vm.BowlerId,
+            PersonId = vm.PersonId,
             Status = vm.Status,
             HangCount = vm.HangCount,
         };
     }
 
-    private static BowlerListItemViewModel MapWeeklyLineupToBowlerListItemViewModel(this WeeklyLineup weeklyLineup)
+    private static BowlerListItemViewModel MapBowlerToBowlerListItemViewModel(this Bowler bowler)
     {
         return new BowlerListItemViewModel(
-            weeklyLineup.BowlerId,
-            weeklyLineup.Bowler.Name,
-            weeklyLineup.Bowler.IsInactive,
-            weeklyLineup.Bowler.IsSub,
-            weeklyLineup.HangCount,
-            weeklyLineup.Id,
-            weeklyLineup.Bowler.ImageUrl,
-            weeklyLineup.Status);
+            bowler.PersonId,
+            bowler.Person.Name,
+            bowler.Person.IsInactive,
+            bowler.Person.IsSub,
+            bowler.HangCount,
+            bowler.Id,
+            bowler.Person.ImageUrl,
+            bowler.Status);
     }
 
-    private static BowlerListItemViewModel Map(this Bowler bowler)
+    private static BowlerListItemViewModel Map(this Person person)
     {
         return new BowlerListItemViewModel(
-            bowler.Id,
-            bowler.Name,
-            bowler.IsInactive,
-            bowler.IsSub,
+            person.Id,
+            person.Name,
+            person.IsInactive,
+            person.IsSub,
             default,
             default,
-            bowler.ImageUrl);
+            person.ImageUrl);
     }
 }

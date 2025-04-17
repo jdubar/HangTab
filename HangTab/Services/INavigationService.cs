@@ -5,8 +5,8 @@ public interface INavigationService
 {
     Task GoBack();
     Task GoToAddBowler();
-    Task GoToEditBowler(Bowler bowler);
-    Task GoToSwitchBowler(WeeklyLineup weeklyLineup);
+    Task GoToEditBowler(Person person);
+    Task GoToSwitchBowler(Bowler bowler);
     Task GoToBowlerOverview();
     Task GoToCurrentWeekOverview();
     Task GoToSettings();

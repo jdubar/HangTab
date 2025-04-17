@@ -11,13 +11,13 @@ public partial class CurrentWeekListItemViewModel : ObservableObject
     private int _weekId;
 
     [ObservableProperty]
-    private int _weeklyLineupId;
-
-    [ObservableProperty]
     private int _bowlerId;
 
     [ObservableProperty]
-    private BowlerStatus _status;
+    private int _personId;
+
+    [ObservableProperty]
+    private Status _status;
 
     [ObservableProperty]
     private int _hangCount;
@@ -26,7 +26,7 @@ public partial class CurrentWeekListItemViewModel : ObservableObject
     {
         if (oldValue != newValue && newValue >= 0)
         {
-            WeakReferenceMessenger.Default.Send(new BowlerHangCountChangedMessage(BowlerId, newValue));
+            WeakReferenceMessenger.Default.Send(new BowlerHangCountChangedMessage(PersonId, newValue));
         }
     }
 
@@ -44,9 +44,9 @@ public partial class CurrentWeekListItemViewModel : ObservableObject
 
     public CurrentWeekListItemViewModel(
         int weekId,
-        int weeklyLineupId,
         int bowlerId,
-        BowlerStatus status,
+        int personId,
+        Status status,
         int hangCount,
         string name,
         string imageUrl,
@@ -54,8 +54,8 @@ public partial class CurrentWeekListItemViewModel : ObservableObject
         string initials)
     {
         WeekId = weekId;
-        WeeklyLineupId = weeklyLineupId;
         BowlerId = bowlerId;
+        PersonId = personId;
         Status = status;
         HangCount = hangCount;
         Name = name;

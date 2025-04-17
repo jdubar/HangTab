@@ -3,11 +3,10 @@
 namespace HangTab.Services;
 public interface IBowlerService
 {
-    Task<Bowler> GetBowlerById(int id);
-    Task<IEnumerable<Bowler>> GetAllBowlers();
-    Task<IEnumerable<Bowler>> GetRegularBowlers();
-    Task<IEnumerable<Bowler>> GetSubstituteBowlers();
     Task<bool> AddBowler(Bowler bowler);
-    Task<bool> DeleteBowler(int id); 
+    Task<IEnumerable<Bowler>> GetAllBowlersByWeekId(int id);
+    Task<IEnumerable<Bowler>> GetAllBowlers();
+    Task<Bowler> GetBowlerById(int id);
+    Task<IEnumerable<Bowler>> GetBowlersByWeekId(int weekId);
     Task<bool> UpdateBowler(Bowler bowler);
 }

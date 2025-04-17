@@ -7,16 +7,16 @@ public class BowlerStatusEnumToTextConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
-        if (value is not BowlerStatus type)
+        if (value is not Status type)
         {
             return string.Empty;
         }
 
         return type switch
         {
-            BowlerStatus.Active => "Active bowler",
-            BowlerStatus.Blind => "Blind bowler",
-            BowlerStatus.UsingSub => "Select a sub",
+            Status.Active => "Active bowler",
+            Status.Blind => "Blind bowler",
+            Status.UsingSub => "Select a sub",
             _ => string.Empty
         };
     }
