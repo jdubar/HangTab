@@ -21,9 +21,9 @@ namespace HangTab.ViewModels;
 public partial class BowlerAddEditViewModel :
     ViewModelBase,
     IQueryAttributable,
-    IRecipient<BowlerImageAddedOrChangedMessage>
+    IRecipient<PersonImageAddedOrChangedMessage>
 {
-    private readonly IPersonService _bowlerService;
+    private readonly IPersonService _personService;
     private readonly IDialogService _dialogService;
     private readonly INavigationService _navigationService;
     private readonly IMediaPickerService _mediaPickerService;
@@ -32,13 +32,13 @@ public partial class BowlerAddEditViewModel :
     private readonly AvatarSelectBottomSheet _avatarOptionsBottomSheet;
 
     public BowlerAddEditViewModel(
-        IPersonService bowlerService,
+        IPersonService personService,
         IDialogService dialogService,
         INavigationService navigationService,
         IMediaPickerService mediaPickerService,
         IPopupService popupService)
     {
-        _bowlerService = bowlerService;
+        _personService = personService;
         _dialogService = dialogService;
         _navigationService = navigationService;
         _mediaPickerService = mediaPickerService;
@@ -51,7 +51,7 @@ public partial class BowlerAddEditViewModel :
         ErrorsChanged += AddBowlerViewModel_ErrorsChanged;
     }
 
-    private Person? _bowler;
+    private Person? _person;
 
     [ObservableProperty]
     private string _pageTitle = string.Empty;
@@ -97,24 +97,24 @@ public partial class BowlerAddEditViewModel :
         await Loading(
             async () =>
             {
-                if (_bowler is null && Id > 0)
+                if (_person is null && Id > 0)
                 {
-                    _bowler = await _bowlerService.GetPersonById(Id);
+                    _person = await _personService.GetPersonById(Id);
                 }
 
-                if (_bowler is not null)
+                if (_person is not null)
                 {
                     IsExistingBowler = true;
                 }
 
-                MapBowler(_bowler);
+                MapPerson(_person);
             });
     }
 
     [RelayCommand]
-    private async Task DeleteBowler()
+    private async Task DeletePerson()
     {
-        if (_bowler is null)
+        if (_person is null)
         {
             await _dialogService.AlertAsync("Error", "No bowler selected to delete.", "Ok");
             return;
@@ -126,9 +126,9 @@ public partial class BowlerAddEditViewModel :
             return;
         }
 
-        if (await _bowlerService.DeletePerson(_bowler.Id))
+        if (await _personService.DeletePerson(_person.Id))
         {
-            WeakReferenceMessenger.Default.Send(new BowlerDeletedMessage(_bowler.Id));
+            WeakReferenceMessenger.Default.Send(new PersonDeletedMessage(_person.Id));
         }
         else
         {
@@ -172,12 +172,12 @@ public partial class BowlerAddEditViewModel :
             return;
         }
 
-        var bowler = MapDataToBowler();
+        var person = MapDataToPerson();
         if (Id == 0)
         {
-            if (await _bowlerService.AddPerson(bowler))
+            if (await _personService.AddPerson(person))
             {
-                WeakReferenceMessenger.Default.Send(new BowlerAddedOrChangedMessage(bowler.Id, bowler.IsSub));
+                WeakReferenceMessenger.Default.Send(new PersonAddedOrChangedMessage(person.Id, person.IsSub));
             }
             else
             {
@@ -187,9 +187,9 @@ public partial class BowlerAddEditViewModel :
         }
         else
         {
-            if (await _bowlerService.UpdatePerson(bowler))
+            if (await _personService.UpdatePerson(person))
             {
-                WeakReferenceMessenger.Default.Send(new BowlerAddedOrChangedMessage());
+                WeakReferenceMessenger.Default.Send(new PersonAddedOrChangedMessage());
             }
             else
             {
@@ -208,7 +208,7 @@ public partial class BowlerAddEditViewModel :
 
     private bool CanSubmitBowler() => !HasErrors;
 
-    private Person MapDataToBowler()
+    private Person MapDataToPerson()
     {
         return new Person
         {
@@ -219,7 +219,7 @@ public partial class BowlerAddEditViewModel :
             IsSub = SelectedType == (int)BowlerType.Sub,
         };
     }    
-    private void MapBowler(Person? model)
+    private void MapPerson(Person? model)
     {
         if (model is not null)
         {
@@ -244,11 +244,11 @@ public partial class BowlerAddEditViewModel :
     {
         if (query.Count > 0)
         {
-            _bowler = query["Bowler"] as Person;
+            _person = query["Person"] as Person;
         }
     }
 
-    public void Receive(BowlerImageAddedOrChangedMessage message)
+    public void Receive(PersonImageAddedOrChangedMessage message)
     {
         ImageUrl = message.ImageUrl;
         _avatarOptionsBottomSheet.DismissAsync();

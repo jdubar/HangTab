@@ -14,8 +14,8 @@ using System.Collections.ObjectModel;
 namespace HangTab.ViewModels;
 public partial class CurrentWeekOverviewViewModel :
     ViewModelBase,
-    IRecipient<BowlerAddedOrChangedMessage>,
-    IRecipient<BowlerDeletedMessage>,
+    IRecipient<PersonAddedOrChangedMessage>,
+    IRecipient<PersonDeletedMessage>,
     IRecipient<BowlerHangCountChangedMessage>
 {
     private readonly IAudioService _audioService;
@@ -40,8 +40,8 @@ public partial class CurrentWeekOverviewViewModel :
         _weekService = weekService;
         _bowlerService = bowlerService;
 
-        WeakReferenceMessenger.Default.Register<BowlerAddedOrChangedMessage>(this);
-        WeakReferenceMessenger.Default.Register<BowlerDeletedMessage>(this);
+        WeakReferenceMessenger.Default.Register<PersonAddedOrChangedMessage>(this);
+        WeakReferenceMessenger.Default.Register<PersonDeletedMessage>(this);
         WeakReferenceMessenger.Default.Register<BowlerHangCountChangedMessage>(this);
     }
 
@@ -175,7 +175,7 @@ public partial class CurrentWeekOverviewViewModel :
         }
     }
 
-    public async void Receive(BowlerAddedOrChangedMessage message)
+    public async void Receive(PersonAddedOrChangedMessage message)
     {
         if (message.Id > 0 && !message.IsSub)
         {
@@ -192,7 +192,7 @@ public partial class CurrentWeekOverviewViewModel :
         await GetCurrentWeek();
     }
 
-    public void Receive(BowlerDeletedMessage message)
+    public void Receive(PersonDeletedMessage message)
     {
         var deletedBowler = CurrentWeekBowlers.FirstOrDefault(b => b.BowlerId == message.Id);
         if (deletedBowler is not null)

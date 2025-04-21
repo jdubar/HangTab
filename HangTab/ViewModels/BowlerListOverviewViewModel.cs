@@ -13,8 +13,8 @@ using System.Collections.ObjectModel;
 namespace HangTab.ViewModels;
 public partial class BowlerListOverviewViewModel :
     ViewModelBase,
-    IRecipient<BowlerAddedOrChangedMessage>,
-    IRecipient<BowlerDeletedMessage>
+    IRecipient<PersonAddedOrChangedMessage>,
+    IRecipient<PersonDeletedMessage>
 {
     private readonly IPersonService _personService;
     private readonly INavigationService _navigationService;
@@ -29,8 +29,8 @@ public partial class BowlerListOverviewViewModel :
         _navigationService = navigationService;
         _weekService = weekService;
 
-        WeakReferenceMessenger.Default.Register<BowlerAddedOrChangedMessage>(this);
-        WeakReferenceMessenger.Default.Register<BowlerDeletedMessage>(this);
+        WeakReferenceMessenger.Default.Register<PersonAddedOrChangedMessage>(this);
+        WeakReferenceMessenger.Default.Register<PersonDeletedMessage>(this);
     }
 
     private IEnumerable<BowlerListItemViewModel> _allBowlers = [];
@@ -119,9 +119,9 @@ public partial class BowlerListOverviewViewModel :
         return Task.CompletedTask;
     }
 
-    public async void Receive(BowlerAddedOrChangedMessage message) => await UpdateBowlerList();
+    public async void Receive(PersonAddedOrChangedMessage message) => await UpdateBowlerList();
 
-    public async void Receive(BowlerDeletedMessage message) => await UpdateBowlerList();
+    public async void Receive(PersonDeletedMessage message) => await UpdateBowlerList();
 
     private async Task UpdateBowlerList()
     {

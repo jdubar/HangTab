@@ -15,7 +15,7 @@ public partial class AvatarSelectViewModel(
     {
         if (await dialogService.Ask("Delete", "Remove the bowler's profile image?"))
         {
-            WeakReferenceMessenger.Default.Send(new BowlerImageAddedOrChangedMessage(null));
+            WeakReferenceMessenger.Default.Send(new PersonImageAddedOrChangedMessage(null));
         }
     }
 
@@ -25,7 +25,7 @@ public partial class AvatarSelectViewModel(
         var photo = await mediaPickerService.TakePhotoAsync();
         if (!string.IsNullOrEmpty(photo))
         {
-            WeakReferenceMessenger.Default.Send(new BowlerImageAddedOrChangedMessage(photo));
+            WeakReferenceMessenger.Default.Send(new PersonImageAddedOrChangedMessage(photo));
         }
     }
 
@@ -35,7 +35,7 @@ public partial class AvatarSelectViewModel(
         var photo = await mediaPickerService.PickPhotoAsync();
         if (!string.IsNullOrEmpty(photo))
         {
-            WeakReferenceMessenger.Default.Send(new BowlerImageAddedOrChangedMessage(photo));
+            WeakReferenceMessenger.Default.Send(new PersonImageAddedOrChangedMessage(photo));
         }
     }
 }

@@ -62,7 +62,7 @@ public partial class SettingsViewModel(
         if (await databaseService.DropAllTables())
         {
             settingsService.CurrentWeekPrimaryKey = 0;
-            WeakReferenceMessenger.Default.Send(new BowlerAddedOrChangedMessage());
+            WeakReferenceMessenger.Default.Send(new PersonAddedOrChangedMessage());
             await dialogService.ToastAsync("All data has been deleted");
         }
         else
