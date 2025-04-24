@@ -91,8 +91,8 @@
             Grid.Row="2"
             Margin="10,0"
             ColumnDefinitions="Auto,*">
+            
             <Image
-                Grid.Column="0"
                 Margin="5,0">
                 <Image.Source>
                     <FontImageSource
@@ -102,17 +102,22 @@
                         Color="{DynamicResource TextPrimaryColor}" />
                 </Image.Source>
             </Image>
-            <Picker
+            
+            <!--Custom "picker" due to MAUI not themeing this control correctly-->
+            <Entry
                 Grid.Column="1"
-                Title="Select a bowler type"
-                ItemsSource="{Binding AllTypes}"
-                ItemDisplayBinding="{Binding .,Converter={StaticResource BowlerTypeEnumToTextConverter}}"
-                SelectedIndex="{Binding SelectedType}">
-                <Picker.GestureRecognizers>
+                ClearButtonVisibility="WhileEditing"
+                Placeholder="Select a bowler type"
+                IsReadOnly="True"
+                Text="{Binding SelectedTypeName}"
+                TextColor="{DynamicResource TextPrimaryColor}"
+                PlaceholderColor="{DynamicResource TextPrimaryColor}">
+                <Entry.GestureRecognizers>
                     <TapGestureRecognizer
                         Command="{Binding ShowBowlerTypePickerCommand}" />
-                </Picker.GestureRecognizers>
-            </Picker>
+                </Entry.GestureRecognizers>
+            </Entry>
+            
         </Grid>
         
         <!--Deactivate Bowler Switch-->
@@ -122,6 +127,7 @@
             Margin="10,0"
             VerticalOptions="Center"
             IsVisible="{Binding IsExistingBowler}">
+            
             <Image
                 Grid.Column="0"
                 Margin="5,0">
@@ -170,7 +176,7 @@
                 BackgroundColor="{DynamicResource Error}"
                 Text="Delete Bowler"
                 IsVisible="{Binding IsExistingBowler}"
-                Command="{Binding DeleteBowlerCommand}" />
+                Command="{Binding DeletePersonCommand}" />
         </StackLayout>
         
         <!--Submit Button-->

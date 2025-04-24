@@ -84,11 +84,12 @@ public partial class BowlerAddEditViewModel :
     [ObservableProperty]
     private bool _isExistingBowler;
 
-	[ObservableProperty]
-    [Required(ErrorMessage="Bowler type is a required field")]
-    [Range((int)BowlerType.Regular, (int)BowlerType.Sub, ErrorMessage="You must select a bowler type")]
+    private int selectedType = -1;
+
+    [ObservableProperty]
+    [Required(ErrorMessage = "Bowler type is a required field")]
     [NotifyDataErrorInfo]
-    private int _selectedType = -1;
+    private string _selectedTypeName = string.Empty;
 
     public IReadOnlyList<BowlerType> AllTypes { get; } = Enum.GetValues<BowlerType>().ToList();
     
@@ -152,15 +153,17 @@ public partial class BowlerAddEditViewModel :
     [RelayCommand]
     private async Task ShowBowlerTypePicker()
     {
-        var result = await _popupService.ShowPopupAsync<BowlerTypePopupViewModel>(onPresenting: vm => vm.RadioSubstituteOption = SelectedType == (int)BowlerType.Sub);
+        var result = await _popupService.ShowPopupAsync<BowlerTypePopupViewModel>(onPresenting: vm => vm.RadioSubstituteOption = selectedType == (int)BowlerType.Sub);
         if (result is null)
         {
             return;
         }
 
-        SelectedType = (bool)result
+        selectedType = (bool)result
             ? (int)BowlerType.Sub
             : (int)BowlerType.Regular;
+
+        UpdateSelectedTypeName();
     }
 
     [RelayCommand(CanExecute = nameof(CanSubmitBowler))]
@@ -216,7 +219,7 @@ public partial class BowlerAddEditViewModel :
             Name = Name,
             ImageUrl = ImageUrl,
             IsInactive = IsInactive,
-            IsSub = SelectedType == (int)BowlerType.Sub,
+            IsSub = selectedType == (int)BowlerType.Sub,
         };
     }    
     private void MapPerson(Person? model)
@@ -230,16 +233,25 @@ public partial class BowlerAddEditViewModel :
             IsSub = model.IsSub;
             Initials = model.Id > 0 ? model.Name.GetInitials() : string.Empty;
 
-            SelectedType = model.IsSub
+            selectedType = model.IsSub
                 ? (int)BowlerType.Sub
                 : (int)BowlerType.Regular;
+
+            UpdateSelectedTypeName();
         }
 
         PageTitle = Id > 0
             ? "Edit Bowler"
             : "Add Bowler";
     }
-        
+
+    private void UpdateSelectedTypeName()
+    {
+        SelectedTypeName = selectedType == (int)BowlerType.Sub
+            ? "Substitute"
+            : "Regular";
+    }
+
     public void ApplyQueryAttributes(IDictionary<string, object> query)
     {
         if (query.Count > 0)
