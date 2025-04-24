@@ -24,6 +24,7 @@
     <Color x:Key="IconColor">#FAFDFF</Color>
     <Color x:Key="AvatarBackgroundColor">#E0E0E0</Color>
     <Color x:Key="ControlShadowColor">#141414</Color>
+    <Color x:Key="ControlDisabledColor">#383843</Color>
     <Color x:Key="PickerTitleColor">#FAFDFD</Color><!--Needed due to how Android handles the placeholder text-->
     <Color x:Key="SearchBarBackgroundColor">Transparent</Color>
     

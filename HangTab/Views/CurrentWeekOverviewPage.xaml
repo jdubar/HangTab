@@ -2,6 +2,7 @@
 <views:ContentPageBase
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:HangTab.Views.Controls"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:views="clr-namespace:HangTab.Views"
     xmlns:vm="clr-namespace:HangTab.ViewModels"
@@ -59,16 +60,16 @@
 
                     <CollectionView.ItemTemplate>
                         <DataTemplate>
+
                             <Border
                                 Margin="5,2"
                                 Style="{StaticResource RoundedCornerBorder}">
                                 <Grid
                                     x:DataType="vm:CurrentWeekListItemViewModel"
                                     Padding="5"
-                                    ColumnDefinitions="Auto,*,Auto"
-                                    RowDefinitions="Auto,Auto">
+                                    ColumnDefinitions="Auto,*,Auto">
 
-                                    <!--Bowler Is A Substitute-->
+                                    <!--Only if the bowler is a sub-->
                                     <Border
                                         Style="{StaticResource Notification_Sub}"
                                         IsVisible="{Binding IsSub}"
@@ -90,34 +91,21 @@
                                         Text="{Binding Initials}"
                                         FontSize="20" />
                                 
-                                    <VerticalStackLayout
-                                        Grid.Row="0"
+                                    <!--Full Name-->
+                                    <Label
                                         Grid.Column="1"
-                                        VerticalOptions="Center">
-                                        <!--Full Name-->
-                                        <Label
-                                            FontSize="Large"
-                                            Text="{Binding Name}"
-                                            Style="{StaticResource BowlerName}" />
-
-                                        <!--Bowler Hangings Count-->
-                                        <Label
-                                            Text="{Binding HangCount, StringFormat='Hangings: {0}'}"
-                                            Style="{StaticResource Label_Hangings}" />
-                                    </VerticalStackLayout>
+                                        VerticalOptions="Center"
+                                        FontSize="Large"
+                                        Text="{Binding Name}"
+                                        Style="{StaticResource BowlerName}" />
                             
                                     <!--Hanging Stepper-->
-                                    <Stepper
-                                        Grid.Row="0"
+                                    <controls:Stepper 
                                         Grid.Column="2"
-                                        Grid.RowSpan="2"
-                                        WidthRequest="100"
-                                        VerticalOptions="Center"
-                                        Margin="10,0"
-                                        Minimum="0"
-                                        Value="{Binding HangCount, Mode=TwoWay}" />
+                                        Value="{Binding HangCount}" />
                                 </Grid>
                             </Border>
+                            
                         </DataTemplate>
                     </CollectionView.ItemTemplate>
                     
@@ -193,19 +181,15 @@
 
                         <Label
                             Grid.Column="1"
-                            Text="{Binding BusRides, StringFormat='Bus Rides: {0}'}"
+                            Text="Bus Rides"
                             Style="{StaticResource BusRides}" />
                 
                         <!--Bus Ride Stepper-->
-                        <Stepper
-                            Grid.Column="2"
-                            WidthRequest="100"
+                        <controls:Stepper 
+                            Grid.Column="3"
                             IsEnabled="{Binding BusRideStepperEnabled}"
-                            VerticalOptions="Center"
-                            HorizontalOptions="End"
-                            Margin="10,0"
-                            Minimum="0"
-                            Value="{Binding BusRides, Mode=TwoWay}" />
+                            Value="{Binding BusRides}" />
+
                     </Grid>
                 </Border>
             </Grid>

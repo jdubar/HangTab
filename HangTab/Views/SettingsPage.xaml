@@ -2,6 +2,7 @@
 <views:ContentPageBase
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:HangTab.Views.Controls"
     xmlns:views="clr-namespace:HangTab.Views"
     xmlns:vm="clr-namespace:HangTab.ViewModels"
     x:Class="HangTab.Views.SettingsPage"
@@ -39,24 +40,16 @@
                                 Color="{DynamicResource IconColor}" />
                         </Image.Source>
                     </Image>
-                    <VerticalStackLayout
+                    <Label
                         Grid.Column="1"
-                        VerticalOptions="Center">
-                        <Label
-                            Text="Weeks In The Season"
-                            TextColor="{DynamicResource TextPrimaryColor}" />
-                        <Label
-                            FontSize="Caption"
-                            Text="{Binding TotalSeasonWeeks}"
-                            TextColor="{DynamicResource TextPrimaryColor}" />
-                    </VerticalStackLayout>
-                    <Stepper
+                        VerticalOptions="Center"
+                        Text="Weeks In The Season"
+                        TextColor="{DynamicResource TextPrimaryColor}" />
+                    <controls:Stepper 
                         Grid.Column="3"
-                        Margin="15,0"
                         Minimum="1"
                         Maximum="52"
-                        WidthRequest="100"
-                        Value="{Binding TotalSeasonWeeks, Mode=TwoWay}"/>
+                        Value="{Binding TotalSeasonWeeks}" />
                 </Grid>
             </Border>
         
