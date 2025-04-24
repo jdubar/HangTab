@@ -55,7 +55,7 @@
     <Style x:Key="ErrorLabel" TargetType="Label">
         <Setter Property="FontSize" Value="12"/>
         <Setter Property="VerticalOptions" Value="Center"/>
-        <Setter Property="TextColor" Value="{DynamicResource Error}"/>
+        <Setter Property="TextColor" Value="{StaticResource Error}"/>
     </Style>
 
     <Style x:Key="Divider" TargetType="BoxView">
@@ -155,6 +155,30 @@
                     <VisualState x:Name="Off">
                         <VisualState.Setters>
                             <Setter Property="ThumbColor" Value="{DynamicResource PrimaryColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
+    </Style>
+    
+    <Style x:Key="StepperControl" TargetType="ImageButton">
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="WidthRequest" Value="40" />
+        <Setter Property="HeightRequest" Value="40" />
+        <Setter Property="Aspect" Value="Center" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource PrimaryColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource ControlDisabledColor}" />
                         </VisualState.Setters>
                     </VisualState>
                 </VisualStateGroup>
