@@ -14,9 +14,9 @@ internal static class WeekMapper
             wl.Status,
             wl.HangCount,
             wl.Person.Name,
-            wl.Person.ImageUrl ?? string.Empty,
             wl.Person.IsSub,
-            wl.Person.Name.GetInitials());
+            wl.Person.Name.GetInitials() ?? string.Empty, // Ensure initials are not null
+            wl.Person.ImageUrl);
     }
 
     internal static Bowler MapCurrentWeekListItemViewModelToBowler(this CurrentWeekListItemViewModel cw)

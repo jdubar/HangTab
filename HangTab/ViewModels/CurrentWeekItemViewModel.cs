@@ -49,9 +49,9 @@ public partial class CurrentWeekListItemViewModel : ObservableObject
         Status status,
         int hangCount,
         string name,
-        string imageUrl,
         bool isSub,
-        string initials)
+        string initials,
+        string? imageUrl = null)
     {
         WeekId = weekId;
         BowlerId = bowlerId;
@@ -59,8 +59,8 @@ public partial class CurrentWeekListItemViewModel : ObservableObject
         Status = status;
         HangCount = hangCount;
         Name = name;
-        ImageUrl = imageUrl;
         IsSub = isSub;
         Initials = initials;
+        ImageUrl = imageUrl;
     }
 }
