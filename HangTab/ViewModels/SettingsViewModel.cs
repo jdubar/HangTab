@@ -59,7 +59,7 @@ public partial class SettingsViewModel(
             return;
         }
 
-        if (await databaseService.DropAllTables())
+        if (await databaseService.DeleteAllTableData())
         {
             settingsService.CurrentWeekPrimaryKey = 0;
             WeakReferenceMessenger.Default.Send(new PersonAddedOrChangedMessage());

@@ -22,8 +22,18 @@ public class DatabaseContext : IDatabaseContext, IAsyncDisposable
     public async Task<bool> DeleteItemByIdAsync<TTable>(object id) where TTable : class, new() =>
         await Execute<TTable, bool>(async () => await Database.DeleteAsync<TTable>(id) > 0);
 
-    public async Task<bool> DropTableAsync<TTable>() where TTable : class, new() =>
-        await Execute<TTable, bool>(async () => await Database.DropTableAsync<TTable>() > 0);
+    public async Task<bool> DropTableAsync<TTable>() where TTable : class, new() => await Database.DropTableAsync<TTable>() > 0;
+
+    public async Task<bool> ResetTableAsync<TTable>() where TTable : class, new()
+    {
+        if (await DropTableAsync<TTable>())
+        {
+            await CreateTableIfNotExists<TTable>();
+            return true;
+        }
+
+        return false;
+    }
 
     public async Task<IEnumerable<TTable>> GetAllAsync<TTable>() where TTable : class, new()
     {

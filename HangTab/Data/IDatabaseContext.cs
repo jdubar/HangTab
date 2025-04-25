@@ -7,6 +7,7 @@ public interface IDatabaseContext
     Task<bool> DeleteItemAsync<TTable>(TTable item) where TTable : class, new();
     Task<bool> DeleteItemByIdAsync<TTable>(object id) where TTable : class, new();
     Task<bool> DropTableAsync<TTable>() where TTable : class, new();
+    Task<bool> ResetTableAsync<TTable>() where TTable : class, new();
     Task<IEnumerable<TTable>> GetAllAsync<TTable>() where TTable : class, new();
     Task<IEnumerable<TTable>> GetFilteredAsync<TTable>(Expression<Func<TTable, bool>> predicate) where TTable : class, new();
     Task<TTable> GetItemByIdAsync<TTable>(object id) where TTable : class, new();

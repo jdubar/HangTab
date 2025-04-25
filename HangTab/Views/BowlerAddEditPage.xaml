@@ -103,10 +103,9 @@
                 </Image.Source>
             </Image>
             
-            <!--Custom "picker" due to MAUI not themeing this control correctly-->
+            <!--Custom "picker" due to MAUI not themeing the native control correctly-->
             <Entry
                 Grid.Column="1"
-                ClearButtonVisibility="WhileEditing"
                 Placeholder="Select a bowler type"
                 IsReadOnly="True"
                 Text="{Binding SelectedTypeName}"
