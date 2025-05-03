@@ -16,6 +16,9 @@
     <Color x:Key="TextPrimaryColor">#424242</Color><!--Original color: #113B5E-->
     <Color x:Key="TextSecondaryColor">#6E6E6E</Color>
     
+    <Color x:Key="ControlDisabledColor">#575757</Color>
+    <Color x:Key="ControlDisabledTextColor">#6E6E6E</Color>
+
     <Color x:Key="PageBackgroundColor">#FAF9F6</Color>
     <Color x:Key="StatusBarColor">#0077B3</Color>
     <Color x:Key="SurfaceColor">White</Color>
@@ -24,7 +27,6 @@
     <Color x:Key="IconColor">#0077B3</Color>
     <Color x:Key="AvatarBackgroundColor">#E0E0E0</Color>
     <Color x:Key="ControlShadowColor">#ACACAC</Color>
-    <Color x:Key="ControlDisabledColor">#575757</Color>
     <Color x:Key="PickerTitleColor">#424241</Color><!--Needed due to how Android handles the placeholder text-->
     <Color x:Key="SearchBarBackgroundColor">White</Color>
 

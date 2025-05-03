@@ -113,6 +113,30 @@
         <Setter Property="CornerRadius" Value="20" />
         <Setter Property="HorizontalOptions" Value="Fill" />
         <Setter Property="TextColor" Value="{DynamicResource PrimaryContrastTextColor}" />
+        <Setter Property="VisualStateManager.VisualStateGroups">
+            <VisualStateGroupList>
+                <VisualStateGroup x:Name="CommonStates">
+                    <VisualState x:Name="Normal">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource PrimaryColor}" />
+                            <Setter Property="TextColor" Value="{DynamicResource PrimaryContrastTextColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Disabled">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource ControlDisabledColor}" />
+                            <Setter Property="TextColor" Value="{DynamicResource ControlDisabledTextColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                    <VisualState x:Name="Pressed">
+                        <VisualState.Setters>
+                            <Setter Property="BackgroundColor" Value="{DynamicResource SecondaryColor}" />
+                            <Setter Property="TextColor" Value="{DynamicResource PrimaryContrastTextColor}" />
+                        </VisualState.Setters>
+                    </VisualState>
+                </VisualStateGroup>
+            </VisualStateGroupList>
+        </Setter>
     </Style>
     
     <Style x:Key="SecondaryButton" TargetType="Button">

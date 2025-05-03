@@ -2,10 +2,14 @@ namespace HangTab.Views.Controls;
 
 public partial class Stepper : ContentView
 {
-	public Stepper()
+    // TODO: Set these 2 static values earlier, like in App.xaml.cs - create a utility class perhaps
+    private static Color PrimaryTextColor => Application.Current?.Resources["TextPrimaryColor"] as Color ?? Colors.Black;
+    private static Color DisabledTextColor => Application.Current?.Resources["ControlDisabledTextColor"] as Color ?? Colors.Gray;
+
+    public Stepper()
 	{
 		InitializeComponent();
-        DecreaseButton.IsEnabled = false;
+        SetDecreaseButtonState(this, false);
     }
 
     public int Value
@@ -41,8 +45,8 @@ public partial class Stepper : ContentView
         propertyChanged: (bindableObject, oldValue, newValue) =>
         {
             var stepper = (Stepper)bindableObject;
-            stepper.DecreaseButton.IsEnabled = (int)newValue > stepper.Minimum;
-            stepper.IncreaseButton.IsEnabled = (int)newValue < stepper.Maximum;
+            SetDecreaseButtonState(stepper, (int)newValue > stepper.Minimum);
+            SetIncreaseButtonState(stepper, (int)newValue < stepper.Maximum);
         }
     );
 
@@ -66,8 +70,8 @@ public partial class Stepper : ContentView
         propertyChanged: (bindableObject, oldValue, newValue) =>
         {
             var stepper = (Stepper)bindableObject;
-            stepper.DecreaseButton.IsEnabled = stepper.Value > stepper.Minimum && (bool)newValue;
-            stepper.IncreaseButton.IsEnabled = stepper.Value < stepper.Maximum && (bool)newValue;
+            SetDecreaseButtonState(stepper, stepper.Value > stepper.Minimum && (bool)newValue);
+            SetIncreaseButtonState(stepper, stepper.Value < stepper.Maximum && (bool)newValue);
         });
 
     private void OnMinusButtonClicked(object sender, EventArgs e)
@@ -86,5 +90,23 @@ public partial class Stepper : ContentView
         }
 
         Value++;
+    }
+
+    private static void SetDecreaseButtonState(Stepper stepper, bool isEnabled)
+    {
+        stepper.DecreaseButton.IsEnabled = isEnabled;
+        if (stepper.DecreaseButton.Source is FontImageSource buttonImage)
+        {
+            buttonImage.Color = isEnabled ? PrimaryTextColor : DisabledTextColor;
+        }
+    }
+
+    private static void SetIncreaseButtonState(Stepper stepper, bool isEnabled)
+    {
+        stepper.IncreaseButton.IsEnabled = isEnabled;
+        if (stepper.IncreaseButton.Source is FontImageSource buttonImage)
+        {
+            buttonImage.Color = isEnabled ? PrimaryTextColor : DisabledTextColor;
+        }
     }
 }
