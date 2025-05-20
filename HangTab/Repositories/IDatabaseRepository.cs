@@ -2,4 +2,5 @@
 public interface IDatabaseRepository
 {
     Task<bool> DeleteAllTableData();
+    Task InitializeDatabase();
 }
