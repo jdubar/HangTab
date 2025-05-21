@@ -2,9 +2,9 @@ using HangTab.ViewModels;
 
 namespace HangTab.Views;
 
-public partial class BowlerAddEditPage : ContentPageBase
+public partial class PersonAddEditPage : ContentPageBase
 {
-	public BowlerAddEditPage(BowlerAddEditViewModel vm)
+	public PersonAddEditPage(PersonAddEditViewModel vm)
 	{
 		InitializeComponent();
         BindingContext = vm;

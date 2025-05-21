@@ -86,6 +86,7 @@ public static class MauiProgram
         builder.Services.AddTransient<AvatarSelectViewModel>();
         builder.Services.AddTransient<BowlerAddEditViewModel>();
         builder.Services.AddTransient<BowlerSwitchViewModel>();
+        builder.Services.AddTransient<PersonAddEditViewModel>();
         return builder;
     }
 
@@ -95,7 +96,7 @@ public static class MauiProgram
         builder.Services.AddSingleton<CurrentWeekOverviewPage>();
         builder.Services.AddSingleton<SettingsPage>();
 
-        builder.Services.AddTransient<BowlerAddEditPage>();
+        builder.Services.AddTransient<PersonAddEditPage>();
         builder.Services.AddTransient<BowlerSwitchPage>();
         return builder;
     }

@@ -18,7 +18,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace HangTab.ViewModels;
-public partial class BowlerAddEditViewModel :
+public partial class PersonAddEditViewModel :
     ViewModelBase,
     IQueryAttributable,
     IRecipient<PersonImageAddedOrChangedMessage>
@@ -31,7 +31,7 @@ public partial class BowlerAddEditViewModel :
 
     private readonly AvatarSelectBottomSheet _avatarOptionsBottomSheet;
 
-    public BowlerAddEditViewModel(
+    public PersonAddEditViewModel(
         IPersonService personService,
         IDialogService dialogService,
         INavigationService navigationService,
@@ -71,9 +71,6 @@ public partial class BowlerAddEditViewModel :
 
     [ObservableProperty]
     private string _initials = string.Empty;
-
-    [ObservableProperty]
-    private bool _isInactive;
 
     [ObservableProperty]
     private bool _isSub;
@@ -218,7 +215,6 @@ public partial class BowlerAddEditViewModel :
             Id = Id,
             Name = Name,
             ImageUrl = ImageUrl,
-            IsInactive = IsInactive,
             IsSub = selectedType == (int)BowlerType.Sub,
         };
     }    
@@ -229,7 +225,6 @@ public partial class BowlerAddEditViewModel :
             Id = model.Id;
             Name = model.Name;
             ImageUrl = model.ImageUrl;
-            IsInactive = model.IsInactive;
             IsSub = model.IsSub;
             Initials = model.Id > 0 ? model.Name.GetInitials() : string.Empty;
 

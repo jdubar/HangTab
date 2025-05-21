@@ -7,8 +7,8 @@
     xmlns:converters="clr-namespace:HangTab.Converters"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
     xmlns:dataAnnotations="clr-namespace:System.ComponentModel.DataAnnotations;assembly=System.ComponentModel.Annotations"
-    x:Class="HangTab.Views.BowlerAddEditPage"
-    x:DataType="vm:BowlerAddEditViewModel">
+    x:Class="HangTab.Views.PersonAddEditPage"
+    x:DataType="vm:PersonAddEditViewModel">
     
     <ContentPage.Resources>
         <converters:BowlerTypeEnumToTextConverter x:Key="BowlerTypeEnumToTextConverter" />
@@ -126,29 +126,6 @@
             Margin="10,0"
             VerticalOptions="Center"
             IsVisible="{Binding IsExistingBowler}">
-            
-            <Image
-                Grid.Column="0"
-                Margin="5,0">
-                <Image.Source>
-                    <FontImageSource
-                        FontFamily="MaterialIcons"
-                        Glyph="{StaticResource person_off}"
-                        Size="30"
-                        Color="{DynamicResource TextPrimaryColor}" />
-                </Image.Source>
-            </Image>
-            
-            <Label
-                Grid.Column="1"
-                Text="Deactivate bowler"
-                FontAttributes="Bold"
-                VerticalOptions="Center"
-                TextColor="{DynamicResource TextPrimaryColor}"/>
-            <Switch
-                Grid.Column="3"
-                IsToggled="{Binding IsInactive, Mode=TwoWay}"
-                HorizontalOptions="End" />
         </Grid>
                     
         <!--Validation Errors List-->

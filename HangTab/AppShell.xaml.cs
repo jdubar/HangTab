@@ -9,8 +9,8 @@ public partial class AppShell : Shell
     {
         InitializeComponent();
 
-        Routing.RegisterRoute(Routes.BowlerAdd, typeof(BowlerAddEditPage));
-        Routing.RegisterRoute(Routes.BowlerEdit, typeof(BowlerAddEditPage));
+        Routing.RegisterRoute(Routes.BowlerAdd, typeof(PersonAddEditPage));
+        Routing.RegisterRoute(Routes.BowlerEdit, typeof(PersonAddEditPage));
         Routing.RegisterRoute(Routes.BowlerSwitch, typeof(BowlerSwitchPage));
     }
 }
