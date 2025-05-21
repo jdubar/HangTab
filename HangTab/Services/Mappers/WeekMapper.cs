@@ -34,7 +34,6 @@ internal static class WeekMapper
                 Name = cw.Name,
                 ImageUrl = cw.ImageUrl,
                 IsSub = cw.IsSub,
-                IsInactive = false,
             },
         };
     }

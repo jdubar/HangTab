@@ -10,7 +10,6 @@ internal static class BowlerMapper
         {
             Id = bowlerListItemViewModel.Id,
             Name = bowlerListItemViewModel.Name,
-            IsInactive = bowlerListItemViewModel.IsInactive,
             IsSub = bowlerListItemViewModel.IsSub,
             ImageUrl = bowlerListItemViewModel.ImageUrl,
         };
@@ -53,7 +52,6 @@ internal static class BowlerMapper
         return new BowlerListItemViewModel(
             bowler.PersonId,
             bowler.Person.Name,
-            bowler.Person.IsInactive,
             bowler.Person.IsSub,
             bowler.HangCount,
             bowler.Id,
@@ -66,7 +64,6 @@ internal static class BowlerMapper
         return new BowlerListItemViewModel(
             person.Id,
             person.Name,
-            person.IsInactive,
             person.IsSub,
             default,
             default,
