@@ -1,15 +1,13 @@
+using HangTab.Utilities;
+
 namespace HangTab.Views.Controls;
 
 public partial class Stepper : ContentView
 {
-    // TODO: Set these 2 static values earlier, like in App.xaml.cs - create a utility class perhaps
-    private static Color PrimaryTextColor => Application.Current?.Resources["TextPrimaryColor"] as Color ?? Colors.Black;
-    private static Color DisabledTextColor => Application.Current?.Resources["ControlDisabledTextColor"] as Color ?? Colors.Gray;
-
     public Stepper()
 	{
 		InitializeComponent();
-        SetDecreaseButtonState(this, false);
+        SetDecreaseButtonState(false);
     }
 
     public int Value
@@ -45,8 +43,11 @@ public partial class Stepper : ContentView
         propertyChanged: (bindableObject, oldValue, newValue) =>
         {
             var stepper = (Stepper)bindableObject;
-            SetDecreaseButtonState(stepper, (int)newValue > stepper.Minimum);
-            SetIncreaseButtonState(stepper, (int)newValue < stepper.Maximum);
+            if (stepper.IsControlEnabled)
+            {
+                stepper.SetDecreaseButtonState((int)newValue > stepper.Minimum);
+                stepper.SetIncreaseButtonState((int)newValue < stepper.Maximum);
+            }
         }
     );
 
@@ -70,8 +71,16 @@ public partial class Stepper : ContentView
         propertyChanged: (bindableObject, oldValue, newValue) =>
         {
             var stepper = (Stepper)bindableObject;
-            SetDecreaseButtonState(stepper, stepper.Value > stepper.Minimum && (bool)newValue);
-            SetIncreaseButtonState(stepper, stepper.Value < stepper.Maximum && (bool)newValue);
+            if ((bool)newValue)
+            {
+                stepper.SetDecreaseButtonState(stepper.Value > stepper.Minimum);
+                stepper.SetIncreaseButtonState(stepper.Value < stepper.Maximum);
+            }
+            else
+            {
+                stepper.SetDecreaseButtonState(false);
+                stepper.SetIncreaseButtonState(false);
+            }
         });
 
     private void OnMinusButtonClicked(object sender, EventArgs e)
@@ -92,21 +101,21 @@ public partial class Stepper : ContentView
         Value++;
     }
 
-    private static void SetDecreaseButtonState(Stepper stepper, bool isEnabled)
+    private void SetDecreaseButtonState(bool isEnabled)
     {
-        stepper.DecreaseButton.IsEnabled = isEnabled;
-        if (stepper.DecreaseButton.Source is FontImageSource buttonImage)
+        DecreaseButton.IsEnabled = isEnabled;
+        if (DecreaseButton.Source is FontImageSource buttonImage)
         {
-            buttonImage.Color = isEnabled ? PrimaryTextColor : DisabledTextColor;
+            buttonImage.Color = isEnabled ? TextColor.PrimaryTextColor : TextColor.DisabledTextColor;
         }
     }
 
-    private static void SetIncreaseButtonState(Stepper stepper, bool isEnabled)
+    private void SetIncreaseButtonState(bool isEnabled)
     {
-        stepper.IncreaseButton.IsEnabled = isEnabled;
-        if (stepper.IncreaseButton.Source is FontImageSource buttonImage)
+        IncreaseButton.IsEnabled = isEnabled;
+        if (IncreaseButton.Source is FontImageSource buttonImage)
         {
-            buttonImage.Color = isEnabled ? PrimaryTextColor : DisabledTextColor;
+            buttonImage.Color = isEnabled ? TextColor.PrimaryTextColor : TextColor.DisabledTextColor;
         }
     }
 }

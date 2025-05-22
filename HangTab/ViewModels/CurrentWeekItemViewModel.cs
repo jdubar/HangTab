@@ -17,6 +17,7 @@ public partial class CurrentWeekListItemViewModel : ObservableObject
     private int _personId;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(EnableStepper))]
     private Status _status;
 
     [ObservableProperty]
@@ -41,6 +42,8 @@ public partial class CurrentWeekListItemViewModel : ObservableObject
 
     [ObservableProperty]
     private string _initials;
+
+    public bool EnableStepper => Status is not Status.Blind;
 
     public CurrentWeekListItemViewModel(
         int weekId,

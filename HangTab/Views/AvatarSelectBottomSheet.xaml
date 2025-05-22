@@ -7,7 +7,8 @@
     x:Class="HangTab.Views.AvatarSelectBottomSheet"
     x:DataType="vm:AvatarSelectViewModel"
     HasBackdrop="True"
-    HasHandle="True">
+    HasHandle="True"
+    BackgroundColor="{DynamicResource PageBackgroundColor}">
     
     <VerticalStackLayout
         Spacing="16">
@@ -19,6 +20,7 @@
             <Label
                 Grid.Column="1"
                 Text="Bowler photo"
+                TextColor="{DynamicResource TextPrimaryColor}"
                 FontAttributes="Bold"
                 FontSize="20"
                 HorizontalOptions="Center"
@@ -40,7 +42,7 @@
                 Command="{Binding SelectBowlerImageFromCameraCommand}">
                 <ImageButton.Source>
                     <FontImageSource
-                        Color="{DynamicResource PrimaryColor}"
+                        Color="{DynamicResource IconColor}"
                         FontFamily="MaterialIcons"
                         Glyph="{StaticResource photo_camera}"
                         Size="40"/>
@@ -57,7 +59,7 @@
                 Command="{Binding SelectBowlerImageFromGalleryCommand}">
                 <ImageButton.Source>
                     <FontImageSource
-                        Color="{DynamicResource PrimaryColor}"
+                        Color="{DynamicResource IconColor}"
                         FontFamily="MaterialIcons"
                         Glyph="{StaticResource image}"
                         Size="40"/>
@@ -74,7 +76,7 @@
                 Command="{Binding DeleteBowlerImageCommand}">
                 <ImageButton.Source>
                     <FontImageSource
-                        Color="{DynamicResource PrimaryColor}"
+                        Color="{DynamicResource IconColor}"
                         FontFamily="MaterialIcons"
                         Glyph="{StaticResource delete}"
                         Size="40"/>
@@ -92,12 +94,14 @@
             <Label
                 Grid.Column="0"
                 Text="Camera"
+                TextColor="{DynamicResource TextPrimaryColor}"
                 HorizontalOptions="Center" />
             
             <!--Gallery Label-->
             <Label
                 Grid.Column="1"
                 Text="Gallery"
+                TextColor="{DynamicResource TextPrimaryColor}"
                 HorizontalOptions="Center"
                 VerticalOptions="Center" />
             
@@ -105,6 +109,7 @@
             <Label
                 Grid.Column="2"
                 Text="Delete"
+                TextColor="{DynamicResource TextPrimaryColor}"
                 HorizontalOptions="Center"
                 VerticalOptions="Center" />
         </Grid>

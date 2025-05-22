@@ -55,21 +55,6 @@
                                     Grid.Row="0"
                                     Grid.RowSpan="2">
                                     
-                                    <!--Bowler Inactive Dot--><!--
-                                    <Border
-                                        Style="{StaticResource NotificationDot_Inactive}"
-                                        IsVisible="{Binding IsInactive}"
-                                        ZIndex="2">
-                                        <Image>
-                                            <Image.Source>
-                                                <FontImageSource
-                                                    FontFamily="MaterialIcons"
-                                                    Glyph="{StaticResource close}"
-                                                    Color="{StaticResource White}"/>
-                                            </Image.Source>
-                                        </Image>
-                                    </Border>-->
-                                    
                                     <!--Bowler Is A Substitute-->
                                     <Border
                                         Style="{StaticResource Notification_Sub}"

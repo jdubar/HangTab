@@ -16,7 +16,8 @@ public partial class CurrentWeekOverviewViewModel :
     ViewModelBase,
     IRecipient<PersonAddedOrChangedMessage>,
     IRecipient<PersonDeletedMessage>,
-    IRecipient<BowlerHangCountChangedMessage>
+    IRecipient<BowlerHangCountChangedMessage>,
+    IRecipient<SystemResetMessage>
 {
     private readonly IAudioService _audioService;
     private readonly IDialogService _dialogService;
@@ -43,6 +44,7 @@ public partial class CurrentWeekOverviewViewModel :
         WeakReferenceMessenger.Default.Register<PersonAddedOrChangedMessage>(this);
         WeakReferenceMessenger.Default.Register<PersonDeletedMessage>(this);
         WeakReferenceMessenger.Default.Register<BowlerHangCountChangedMessage>(this);
+        WeakReferenceMessenger.Default.Register<SystemResetMessage>(this);
     }
 
     [ObservableProperty]
@@ -74,7 +76,7 @@ public partial class CurrentWeekOverviewViewModel :
     private Week CurrentWeek { get; set; } = new Week();
 
     [ObservableProperty]
-    private string _pageTitle = string.Empty;
+    private string _pageTitle = "Week 1";
 
     [ObservableProperty]
     private int _teamHangTotal;
@@ -97,17 +99,9 @@ public partial class CurrentWeekOverviewViewModel :
     [ObservableProperty]
     private bool _playBusRideAnimation;
 
-    // TODO: Add Complete Week (submit) relay command
+    public bool LoadingComplete => !IsLoading;
 
-    [RelayCommand]
-    private async Task NavigateToSwitchSelectedBowler()
-    {
-        if (SelectedBowler is not null)
-        {
-            await _navigationService.GoToSwitchBowler(WeekMapper.MapCurrentWeekListItemViewModelToBowler(SelectedBowler));
-            SelectedBowler = null;
-        }
-    }
+    // TODO: Add Complete Week (submit) relay command
 
     public override async Task LoadAsync()
     {
@@ -132,7 +126,7 @@ public partial class CurrentWeekOverviewViewModel :
             if (CurrentWeek.Bowlers.Count > 0)
             {
                 CurrentWeekBowlers.Clear();
-                CurrentWeekBowlers = WeekMapper.MapBowlerToBowlerListItemViewModel(CurrentWeek.Bowlers.Where(b => !b.Person.IsInactive)).ToObservableCollection();
+                CurrentWeekBowlers = WeekMapper.MapBowlerToBowlerListItemViewModel(CurrentWeek.Bowlers).ToObservableCollection();
             }
 
             MapWeekData(CurrentWeek);
@@ -146,7 +140,46 @@ public partial class CurrentWeekOverviewViewModel :
         return week;
     }
 
+    [RelayCommand]
+    private async Task SetBowlerStatusToActive(CurrentWeekListItemViewModel? vm) => await SetBowlerStatus(vm, Enums.Status.Active);
+
+    [RelayCommand]
+    private async Task SetBowlerStatusToBlind(CurrentWeekListItemViewModel? vm) => await SetBowlerStatus(vm, Enums.Status.Blind);
+
+    [RelayCommand]
+    private async Task SetBowlerStatusToUsingSub(CurrentWeekListItemViewModel? vm)
+    {
+        if (vm is null)
+        {
+            return;
+        }
+        // TODO: Finish this command
+        await _navigationService.GoToSelectSub(WeekMapper.MapCurrentWeekListItemViewModelToBowler(vm));
+        await SetBowlerStatus(vm, Enums.Status.UsingSub);
+    }
+
     // TODO: Add submit command with confirmation dialog
+
+    private async Task SetBowlerStatus(CurrentWeekListItemViewModel? vm, Enums.Status status)
+    {
+        if (vm is null)
+        {
+            return;
+        }
+
+        CurrentWeekBowlers.First(b => b.BowlerId == vm.BowlerId).Status = status;
+        await _bowlerService.UpdateBowler(WeekMapper.MapCurrentWeekListItemViewModelToBowler(vm));
+        await GetCurrentWeek();
+    }
+
+    public async void Receive(SystemResetMessage message)
+    {
+        CurrentWeekBowlers.Clear();
+        TeamHangTotal = 0;
+        IsEnableCompleteWeek = false;
+        PageTitle = "Week 1";
+        await GetCurrentWeek();
+    }
 
     public async void Receive(BowlerHangCountChangedMessage message)
     {
@@ -177,7 +210,7 @@ public partial class CurrentWeekOverviewViewModel :
 
     public async void Receive(PersonAddedOrChangedMessage message)
     {
-        if (message.Id > 0 && !message.IsSub)
+        if (message.Id > 0 && !message.IsSub && !CurrentWeekBowlers.Any(b => b.PersonId == message.Id))
         {
             var bowler = new Bowler
             {

@@ -15,9 +15,6 @@ public partial class BowlerListItemViewModel : ObservableObject
     private string _name = string.Empty;
 
     [ObservableProperty]
-    private bool _isInactive;
-
-    [ObservableProperty]
     private bool _isSub;
 
     [ObservableProperty]
@@ -46,7 +43,6 @@ public partial class BowlerListItemViewModel : ObservableObject
     public BowlerListItemViewModel(
         int id,
         string name,
-        bool isInactive,
         bool isSub,
         int bowlerId = 0,
         int hangings = 0,
@@ -55,7 +51,6 @@ public partial class BowlerListItemViewModel : ObservableObject
     {
         Id = id;
         Name = name;
-        IsInactive = isInactive;
         IsSub = isSub;
         BowlerId = bowlerId;
         Hangings = hangings;

@@ -23,15 +23,15 @@ public class ThemeService : IThemeService
         {
             if (theme == Theme.Dark)
             {
-                Application.Current.UserAppTheme = AppTheme.Dark;
                 mergedDictionaries.Remove(LightTheme);
                 mergedDictionaries.Add(DarkTheme);
+                Application.Current.UserAppTheme = AppTheme.Dark;
             }
             else
             {
-                Application.Current.UserAppTheme = AppTheme.Light;
                 mergedDictionaries.Remove(DarkTheme);
                 mergedDictionaries.Add(LightTheme);
+                Application.Current.UserAppTheme = AppTheme.Light;
             }
         }
     }

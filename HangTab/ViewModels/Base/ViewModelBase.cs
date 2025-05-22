@@ -7,6 +7,9 @@ public partial class ViewModelBase : ObservableValidator, IViewModelBase
     [ObservableProperty]
     private bool _isLoading;
 
+    [ObservableProperty]
+    private string _loadingText = "Processing...";
+
     public IAsyncRelayCommand InitializeAsyncCommand { get; }
 
     public ViewModelBase()

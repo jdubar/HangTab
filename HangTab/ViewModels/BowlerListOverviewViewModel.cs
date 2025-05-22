@@ -14,7 +14,8 @@ namespace HangTab.ViewModels;
 public partial class BowlerListOverviewViewModel :
     ViewModelBase,
     IRecipient<PersonAddedOrChangedMessage>,
-    IRecipient<PersonDeletedMessage>
+    IRecipient<PersonDeletedMessage>,
+    IRecipient<SystemResetMessage>
 {
     private readonly IPersonService _personService;
     private readonly INavigationService _navigationService;
@@ -31,6 +32,7 @@ public partial class BowlerListOverviewViewModel :
 
         WeakReferenceMessenger.Default.Register<PersonAddedOrChangedMessage>(this);
         WeakReferenceMessenger.Default.Register<PersonDeletedMessage>(this);
+        WeakReferenceMessenger.Default.Register<SystemResetMessage>(this);
     }
 
     private IEnumerable<BowlerListItemViewModel> _allBowlers = [];
@@ -55,7 +57,6 @@ public partial class BowlerListOverviewViewModel :
 
     [ObservableProperty]
     private string _searchText = string.Empty;
-    // TODO: Add inactive notification to bowlers
     partial void OnSearchTextChanged(string value)
     {
         if (string.IsNullOrEmpty(value))
@@ -117,6 +118,12 @@ public partial class BowlerListOverviewViewModel :
         Bowlers.Clear();
         Bowlers = AllBowlers.Where(b => b.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)).ToObservableCollection();
         return Task.CompletedTask;
+    }
+
+    public void Receive(SystemResetMessage message)
+    {
+        Bowlers.Clear();
+        AllBowlers = [];
     }
 
     public async void Receive(PersonAddedOrChangedMessage message) => await UpdateBowlerList();

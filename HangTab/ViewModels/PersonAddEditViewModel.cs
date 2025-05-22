@@ -118,22 +118,19 @@ public partial class PersonAddEditViewModel :
             return;
         }
 
-        var result = await _popupService.ShowPopupAsync<DeleteBowlerPopupViewModel>();
-        if (result is null)
+        if (await _dialogService.Ask("Delete", "Are you sure you want to delete this bowler?"))
         {
-            return;
-        }
+            if (await _personService.DeletePerson(_person.Id))
+            {
+                WeakReferenceMessenger.Default.Send(new PersonDeletedMessage(_person.Id));
+            }
+            else
+            {
+                await _dialogService.AlertAsync("Critical Error", "Error occurred while deleting the bowler!", "Ok");
+            }
 
-        if (await _personService.DeletePerson(_person.Id))
-        {
-            WeakReferenceMessenger.Default.Send(new PersonDeletedMessage(_person.Id));
+            await _navigationService.GoBack();
         }
-        else
-        {
-            await _dialogService.AlertAsync("Critical Error", "Error occurred while deleting the bowler!", "Ok");
-        }
-
-        await _navigationService.GoBack();
     }
 
     [RelayCommand]
