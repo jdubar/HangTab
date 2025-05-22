@@ -10,4 +10,5 @@ public interface INavigationService
     Task GoToBowlerOverview();
     Task GoToCurrentWeekOverview();
     Task GoToSettings();
+    Task GoToSelectSub(Bowler bowler);
 }

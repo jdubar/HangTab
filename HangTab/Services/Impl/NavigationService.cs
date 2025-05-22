@@ -28,6 +28,16 @@ public class NavigationService : INavigationService
         await Shell.Current.GoToAsync(Routes.BowlerSwitch, navigationParameter);
     }
 
+    public async Task GoToSelectSub(Bowler bowler)
+    {
+        var navigationParameter = new ShellNavigationQueryParameters
+        {
+            { nameof(Bowler), bowler }
+        };
+
+        await Shell.Current.GoToAsync(Routes.BowlerSelectSub, navigationParameter);
+    }
+
     public Task GoToBowlerOverview() => Shell.Current.GoToAsync(Routes.BowlerOverview);
     public Task GoToCurrentWeekOverview() => Shell.Current.GoToAsync(Routes.CurrentWeekOverview);
     public Task GoToSettings() => Shell.Current.GoToAsync(Routes.Settings);
