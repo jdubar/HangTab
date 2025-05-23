@@ -89,7 +89,8 @@
 		<PackageReference Include="CommunityToolkit.Maui" Version="[11.1.0]" />
 		<PackageReference Include="CommunityToolkit.Mvvm" Version="[8.3.2]" />
 		<PackageReference Include="Microsoft.Maui.Controls" Version="[9.0.40]" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.3" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.5" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Plugin.Maui.Audio" Version="3.1.1" />
 		<PackageReference Include="sqlite-net-pcl" Version="1.9.172" />
 		<PackageReference Include="SQLiteNetExtensions" Version="2.1.0" />
@@ -110,11 +111,20 @@
 		<MauiXaml Update="Themes\LightTheme.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\AvatarSelectBottomSheet.xaml">
+		<MauiXaml Update="Views\BottomSheets\AvatarSelectBottomSheet.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\BowlerAddEditPage.xaml">
+		<MauiXaml Update="Views\Controls\EmptyCollectionMessage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Controls\LoadingIndicator.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Controls\UserImage.xaml">
 			<Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\PersonAddEditPage.xaml">
+		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\BowlerOverviewPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
@@ -131,13 +141,7 @@
 		<MauiXaml Update="Views\Popups\BowlerTypePopup.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\Popups\DataResetPopUp.xaml">
-		  <Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Views\Popups\DeleteBowlerPopup.xaml">
-		  <Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
-		<MauiXaml Update="Views\Popups\StartNewSeasonPopup.xaml">
+		<MauiXaml Update="Views\BowlerSelectSubPage.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\SettingsPage.xaml">

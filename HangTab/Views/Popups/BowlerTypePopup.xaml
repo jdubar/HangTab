@@ -19,9 +19,7 @@
         
         <ControlTemplate
             x:Key="RadioButtonTemplate">
-            <Border
-                Stroke="Transparent"
-                BackgroundColor="Transparent">
+            <Grid>
                 <VisualStateManager.VisualStateGroups>
                     <VisualStateGroupList>
                         <VisualStateGroup x:Name="CheckedStates">
@@ -46,9 +44,16 @@
                 </VisualStateManager.VisualStateGroups>
                 
                 <Grid
-                    ColumnDefinitions="50,Auto">
-                    <Grid
+                    ColumnDefinitions="*,Auto">
+                    
+                    <ContentPresenter
                         Grid.Column="0"
+                        Margin="10,0,0,0"
+                        HorizontalOptions="Start"
+                        VerticalOptions="Center" />
+                    
+                    <Grid
+                        Grid.Column="1"
                         WidthRequest="40"
                         HeightRequest="40"
                         VerticalOptions="Center"
@@ -73,13 +78,8 @@
                             Color="{DynamicResource PrimaryColor}" />
                         
                     </Grid>
-                    <ContentPresenter
-                        Grid.Column="1"
-                        Margin="10,0,0,0"
-                        HorizontalOptions="Start"
-                        VerticalOptions="Center" />
                 </Grid>
-            </Border>
+            </Grid>
         </ControlTemplate>
 
         <Style TargetType="RadioButton">
@@ -116,19 +116,31 @@
         
         <RadioButton
             Margin="10,0"
-            Content="Regular bowler"
             IsChecked="{Binding RadioRegularOption}"
-            TextColor="{DynamicResource TextPrimaryColor}" />
+            TextColor="{DynamicResource TextPrimaryColor}">
+            <RadioButton.Content>
+                <Label
+                    Text="Regular Bowler"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center" />
+            </RadioButton.Content>
+        </RadioButton>
         
         <RadioButton
             Margin="10,0,10,10"
-            Content="Substitute bowler"
             IsChecked="{Binding RadioSubstituteOption}"
-            TextColor="{DynamicResource TextPrimaryColor}" />
+            TextColor="{DynamicResource TextPrimaryColor}">
+            <RadioButton.Content>
+                <Label
+                    Text="Substitute Bowler"
+                    HorizontalOptions="Start"
+                    VerticalOptions="Center" />
+            </RadioButton.Content>
+        </RadioButton>
         
         <Button
-            Text="Save"
-            Margin="10,0"
+            Text="Done"
+            Margin="10,10,10,0"
             Command="{Binding SaveBowlerTypeCommand}"
             Style="{StaticResource PrimaryButton}" />
     </VerticalStackLayout>

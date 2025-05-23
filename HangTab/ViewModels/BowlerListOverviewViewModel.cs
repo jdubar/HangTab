@@ -89,8 +89,6 @@ public partial class BowlerListOverviewViewModel :
         {
             await Loading(GetBowlers);
         }
-
-        await UpdateBowlerHangCounts();
     }
 
     private async Task GetBowlers()
@@ -101,6 +99,8 @@ public partial class BowlerListOverviewViewModel :
             Bowlers.Clear();
             AllBowlers = people.OrderBy(b => b.Name).MapBowlerToBowlerListItemViewModel();
             Bowlers = AllBowlers.ToObservableCollection();
+
+            await UpdateBowlerHangCounts();
         }
     }
 
@@ -133,13 +133,7 @@ public partial class BowlerListOverviewViewModel :
         AllBowlers = [];
     }
 
-    public async void Receive(PersonAddedOrChangedMessage message) => await UpdateBowlerList();
+    public async void Receive(PersonAddedOrChangedMessage message) => await GetBowlers();
 
-    public async void Receive(PersonDeletedMessage message) => await UpdateBowlerList();
-
-    private async Task UpdateBowlerList()
-    {
-        Bowlers.Clear();
-        await GetBowlers();
-    }
+    public async void Receive(PersonDeletedMessage message) => await GetBowlers();
 }

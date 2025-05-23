@@ -7,6 +7,7 @@ using HangTab.Repositories.Impl;
 using HangTab.Services;
 using HangTab.Services.Impl;
 using HangTab.ViewModels;
+using HangTab.ViewModels.BottomSheets;
 using HangTab.ViewModels.Popups;
 using HangTab.Views;
 using HangTab.Views.Popups;
@@ -105,9 +106,6 @@ public static class MauiProgram
     private static MauiAppBuilder RegisterPopups(this MauiAppBuilder builder)
     {
         builder.Services.AddTransientPopup<BowlerTypePopup, BowlerTypePopupViewModel>();
-        builder.Services.AddTransientPopup<DataResetPopUp, DataResetPopUpViewModel>();
-        builder.Services.AddTransientPopup<DeleteBowlerPopup, DeleteBowlerPopupViewModel>();
-        builder.Services.AddTransientPopup<StartNewSeasonPopup, StartNewSeasonPopupViewModel>();
         return builder;
     }
 }

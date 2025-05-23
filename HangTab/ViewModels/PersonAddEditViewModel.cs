@@ -10,8 +10,9 @@ using HangTab.Messages;
 using HangTab.Models;
 using HangTab.Services;
 using HangTab.ViewModels.Base;
+using HangTab.ViewModels.BottomSheets;
 using HangTab.ViewModels.Popups;
-using HangTab.Views;
+using HangTab.Views.BottomSheets;
 
 using System.Collections.ObjectModel;
 using System.ComponentModel;

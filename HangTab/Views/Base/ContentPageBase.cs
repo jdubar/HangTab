@@ -1,6 +1,6 @@
 ﻿using HangTab.ViewModels.Base;
 
-namespace HangTab.Views;
+namespace HangTab.Views.Base;
 public partial class ContentPageBase : ContentPage
 {
     protected override async void OnAppearing()

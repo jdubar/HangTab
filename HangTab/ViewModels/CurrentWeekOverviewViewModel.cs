@@ -76,7 +76,7 @@ public partial class CurrentWeekOverviewViewModel :
     private Week CurrentWeek { get; set; } = new Week();
 
     [ObservableProperty]
-    private string _pageTitle = "Week 1";
+    private string _pageTitle;
 
     [ObservableProperty]
     private int _teamHangTotal;

@@ -15,10 +15,13 @@ public partial class BowlerSelectSubViewModel(IPersonService personService) : Vi
     private Bowler? _bowler;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(EnabelSubmitButton))]
     private SubListItemViewModel? _selectedSub = null;
 
     [ObservableProperty]
     private ObservableCollection<SubListItemViewModel> _subs = [];
+
+    public bool EnabelSubmitButton => SelectedSub is not null;
 
     public override async Task LoadAsync()
     {

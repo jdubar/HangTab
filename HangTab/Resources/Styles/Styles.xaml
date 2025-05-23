@@ -101,7 +101,7 @@
         <Setter Property="BackgroundColor" Value="{StaticResource SubBowler}" />
         <Setter Property="HeightRequest" Value="20" />
         <Setter Property="WidthRequest" Value="48" />
-        <Setter Property="Margin" Value="10,50,0,0" />
+        <Setter Property="Margin" Value="12,50,0,0" />
         <Setter Property="StrokeShape" Value="RoundRectangle 40" />
         <Setter Property="Stroke" Value="{DynamicResource SurfaceColor}" />
         <Setter Property="StrokeThickness" Value="1" />

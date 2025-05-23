@@ -3,7 +3,7 @@
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:models="clr-namespace:HangTab.Models"
-    xmlns:views="clr-namespace:HangTab.Views"
+    xmlns:views="clr-namespace:HangTab.Views.Base"
     xmlns:vm="clr-namespace:HangTab.ViewModels"
     xmlns:controls="clr-namespace:HangTab.Views.Controls"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
@@ -36,7 +36,8 @@
         </Style>
     </ContentPage.Resources>
     
-    <VerticalStackLayout>
+    <Grid
+        RowDefinitions="*,Auto">
         
         <!--Loading Indicator-->
         <controls:LoadingIndicator
@@ -88,12 +89,13 @@
                                 Margin="10,0"
                                 StrokeThickness="0"
                                 StrokeShape="RoundRectangle 40"
-                                BackgroundColor="{DynamicResource PrimaryColor}"
+                                BackgroundColor="{DynamicResource SecondaryColor}"
                                 VerticalOptions="Center"
-                                HeightRequest="40"
-                                WidthRequest="40">
+                                HeightRequest="50"
+                                WidthRequest="50">
                                 <Image
                                     IsVisible="{Binding IsSelected}"
+                                    HeightRequest="40"
                                     Source="task_alt.png">
                                     <Image.Behaviors>
                                         <behaviors:TadaAnimationBehavior />
@@ -115,5 +117,15 @@
             </CollectionView.EmptyView>
             
         </CollectionView>
-    </VerticalStackLayout>
+        
+        <!--Submit Button-->
+        <StackLayout
+            Grid.Row="1"
+            Margin="5">
+            <Button
+                IsEnabled="{Binding EnabelSubmitButton}"
+                Style="{StaticResource PrimaryButton}"
+                Text="Use this sub" />
+        </StackLayout>
+    </Grid>
 </views:ContentPageBase>

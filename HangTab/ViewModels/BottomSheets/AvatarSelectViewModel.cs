@@ -5,7 +5,7 @@ using HangTab.Messages;
 using HangTab.Services;
 using HangTab.ViewModels.Base;
 
-namespace HangTab.ViewModels;
+namespace HangTab.ViewModels.BottomSheets;
 public partial class AvatarSelectViewModel(
     IDialogService dialogService,
     IMediaPickerService mediaPickerService) : ViewModelBase
