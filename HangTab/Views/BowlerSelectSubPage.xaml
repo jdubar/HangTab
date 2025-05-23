@@ -1,0 +1,119 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<views:ContentPageBase
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:models="clr-namespace:HangTab.Models"
+    xmlns:views="clr-namespace:HangTab.Views"
+    xmlns:vm="clr-namespace:HangTab.ViewModels"
+    xmlns:controls="clr-namespace:HangTab.Views.Controls"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:behaviors="clr-namespace:HangTab.Views.Controls.Behaviors"
+    x:Class="HangTab.Views.BowlerSelectSubPage"
+    x:DataType="vm:BowlerSelectSubViewModel">
+    
+    <Shell.TitleView>
+        <Label
+            Text="Select a sub"
+            Style="{StaticResource PageTitle}" />
+    </Shell.TitleView>
+    
+    <ContentPage.Resources>
+        <Style TargetType="Border">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter
+                                    Property="BackgroundColor"
+                                    Value="Transparent" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+    
+    <VerticalStackLayout>
+        
+        <!--Loading Indicator-->
+        <controls:LoadingIndicator
+            ShowLoadingIndicator="{Binding IsLoading}"
+            LoadingText="{Binding LoadingText}" />
+
+        <CollectionView
+            ItemsSource="{Binding Subs}"
+            Margin="0,10,0,0"
+            SelectionMode="Single"
+            SelectedItem="{Binding SelectedSub}"
+            SelectionChangedCommand="{Binding ShowCheckmarkOnSelectedSubCommand}">
+            
+            <CollectionView.ItemsLayout>
+                <LinearItemsLayout
+                    ItemSpacing="4"
+                    Orientation="Vertical" />
+            </CollectionView.ItemsLayout>
+            
+            <CollectionView.ItemTemplate>
+                <DataTemplate
+                    x:DataType="vm:SubListItemViewModel">
+                    
+                    <Border
+                        Margin="5,2"
+                        Style="{StaticResource RoundedCornerBorder}">
+                        <Grid
+                            Padding="5"
+                            ColumnDefinitions="Auto,*,Auto">
+
+                            <!--Avatar Image-->
+                            <controls:UserImage
+                                ImageUrl="{Binding ImageUrl}"
+                                Initials="{Binding Initials}"
+                                ShowSub="{Binding IsSub}" />
+                                
+                            <!--Full Name-->
+                            <Label
+                                Grid.Column="1"
+                                VerticalOptions="Center"
+                                FontSize="Large"
+                                Text="{Binding Name}"
+                                Style="{StaticResource BowlerName}" />
+                            
+                            <!--Selection Checkmark-->
+                            <Border
+                                Grid.Column="2"
+                                IsVisible="{Binding IsSelected}"
+                                Margin="10,0"
+                                StrokeThickness="0"
+                                StrokeShape="RoundRectangle 40"
+                                BackgroundColor="{DynamicResource PrimaryColor}"
+                                VerticalOptions="Center"
+                                HeightRequest="40"
+                                WidthRequest="40">
+                                <Image
+                                    IsVisible="{Binding IsSelected}"
+                                    Source="task_alt.png">
+                                    <Image.Behaviors>
+                                        <behaviors:TadaAnimationBehavior />
+                                    </Image.Behaviors>
+                                </Image>
+                            </Border>
+                                    
+                        </Grid>
+                    </Border>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+            
+            <!--Empty List Message-->
+            <CollectionView.EmptyView>
+                <controls:EmptyCollectionMessage
+                    IsVisible="{Binding LoadingComplete}"
+                    Message="No subs available"
+                    SubMessage="Create subs on the Bowlers page" />
+            </CollectionView.EmptyView>
+            
+        </CollectionView>
+    </VerticalStackLayout>
+</views:ContentPageBase>

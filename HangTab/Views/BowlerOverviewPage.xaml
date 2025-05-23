@@ -6,6 +6,7 @@
     xmlns:views="clr-namespace:HangTab.Views"
     xmlns:vm="clr-namespace:HangTab.ViewModels"
     xmlns:models="clr-namespace:HangTab.Models"
+    xmlns:controls="clr-namespace:HangTab.Views.Controls"
     x:Class="HangTab.Views.BowlerOverviewPage"
     x:DataType="vm:BowlerListOverviewViewModel">
     
@@ -36,6 +37,12 @@
                     Style="{StaticResource Divider}" />
             </StackLayout>
             
+            <!--Loading Indicator-->
+            <controls:LoadingIndicator
+                Grid.Row="1"
+                ShowLoadingIndicator="{Binding IsLoading}"
+                LoadingText="{Binding LoadingText}" />
+            
             <CollectionView
                 Grid.Row="1"
                 ItemsSource="{Binding Bowlers}"
@@ -51,36 +58,13 @@
                                 x:DataType="vm:BowlerListItemViewModel"
                                 ColumnDefinitions="Auto,*,Auto,Auto">
                                 
-                                <Grid
-                                    Grid.Row="0"
-                                    Grid.RowSpan="2">
-                                    
-                                    <!--Bowler Is A Substitute-->
-                                    <Border
-                                        Style="{StaticResource Notification_Sub}"
-                                        IsVisible="{Binding IsSub}"
-                                        ZIndex="2">
-                                        <Label
-                                            Text="SUB"
-                                            FontSize="12"
-                                            FontAttributes="Bold"
-                                            TextColor="{DynamicResource PrimaryContrastTextColor}"
-                                            HorizontalOptions="Center" />
-                                    </Border>
-                                
-                                    <!--Avatar Image-->
-                                    <toolkit:AvatarView
-                                        Style="{StaticResource BowlerAvatar}"
-                                        ImageSource="{Binding ImageUrl}"
-                                        WidthRequest="60"
-                                        HeightRequest="60"
-                                        Text="{Binding Initials}"
-                                        FontSize="20" />
-                            
-                                </Grid>
+                                <!--Avatar Image-->
+                                <controls:UserImage
+                                    ImageUrl="{Binding ImageUrl}"
+                                    Initials="{Binding Initials}"
+                                    ShowSub="{Binding IsSub}" />
                                 
                                 <VerticalStackLayout
-                                    Grid.Row="0"
                                     Grid.Column="1"
                                     VerticalOptions="Center">
                                     <!--Full Name-->
@@ -93,11 +77,11 @@
                                     <Label
                                         Text="{Binding Hangings, StringFormat='Season hangings: {0}'}"
                                         Style="{StaticResource Label_Hangings}" />
+                                    
                                 </VerticalStackLayout>
                                                             
                                 <!--Chevron Image-->
                                 <Image
-                                    Grid.Row="0"
                                     Grid.Column="3"
                                     Margin="15,0">
                                     <Image.Source>
@@ -107,29 +91,18 @@
                                             Color="{DynamicResource TextPrimaryColor}"/>
                                     </Image.Source>
                                 </Image>
+                                
                             </Grid>
                         </Border>
                     </DataTemplate>
                 </CollectionView.ItemTemplate>
                 
+                <!--Empty List Message-->
                 <CollectionView.EmptyView>
-                    <Grid
-                        HeightRequest="{Binding Source={RelativeSource AncestorType={x:Type CollectionView}}, Path=Height}">
-                        <VerticalStackLayout
-                            VerticalOptions="Center">
-                            <Label
-                                Text="No Bowlers Found"
-                                FontSize="18"
-                                FontAttributes="Bold"
-                                HorizontalTextAlignment="Center"
-                                TextColor="{DynamicResource TextPrimaryColor}"/>
-                            <Label
-                                Grid.Row="1"
-                                Text="Create a bowler using the button below"
-                                HorizontalTextAlignment="Center"
-                                TextColor="{DynamicResource TextPrimaryColor}"/>
-                        </VerticalStackLayout>
-                    </Grid>
+                    <controls:EmptyCollectionMessage
+                        IsVisible="{Binding LoadingComplete}"
+                        Message="No Bowlers Found"
+                        SubMessage="Create a bowler using the button below" />
                 </CollectionView.EmptyView>
             </CollectionView>
             <ImageButton
