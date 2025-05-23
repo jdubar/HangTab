@@ -109,7 +109,14 @@ public partial class BowlerListOverviewViewModel :
         if (Bowlers.Count > 0)
         {
             var allWeeks = await _weekService.GetAllWeeks();
-            Bowlers.ToList().ForEach(b => b.Hangings = allWeeks.SelectMany(w => w.Bowlers.Where(b => b.PersonId == b.Id)).Sum(w => w.HangCount));
+            if (allWeeks is null)
+            {
+                return;
+            }
+
+            Bowlers.ToList()
+                   .ForEach(bowler => bowler.Hangings = allWeeks.SelectMany(w => w.Bowlers.Where(b => b.PersonId == bowler.Id))
+                                                                .Sum(w => w.HangCount));
         }
     }
 
