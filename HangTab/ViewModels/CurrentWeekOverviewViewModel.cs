@@ -99,8 +99,6 @@ public partial class CurrentWeekOverviewViewModel :
     [ObservableProperty]
     private bool _playBusRideAnimation;
 
-    public bool LoadingComplete => !IsLoading;
-
     // TODO: Add Complete Week (submit) relay command
 
     public override async Task LoadAsync()
@@ -155,7 +153,7 @@ public partial class CurrentWeekOverviewViewModel :
         }
         // TODO: Finish this command
         await _navigationService.GoToSelectSub(WeekMapper.MapCurrentWeekListItemViewModelToBowler(vm));
-        await SetBowlerStatus(vm, Enums.Status.UsingSub);
+        //await SetBowlerStatus(vm, Enums.Status.UsingSub);
     }
 
     // TODO: Add submit command with confirmation dialog

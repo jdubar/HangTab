@@ -4,6 +4,7 @@ public static class Routes
 {
     public static string BowlerAdd => "bowler/add";
     public static string BowlerEdit => "bowler/edit";
+    public static string BowlerSelectSub => "bowler/selectsub";
     public static string BowlerSwitch => "bowler/switch";
 
     public static string BowlerOverview => "//bowleroverview";
