@@ -20,6 +20,19 @@
                 TextColor="{DynamicResource PrimaryContrastTextColor}"
                 HorizontalOptions="Center" />
         </Border>
+        
+        <!--Only if the bowler is blind-->
+        <Border
+            Style="{StaticResource NotificationDot_Blind}"
+            IsVisible="{Binding Source={x:Reference AvatarView}, Path=ShowBlind}"
+            ZIndex="2">
+            <Label
+                Text="BLIND"
+                FontSize="12"
+                FontAttributes="Bold"
+                TextColor="{DynamicResource PrimaryContrastTextColor}"
+                HorizontalOptions="Center" />
+        </Border>
                                 
         <!--Avatar Image-->
         <toolkit:AvatarView

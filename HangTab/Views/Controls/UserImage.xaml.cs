@@ -7,7 +7,13 @@ public partial class UserImage : ContentView
 		InitializeComponent();
 	}
 
-	public bool ShowSub
+    public bool ShowBlind
+    {
+        get => (bool)GetValue(ShowBlindProperty);
+        set => SetValue(ShowBlindProperty, value);
+    }
+
+    public bool ShowSub
     {
         get => (bool)GetValue(ShowSubProperty);
         set => SetValue(ShowSubProperty, value);
@@ -24,6 +30,9 @@ public partial class UserImage : ContentView
         get => (string)GetValue(InitialsProperty);
         set => SetValue(InitialsProperty, value);
     }
+
+    public static readonly BindableProperty ShowBlindProperty =
+        BindableProperty.Create(nameof(ShowBlind), typeof(bool), typeof(UserImage), defaultValue: false);
 
     public static readonly BindableProperty ShowSubProperty =
         BindableProperty.Create(nameof(ShowSub), typeof(bool), typeof(UserImage), defaultValue: false);
