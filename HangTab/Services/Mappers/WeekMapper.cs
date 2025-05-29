@@ -5,18 +5,19 @@ using HangTab.ViewModels;
 namespace HangTab.Services.Mappers;
 internal static class WeekMapper
 {
-    internal static CurrentWeekListItemViewModel MapBowlerToCurrentWeekListItemViewModel(this Bowler wl)
+    internal static CurrentWeekListItemViewModel MapBowlerToCurrentWeekListItemViewModel(this Bowler bowler)
     {
         return new CurrentWeekListItemViewModel(
-            wl.WeekId,
-            wl.Id,
-            wl.PersonId,
-            wl.Status,
-            wl.HangCount,
-            wl.Person.Name,
-            wl.Person.IsSub,
-            wl.Person.Name.GetInitials() ?? string.Empty, // Ensure initials are not null
-            wl.Person.ImageUrl);
+            bowler.WeekId,
+            bowler.Id,
+            bowler.PersonId,
+            bowler.SubId,
+            bowler.Status,
+            bowler.HangCount,
+            bowler.Person.Name,
+            bowler.Person.IsSub,
+            bowler.Person.Name.GetInitials() ?? string.Empty, // Ensure initials are not null
+            bowler.Person.ImageUrl);
     }
 
     internal static Bowler MapCurrentWeekListItemViewModelToBowler(this CurrentWeekListItemViewModel cw)
@@ -27,6 +28,7 @@ internal static class WeekMapper
             WeekId = cw.WeekId,
             PersonId = cw.PersonId,
             Status = cw.Status,
+            SubId = cw.SubId,
             HangCount = cw.HangCount,
             Person = new Person
             {

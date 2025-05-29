@@ -19,6 +19,8 @@ public class Bowler
     [ForeignKey(typeof(Person))]
     public int PersonId { get; set; }
 
+    public int? SubId { get; set; } = null;
+
     [ManyToOne(CascadeOperations = CascadeOperation.All)]
     public Person Person { get; set; } = new();
 }

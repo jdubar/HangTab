@@ -17,9 +17,13 @@ public partial class CurrentWeekListItemViewModel : ObservableObject
     private int _personId;
 
     [ObservableProperty]
+    private int? _subId;
+
+    [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(EnableStepper))]
     [NotifyPropertyChangedFor(nameof(ShowActiveOption))]
     [NotifyPropertyChangedFor(nameof(ShowBlindOption))]
+    [NotifyPropertyChangedFor(nameof(IsBlind))]
     private Status _status;
 
     [ObservableProperty]
@@ -49,11 +53,13 @@ public partial class CurrentWeekListItemViewModel : ObservableObject
 
     public bool ShowActiveOption => Status is Status.Blind or Status.UsingSub;
     public bool ShowBlindOption => Status is Status.Active;
+    public bool IsBlind => Status is Status.Blind;
 
     public CurrentWeekListItemViewModel(
         int weekId,
         int bowlerId,
         int personId,
+        int? subId,
         Status status,
         int hangCount,
         string name,
@@ -64,6 +70,7 @@ public partial class CurrentWeekListItemViewModel : ObservableObject
         WeekId = weekId;
         BowlerId = bowlerId;
         PersonId = personId;
+        SubId = subId;
         Status = status;
         HangCount = hangCount;
         Name = name;

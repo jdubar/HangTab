@@ -17,7 +17,8 @@ public partial class CurrentWeekOverviewViewModel :
     IRecipient<PersonAddedOrChangedMessage>,
     IRecipient<PersonDeletedMessage>,
     IRecipient<BowlerHangCountChangedMessage>,
-    IRecipient<SystemResetMessage>
+    IRecipient<SystemResetMessage>,
+    IRecipient<BowlerSubChangedMessage>
 {
     private readonly IAudioService _audioService;
     private readonly IDialogService _dialogService;
@@ -45,6 +46,7 @@ public partial class CurrentWeekOverviewViewModel :
         WeakReferenceMessenger.Default.Register<PersonDeletedMessage>(this);
         WeakReferenceMessenger.Default.Register<BowlerHangCountChangedMessage>(this);
         WeakReferenceMessenger.Default.Register<SystemResetMessage>(this);
+        WeakReferenceMessenger.Default.Register<BowlerSubChangedMessage>(this);
     }
 
     [ObservableProperty]
@@ -76,7 +78,7 @@ public partial class CurrentWeekOverviewViewModel :
     private Week CurrentWeek { get; set; } = new Week();
 
     [ObservableProperty]
-    private string _pageTitle;
+    private string _pageTitle = string.Empty;
 
     [ObservableProperty]
     private int _teamHangTotal;
@@ -145,16 +147,7 @@ public partial class CurrentWeekOverviewViewModel :
     private async Task SetBowlerStatusToBlind(CurrentWeekListItemViewModel? vm) => await SetBowlerStatus(vm, Enums.Status.Blind);
 
     [RelayCommand]
-    private async Task SetBowlerStatusToUsingSub(CurrentWeekListItemViewModel? vm)
-    {
-        if (vm is null)
-        {
-            return;
-        }
-        // TODO: Finish this command
-        await _navigationService.GoToSelectSub(WeekMapper.MapCurrentWeekListItemViewModelToBowler(vm));
-        //await SetBowlerStatus(vm, Enums.Status.UsingSub);
-    }
+    private async Task SetBowlerStatusToUsingSub(CurrentWeekListItemViewModel? vm) => await SetBowlerStatus(vm, Enums.Status.UsingSub);
 
     // TODO: Add submit command with confirmation dialog
 
@@ -165,8 +158,23 @@ public partial class CurrentWeekOverviewViewModel :
             return;
         }
 
-        CurrentWeekBowlers.First(b => b.BowlerId == vm.BowlerId).Status = status;
-        await _bowlerService.UpdateBowler(WeekMapper.MapCurrentWeekListItemViewModelToBowler(vm));
+        switch (status)
+        {
+            case Enums.Status.Active:
+                vm.SubId = null;
+                vm.Status = Enums.Status.Active;
+                await _bowlerService.UpdateBowler(WeekMapper.MapCurrentWeekListItemViewModelToBowler(vm));
+                break;
+            case Enums.Status.Blind:
+                vm.SubId = null;
+                vm.Status = Enums.Status.Blind;
+                await _bowlerService.UpdateBowler(WeekMapper.MapCurrentWeekListItemViewModelToBowler(vm));
+                break;
+            case Enums.Status.UsingSub:
+                await _navigationService.GoToSelectSub(WeekMapper.MapCurrentWeekListItemViewModelToBowler(vm));
+                return;
+        }
+
         await GetCurrentWeek();
     }
 
@@ -176,6 +184,21 @@ public partial class CurrentWeekOverviewViewModel :
         TeamHangTotal = 0;
         IsEnableCompleteWeek = false;
         PageTitle = "Week 1";
+        await GetCurrentWeek();
+    }
+
+    public async void Receive(BowlerSubChangedMessage message)
+    {
+        var bowler = CurrentWeekBowlers.FirstOrDefault(b => b.BowlerId == message.Id);
+        if (bowler is null)
+        {
+            return;
+        }
+
+        bowler.SubId = message.SubId;
+        bowler.Status = Enums.Status.UsingSub;
+        await _bowlerService.UpdateBowler(WeekMapper.MapCurrentWeekListItemViewModelToBowler(bowler));
+
         await GetCurrentWeek();
     }
 

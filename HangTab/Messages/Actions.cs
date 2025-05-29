@@ -2,6 +2,7 @@
 public record PersonAddedOrChangedMessage(int Id = 0, bool IsSub = false);
 public record PersonDeletedMessage(int Id);
 public record BowlerHangCountChangedMessage(int Id, int HangCount);
+public record BowlerSubChangedMessage(int Id, int SubId);
 public record PersonImageAddedOrChangedMessage(string? ImageUrl);
 public record SystemResetMessage();
 public record WeekBusRideCountChangedMessage(int BusRideCount = 0);

@@ -152,6 +152,7 @@
                                             <controls:UserImage
                                                 ImageUrl="{Binding ImageUrl}"
                                                 Initials="{Binding Initials}"
+                                                ShowBlind="{Binding IsBlind}"
                                                 ShowSub="{Binding IsSub}" />
                                 
                                             <!--Full Name-->
@@ -193,27 +194,27 @@
                     ColumnDefinitions="Auto,*">
                     <Border
                         Grid.Column="0"
-                        Grid.ColumnSpan="3"
+                        Grid.ColumnSpan="2"
                         Style="{StaticResource RoundedCornerBorder}"
                         ZIndex="1">
-                        
-                        <HorizontalStackLayout>
-                            <!--Group Total-->
-                            <Label
-                                Text="{Binding TeamHangTotal, Mode=OneWay, StringFormat='Total Hangings: {0}'}"
-                                Style="{StaticResource TotalHangings}" />
-                        </HorizontalStackLayout>
                     </Border>
                     
-                    <Image
+                    <Grid
                         Grid.Column="1"
-                        Source="popper_anim.gif"
-                        IsVisible="{Binding PlayPopperAnimation}"
-                        HeightRequest="40"
-                        HorizontalOptions="Center"
-                        Margin="-50,0,0,5"
-                        IsAnimationPlaying="{Binding PlayPopperAnimation}"
-                        ZIndex="2" />
+                        ColumnDefinitions="Auto,*"
+                        ZIndex="2">
+                        <Label
+                            Text="{Binding TeamHangTotal, Mode=OneWay, StringFormat='Total Hangings: {0}'}"
+                            Style="{StaticResource TotalHangings}" />
+                        <Image
+                            Grid.Column="1"
+                            Source="popper_anim.gif"
+                            IsVisible="{Binding PlayPopperAnimation}"
+                            HeightRequest="40"
+                            Margin="0,0,0,10"
+                            HorizontalOptions="Start"
+                            IsAnimationPlaying="{Binding PlayPopperAnimation}" />
+                    </Grid>
                 </Grid>
             </Grid>
         

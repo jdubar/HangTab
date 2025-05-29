@@ -215,7 +215,8 @@ public partial class PersonAddEditViewModel :
             ImageUrl = ImageUrl,
             IsSub = selectedType == (int)BowlerType.Sub,
         };
-    }    
+    }
+
     private void MapPerson(Person? model)
     {
         if (model is not null)

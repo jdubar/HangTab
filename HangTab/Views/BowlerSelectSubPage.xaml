@@ -123,9 +123,10 @@
             Grid.Row="1"
             Margin="5">
             <Button
-                IsEnabled="{Binding EnabelSubmitButton}"
+                IsEnabled="{Binding EnableSubmitButton}"
                 Style="{StaticResource PrimaryButton}"
-                Text="Use this sub" />
+                Text="Use this sub"
+                Command="{Binding SubmitSelectedSubCommand}"/>
         </StackLayout>
     </Grid>
 </views:ContentPageBase>
