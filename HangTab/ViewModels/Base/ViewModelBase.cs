@@ -5,6 +5,7 @@ namespace HangTab.ViewModels.Base;
 public partial class ViewModelBase : ObservableValidator, IViewModelBase
 {
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(LoadingComplete))]
     private bool _isLoading;
 
     [ObservableProperty]
