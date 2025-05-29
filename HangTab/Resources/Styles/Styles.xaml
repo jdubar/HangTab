@@ -30,14 +30,14 @@
     </Style>
     
     <Style x:Key="TotalHangings" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
-        <Setter Property="Margin" Value="10,0" />
+        <Setter Property="Margin" Value="15,0,0,0" />
         <Setter Property="VerticalOptions" Value="Center" />
     </Style>
     
     <Style x:Key="BowlerName" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
         <Setter Property="FontSize" Value="Large" />
         <Setter Property="VerticalTextAlignment" Value="Center" />
-        <Setter Property="Margin" Value="22,0,22,0" />
+        <Setter Property="Margin" Value="20,0" />
     </Style>
     
     <Style x:Key="BusRides" TargetType="Label" BasedOn="{StaticResource BaseLabel}">
@@ -89,12 +89,14 @@
         <Setter Property="BackgroundColor" Value="{DynamicResource SurfaceColor}" />
     </Style>
     
-    <Style x:Key="NotificationDot_Inactive" TargetType="Border">
-        <Setter Property="BackgroundColor" Value="{StaticResource InactiveBowler}" />
-        <Setter Property="HeightRequest" Value="25" />
-        <Setter Property="WidthRequest" Value="25" />
-        <Setter Property="Margin" Value="40,40,0,0" />
-        <Setter Property="StrokeShape" Value="RoundRectangle 100" />
+    <Style x:Key="NotificationDot_Blind" TargetType="Border">
+        <Setter Property="BackgroundColor" Value="{StaticResource Error}" />
+        <Setter Property="HeightRequest" Value="20" />
+        <Setter Property="WidthRequest" Value="48" />
+        <Setter Property="Margin" Value="12,50,0,0" />
+        <Setter Property="StrokeShape" Value="RoundRectangle 40" />
+        <Setter Property="Stroke" Value="{DynamicResource SurfaceColor}" />
+        <Setter Property="StrokeThickness" Value="1" />
     </Style>
     
     <Style x:Key="Notification_Sub" TargetType="Border">
