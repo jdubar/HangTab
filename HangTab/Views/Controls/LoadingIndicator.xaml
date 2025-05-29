@@ -17,7 +17,8 @@
         <Label
             Text="{Binding Source={x:Reference LoadingView}, Path=LoadingText}"
             VerticalOptions="Center"
-            HorizontalOptions="Center"/>
+            HorizontalOptions="Center"
+            TextColor="{DynamicResource TextPrimaryColor}"/>
     </VerticalStackLayout>
     
 </ContentView>
