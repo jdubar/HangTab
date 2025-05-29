@@ -129,9 +129,6 @@
 		<MauiXaml Update="Views\BowlerOverviewPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\BowlerSwitchPage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
 		<MauiXaml Update="Views\Controls\Stepper.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
