@@ -14,7 +14,7 @@ public interface IDatabaseContext
     Task<bool> UpdateItemAsync<TTable>(TTable item) where TTable : class, new();
 
     Task<TTable> GetWithChildrenAsync<TTable>(object id) where TTable : class, new();
-    Task<IEnumerable<TTable>> GetAllWithChildrenAsync<TTable>(Expression<Func<TTable, bool>> predicate = null) where TTable : class, new();
+    Task<IEnumerable<TTable>> GetAllWithChildrenAsync<TTable>(Expression<Func<TTable, bool>>? predicate = null) where TTable : class, new();
     Task InsertWithChildrenAsync<TTable>(TTable item) where TTable : class, new();
     Task UpdateWithChildrenAsync<TTable>(TTable item) where TTable : class, new();
 
