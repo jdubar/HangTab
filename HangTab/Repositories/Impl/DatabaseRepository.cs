@@ -11,12 +11,10 @@ public class DatabaseRepository(IDatabaseContext context) : IDatabaseRepository
             && await context.ResetTableAsync<Bowler>();
     }
 
-    public Task InitializeDatabase()
+    public async Task InitializeDatabase()
     {
-        return Task.WhenAll(
-            context.CreateTableIfNotExists<Person>(),
-            context.CreateTableIfNotExists<Week>(),
-            context.CreateTableIfNotExists<Bowler>()
-        );
+        await context.CreateTableIfNotExists<Person>();
+        await context.CreateTableIfNotExists<Week>();
+        await context.CreateTableIfNotExists<Bowler>();
     }
 }
