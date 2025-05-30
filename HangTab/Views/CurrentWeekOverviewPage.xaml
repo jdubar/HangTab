@@ -40,7 +40,6 @@
 
                 <!--Bowler List-->
                 <CollectionView
-                    x:Name="collectionView"
                     ItemsSource="{Binding CurrentWeekBowlers}"
                     SelectedItem="{Binding SelectedBowler}">
 
@@ -59,7 +58,7 @@
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CurrentWeekOverviewViewModel}}, Path=SetBowlerStatusToActiveCommand}"
                                                 CommandParameter="{Binding .}">
                                                 <Border
-                                                    StrokeShape="RoundRectangle 5,0,5,0"
+                                                    StrokeShape="RoundRectangle 5,0"
                                                     WidthRequest="70"
                                                     BackgroundColor="{DynamicResource Success}">
                                                     <Grid
@@ -88,7 +87,7 @@
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CurrentWeekOverviewViewModel}}, Path=SetBowlerStatusToBlindCommand}"
                                                 CommandParameter="{Binding .}">
                                                 <Border
-                                                    StrokeShape="RoundRectangle 5,0,5,0"
+                                                    StrokeShape="RoundRectangle 5,0"
                                                     WidthRequest="70"
                                                     BackgroundColor="{DynamicResource Error}">
                                                     <Grid
