@@ -16,12 +16,16 @@ using Microsoft.Extensions.Logging;
 
 using Plugin.Maui.Audio;
 
+using System.Runtime.Versioning;
+
 using The49.Maui.BottomSheet;
 
 namespace HangTab;
 
 public static class MauiProgram
 {
+    [SupportedOSPlatform("windows10.0.17763.0")]
+    [SupportedOSPlatform("android21.0")]
     public static MauiApp CreateMauiApp()
     {
         var builder = MauiApp.CreateBuilder()
