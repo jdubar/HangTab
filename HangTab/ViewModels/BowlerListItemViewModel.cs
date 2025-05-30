@@ -33,7 +33,7 @@ public partial class BowlerListItemViewModel : ObservableObject
     {
         if (oldValue != newValue && newValue >= 0)
         {
-            WeakReferenceMessenger.Default.Send(new BowlerHangCountChangedMessage(Id, newValue));
+            WeakReferenceMessenger.Default.Send(new BowlerHangCountChangedMessage(BowlerId, newValue));
         }
     }
 

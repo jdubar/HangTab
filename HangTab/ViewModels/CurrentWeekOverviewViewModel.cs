@@ -204,7 +204,7 @@ public partial class CurrentWeekOverviewViewModel :
 
     public async void Receive(BowlerHangCountChangedMessage message)
     {
-        var bowler = CurrentWeekBowlers.FirstOrDefault(b => b.BowlerId == message.Id);
+        var bowler = CurrentWeekBowlers.FirstOrDefault(b => b.BowlerId == message.BowlerId);
         if (bowler is null)
         {
             return;

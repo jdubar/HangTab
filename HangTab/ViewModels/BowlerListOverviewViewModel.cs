@@ -13,6 +13,7 @@ using System.Collections.ObjectModel;
 namespace HangTab.ViewModels;
 public partial class BowlerListOverviewViewModel :
     ViewModelBase,
+    IRecipient<BowlerHangCountChangedMessage>,
     IRecipient<PersonAddedOrChangedMessage>,
     IRecipient<PersonDeletedMessage>,
     IRecipient<SystemResetMessage>
@@ -30,6 +31,7 @@ public partial class BowlerListOverviewViewModel :
         _navigationService = navigationService;
         _weekService = weekService;
 
+        WeakReferenceMessenger.Default.Register<BowlerHangCountChangedMessage>(this);
         WeakReferenceMessenger.Default.Register<PersonAddedOrChangedMessage>(this);
         WeakReferenceMessenger.Default.Register<PersonDeletedMessage>(this);
         WeakReferenceMessenger.Default.Register<SystemResetMessage>(this);
@@ -115,7 +117,7 @@ public partial class BowlerListOverviewViewModel :
             }
 
             Bowlers.ToList()
-                   .ForEach(bowler => bowler.Hangings = allWeeks.SelectMany(w => w.Bowlers.Where(b => b.PersonId == bowler.Id))
+                   .ForEach(bowler => bowler.Hangings = allWeeks.SelectMany(w => w.Bowlers.Where(b => (b.Status == Enums.Status.UsingSub ? b.SubId : b.PersonId) == bowler.Id))
                                                                 .Sum(w => w.HangCount));
         }
     }
@@ -132,6 +134,8 @@ public partial class BowlerListOverviewViewModel :
         Bowlers.Clear();
         AllBowlers = [];
     }
+
+    public async void Receive(BowlerHangCountChangedMessage message) => await UpdateBowlerHangCounts();
 
     public async void Receive(PersonAddedOrChangedMessage message) => await GetBowlers();
 

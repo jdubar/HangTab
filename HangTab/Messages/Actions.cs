@@ -1,7 +1,7 @@
 ﻿namespace HangTab.Messages;
 public record PersonAddedOrChangedMessage(int Id = 0, bool IsSub = false);
 public record PersonDeletedMessage(int Id);
-public record BowlerHangCountChangedMessage(int Id, int HangCount);
+public record BowlerHangCountChangedMessage(int BowlerId, int HangCount);
 public record BowlerSubChangedMessage(int Id, int SubId);
 public record PersonImageAddedOrChangedMessage(string? ImageUrl);
 public record SystemResetMessage();
