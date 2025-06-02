@@ -24,7 +24,7 @@ public class WeekRepository(IDatabaseContext context) : IWeekRepository
                 WeekId = bowler.WeekId,
                 PersonId = bowler.PersonId,
                 SubId = bowler.SubId,
-                Person = await context.GetItemByIdAsync<Person>(bowler.SubId is null ? bowler.Id : bowler.SubId)
+                Person = await context.GetItemByIdAsync<Person>(bowler.SubId is null ? bowler.PersonId : bowler.SubId)
             });
         }
 
