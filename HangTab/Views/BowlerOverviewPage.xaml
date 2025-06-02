@@ -69,19 +69,22 @@
                 SelectionMode="Single"
                 SelectionChangedCommand="{Binding NavigateToEditSelectedBowlerCommand}">
                 <CollectionView.ItemTemplate>
-                    <DataTemplate>
+                    <DataTemplate
+                        x:DataType="vm:BowlerListItemViewModel">
+                        
                         <Border
                             Margin="5,2"
                             Style="{StaticResource RoundedCornerBorder}">
                             <Grid
-                                x:DataType="vm:BowlerListItemViewModel"
-                                ColumnDefinitions="Auto,*,Auto,Auto">
+                                Padding="5"
+                                ColumnDefinitions="Auto,*,Auto">
                                 
                                 <!--Avatar Image-->
                                 <controls:UserImage
                                     ImageUrl="{Binding ImageUrl}"
                                     Initials="{Binding Initials}"
-                                    ShowSub="{Binding IsSub}" />
+                                    ShowSub="{Binding IsSub}"
+                                    ShowCrown="{Binding HasLowestHangs}" />
                                 
                                 <VerticalStackLayout
                                     Grid.Column="1"
@@ -123,6 +126,7 @@
                         Message="No Bowlers Found"
                         SubMessage="Create a bowler using the button below" />
                 </CollectionView.EmptyView>
+                
             </CollectionView>
             <ImageButton
                 Grid.Row="1"

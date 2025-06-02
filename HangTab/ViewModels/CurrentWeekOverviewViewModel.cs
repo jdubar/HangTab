@@ -115,6 +115,24 @@ public partial class CurrentWeekOverviewViewModel :
         PageTitle = $"Week {WeekNumber} of {_settingsService.TotalSeasonWeeks}";
     }
 
+    [RelayCommand]
+    private async Task SetBowlerStatusToActive(CurrentWeekListItemViewModel? vm) => await SetBowlerStatus(vm, Enums.Status.Active);
+
+    [RelayCommand]
+    private async Task SetBowlerStatusToBlind(CurrentWeekListItemViewModel? vm) => await SetBowlerStatus(vm, Enums.Status.Blind);
+
+    [RelayCommand]
+    private async Task SetBowlerStatusToUsingSub(CurrentWeekListItemViewModel? vm) => await SetBowlerStatus(vm, Enums.Status.UsingSub);
+
+    // TODO: Add submit command with confirmation dialog
+    
+    private async Task<Week> CreateFirstWeek()
+    {
+        var week = await _weekService.CreateWeek(1);
+        _settingsService.CurrentWeekPrimaryKey = week.Id;
+        return week;
+    }
+
     private async Task GetCurrentWeek()
     {
         CurrentWeek = _settingsService.CurrentWeekPrimaryKey == 0
@@ -127,29 +145,19 @@ public partial class CurrentWeekOverviewViewModel :
             {
                 CurrentWeekBowlers.Clear();
                 CurrentWeekBowlers = WeekMapper.MapBowlerToBowlerListItemViewModel(CurrentWeek.Bowlers).ToObservableCollection();
+                UpdateLowestHangsStatus();
             }
 
             MapWeekData(CurrentWeek);
         }
     }
 
-    private async Task<Week> CreateFirstWeek()
+    private void MapWeekData(Week week)
     {
-        var week = await _weekService.CreateWeek(1);
-        _settingsService.CurrentWeekPrimaryKey = week.Id;
-        return week;
+        Id = week.Id;
+        WeekNumber = week.Number;
+        BusRides = week.BusRides;
     }
-
-    [RelayCommand]
-    private async Task SetBowlerStatusToActive(CurrentWeekListItemViewModel? vm) => await SetBowlerStatus(vm, Enums.Status.Active);
-
-    [RelayCommand]
-    private async Task SetBowlerStatusToBlind(CurrentWeekListItemViewModel? vm) => await SetBowlerStatus(vm, Enums.Status.Blind);
-
-    [RelayCommand]
-    private async Task SetBowlerStatusToUsingSub(CurrentWeekListItemViewModel? vm) => await SetBowlerStatus(vm, Enums.Status.UsingSub);
-
-    // TODO: Add submit command with confirmation dialog
 
     private async Task SetBowlerStatus(CurrentWeekListItemViewModel? vm, Enums.Status status)
     {
@@ -176,6 +184,14 @@ public partial class CurrentWeekOverviewViewModel :
         }
 
         await GetCurrentWeek();
+    }
+
+    private void UpdateLowestHangsStatus()
+    {
+        CurrentWeekBowlers.Where(b => !b.IsSub).ToList().ForEach(b =>
+        {
+            b.HasLowestHangs = b.HangCount == CurrentWeekBowlers.Where(bw => !bw.IsSub).Min(bw => bw.HangCount);
+        });
     }
 
     public async void Receive(SystemResetMessage message)
@@ -215,6 +231,7 @@ public partial class CurrentWeekOverviewViewModel :
             var newHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
             var isIncrease = newHangTotal > TeamHangTotal;
             TeamHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
+            UpdateLowestHangsStatus();
 
             if (isIncrease)
             {
@@ -239,7 +256,6 @@ public partial class CurrentWeekOverviewViewModel :
                 WeekId = _settingsService.CurrentWeekPrimaryKey,
             };
             await _bowlerService.AddBowler(bowler);
-            CurrentWeekBowlers.Add(bowler.MapBowlerToCurrentWeekListItemViewModel());
         }
 
         CurrentWeekBowlers.Clear();
@@ -252,13 +268,7 @@ public partial class CurrentWeekOverviewViewModel :
         if (deletedBowler is not null)
         {
             CurrentWeekBowlers.Remove(deletedBowler);
+            UpdateLowestHangsStatus();
         }
-    }
-
-    private void MapWeekData(Week week)
-    {
-        Id = week.Id;
-        WeekNumber = week.Number;
-        BusRides = week.BusRides;
     }
 }

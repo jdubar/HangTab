@@ -89,7 +89,7 @@
         <Setter Property="BackgroundColor" Value="{DynamicResource SurfaceColor}" />
     </Style>
     
-    <Style x:Key="NotificationDot_Blind" TargetType="Border">
+    <Style x:Key="Notification_Blind" TargetType="Border">
         <Setter Property="BackgroundColor" Value="{StaticResource Error}" />
         <Setter Property="HeightRequest" Value="20" />
         <Setter Property="WidthRequest" Value="48" />

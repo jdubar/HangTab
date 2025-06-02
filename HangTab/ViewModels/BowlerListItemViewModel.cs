@@ -38,6 +38,9 @@ public partial class BowlerListItemViewModel : ObservableObject
     }
 
     [ObservableProperty]
+    private bool _hasLowestHangs;
+
+    [ObservableProperty]
     private Status _status;
 
     public BowlerListItemViewModel(

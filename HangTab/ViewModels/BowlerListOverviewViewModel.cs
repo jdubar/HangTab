@@ -72,6 +72,9 @@ public partial class BowlerListOverviewViewModel :
         }
     }
 
+    // TODO: Add filtering by Subs,Regulars
+    // TODO: Add sort by most hangs,least hangs, name asc/desc
+
     [RelayCommand]
     private async Task NavigateToAddBowler() => await _navigationService.GoToAddBowler();
 
@@ -119,6 +122,11 @@ public partial class BowlerListOverviewViewModel :
             Bowlers.ToList()
                    .ForEach(bowler => bowler.Hangings = allWeeks.SelectMany(w => w.Bowlers.Where(b => (b.Status == Enums.Status.UsingSub ? b.SubId : b.PersonId) == bowler.Id))
                                                                 .Sum(w => w.HangCount));
+
+            Bowlers.Where(b => !b.IsSub).ToList().ForEach(b =>
+            {
+                b.HasLowestHangs = b.Hangings == Bowlers.Where(bw => !bw.IsSub).Min(bw => bw.Hangings);
+            });
         }
     }
 

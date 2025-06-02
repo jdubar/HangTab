@@ -8,6 +8,15 @@
     
     <Grid
         ColumnDefinitions="Auto">
+        
+        <!--Only if the bowler has the lowest season hangs-->
+        <Image
+            IsVisible="{Binding Source={x:Reference AvatarView}, Path=ShowCrown}"
+            Source="crown.png"
+            ZIndex="2"
+            WidthRequest="62"
+            Margin="8,-38,0,20" />
+        
         <!--Only if the bowler is a sub-->
         <Border
             Style="{StaticResource Notification_Sub}"
@@ -23,7 +32,7 @@
         
         <!--Only if the bowler is blind-->
         <Border
-            Style="{StaticResource NotificationDot_Blind}"
+            Style="{StaticResource Notification_Blind}"
             IsVisible="{Binding Source={x:Reference AvatarView}, Path=ShowBlind}"
             ZIndex="2">
             <Label

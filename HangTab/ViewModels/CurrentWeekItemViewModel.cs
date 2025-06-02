@@ -33,7 +33,7 @@ public partial class CurrentWeekListItemViewModel : ObservableObject
     {
         if (oldValue != newValue && newValue >= 0)
         {
-            WeakReferenceMessenger.Default.Send(new BowlerHangCountChangedMessage(PersonId, newValue));
+            WeakReferenceMessenger.Default.Send(new BowlerHangCountChangedMessage(BowlerId, newValue));
         }
     }
 
@@ -48,6 +48,9 @@ public partial class CurrentWeekListItemViewModel : ObservableObject
 
     [ObservableProperty]
     private string _initials;
+
+    [ObservableProperty]
+    private bool _hasLowestHangs;
 
     public bool EnableStepper => Status is not Status.Blind;
 

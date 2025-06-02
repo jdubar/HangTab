@@ -143,7 +143,6 @@
                                         Margin="5,2"
                                         Style="{StaticResource RoundedCornerBorder}">
                                         <Grid
-                                            x:Name="grid"
                                             Padding="5"
                                             ColumnDefinitions="Auto,*,Auto">
                                             
