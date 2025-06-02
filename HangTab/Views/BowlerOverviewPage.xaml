@@ -41,17 +41,12 @@
             RowDefinitions="Auto,*">
             
             <!--Search Bar-->
-            <StackLayout>
-                <Border
-                    Style="{StaticResource SearchBarFrame}">
-                    <SearchBar
-                        Placeholder="Search by name" 
-                        Text="{Binding SearchText, Mode=TwoWay}" />
-                </Border>
-                
-                <!--<BoxView
-                    Style="{StaticResource Divider}" />-->
-            </StackLayout>
+            <Border
+                Style="{StaticResource SearchBarFrame}">
+                <SearchBar
+                    Placeholder="Search by name" 
+                    Text="{Binding SearchText, Mode=TwoWay}" />
+            </Border>
             
             <!--Loading Indicator-->
             <controls:LoadingIndicator
