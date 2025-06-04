@@ -54,4 +54,14 @@ internal static class WeekMapper
     {
         return bowlers.Select(b => b.MapBowlerToCurrentWeekListItemViewModel()).ToList();
     }
+
+    internal static List<WeekListItemViewModel> MapWeekToWeekListItemViewModel(this IEnumerable<Week> weeks)
+    {
+        return weeks.Select(w => new WeekListItemViewModel
+        {
+            Id = w.Id,
+            Number = w.Number,
+            BusRides = w.BusRides,
+        }).ToList();
+    }
 }

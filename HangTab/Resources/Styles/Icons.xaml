@@ -8,6 +8,7 @@
     <x:String x:Key="arrow_drop_down">&#xe5c5;</x:String>
     <x:String x:Key="arrow_drop_up">&#xe5c7;</x:String>
     <x:String x:Key="brightness_4">&#xe3a9;</x:String>
+    <x:String x:Key="check">&#xe5ca;</x:String>
     <x:String x:Key="calendar_month">&#xebcc;</x:String>
     <x:String x:Key="chevron_right">&#xe5cc;</x:String>
     <x:String x:Key="close">&#xe5cd;</x:String>
