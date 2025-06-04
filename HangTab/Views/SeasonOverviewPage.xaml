@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<views:ContentPageBase
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:HangTab.Views.Controls"
+    xmlns:views="clr-namespace:HangTab.Views.Base"
+    xmlns:vm="clr-namespace:HangTab.ViewModels"
+    x:Class="HangTab.Views.SeasonOverviewPage"
+    x:DataType="vm:SeasonOverviewViewModel">
+    
+    <!--Page titlebar-->
+    <Shell.TitleView>
+        <Label
+            Text="Season Overview"
+            Style="{StaticResource PageTitle}" />
+    </Shell.TitleView>
+    
+    <ContentPage.Resources>
+        <Style TargetType="Border">
+            <Setter Property="VisualStateManager.VisualStateGroups">
+                <VisualStateGroupList>
+                    <VisualStateGroup x:Name="CommonStates">
+                        <VisualState x:Name="Normal" />
+                        <VisualState x:Name="Selected">
+                            <VisualState.Setters>
+                                <Setter
+                                    Property="BackgroundColor"
+                                    Value="Transparent" />
+                            </VisualState.Setters>
+                        </VisualState>
+                    </VisualStateGroup>
+                </VisualStateGroupList>
+            </Setter>
+        </Style>
+    </ContentPage.Resources>
+    
+    <ContentPage.Content>
+
+        <Grid>
+
+            <!--Loading Indicator-->
+            <controls:LoadingIndicator
+                ShowLoadingIndicator="{Binding IsLoading}"
+                LoadingText="{Binding LoadingText}" />
+
+            <CollectionView
+                ItemsSource="{Binding Weeks}"
+                SelectedItem="{Binding SelectedWeek}"
+                SelectionMode="Single">
+
+                <CollectionView.ItemTemplate>
+                    <DataTemplate
+                        x:DataType="vm:WeekListItemViewModel">
+                        
+                        <Border
+                            Margin="5,2"
+                            Style="{StaticResource RoundedCornerBorder}">
+                            
+                            <Grid
+                                Padding="8"
+                                ColumnDefinitions="Auto,Auto,*,Auto">
+                                
+                                <Grid
+                                    WidthRequest="50"
+                                    HeightRequest="50">
+                                    <Image
+                                        WidthRequest="40"
+                                        HeightRequest="40"
+                                        Margin="10,0,10,0">
+                                        <Image.Source>
+                                            <FontImageSource
+                                                FontFamily="MaterialIcons"
+                                                Glyph="{StaticResource calendar_month}"
+                                                Size="24"
+                                                Color="{DynamicResource TextPrimaryColor}" />
+                                        </Image.Source>
+                                    </Image>
+                                    
+                                    <Image
+                                        WidthRequest="30"
+                                        HeightRequest="30"
+                                        Margin="20,0,0,10"
+                                        ZIndex="2">
+                                        <Image.Source>
+                                            <FontImageSource
+                                                FontFamily="MaterialIcons"
+                                                Glyph="{StaticResource check}"
+                                                Size="24"
+                                                Color="{DynamicResource Success}" />
+                                        </Image.Source>
+                                    </Image>
+                                </Grid>
+                                
+                                <Label
+                                    Grid.Column="1"
+                                    Margin="10,0"
+                                    FontSize="Large"
+                                    VerticalOptions="Center"
+                                    TextColor="{DynamicResource TextPrimaryColor}"
+                                    Text="{Binding Number, Mode=OneWay, StringFormat='Week {0}'}" />
+                                
+                                <VerticalStackLayout
+                                    Grid.Column="2"
+                                    VerticalOptions="Center"
+                                    Margin="15,0">
+                                    <Label
+                                        VerticalOptions="Center"
+                                        FontSize="Medium"
+                                        TextColor="{DynamicResource TextPrimaryColor}"
+                                        Text="{Binding Hangings, Mode=OneWay, StringFormat='Hangings: {0}'}" />
+                                    <Label
+                                        VerticalOptions="Center"
+                                        FontSize="Medium"
+                                        TextColor="{DynamicResource TextPrimaryColor}"
+                                        Text="{Binding BusRides, Mode=OneWay, StringFormat='Bus Rides: {0}'}" />
+                                </VerticalStackLayout>
+                                
+                                <!--Chevron Image-->
+                                <Image
+                                    Grid.Column="3"
+                                    Margin="15,0">
+                                    <Image.Source>
+                                        <FontImageSource
+                                            FontFamily="MaterialIcons"
+                                            Glyph="{StaticResource chevron_right}"
+                                            Color="{DynamicResource TextPrimaryColor}"/>
+                                    </Image.Source>
+                                </Image>
+
+                            </Grid>
+                        
+                        </Border>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                
+                <!--Empty List Message-->
+                <CollectionView.EmptyView>
+                    <controls:EmptyCollectionMessage
+                        IsVisible="{Binding LoadingComplete}"
+                        Message="No Completed Weeks Found"
+                        SubMessage="Create a bowler using the button below" />
+                </CollectionView.EmptyView>
+
+            </CollectionView>
+            
+        </Grid>
+        
+    </ContentPage.Content>
+
+
+</views:ContentPageBase>

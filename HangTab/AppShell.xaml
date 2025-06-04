@@ -8,7 +8,7 @@
     FlyoutBehavior="Disabled">
     <Shell.Behaviors>
         <toolkit:StatusBarBehavior
-            StatusBarColor="#113B5E" />
+            StatusBarColor="{StaticResource StatusBarColor}" />
     </Shell.Behaviors>
 
     <TabBar>
@@ -34,8 +34,16 @@
                 ContentTemplate="{DataTemplate views:BowlerOverviewPage}"
                 Route="bowleroverview"/>
         </Tab>
-        <Tab Icon="calendar_month.png" Title="Season">
-            <!--<ShellContent ContentTemplate="{DataTemplate views:SeasonPage}" />-->
+        <Tab 
+            Title="Season">
+            <Tab.Icon>
+                <FontImageSource
+                    FontFamily="MaterialIcons"
+                    Glyph="{StaticResource calendar_month}" />
+            </Tab.Icon>
+            <ShellContent
+                ContentTemplate="{DataTemplate views:SeasonOverviewPage}"
+                Route="seasonoverview"/>
         </Tab>
         <Tab
             Title="Settings">

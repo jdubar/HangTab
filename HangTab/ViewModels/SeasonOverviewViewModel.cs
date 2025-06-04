@@ -1,0 +1,38 @@
+﻿using CommunityToolkit.Maui.Core.Extensions;
+using CommunityToolkit.Mvvm.ComponentModel;
+
+using HangTab.Services;
+using HangTab.Services.Mappers;
+using HangTab.ViewModels.Base;
+
+using System.Collections.ObjectModel;
+
+namespace HangTab.ViewModels;
+public partial class SeasonOverviewViewModel(
+    IWeekService weekService,
+    INavigationService navigationService) : ViewModelBase
+{
+    [ObservableProperty]
+    private ObservableCollection<WeekListItemViewModel> _weeks = [];
+
+    [ObservableProperty]
+    private WeekListItemViewModel? _selectedWeek;
+
+    public override async Task LoadAsync()
+    {
+        await Loading(GetWeeks);
+    }
+
+    private async Task GetWeeks()
+    {
+        var weeks = await weekService.GetAllWeeks();
+        if (weeks.Any())
+        {
+            Weeks.Clear();
+            // TODO: Need to omit the current week from this list
+            Weeks = weeks.OrderByDescending(b => b.Number)
+                         .MapWeekToWeekListItemViewModel()
+                         .ToObservableCollection();
+        }
+    }
+}

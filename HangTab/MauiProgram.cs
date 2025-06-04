@@ -86,6 +86,7 @@ public static class MauiProgram
     {
         builder.Services.AddSingleton<BowlerListOverviewViewModel>();
         builder.Services.AddSingleton<CurrentWeekOverviewViewModel>();
+        builder.Services.AddSingleton<SeasonOverviewViewModel>();
         builder.Services.AddSingleton<SettingsViewModel>();
 
         builder.Services.AddTransient<AvatarSelectViewModel>();
@@ -98,6 +99,7 @@ public static class MauiProgram
     {
         builder.Services.AddSingleton<BowlerOverviewPage>();
         builder.Services.AddSingleton<CurrentWeekOverviewPage>();
+        builder.Services.AddSingleton<SeasonOverviewPage>();
         builder.Services.AddSingleton<SettingsPage>();
 
         builder.Services.AddTransient<PersonAddEditPage>();
