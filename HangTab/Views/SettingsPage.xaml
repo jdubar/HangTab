@@ -25,13 +25,16 @@
             <!--Weeks in the season-->
             <Border
                 Grid.Row="1"
+                HeightRequest="70"
                 Stroke="{DynamicResource BorderColor}"
                 Margin="-2,0">
                 <Grid
                     ColumnDefinitions="Auto,Auto,*,Auto"
                     BackgroundColor="{DynamicResource SurfaceColor}">
                     <Image
-                        Margin="15,0,10,0">
+                        Margin="15,0,10,0"
+                        WidthRequest="30"
+                        HeightRequest="30">
                         <Image.Source>
                             <FontImageSource
                                 FontFamily="MaterialIcons"
@@ -42,7 +45,9 @@
                     </Image>
                     <Label
                         Grid.Column="1"
+                        Margin="10,0"
                         VerticalOptions="Center"
+                        FontSize="Medium"
                         Text="Weeks In The Season"
                         TextColor="{DynamicResource TextPrimaryColor}" />
                     <controls:Stepper 
@@ -56,13 +61,16 @@
             <!--Theme-->
             <Border
                 Grid.Row="2"
+                HeightRequest="70"
                 Stroke="{DynamicResource BorderColor}"
                 Margin="-2,-2">
                 <Grid
                     ColumnDefinitions="Auto,Auto,*,Auto"
                     BackgroundColor="{DynamicResource SurfaceColor}">
                     <Image
-                        Margin="15,0,10,0">
+                        Margin="15,0,10,0"
+                        WidthRequest="30"
+                        HeightRequest="30">
                         <Image.Source>
                             <FontImageSource
                                 FontFamily="MaterialIcons"
@@ -73,7 +81,9 @@
                     </Image>
                     <Label
                         Grid.Column="1"
+                        Margin="10,0"
                         VerticalOptions="Center"
+                        FontSize="Medium"
                         Text="Dark Theme"
                         TextColor="{DynamicResource TextPrimaryColor}" />
                     <Switch
@@ -95,16 +105,19 @@
             <!--Start New Season-->
             <Border
                 Grid.Row="1"
+                HeightRequest="70"
                 Stroke="{DynamicResource BorderColor}"
                 Margin="-2,0">
                 <Grid
-                    ColumnDefinitions="Auto,Auto,*,Auto"
+                    ColumnDefinitions="Auto,*"
                     BackgroundColor="{DynamicResource SurfaceColor}">
                     <Grid.GestureRecognizers>
                         <TapGestureRecognizer Command="{Binding StartNewSeasonCommand}" />
                     </Grid.GestureRecognizers>
                     <Image
-                        Margin="15,0,10,0">
+                        Margin="15,0,10,0"
+                        WidthRequest="30"
+                        HeightRequest="30">
                         <Image.Source>
                             <FontImageSource
                                 FontFamily="MaterialIcons"
@@ -115,9 +128,10 @@
                     </Image>
                     <VerticalStackLayout
                         Grid.Column="1"
-                        Margin="0,7"
+                        Margin="10,7"
                         VerticalOptions="Center">
                         <Label
+                            FontSize="Medium"
                             Text="Start New Season"
                             TextColor="{DynamicResource TextPrimaryColor}" />
                         <Label
@@ -131,6 +145,7 @@
             <!--Delete All Data-->
             <Border
                 Grid.Row="2"
+                HeightRequest="70"
                 Stroke="{DynamicResource BorderColor}"
                 Margin="-2,-2">
                 <Grid
@@ -140,7 +155,9 @@
                         <TapGestureRecognizer Command="{Binding DeleteAllDataCommand}" />
                     </Grid.GestureRecognizers>
                     <Image
-                        Margin="15,0,10,0">
+                        Margin="15,0,10,0"
+                        WidthRequest="30"
+                        HeightRequest="30">
                         <Image.Source>
                             <FontImageSource
                                 FontFamily="MaterialIcons"
@@ -151,8 +168,10 @@
                     </Image>
                     <VerticalStackLayout
                         Grid.Column="1"
-                        Margin="0,7">
+                        Margin="10,7"
+                        VerticalOptions="Center">
                         <Label
+                            FontSize="Medium"
                             Text="Delete All Data"
                             TextColor="{DynamicResource TextPrimaryColor}" />
                         <Label
