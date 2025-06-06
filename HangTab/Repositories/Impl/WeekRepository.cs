@@ -4,8 +4,13 @@ using HangTab.Models;
 namespace HangTab.Repositories.Impl;
 public class WeekRepository(IDatabaseContext context) : IWeekRepository
 {
-    public async Task<Week> GetWeek(int id)
+    public async Task<Week> GetWeekById(int id)
     {
+        if (id < 1)
+        {
+            return await CreateWeek(1); // Create the first week if no valid ID is provided
+        }
+
         var week = await context.GetItemByIdAsync<Week>(id);
         if (week is null)
         {
@@ -33,7 +38,6 @@ public class WeekRepository(IDatabaseContext context) : IWeekRepository
     }
 
     public Task<IEnumerable<Week>> GetAllWeeks() => context.GetAllWithChildrenAsync<Week>();
-    public Task<Week> GetWeekById(int id) => context.GetItemByIdAsync<Week>(id);
 
     public async Task<Week> CreateWeek(int weekNumber)
     {
@@ -41,13 +45,22 @@ public class WeekRepository(IDatabaseContext context) : IWeekRepository
         {
             Number = weekNumber
         };
-
-        // TODO: Is this still needed?
-        await context.CreateTableIfNotExists<Bowler>();
-        await context.CreateTableIfNotExists<Person>();
-        await context.CreateTableIfNotExists<Week>();
-
         await context.AddItemAsync(week);
+
+        var people = await context.GetFilteredAsync<Person>(p => !p.IsSub);
+        if (people.Any())
+        {
+            foreach (var person in people)
+            {
+                var bowler = new Bowler
+                {
+                    PersonId = person.Id,
+                    WeekId = week.Id
+                };
+                await context.AddItemAsync(bowler);
+            }
+        }
+
         return week;
     }
 

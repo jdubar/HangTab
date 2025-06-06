@@ -83,7 +83,7 @@ public partial class BowlerListOverviewViewModel :
     {
         if (SelectedBowler is not null)
         {
-            await _navigationService.GoToEditBowler(SelectedBowler.MapBowlerListItemViewModelToBowler());
+            await _navigationService.GoToEditBowler(SelectedBowler.MapBowlerListItemViewModelToPerson());
             SelectedBowler = null;
         }
     }
@@ -102,7 +102,7 @@ public partial class BowlerListOverviewViewModel :
         if (people.Any())
         {
             Bowlers.Clear();
-            AllBowlers = people.OrderBy(b => b.Name).MapBowlerToBowlerListItemViewModel();
+            AllBowlers = people.OrderBy(b => b.Name).MapPersonToBowlerListItemViewModel();
             Bowlers = AllBowlers.ToObservableCollection();
 
             await UpdateBowlerHangCounts();

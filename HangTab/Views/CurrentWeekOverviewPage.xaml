@@ -7,13 +7,11 @@
     xmlns:views="clr-namespace:HangTab.Views.Base"
     xmlns:vm="clr-namespace:HangTab.ViewModels"
     x:Class="HangTab.Views.CurrentWeekOverviewPage"
-    x:DataType="vm:CurrentWeekOverviewViewModel"
-    x:Name="PageSelf">
+    x:DataType="vm:CurrentWeekOverviewViewModel">
     
     <Shell.TitleView>
-        <Label
-            Text="{Binding PageTitle}"
-            Style="{StaticResource PageTitle}" />
+        <controls:PageTitle
+            Title="{Binding PageTitle}" />
     </Shell.TitleView>
     
     <ContentPage.Content>
@@ -256,7 +254,8 @@
                 <Button
                     IsEnabled="{Binding IsEnableCompleteWeek}"
                     Style="{StaticResource PrimaryButton}"
-                    Text="{Binding WeekNumber, StringFormat='Complete week {0}'}" />
+                    Text="{Binding WeekNumber, StringFormat='Complete week {0}'}"
+                    Command="{Binding SubmitWeekCommand}"/>
             </StackLayout>
         </Grid>
     </ContentPage.Content>

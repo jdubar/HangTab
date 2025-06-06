@@ -12,9 +12,8 @@
     x:DataType="vm:BowlerSelectSubViewModel">
     
     <Shell.TitleView>
-        <Label
-            Text="Select a sub"
-            Style="{StaticResource PageTitle}" />
+        <controls:PageTitle
+            Title="Select a sub" />
     </Shell.TitleView>
     
     <ContentPage.Resources>

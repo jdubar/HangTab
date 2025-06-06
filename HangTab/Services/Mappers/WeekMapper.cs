@@ -50,18 +50,13 @@ internal static class WeekMapper
         };
     }
 
-    internal static List<CurrentWeekListItemViewModel> MapBowlerToBowlerListItemViewModel(this IEnumerable<Bowler> bowlers)
+    internal static List<CurrentWeekListItemViewModel> MapBowlerToCurrentWeekListItemViewModel(this IEnumerable<Bowler> bowlers)
     {
         return bowlers.Select(b => b.MapBowlerToCurrentWeekListItemViewModel()).ToList();
     }
 
     internal static List<WeekListItemViewModel> MapWeekToWeekListItemViewModel(this IEnumerable<Week> weeks)
     {
-        return weeks.Select(w => new WeekListItemViewModel
-        {
-            Id = w.Id,
-            Number = w.Number,
-            BusRides = w.BusRides,
-        }).ToList();
+        return weeks.Select(w => new WeekListItemViewModel(w.Id, w.Number, w.BusRides, w.Bowlers.Sum(b => b.HangCount), w.Bowlers.MapBowlerToBowlerListItemViewModel())).ToList();
     }
 }

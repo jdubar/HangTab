@@ -4,7 +4,7 @@ using HangTab.ViewModels;
 namespace HangTab.Services.Mappers;
 internal static class BowlerMapper
 {
-    internal static Person MapBowlerListItemViewModelToBowler(this BowlerListItemViewModel bowlerListItemViewModel)
+    internal static Person MapBowlerListItemViewModelToPerson(this BowlerListItemViewModel bowlerListItemViewModel)
     {
         return new Person
         {
@@ -15,7 +15,7 @@ internal static class BowlerMapper
         };
     }
 
-    internal static List<BowlerListItemViewModel> MapBowlerToBowlerListItemViewModel(this IEnumerable<Person> people)
+    internal static List<BowlerListItemViewModel> MapPersonToBowlerListItemViewModel(this IEnumerable<Person> people)
     {
         return people.Select(b => b.Map()).ToList();
     }

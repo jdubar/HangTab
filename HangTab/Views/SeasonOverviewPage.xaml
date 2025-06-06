@@ -10,9 +10,8 @@
     
     <!--Page titlebar-->
     <Shell.TitleView>
-        <Label
-            Text="Season Overview"
-            Style="{StaticResource PageTitle}" />
+        <controls:PageTitle
+            Title="Season Overview" />
     </Shell.TitleView>
     
     <ContentPage.Resources>
@@ -71,7 +70,7 @@
                                             <FontImageSource
                                                 FontFamily="MaterialIcons"
                                                 Glyph="{StaticResource calendar_month}"
-                                                Size="24"
+                                                Size="40"
                                                 Color="{DynamicResource TextPrimaryColor}" />
                                         </Image.Source>
                                     </Image>
@@ -85,7 +84,7 @@
                                             <FontImageSource
                                                 FontFamily="MaterialIcons"
                                                 Glyph="{StaticResource check}"
-                                                Size="24"
+                                                Size="30"
                                                 Color="{DynamicResource Success}" />
                                         </Image.Source>
                                     </Image>

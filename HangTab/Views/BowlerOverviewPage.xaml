@@ -12,9 +12,8 @@
     
     <!--Page titlebar-->
     <Shell.TitleView>
-        <Label
-            Text="All Bowlers"
-            Style="{StaticResource PageTitle}" />
+        <controls:PageTitle
+            Title="All Bowlers" />
     </Shell.TitleView>
     
     <ContentPage.Resources>
@@ -42,6 +41,7 @@
             
             <!--Search Bar-->
             <Border
+                HorizontalOptions="Fill"
                 Style="{StaticResource SearchBarFrame}">
                 <SearchBar
                     Placeholder="Search by name" 

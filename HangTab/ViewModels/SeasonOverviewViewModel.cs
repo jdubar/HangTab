@@ -10,7 +10,8 @@ using System.Collections.ObjectModel;
 namespace HangTab.ViewModels;
 public partial class SeasonOverviewViewModel(
     IWeekService weekService,
-    INavigationService navigationService) : ViewModelBase
+    INavigationService navigationService,
+    ISettingsService settingsService) : ViewModelBase
 {
     [ObservableProperty]
     private ObservableCollection<WeekListItemViewModel> _weeks = [];
@@ -30,7 +31,8 @@ public partial class SeasonOverviewViewModel(
         {
             Weeks.Clear();
             // TODO: Need to omit the current week from this list
-            Weeks = weeks.OrderByDescending(b => b.Number)
+            Weeks = weeks.Where(w => w.Id != settingsService.CurrentWeekPrimaryKey)
+                         .OrderByDescending(b => b.Number)
                          .MapWeekToWeekListItemViewModel()
                          .ToObservableCollection();
         }

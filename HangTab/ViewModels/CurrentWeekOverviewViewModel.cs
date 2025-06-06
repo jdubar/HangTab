@@ -101,8 +101,6 @@ public partial class CurrentWeekOverviewViewModel :
     [ObservableProperty]
     private bool _playBusRideAnimation;
 
-    // TODO: Add Complete Week (submit) relay command
-
     public override async Task LoadAsync()
     {
         if (CurrentWeekBowlers.Count == 0)
@@ -110,6 +108,11 @@ public partial class CurrentWeekOverviewViewModel :
             await Loading(GetCurrentWeek);
         }
 
+        InitializeCurrentWeekPageSettings();
+    }
+
+    private void InitializeCurrentWeekPageSettings()
+    {
         IsEnableCompleteWeek = CurrentWeekBowlers.Count > 0;
         TeamHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
         PageTitle = $"Week {WeekNumber} of {_settingsService.TotalSeasonWeeks}";
@@ -125,26 +128,38 @@ public partial class CurrentWeekOverviewViewModel :
     private async Task SetBowlerStatusToUsingSub(CurrentWeekListItemViewModel? vm) => await SetBowlerStatus(vm, Enums.Status.UsingSub);
 
     // TODO: Add submit command with confirmation dialog
-    
-    private async Task<Week> CreateFirstWeek()
+    [RelayCommand]
+    private async Task SubmitWeek()
     {
-        var week = await _weekService.CreateWeek(1);
-        _settingsService.CurrentWeekPrimaryKey = week.Id;
-        return week;
+        if (await _dialogService.Ask("Complete Week", $"Are you ready to complete week {CurrentWeek.Number}?", "Yes", "No"))
+        {
+            await _weekService.CreateWeek(CurrentWeek.Number + 1).ContinueWith(async saveTask =>
+            {
+                if (saveTask.IsCompletedSuccessfully)
+                {
+                    var newWeek = await saveTask;
+                    _settingsService.CurrentWeekPrimaryKey = newWeek.Id;
+                    await GetCurrentWeek();
+                    InitializeCurrentWeekPageSettings();
+                }
+                else
+                {
+                    await _dialogService.AlertAsync("Error", "Unable to create new week.", "Ok");
+                }
+            });
+        }
     }
 
     private async Task GetCurrentWeek()
     {
-        CurrentWeek = _settingsService.CurrentWeekPrimaryKey == 0
-            ? await CreateFirstWeek()
-            : await _weekService.GetWeek(_settingsService.CurrentWeekPrimaryKey);
-
+        CurrentWeek = await _weekService.GetWeekById(_settingsService.CurrentWeekPrimaryKey);
         if (CurrentWeek is not null)
         {
+            _settingsService.CurrentWeekPrimaryKey = CurrentWeek.Id;
             if (CurrentWeek.Bowlers.Count > 0)
             {
                 CurrentWeekBowlers.Clear();
-                CurrentWeekBowlers = WeekMapper.MapBowlerToBowlerListItemViewModel(CurrentWeek.Bowlers).ToObservableCollection();
+                CurrentWeekBowlers = WeekMapper.MapBowlerToCurrentWeekListItemViewModel(CurrentWeek.Bowlers).ToObservableCollection();
                 UpdateLowestHangsStatus();
             }
 
