@@ -4,6 +4,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using HangTab.Services;
 using HangTab.Services.Mappers;
 using HangTab.ViewModels.Base;
+using HangTab.ViewModels.Items;
 
 using System.Collections.ObjectModel;
 
@@ -30,7 +31,6 @@ public partial class SeasonOverviewViewModel(
         if (weeks.Any())
         {
             Weeks.Clear();
-            // TODO: Need to omit the current week from this list
             Weeks = weeks.Where(w => w.Id != settingsService.CurrentWeekPrimaryKey)
                          .OrderByDescending(b => b.Number)
                          .MapWeekToWeekListItemViewModel()

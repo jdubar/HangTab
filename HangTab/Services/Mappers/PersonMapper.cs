@@ -1,5 +1,5 @@
 ﻿using HangTab.Models;
-using HangTab.ViewModels;
+using HangTab.ViewModels.Items;
 
 namespace HangTab.Services.Mappers;
 internal static class PersonMapper

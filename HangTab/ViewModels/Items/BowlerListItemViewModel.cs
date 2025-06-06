@@ -5,7 +5,7 @@ using HangTab.Enums;
 using HangTab.Extensions;
 using HangTab.Messages;
 
-namespace HangTab.ViewModels;
+namespace HangTab.ViewModels.Items;
 public partial class BowlerListItemViewModel : ObservableObject
 {
     [ObservableProperty]

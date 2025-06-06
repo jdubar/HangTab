@@ -7,11 +7,12 @@ using HangTab.Messages;
 using HangTab.Services;
 using HangTab.Services.Mappers;
 using HangTab.ViewModels.Base;
+using HangTab.ViewModels.Items;
 
 using System.Collections.ObjectModel;
 
 namespace HangTab.ViewModels;
-public partial class BowlerListOverviewViewModel :
+public partial class BowlerOverviewViewModel :
     ViewModelBase,
     IRecipient<BowlerHangCountChangedMessage>,
     IRecipient<PersonAddedOrChangedMessage>,
@@ -22,7 +23,7 @@ public partial class BowlerListOverviewViewModel :
     private readonly INavigationService _navigationService;
     private readonly IWeekService _weekService;
 
-    public BowlerListOverviewViewModel(
+    public BowlerOverviewViewModel(
         IPersonService personService,
         INavigationService navigationService,
         IWeekService weekService)

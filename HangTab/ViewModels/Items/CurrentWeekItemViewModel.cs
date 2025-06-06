@@ -4,7 +4,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using HangTab.Enums;
 using HangTab.Messages;
 
-namespace HangTab.ViewModels;
+namespace HangTab.ViewModels.Items;
 public partial class CurrentWeekListItemViewModel : ObservableObject
 {
     [ObservableProperty]

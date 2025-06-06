@@ -2,7 +2,7 @@
 
 using HangTab.Extensions;
 
-namespace HangTab.ViewModels;
+namespace HangTab.ViewModels.Items;
 public partial class SubListItemViewModel : ObservableObject
 {
     [ObservableProperty]

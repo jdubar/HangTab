@@ -5,7 +5,7 @@ namespace HangTab.Views;
 
 public partial class BowlerOverviewPage : ContentPageBase
 {
-	public BowlerOverviewPage(BowlerListOverviewViewModel vm)
+	public BowlerOverviewPage(BowlerOverviewViewModel vm)
 	{
 		InitializeComponent();
         BindingContext = vm;

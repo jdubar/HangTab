@@ -5,6 +5,7 @@
     xmlns:controls="clr-namespace:HangTab.Views.Controls"
     xmlns:views="clr-namespace:HangTab.Views.Base"
     xmlns:vm="clr-namespace:HangTab.ViewModels"
+    xmlns:vmitems="clr-namespace:HangTab.ViewModels.Items"
     x:Class="HangTab.Views.SeasonOverviewPage"
     x:DataType="vm:SeasonOverviewViewModel">
     
@@ -49,7 +50,7 @@
 
                 <CollectionView.ItemTemplate>
                     <DataTemplate
-                        x:DataType="vm:WeekListItemViewModel">
+                        x:DataType="vmitems:WeekListItemViewModel">
                         
                         <Border
                             Margin="5,2"

@@ -2,7 +2,7 @@
 
 using System.Collections.ObjectModel;
 
-namespace HangTab.ViewModels;
+namespace HangTab.ViewModels.Items;
 public partial class WeekListItemViewModel : ObservableObject
 {
     [ObservableProperty]

@@ -8,6 +8,7 @@ using HangTab.Models;
 using HangTab.Services;
 using HangTab.Services.Mappers;
 using HangTab.ViewModels.Base;
+using HangTab.ViewModels.Items;
 
 using System.Collections.ObjectModel;
 
