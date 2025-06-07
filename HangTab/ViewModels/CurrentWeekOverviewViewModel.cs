@@ -128,27 +128,28 @@ public partial class CurrentWeekOverviewViewModel :
     [RelayCommand]
     private async Task SetBowlerStatusToUsingSub(CurrentWeekListItemViewModel? vm) => await SetBowlerStatus(vm, Enums.Status.UsingSub);
 
-    // TODO: Add submit command with confirmation dialog
     [RelayCommand]
     private async Task SubmitWeek()
     {
-        if (await _dialogService.Ask("Complete Week", $"Are you ready to complete week {CurrentWeek.Number}?", "Yes", "No"))
+        if (!await _dialogService.Ask("Complete Week", $"Are you ready to complete week {CurrentWeek.Number}?", "Yes", "No"))
         {
-            await _weekService.CreateWeek(CurrentWeek.Number + 1).ContinueWith(async saveTask =>
-            {
-                if (saveTask.IsCompletedSuccessfully)
-                {
-                    var newWeek = await saveTask;
-                    _settingsService.CurrentWeekPrimaryKey = newWeek.Id;
-                    await GetCurrentWeek();
-                    InitializeCurrentWeekPageSettings();
-                }
-                else
-                {
-                    await _dialogService.AlertAsync("Error", "Unable to create new week.", "Ok");
-                }
-            });
+            return;
         }
+
+        await _weekService.CreateWeek(CurrentWeek.Number + 1).ContinueWith(async saveTask =>
+        {
+            if (saveTask.IsCompletedSuccessfully)
+            {
+                var newWeek = await saveTask;
+                _settingsService.CurrentWeekPrimaryKey = newWeek.Id;
+                await GetCurrentWeek();
+                InitializeCurrentWeekPageSettings();
+            }
+            else
+            {
+                await _dialogService.AlertAsync("Error", "Unable to create new week.", "Ok");
+            }
+        });
     }
 
     private async Task GetCurrentWeek()
