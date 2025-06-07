@@ -25,7 +25,7 @@ public static class CurrentWeekListItemViewModelMapper
                 bowler.HangCount,
                 bowler.Person.Name,
                 bowler.Person.IsSub,
-                bowler.Person.Name.GetInitials() ?? string.Empty, // Ensure initials are not null
+                bowler.Person.Name.GetInitials(),
                 bowler.Person.ImageUrl);
     }
 }
