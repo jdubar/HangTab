@@ -28,13 +28,18 @@ public partial class CurrentWeekOverviewViewModel :
     private readonly IWeekService _weekService;
     private readonly IBowlerService _bowlerService;
 
+    private readonly IMapper<CurrentWeekListItemViewModel, Bowler> _bowlerMapper;
+    private readonly IMapper<IEnumerable<Bowler>, IEnumerable<CurrentWeekListItemViewModel>> _currentWeekListItemViewModelMapper;
+
     public CurrentWeekOverviewViewModel(
         IAudioService audioService,
         IDialogService dialogService,
         INavigationService navigationService,
         ISettingsService settingsService,
         IWeekService weekService,
-        IBowlerService bowlerService)
+        IBowlerService bowlerService,
+        IMapper<CurrentWeekListItemViewModel, Bowler> bowlerMapper,
+        IMapper<IEnumerable<Bowler>, IEnumerable<CurrentWeekListItemViewModel>> currentWeekListItemViewModelMapper)
     {
         _audioService = audioService;
         _dialogService = dialogService;
@@ -42,6 +47,9 @@ public partial class CurrentWeekOverviewViewModel :
         _settingsService = settingsService;
         _weekService = weekService;
         _bowlerService = bowlerService;
+
+        _bowlerMapper = bowlerMapper;
+        _currentWeekListItemViewModelMapper = currentWeekListItemViewModelMapper;
 
         WeakReferenceMessenger.Default.Register<PersonAddedOrChangedMessage>(this);
         WeakReferenceMessenger.Default.Register<PersonDeletedMessage>(this);
@@ -154,7 +162,7 @@ public partial class CurrentWeekOverviewViewModel :
             if (CurrentWeek.Bowlers.Count > 0)
             {
                 CurrentWeekBowlers.Clear();
-                CurrentWeekBowlers = CurrentWeekListItemViewModelMapper.Map(CurrentWeek.Bowlers).ToObservableCollection();
+                CurrentWeekBowlers = _currentWeekListItemViewModelMapper.Map(CurrentWeek.Bowlers).ToObservableCollection();
                 UpdateLowestHangsStatus();
             }
 
@@ -188,15 +196,15 @@ public partial class CurrentWeekOverviewViewModel :
             case Enums.Status.Active:
                 vm.SubId = null;
                 vm.Status = Enums.Status.Active;
-                await _bowlerService.UpdateBowler(vm.Map());
+                await _bowlerService.UpdateBowler(_bowlerMapper.Map(vm));
                 break;
             case Enums.Status.Blind:
                 vm.SubId = null;
                 vm.Status = Enums.Status.Blind;
-                await _bowlerService.UpdateBowler(vm.Map());
+                await _bowlerService.UpdateBowler(_bowlerMapper.Map(vm));
                 break;
             case Enums.Status.UsingSub:
-                await _navigationService.GoToSelectSub(vm.Map());
+                await _navigationService.GoToSelectSub(_bowlerMapper.Map(vm));
                 return;
         }
 
@@ -230,7 +238,7 @@ public partial class CurrentWeekOverviewViewModel :
 
         bowler.SubId = message.SubId;
         bowler.Status = Enums.Status.UsingSub;
-        await _bowlerService.UpdateBowler(bowler.Map());
+        await _bowlerService.UpdateBowler(_bowlerMapper.Map(bowler));
 
         await GetCurrentWeek();
     }
@@ -243,7 +251,8 @@ public partial class CurrentWeekOverviewViewModel :
             return;
         }
 
-        if (await _bowlerService.UpdateBowler(bowler.Map()))
+        //if (await _bowlerService.UpdateBowler(bowler.Map()))
+        if (await _bowlerService.UpdateBowler(_bowlerMapper.Map(bowler)))
         {
             var newHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
             var isIncrease = newHangTotal > TeamHangTotal;

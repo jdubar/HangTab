@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.ComponentModel;
 
 using HangTab.Mappers;
+using HangTab.Models;
 using HangTab.Services;
 using HangTab.ViewModels.Base;
 using HangTab.ViewModels.Items;
@@ -12,7 +13,7 @@ namespace HangTab.ViewModels;
 public partial class SeasonOverviewViewModel(
     IWeekService weekService,
     INavigationService navigationService,
-    ISettingsService settingsService) : ViewModelBase
+    IMapper<IEnumerable<Week>, IEnumerable<WeekListItemViewModel>> mapper) : ViewModelBase
 {
     [ObservableProperty]
     private ObservableCollection<WeekListItemViewModel> _weeks = [];
@@ -31,10 +32,7 @@ public partial class SeasonOverviewViewModel(
         if (weeks.Any())
         {
             Weeks.Clear();
-            Weeks = weeks.Where(w => w.Id != settingsService.CurrentWeekPrimaryKey)
-                         .OrderByDescending(b => b.Number)
-                         .Map()
-                         .ToObservableCollection();
+            Weeks = mapper.Map(weeks.OrderByDescending(w => w.Number)).ToObservableCollection();
         }
     }
 }

@@ -2,11 +2,22 @@
 using HangTab.ViewModels.Items;
 
 namespace HangTab.Mappers;
-public static class BowlerListItemViewModelMapper
+public class BowlerListItemViewModelMapper : IMapper<IEnumerable<Person>, IEnumerable<BowlerListItemViewModel>>,
+                                             IMapper<IEnumerable<Bowler>, IEnumerable<BowlerListItemViewModel>>
 {
-    public static IEnumerable<BowlerListItemViewModel> Map(this IEnumerable<Person> people) => people.Select(Map);
+    public IEnumerable<BowlerListItemViewModel> Map(IEnumerable<Person> people)
+    {
+        return people is null
+            ? throw new ArgumentNullException(nameof(people))
+            : people.Select(Map);
+    }
 
-    public static IEnumerable<BowlerListItemViewModel> Map(this IEnumerable<Bowler> bowlers) => bowlers.Select(Map);
+    public IEnumerable<BowlerListItemViewModel> Map(IEnumerable<Bowler> bowlers)
+    {
+        return bowlers is null
+            ? throw new ArgumentNullException(nameof(bowlers))
+            : bowlers.Select(Map);
+    }
 
     private static BowlerListItemViewModel Map(Bowler bowler)
     {

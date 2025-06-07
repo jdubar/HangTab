@@ -3,9 +3,9 @@ using HangTab.Models;
 using HangTab.ViewModels.Items;
 
 namespace HangTab.Mappers;
-public static class CurrentWeekListItemViewModelMapper
+public class CurrentWeekListItemViewModelMapper : IMapper<IEnumerable<Bowler>, IEnumerable<CurrentWeekListItemViewModel>>
 {
-    public static IEnumerable<CurrentWeekListItemViewModel> Map(this IEnumerable<Bowler> bowlers)
+    public IEnumerable<CurrentWeekListItemViewModel> Map(IEnumerable<Bowler> bowlers)
     {
         return bowlers is null
             ? throw new ArgumentNullException(nameof(bowlers))

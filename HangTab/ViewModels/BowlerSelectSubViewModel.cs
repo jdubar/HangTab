@@ -16,7 +16,8 @@ namespace HangTab.ViewModels;
 public partial class BowlerSelectSubViewModel(
     IPersonService personService,
     IBowlerService bowlerService,
-    INavigationService navigationService) : ViewModelBase, IQueryAttributable
+    INavigationService navigationService,
+    IMapper<IEnumerable<Person>, IEnumerable<SubListItemViewModel>> mapper) : ViewModelBase, IQueryAttributable
 {
     private Bowler? _bowler;
 
@@ -94,7 +95,7 @@ public partial class BowlerSelectSubViewModel(
         if (subs.Any())
         {
             Subs.Clear();
-            Subs = SubListItemViewModelMapper.Map(subs).ToObservableCollection();
+            Subs = mapper.Map(subs).ToObservableCollection();
         }
     }
 

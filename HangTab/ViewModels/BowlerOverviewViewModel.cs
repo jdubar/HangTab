@@ -6,6 +6,7 @@ using CommunityToolkit.Mvvm.Messaging;
 using HangTab.Mappers;
 
 using HangTab.Messages;
+using HangTab.Models;
 using HangTab.Services;
 using HangTab.ViewModels.Base;
 using HangTab.ViewModels.Items;
@@ -24,14 +25,22 @@ public partial class BowlerOverviewViewModel :
     private readonly INavigationService _navigationService;
     private readonly IWeekService _weekService;
 
+    private readonly IMapper<BowlerListItemViewModel, Person> _personMapper;
+    private readonly IMapper<IEnumerable<Person>, IEnumerable<BowlerListItemViewModel>> _bowlerListItemViewModelMapper;
+
     public BowlerOverviewViewModel(
         IPersonService personService,
         INavigationService navigationService,
-        IWeekService weekService)
+        IWeekService weekService,
+        IMapper<BowlerListItemViewModel, Person> personMapper,
+        IMapper<IEnumerable<Person>, IEnumerable<BowlerListItemViewModel>> bowlerListItemViewModelMapper)
     {
         _personService = personService;
         _navigationService = navigationService;
         _weekService = weekService;
+
+        _personMapper = personMapper;
+        _bowlerListItemViewModelMapper = bowlerListItemViewModelMapper;
 
         WeakReferenceMessenger.Default.Register<BowlerHangCountChangedMessage>(this);
         WeakReferenceMessenger.Default.Register<PersonAddedOrChangedMessage>(this);
@@ -85,7 +94,7 @@ public partial class BowlerOverviewViewModel :
     {
         if (SelectedBowler is not null)
         {
-            await _navigationService.GoToEditBowler(SelectedBowler.Map());
+            await _navigationService.GoToEditBowler(_personMapper.Map(SelectedBowler));
             SelectedBowler = null;
         }
     }
@@ -104,7 +113,7 @@ public partial class BowlerOverviewViewModel :
         if (people.Any())
         {
             Bowlers.Clear();
-            AllBowlers = BowlerListItemViewModelMapper.Map(people.OrderBy(b => b.Name));
+            AllBowlers = _bowlerListItemViewModelMapper.Map(people.OrderBy(b => b.Name));
             Bowlers = AllBowlers.ToObservableCollection();
 
             await UpdateBowlerHangCounts();

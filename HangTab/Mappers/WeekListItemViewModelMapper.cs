@@ -2,9 +2,10 @@
 using HangTab.ViewModels.Items;
 
 namespace HangTab.Mappers;
-public static class WeekListItemViewModelMapper
+public class WeekListItemViewModelMapper(
+    IMapper<IEnumerable<Bowler>, IEnumerable<BowlerListItemViewModel>> mapper) : IMapper<IEnumerable<Week>, IEnumerable<WeekListItemViewModel>>
 {
-    public static IEnumerable<WeekListItemViewModel> Map(this IEnumerable<Week> weeks)
+    public IEnumerable<WeekListItemViewModel> Map(IEnumerable<Week> weeks)
     {
         return weeks is null
             ? throw new ArgumentNullException(nameof(weeks))
@@ -13,6 +14,6 @@ public static class WeekListItemViewModelMapper
                 w.Number,
                 w.BusRides,
                 w.Bowlers.Sum(b => b.HangCount),
-                BowlerListItemViewModelMapper.Map(w.Bowlers)));
+                mapper.Map(w.Bowlers)));
     }
 }

@@ -3,9 +3,9 @@ using HangTab.ViewModels.Items;
 
 namespace HangTab.Mappers;
 
-public static class BowlerMapper
+public class BowlerMapper : IMapper<CurrentWeekListItemViewModel, Bowler>
 {
-    public static Bowler Map(this CurrentWeekListItemViewModel vm)
+    public Bowler Map(CurrentWeekListItemViewModel vm)
     {
         return vm is null
             ? throw new ArgumentNullException(nameof(vm))

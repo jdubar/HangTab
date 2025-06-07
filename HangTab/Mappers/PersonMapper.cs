@@ -3,9 +3,9 @@ using HangTab.ViewModels.Items;
 
 namespace HangTab.Mappers;
 
-public static class PersonMapper
+public class PersonMapper : IMapper<BowlerListItemViewModel, Person>
 {
-    public static Person Map(this BowlerListItemViewModel vm)
+    public Person Map(BowlerListItemViewModel vm)
     {
         return vm is null
             ? throw new ArgumentNullException(nameof(vm))

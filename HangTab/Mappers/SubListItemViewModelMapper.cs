@@ -2,9 +2,9 @@
 using HangTab.ViewModels.Items;
 
 namespace HangTab.Mappers;
-public static class SubListItemViewModelMapper
+public class SubListItemViewModelMapper : IMapper<IEnumerable<Person>, IEnumerable<SubListItemViewModel>>
 {
-    public static IEnumerable<SubListItemViewModel> Map(this IEnumerable<Person> people)
+    public  IEnumerable<SubListItemViewModel> Map(IEnumerable<Person> people)
     {
         return people is null
             ? throw new ArgumentNullException(nameof(people))

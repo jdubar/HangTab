@@ -2,12 +2,15 @@
 
 using HangTab.Data;
 using HangTab.Data.Impl;
+using HangTab.Mappers;
+using HangTab.Models;
 using HangTab.Repositories;
 using HangTab.Repositories.Impl;
 using HangTab.Services;
 using HangTab.Services.Impl;
 using HangTab.ViewModels;
 using HangTab.ViewModels.BottomSheets;
+using HangTab.ViewModels.Items;
 using HangTab.ViewModels.Popups;
 using HangTab.Views;
 using HangTab.Views.Popups;
@@ -45,7 +48,8 @@ public static class MauiProgram
             .RegisterServices()
             .RegisterViewModels()
             .RegisterViews()
-            .RegisterPopups();
+            .RegisterPopups()
+            .RegisterMappers();
 
 #if DEBUG
         builder.Logging.AddDebug();
@@ -110,6 +114,18 @@ public static class MauiProgram
     private static MauiAppBuilder RegisterPopups(this MauiAppBuilder builder)
     {
         builder.Services.AddTransientPopup<BowlerTypePopup, BowlerTypePopupViewModel>();
+        return builder;
+    }
+
+    private static MauiAppBuilder RegisterMappers(this MauiAppBuilder builder)
+    {
+        builder.Services.AddSingleton<IMapper<CurrentWeekListItemViewModel, Bowler>, BowlerMapper>();
+        builder.Services.AddSingleton<IMapper<BowlerListItemViewModel, Person>, PersonMapper>();
+        builder.Services.AddSingleton<IMapper<IEnumerable<Person>, IEnumerable<BowlerListItemViewModel>>, BowlerListItemViewModelMapper>();
+        builder.Services.AddSingleton<IMapper<IEnumerable<Bowler>, IEnumerable<BowlerListItemViewModel>>, BowlerListItemViewModelMapper>();
+        builder.Services.AddSingleton<IMapper<IEnumerable<Bowler>, IEnumerable<CurrentWeekListItemViewModel>>, CurrentWeekListItemViewModelMapper>();
+        builder.Services.AddSingleton<IMapper<IEnumerable<Person>, IEnumerable<SubListItemViewModel>>, SubListItemViewModelMapper>();
+        builder.Services.AddSingleton<IMapper<IEnumerable<Week>, IEnumerable<WeekListItemViewModel>>, WeekListItemViewModelMapper>();
         return builder;
     }
 }
