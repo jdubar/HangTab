@@ -10,24 +10,28 @@ public static class BowlerListItemViewModelMapper
 
     private static BowlerListItemViewModel Map(Bowler bowler)
     {
-        return new BowlerListItemViewModel(
-            bowler.PersonId,
-            bowler.Person.Name,
-            bowler.Person.IsSub,
-            bowler.HangCount,
-            bowler.Id,
-            bowler.Person.ImageUrl,
-            bowler.Status);
+        return bowler is null
+            ? throw new ArgumentNullException(nameof(bowler))
+            : new BowlerListItemViewModel(
+                bowler.PersonId,
+                bowler.Person.Name,
+                bowler.Person.IsSub,
+                bowler.HangCount,
+                bowler.Id,
+                bowler.Person.ImageUrl,
+                bowler.Status);
     }
 
     private static BowlerListItemViewModel Map(Person person)
     {
-        return new BowlerListItemViewModel(
-            person.Id,
-            person.Name,
-            person.IsSub,
-            default,
-            default,
-            person.ImageUrl);
+        return person is null
+            ? throw new ArgumentNullException(nameof(person))
+            : new BowlerListItemViewModel(
+                person.Id,
+                person.Name,
+                person.IsSub,
+                default,
+                default,
+                person.ImageUrl);
     }
 }

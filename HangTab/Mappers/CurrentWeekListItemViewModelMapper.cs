@@ -5,23 +5,22 @@ using HangTab.ViewModels.Items;
 namespace HangTab.Mappers;
 public static class CurrentWeekListItemViewModelMapper
 {
-    public static IEnumerable<CurrentWeekListItemViewModel> Map(this IEnumerable<Bowler> bowlers)
-    {
-        return bowlers.Select(Map);
-    }
+    public static IEnumerable<CurrentWeekListItemViewModel> Map(this IEnumerable<Bowler> bowlers) => bowlers.Select(Map);
 
     private static CurrentWeekListItemViewModel Map(Bowler bowler)
     {
-        return new CurrentWeekListItemViewModel(
-            bowler.WeekId,
-            bowler.Id,
-            bowler.PersonId,
-            bowler.SubId,
-            bowler.Status,
-            bowler.HangCount,
-            bowler.Person.Name,
-            bowler.Person.IsSub,
-            bowler.Person.Name.GetInitials() ?? string.Empty, // Ensure initials are not null
-            bowler.Person.ImageUrl);
+        return bowler is null
+            ? throw new ArgumentNullException(nameof(bowler))
+            : new CurrentWeekListItemViewModel(
+                bowler.WeekId,
+                bowler.Id,
+                bowler.PersonId,
+                bowler.SubId,
+                bowler.Status,
+                bowler.HangCount,
+                bowler.Person.Name,
+                bowler.Person.IsSub,
+                bowler.Person.Name.GetInitials() ?? string.Empty, // Ensure initials are not null
+                bowler.Person.ImageUrl);
     }
 }

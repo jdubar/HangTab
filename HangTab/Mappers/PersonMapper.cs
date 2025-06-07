@@ -5,14 +5,16 @@ namespace HangTab.Mappers;
 
 public static class PersonMapper
 {
-    public static Person Map(this BowlerListItemViewModel bowlerListItemViewModel)
+    public static Person Map(this BowlerListItemViewModel vm)
     {
-        return new Person
-        {
-            Id = bowlerListItemViewModel.Id,
-            Name = bowlerListItemViewModel.Name,
-            IsSub = bowlerListItemViewModel.IsSub,
-            ImageUrl = bowlerListItemViewModel.ImageUrl,
-        };
+        return vm is null
+            ? throw new ArgumentNullException(nameof(vm))
+            : new Person
+                {
+                    Id = vm.Id,
+                    Name = vm.Name,
+                    IsSub = vm.IsSub,
+                    ImageUrl = vm.ImageUrl,
+                };
     }
 }

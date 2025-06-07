@@ -7,12 +7,14 @@ public static class BowlerMapper
 {
     public static Bowler Map(this CurrentWeekListItemViewModel vm)
     {
-        return new Bowler
-        {
-            Id = vm.BowlerId,
-            PersonId = vm.PersonId,
-            Status = vm.Status,
-            HangCount = vm.HangCount,
-        };
+        return vm is null
+            ? throw new ArgumentNullException(nameof(vm))
+            : new Bowler
+                {
+                    Id = vm.BowlerId,
+                    PersonId = vm.PersonId,
+                    Status = vm.Status,
+                    HangCount = vm.HangCount,
+                };
     }
 }
