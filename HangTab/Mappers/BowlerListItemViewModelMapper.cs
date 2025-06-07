@@ -16,8 +16,8 @@ public static class BowlerListItemViewModelMapper
                 bowler.PersonId,
                 bowler.Person.Name,
                 bowler.Person.IsSub,
-                bowler.HangCount,
                 bowler.Id,
+                bowler.HangCount,
                 bowler.Person.ImageUrl,
                 bowler.Status);
     }

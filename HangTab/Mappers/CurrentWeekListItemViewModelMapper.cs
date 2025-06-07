@@ -5,7 +5,12 @@ using HangTab.ViewModels.Items;
 namespace HangTab.Mappers;
 public static class CurrentWeekListItemViewModelMapper
 {
-    public static IEnumerable<CurrentWeekListItemViewModel> Map(this IEnumerable<Bowler> bowlers) => bowlers.Select(Map);
+    public static IEnumerable<CurrentWeekListItemViewModel> Map(this IEnumerable<Bowler> bowlers)
+    {
+        return bowlers is null
+            ? throw new ArgumentNullException(nameof(bowlers))
+            : bowlers.Select(Map);
+    }
 
     private static CurrentWeekListItemViewModel Map(Bowler bowler)
     {
