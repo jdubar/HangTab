@@ -1,6 +1,7 @@
 ﻿namespace HangTab.Services;
 public interface IDatabaseService
 {
-    Task<bool> DeleteAllTableData();
+    Task<bool> DeleteAllData();
+    Task<bool> DeleteSeasonData();
     Task InitializeDatabase();
 }

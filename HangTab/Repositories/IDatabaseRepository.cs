@@ -1,6 +1,7 @@
 ﻿namespace HangTab.Repositories;
 public interface IDatabaseRepository
 {
-    Task<bool> DeleteAllTableData();
+    Task<bool> DeleteAllData();
+    Task<bool> DeleteSeasonData();
     Task InitializeDatabase();
 }

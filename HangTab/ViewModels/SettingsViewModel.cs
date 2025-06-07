@@ -42,7 +42,7 @@ public partial class SettingsViewModel(
     {
         if (await dialogService.Ask("Delete", "Are you sure you want to delete ALL data?", "Yes", "No"))
         {
-            if (await databaseService.DeleteAllTableData())
+            if (await databaseService.DeleteAllData())
             {
                 settingsService.CurrentWeekPrimaryKey = 0;
                 WeakReferenceMessenger.Default.Send(new SystemResetMessage());
@@ -63,21 +63,16 @@ public partial class SettingsViewModel(
             return;
         }
 
-        //TODO: Implement this method
-
-        
-        //if (await dialogService.Ask("Reset", "Are you ready to start a new season and reset all bowler hangings?"))
-        //{
-        //    WeakReferenceMessenger.Default.Send(new BowlerAddedOrChangedMessage());
-            //if (await databaseService.ResetHangings())
-            //{
-            //    await dialogService.ToastAsync("New season has been started");
-            //}
-            //else
-            //{
-            //    await dialogService.AlertAsync("Critical Error", "Error occurred while resetting databaseService!", "Ok");
-            //}
-        //}
+        if (await databaseService.DeleteSeasonData())
+        {
+            settingsService.CurrentWeekPrimaryKey = 0;
+            WeakReferenceMessenger.Default.Send(new SystemResetMessage());
+            await dialogService.ToastAsync("A new season has started");
+        }
+        else
+        {
+            await dialogService.AlertAsync("Critical Error", "Error occurred while resetting the database!", "Ok");
+        }
     }
 
     private Task InitializeSettingsAsync()
