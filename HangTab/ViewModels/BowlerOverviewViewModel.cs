@@ -3,9 +3,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 
+using HangTab.Mappers;
+
 using HangTab.Messages;
 using HangTab.Services;
-using HangTab.Services.Mappers;
 using HangTab.ViewModels.Base;
 using HangTab.ViewModels.Items;
 
@@ -84,7 +85,7 @@ public partial class BowlerOverviewViewModel :
     {
         if (SelectedBowler is not null)
         {
-            await _navigationService.GoToEditBowler(SelectedBowler.MapBowlerListItemViewModelToPerson());
+            await _navigationService.GoToEditBowler(SelectedBowler.Map());
             SelectedBowler = null;
         }
     }
@@ -103,7 +104,7 @@ public partial class BowlerOverviewViewModel :
         if (people.Any())
         {
             Bowlers.Clear();
-            AllBowlers = people.OrderBy(b => b.Name).MapPersonToBowlerListItemViewModel();
+            AllBowlers = BowlerListItemViewModelMapper.Map(people.OrderBy(b => b.Name));
             Bowlers = AllBowlers.ToObservableCollection();
 
             await UpdateBowlerHangCounts();

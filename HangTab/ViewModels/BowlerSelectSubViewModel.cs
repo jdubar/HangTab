@@ -3,10 +3,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 
+using HangTab.Mappers;
 using HangTab.Messages;
 using HangTab.Models;
 using HangTab.Services;
-using HangTab.Services.Mappers;
 using HangTab.ViewModels.Base;
 using HangTab.ViewModels.Items;
 
@@ -94,7 +94,7 @@ public partial class BowlerSelectSubViewModel(
         if (subs.Any())
         {
             Subs.Clear();
-            Subs = subs.MapPersonToSubListItemViewModel().ToObservableCollection();
+            Subs = SubListItemViewModelMapper.Map(subs).ToObservableCollection();
         }
     }
 

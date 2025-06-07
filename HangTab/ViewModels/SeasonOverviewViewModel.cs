@@ -1,8 +1,8 @@
 ﻿using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 
+using HangTab.Mappers;
 using HangTab.Services;
-using HangTab.Services.Mappers;
 using HangTab.ViewModels.Base;
 using HangTab.ViewModels.Items;
 
@@ -33,7 +33,7 @@ public partial class SeasonOverviewViewModel(
             Weeks.Clear();
             Weeks = weeks.Where(w => w.Id != settingsService.CurrentWeekPrimaryKey)
                          .OrderByDescending(b => b.Number)
-                         .MapWeekToWeekListItemViewModel()
+                         .Map()
                          .ToObservableCollection();
         }
     }

@@ -3,10 +3,10 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 
+using HangTab.Mappers;
 using HangTab.Messages;
 using HangTab.Models;
 using HangTab.Services;
-using HangTab.Services.Mappers;
 using HangTab.ViewModels.Base;
 using HangTab.ViewModels.Items;
 
@@ -112,13 +112,6 @@ public partial class CurrentWeekOverviewViewModel :
         InitializeCurrentWeekPageSettings();
     }
 
-    private void InitializeCurrentWeekPageSettings()
-    {
-        IsEnableCompleteWeek = CurrentWeekBowlers.Count > 0;
-        TeamHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
-        PageTitle = $"Week {WeekNumber} of {_settingsService.TotalSeasonWeeks}";
-    }
-
     [RelayCommand]
     private async Task SetBowlerStatusToActive(CurrentWeekListItemViewModel? vm) => await SetBowlerStatus(vm, Enums.Status.Active);
 
@@ -161,12 +154,19 @@ public partial class CurrentWeekOverviewViewModel :
             if (CurrentWeek.Bowlers.Count > 0)
             {
                 CurrentWeekBowlers.Clear();
-                CurrentWeekBowlers = WeekMapper.MapBowlerToCurrentWeekListItemViewModel(CurrentWeek.Bowlers).ToObservableCollection();
+                CurrentWeekBowlers = CurrentWeekListItemViewModelMapper.Map(CurrentWeek.Bowlers).ToObservableCollection();
                 UpdateLowestHangsStatus();
             }
 
             MapWeekData(CurrentWeek);
         }
+    }
+    
+    private void InitializeCurrentWeekPageSettings()
+    {
+        IsEnableCompleteWeek = CurrentWeekBowlers.Count > 0;
+        TeamHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
+        PageTitle = $"Week {WeekNumber} of {_settingsService.TotalSeasonWeeks}";
     }
 
     private void MapWeekData(Week week)
@@ -188,15 +188,15 @@ public partial class CurrentWeekOverviewViewModel :
             case Enums.Status.Active:
                 vm.SubId = null;
                 vm.Status = Enums.Status.Active;
-                await _bowlerService.UpdateBowler(WeekMapper.MapCurrentWeekListItemViewModelToBowler(vm));
+                await _bowlerService.UpdateBowler(vm.Map());
                 break;
             case Enums.Status.Blind:
                 vm.SubId = null;
                 vm.Status = Enums.Status.Blind;
-                await _bowlerService.UpdateBowler(WeekMapper.MapCurrentWeekListItemViewModelToBowler(vm));
+                await _bowlerService.UpdateBowler(vm.Map());
                 break;
             case Enums.Status.UsingSub:
-                await _navigationService.GoToSelectSub(WeekMapper.MapCurrentWeekListItemViewModelToBowler(vm));
+                await _navigationService.GoToSelectSub(vm.Map());
                 return;
         }
 
@@ -230,7 +230,7 @@ public partial class CurrentWeekOverviewViewModel :
 
         bowler.SubId = message.SubId;
         bowler.Status = Enums.Status.UsingSub;
-        await _bowlerService.UpdateBowler(WeekMapper.MapCurrentWeekListItemViewModelToBowler(bowler));
+        await _bowlerService.UpdateBowler(bowler.Map());
 
         await GetCurrentWeek();
     }
@@ -243,7 +243,7 @@ public partial class CurrentWeekOverviewViewModel :
             return;
         }
 
-        if (await _bowlerService.UpdateBowler(WeekMapper.MapCurrentWeekListItemViewModelToBowler(bowler)))
+        if (await _bowlerService.UpdateBowler(bowler.Map()))
         {
             var newHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
             var isIncrease = newHangTotal > TeamHangTotal;

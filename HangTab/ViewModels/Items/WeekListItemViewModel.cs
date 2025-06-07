@@ -19,7 +19,7 @@ public partial class WeekListItemViewModel : ObservableObject
 
     [ObservableProperty]
     [NotifyPropertyChangedFor(nameof(Bowlers))]
-    private List<BowlerListItemViewModel> _allBowlers = [];
+    private IEnumerable<BowlerListItemViewModel> _allBowlers = [];
 
     public ObservableCollection<BowlerListItemViewModel> Bowlers => new(AllBowlers);
 
@@ -28,7 +28,7 @@ public partial class WeekListItemViewModel : ObservableObject
         int number,
         int busRides,
         int hangings,
-        List<BowlerListItemViewModel> allBowlers)
+        IEnumerable<BowlerListItemViewModel> allBowlers)
     {
         Id = id;
         Number = number;
