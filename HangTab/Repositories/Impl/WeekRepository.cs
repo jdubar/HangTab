@@ -8,7 +8,7 @@ public class WeekRepository(IDatabaseContext context) : IWeekRepository
     {
         if (id < 1)
         {
-            return await CreateWeek(1); // Create the first week if no valid ID is provided
+            return await CreateWeek(); // Create the first week if no valid ID is provided
         }
 
         var week = await context.GetItemByIdAsync<Week>(id);
@@ -39,7 +39,7 @@ public class WeekRepository(IDatabaseContext context) : IWeekRepository
 
     public Task<IEnumerable<Week>> GetAllWeeks() => context.GetAllWithChildrenAsync<Week>();
 
-    public async Task<Week> CreateWeek(int weekNumber)
+    public async Task<Week> CreateWeek(int weekNumber = 1)
     {
         var week = new Week
         {

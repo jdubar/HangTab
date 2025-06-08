@@ -3,7 +3,7 @@
 using System.Globalization;
 
 namespace HangTab.Converters;
-public class BowlerStatusEnumToTextConverter : IValueConverter
+public class StatusEnumToTextConverter : IValueConverter
 {
     public object? Convert(object? value, Type targetType, object? parameter, CultureInfo culture)
     {
