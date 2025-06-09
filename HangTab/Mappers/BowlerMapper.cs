@@ -15,6 +15,8 @@ public class BowlerMapper : IMapper<CurrentWeekListItemViewModel, Bowler>
                     PersonId = vm.PersonId,
                     Status = vm.Status,
                     HangCount = vm.HangCount,
+                    WeekId = vm.WeekId,
+                    SubId = vm.SubId
                 };
     }
 }
