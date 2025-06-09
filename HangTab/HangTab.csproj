@@ -92,6 +92,9 @@
 		<MauiXaml Update="Views\Controls\PageTitle.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
+		<MauiXaml Update="Views\Controls\SwipeItem.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
 		<MauiXaml Update="Views\Controls\UserImage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>

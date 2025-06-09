@@ -55,28 +55,11 @@
                                                 IsVisible="{Binding ShowActiveOption}"
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CurrentWeekOverviewViewModel}}, Path=SetBowlerStatusToActiveCommand}"
                                                 CommandParameter="{Binding .}">
-                                                <Border
-                                                    StrokeShape="RoundRectangle 5,0"
-                                                    WidthRequest="70"
-                                                    BackgroundColor="{DynamicResource Success}">
-                                                    <Grid
-                                                        RowDefinitions="40,Auto"
-                                                        VerticalOptions="Center"
-                                                        HorizontalOptions="Center">
-                                                        <Image
-                                                            Aspect="AspectFill"
-                                                            WidthRequest="40"
-                                                            HorizontalOptions="Center"
-                                                            Source="person.png" />
-                                                        <Label
-                                                            Grid.Row="1"
-                                                            Text="Active"
-                                                            FontSize="14"
-                                                            FontAttributes="Bold"
-                                                            TextColor="{DynamicResource PrimaryContrastTextColor}"
-                                                            HorizontalOptions="Center" />
-                                                    </Grid>
-                                                </Border>
+                                                <controls:SwipeItem
+                                                    RoundCorners="True"
+                                                    IconSource="person.png"
+                                                    Text="Active"
+                                                    Color="{DynamicResource Success}" />
                                             </SwipeItemView>
                                             
                                             <!--Blind Swipe Item-->
@@ -84,55 +67,21 @@
                                                 IsVisible="{Binding ShowBlindOption}"
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CurrentWeekOverviewViewModel}}, Path=SetBowlerStatusToBlindCommand}"
                                                 CommandParameter="{Binding .}">
-                                                <Border
-                                                    StrokeShape="RoundRectangle 5,0"
-                                                    WidthRequest="70"
-                                                    BackgroundColor="{DynamicResource Error}">
-                                                    <Grid
-                                                        RowDefinitions="40,Auto"
-                                                        VerticalOptions="Center"
-                                                        HorizontalOptions="Center">
-                                                        <Image
-                                                            Aspect="AspectFill"
-                                                            WidthRequest="40"
-                                                            HorizontalOptions="Center"
-                                                            Source="person_off.png" />
-                                                        <Label
-                                                            Grid.Row="1"
-                                                            Text="Blind"
-                                                            FontSize="14"
-                                                            FontAttributes="Bold"
-                                                            TextColor="{DynamicResource PrimaryContrastTextColor}"
-                                                            HorizontalOptions="Center" />
-                                                    </Grid>
-                                                </Border>
+                                                <controls:SwipeItem
+                                                    RoundCorners="True"
+                                                    IconSource="person_off.png"
+                                                    Text="Blind"
+                                                    Color="{DynamicResource Error}" />
                                             </SwipeItemView>
                                             
                                             <!--Use Sub Swipe Item-->
                                             <SwipeItemView
                                                 Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CurrentWeekOverviewViewModel}}, Path=SetBowlerStatusToUsingSubCommand}"
                                                 CommandParameter="{Binding .}">
-                                                <Border
-                                                    WidthRequest="70"
-                                                    BackgroundColor="{DynamicResource SecondaryColor}">
-                                                    <Grid
-                                                        RowDefinitions="40,Auto"
-                                                        VerticalOptions="Center"
-                                                        HorizontalOptions="Center">
-                                                        <Image
-                                                            Aspect="AspectFill"
-                                                            WidthRequest="40"
-                                                            HorizontalOptions="Center"
-                                                            Source="switch_account.png" />
-                                                        <Label
-                                                            Grid.Row="1"
-                                                            Text="Sub"
-                                                            FontSize="14"
-                                                            FontAttributes="Bold"
-                                                            TextColor="{DynamicResource PrimaryContrastTextColor}"
-                                                            HorizontalOptions="Center" />
-                                                    </Grid>
-                                                </Border>
+                                                <controls:SwipeItem
+                                                    IconSource="switch_account.png"
+                                                    Text="Sub"
+                                                    Color="{DynamicResource SecondaryColor}" />
                                             </SwipeItemView>
                                         </SwipeItems>
                                     </SwipeView.LeftItems>
