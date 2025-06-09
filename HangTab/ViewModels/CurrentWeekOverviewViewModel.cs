@@ -251,7 +251,6 @@ public partial class CurrentWeekOverviewViewModel :
             return;
         }
 
-        //if (await _bowlerService.UpdateBowler(bowler.Map()))
         if (await _bowlerService.UpdateBowler(_bowlerMapper.Map(bowler)))
         {
             var newHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
