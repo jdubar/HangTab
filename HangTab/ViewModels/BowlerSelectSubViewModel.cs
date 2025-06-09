@@ -91,12 +91,26 @@ public partial class BowlerSelectSubViewModel(
 
     private async Task GetSubs()
     {
-        var subs = await personService.GetSubstitutes();
+        var subs = await GetAvailableSubs();
         if (subs.Any())
         {
             Subs.Clear();
             Subs = mapper.Map(subs).ToObservableCollection();
         }
+    }
+
+    private async Task<IEnumerable<Person>> GetAvailableSubs()
+    {
+        var subs = await personService.GetSubstitutes();
+        if (!subs.Any())
+        {
+            return [];
+        }
+
+        var bowlers = await bowlerService.GetAllBowlersByWeekId(_bowler?.WeekId ?? 0);
+        return bowlers.Any()
+            ? subs.Where(s => !bowlers.Any(b => b.SubId == s.Id))
+            : subs;
     }
 
     private Bowler MapDataToBowler()
