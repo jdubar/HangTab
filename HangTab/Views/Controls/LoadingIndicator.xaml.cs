@@ -19,23 +19,14 @@ public partial class LoadingIndicator : ContentView
         set => SetValue(LoadingTextProperty, value);
     }
 
-    public static readonly BindableProperty ShowLoadingIndicatorProperty = BindableProperty.Create(
-        nameof(ShowLoadingIndicator),
-        typeof(bool),
-        typeof(LoadingIndicator),
-        defaultValue: false,
-        defaultBindingMode: BindingMode.TwoWay,
+    public static readonly BindableProperty ShowLoadingIndicatorProperty =
+        BindableProperty.Create(nameof(ShowLoadingIndicator), typeof(bool), typeof(LoadingIndicator), defaultValue: false, defaultBindingMode: BindingMode.TwoWay,
         propertyChanged: (bindableObject, oldValue, newValue) =>
         {
             var loadingIndicator = (LoadingIndicator)bindableObject;
             loadingIndicator.LoadingView.IsVisible = (bool)newValue;
-        }
-    );
+        });
 
-    public static readonly BindableProperty LoadingTextProperty = BindableProperty.Create(
-        nameof(LoadingText),
-        typeof(string),
-        typeof(LoadingIndicator),
-        defaultValue: "Loading..."
-    );
+    public static readonly BindableProperty LoadingTextProperty =
+        BindableProperty.Create(nameof(LoadingText), typeof(string), typeof(LoadingIndicator), defaultValue: "Loading...");
 }

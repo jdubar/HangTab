@@ -34,12 +34,8 @@ public partial class Stepper : ContentView
         set => SetValue(IsControlEnabledProperty, value);
     }
 
-    public static readonly BindableProperty ValueProperty = BindableProperty.Create(
-        nameof(Value),
-        typeof(int),
-        typeof(Stepper),
-        defaultValue: 0,
-        BindingMode.TwoWay,
+    public static readonly BindableProperty ValueProperty =
+        BindableProperty.Create(nameof(Value), typeof(int), typeof(Stepper), defaultValue: 0, BindingMode.TwoWay,
         propertyChanged: (bindableObject, oldValue, newValue) =>
         {
             var stepper = (Stepper)bindableObject;
@@ -48,26 +44,16 @@ public partial class Stepper : ContentView
                 stepper.SetDecreaseButtonState((int)newValue > stepper.Minimum);
                 stepper.SetIncreaseButtonState((int)newValue < stepper.Maximum);
             }
-        }
-    );
+        });
 
-    public static readonly BindableProperty MinimumProperty = BindableProperty.Create(
-        nameof(Minimum),
-        typeof(int),
-        typeof(Stepper),
-        defaultValue: 0);
+    public static readonly BindableProperty MinimumProperty =
+        BindableProperty.Create(nameof(Minimum), typeof(int), typeof(Stepper), defaultValue: 0);
 
-    public static readonly BindableProperty MaximumProperty = BindableProperty.Create(
-        nameof(Maximum),
-        typeof(int),
-        typeof(Stepper),
-        defaultValue: 100);
+    public static readonly BindableProperty MaximumProperty =
+        BindableProperty.Create(nameof(Maximum), typeof(int), typeof(Stepper), defaultValue: 100);
 
-    public static readonly BindableProperty IsControlEnabledProperty = BindableProperty.Create(
-        nameof(IsControlEnabled),
-        typeof(bool),
-        typeof(Stepper),
-        defaultValue: true,
+    public static readonly BindableProperty IsControlEnabledProperty =
+        BindableProperty.Create(nameof(IsControlEnabled), typeof(bool), typeof(Stepper), defaultValue: true,
         propertyChanged: (bindableObject, oldValue, newValue) =>
         {
             var stepper = (Stepper)bindableObject;
