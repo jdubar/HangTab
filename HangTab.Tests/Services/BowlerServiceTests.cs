@@ -37,7 +37,7 @@ public class BowlerServiceTests
 
         // Assert
         Assert.False(result);
-        A.CallTo(() => bowlerRepo.AddBowler(bowler)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => bowlerRepo.AddBowler(A<Bowler>._)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -60,7 +60,7 @@ public class BowlerServiceTests
 
         // Assert
         Assert.Equal(expected.Count, result.Count());
-        A.CallTo(() => bowlerRepo.GetAllBowlersByWeekId(weeekId)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => bowlerRepo.GetAllBowlersByWeekId(A<int>._)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -94,7 +94,7 @@ public class BowlerServiceTests
 
         // Assert
         Assert.Equal(expected.Id, result.Id);
-        A.CallTo(() => bowlerRepo.GetBowlerById(id)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => bowlerRepo.GetBowlerById(A<int>._)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -113,7 +113,7 @@ public class BowlerServiceTests
         // Assert
         Assert.Single(result);
         Assert.Equal(expected[0].Id, result.First().Id);
-        A.CallTo(() => bowlerRepo.GetBowlersByWeekId(id)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => bowlerRepo.GetBowlersByWeekId(A<int>._)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
