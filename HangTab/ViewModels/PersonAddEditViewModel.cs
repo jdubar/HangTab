@@ -250,7 +250,7 @@ public partial class PersonAddEditViewModel :
     {
         if (query.Count > 0)
         {
-            _person = query["Person"] as Person;
+            _person = query[nameof(Person)] as Person;
         }
     }
 

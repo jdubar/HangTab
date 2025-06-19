@@ -130,7 +130,7 @@ public partial class BowlerSelectSubViewModel(
     {
         if (query.Count > 0)
         {
-            _bowler = query["Bowler"] as Bowler;
+            _bowler = query[nameof(Bowler)] as Bowler;
         }
     }
 }
