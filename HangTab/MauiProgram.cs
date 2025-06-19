@@ -71,7 +71,13 @@ public static class MauiProgram
 
     private static MauiAppBuilder RegisterServices(this MauiAppBuilder builder)
     {
-        builder.Services.AddSingleton<IAudioService>(new AudioService(AudioManager.Current));
+        builder.Services.AddSingleton<IFileSystemService>(new FileSystemService(FileSystem.Current));
+        builder.Services.AddSingleton<IAudioService>(provider =>
+        {
+            var audioManager = AudioManager.Current;
+            var fileSystemService = provider.GetRequiredService<IFileSystemService>();
+            return new AudioService(audioManager, fileSystemService);
+        });
         builder.Services.AddSingleton<IDatabaseContext, DatabaseContext>();
         builder.Services.AddSingleton<ISettingsService>(new SettingsService(Preferences.Default));
 

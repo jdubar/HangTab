@@ -74,8 +74,8 @@ public partial class CurrentWeekOverviewViewModel :
             if (CurrentWeek.BusRides < value)
             {
                 PlayBusRideAnimation = true;
-                _audioService.PlayBusRideSound();
-                await Task.Delay(3000);
+                await _audioService.PlaySoundAsync(Constants.Files.BusRideSoundFileName);
+                await Task.Delay(1500);
                 PlayBusRideAnimation = false;
             }
 

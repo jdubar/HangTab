@@ -1,5 +1,5 @@
 ﻿namespace HangTab.Services;
 public interface IAudioService
 {
-    void PlayBusRideSound();
+    Task PlaySoundAsync(string audioFileName);
 }
