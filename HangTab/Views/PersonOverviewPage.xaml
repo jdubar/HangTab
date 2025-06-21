@@ -9,7 +9,7 @@
     xmlns:models="clr-namespace:HangTab.Models"
     xmlns:controls="clr-namespace:HangTab.Views.Controls"
     x:Class="HangTab.Views.BowlerOverviewPage"
-    x:DataType="vm:BowlerOverviewViewModel">
+    x:DataType="vm:PersonOverviewViewModel">
     
     <!--Page titlebar-->
     <Shell.TitleView>

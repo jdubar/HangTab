@@ -14,7 +14,7 @@ using HangTab.ViewModels.Items;
 using System.Collections.ObjectModel;
 
 namespace HangTab.ViewModels;
-public partial class BowlerOverviewViewModel :
+public partial class PersonOverviewViewModel :
     ViewModelBase,
     IRecipient<BowlerHangCountChangedMessage>,
     IRecipient<PersonAddedOrChangedMessage>,
@@ -28,7 +28,7 @@ public partial class BowlerOverviewViewModel :
     private readonly IMapper<BowlerListItemViewModel, Person> _personMapper;
     private readonly IMapper<IEnumerable<Person>, IEnumerable<BowlerListItemViewModel>> _bowlerListItemViewModelMapper;
 
-    public BowlerOverviewViewModel(
+    public PersonOverviewViewModel(
         IPersonService personService,
         INavigationService navigationService,
         IWeekService weekService,

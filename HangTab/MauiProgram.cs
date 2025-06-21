@@ -91,8 +91,8 @@ public static class MauiProgram
 
     private static MauiAppBuilder RegisterViewModels(this MauiAppBuilder builder)
     {
-        builder.Services.AddSingleton<BowlerOverviewViewModel>();
         builder.Services.AddSingleton<CurrentWeekOverviewViewModel>();
+        builder.Services.AddSingleton<PersonOverviewViewModel>();
         builder.Services.AddSingleton<SeasonOverviewViewModel>();
         builder.Services.AddSingleton<SettingsViewModel>();
 
