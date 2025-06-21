@@ -15,8 +15,8 @@ public class BowlerTypeEnumToTextConverter : IValueConverter
         return type switch
         {
             BowlerType.Regular => "Regular bowler",
-            BowlerType.Sub => "Sub",
-            _ => string.Empty
+            BowlerType.Sub => "Substitute bowler",
+            _ => throw new NotImplementedException(),
         };
     }
 
