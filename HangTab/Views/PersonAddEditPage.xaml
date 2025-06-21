@@ -22,7 +22,7 @@
     </Shell.TitleView>
     
     <Grid
-        RowDefinitions="Auto,Auto,Auto,Auto,*,Auto,Auto"
+        RowDefinitions="Auto,Auto,Auto,*,Auto,Auto"
         RowSpacing="10"
         HorizontalOptions="Fill"
         VerticalOptions="Fill">
@@ -101,34 +101,20 @@
                 </Image.Source>
             </Image>
             
-            <!--Custom "picker" due to MAUI not themeing the native control correctly-->
-            <Entry
+            <Picker
                 Grid.Column="1"
-                Placeholder="Select a bowler type"
-                IsReadOnly="True"
-                Text="{Binding SelectedTypeName}"
+                ItemDisplayBinding="{Binding ., Converter={StaticResource BowlerTypeEnumToTextConverter}}"
+                ItemsSource="{Binding BowlerTypes}"
+                SelectedIndex="{Binding BowlerTypeIndex}"
                 TextColor="{DynamicResource TextPrimaryColor}"
-                PlaceholderColor="{DynamicResource TextPrimaryColor}">
-                <Entry.GestureRecognizers>
-                    <TapGestureRecognizer
-                        Command="{Binding ShowBowlerTypePickerCommand}" />
-                </Entry.GestureRecognizers>
-            </Entry>
+                Title="Select Bowler Type"
+                TitleColor="{DynamicResource TextSecondaryColor}" />
             
-        </Grid>
-        
-        <!--Deactivate Bowler Switch-->
-        <Grid
-            Grid.Row="3"
-            ColumnDefinitions="Auto,Auto,*,Auto"
-            Margin="10,0"
-            VerticalOptions="Center"
-            IsVisible="{Binding IsExistingBowler}">
         </Grid>
                     
         <!--Validation Errors List-->
         <VerticalStackLayout
-            Grid.Row="4"
+            Grid.Row="3"
             Margin="40,0,0,0"
             BindableLayout.ItemsSource="{Binding Errors}">
             <BindableLayout.ItemTemplate>
@@ -143,7 +129,7 @@
             
         <!--Delete Button-->
         <StackLayout
-                Grid.Row="5"
+                Grid.Row="4"
                 Margin="10,0">
             <Button
                 Style="{StaticResource PrimaryButton}"
@@ -155,7 +141,7 @@
         
         <!--Submit Button-->
         <StackLayout
-                Grid.Row="6"
+                Grid.Row="5"
                 Margin="10,0,10,10">
             <Button
                 Style="{StaticResource PrimaryButton}"

@@ -11,9 +11,7 @@ using HangTab.Services.Impl;
 using HangTab.ViewModels;
 using HangTab.ViewModels.BottomSheets;
 using HangTab.ViewModels.Items;
-using HangTab.ViewModels.Popups;
 using HangTab.Views;
-using HangTab.Views.Popups;
 
 using Microsoft.Extensions.Logging;
 
@@ -48,7 +46,6 @@ public static class MauiProgram
             .RegisterServices()
             .RegisterViewModels()
             .RegisterViews()
-            .RegisterPopups()
             .RegisterMappers();
 
 #if DEBUG
@@ -114,12 +111,6 @@ public static class MauiProgram
 
         builder.Services.AddTransient<PersonAddEditPage>();
         builder.Services.AddTransient<BowlerSelectSubPage>();
-        return builder;
-    }
-
-    private static MauiAppBuilder RegisterPopups(this MauiAppBuilder builder)
-    {
-        builder.Services.AddTransientPopup<BowlerTypePopup, BowlerTypePopupViewModel>();
         return builder;
     }
 

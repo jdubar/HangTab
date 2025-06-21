@@ -92,7 +92,9 @@ public partial class Stepper : ContentView
         DecreaseButton.IsEnabled = isEnabled;
         if (DecreaseButton.Source is FontImageSource buttonImage)
         {
-            buttonImage.Color = isEnabled ? TextColor.PrimaryTextColor : TextColor.DisabledTextColor;
+            buttonImage.Color = isEnabled
+                ? TextColor.PrimaryContrastTextColor
+                : TextColor.ControlDisabledTextColor;
         }
     }
 
@@ -101,7 +103,9 @@ public partial class Stepper : ContentView
         IncreaseButton.IsEnabled = isEnabled;
         if (IncreaseButton.Source is FontImageSource buttonImage)
         {
-            buttonImage.Color = isEnabled ? TextColor.PrimaryTextColor : TextColor.DisabledTextColor;
+            buttonImage.Color = isEnabled
+                ? TextColor.PrimaryContrastTextColor
+                : TextColor.ControlDisabledTextColor;
         }
     }
 }

@@ -110,9 +110,6 @@
 		<MauiXaml Update="Views\CurrentWeekOverviewPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\Popups\BowlerTypePopup.xaml">
-			<Generator>MSBuild:Compile</Generator>
-		</MauiXaml>
 		<MauiXaml Update="Views\BowlerSelectSubPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>

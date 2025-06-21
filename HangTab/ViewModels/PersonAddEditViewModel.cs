@@ -1,5 +1,4 @@
-﻿using CommunityToolkit.Maui.Core;
-using CommunityToolkit.Maui.Core.Platform;
+﻿using CommunityToolkit.Maui.Core.Platform;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
@@ -11,7 +10,6 @@ using HangTab.Models;
 using HangTab.Services;
 using HangTab.ViewModels.Base;
 using HangTab.ViewModels.BottomSheets;
-using HangTab.ViewModels.Popups;
 using HangTab.Views.BottomSheets;
 
 using System.Collections.ObjectModel;
@@ -28,7 +26,6 @@ public partial class PersonAddEditViewModel :
     private readonly IDialogService _dialogService;
     private readonly INavigationService _navigationService;
     private readonly IMediaPickerService _mediaPickerService;
-    private readonly IPopupService _popupService;
 
     private readonly AvatarSelectBottomSheet _avatarOptionsBottomSheet;
 
@@ -36,14 +33,12 @@ public partial class PersonAddEditViewModel :
         IPersonService personService,
         IDialogService dialogService,
         INavigationService navigationService,
-        IMediaPickerService mediaPickerService,
-        IPopupService popupService)
+        IMediaPickerService mediaPickerService)
     {
         _personService = personService;
         _dialogService = dialogService;
         _navigationService = navigationService;
         _mediaPickerService = mediaPickerService;
-        _popupService = popupService;
 
         _avatarOptionsBottomSheet = new AvatarSelectBottomSheet(new AvatarSelectViewModel(_dialogService, _mediaPickerService));
 
@@ -51,6 +46,12 @@ public partial class PersonAddEditViewModel :
 
         ErrorsChanged += AddBowlerViewModel_ErrorsChanged;
     }
+
+    [ObservableProperty]
+    [Required(ErrorMessage="Bowler type is a required field")]
+    [Range((int)BowlerType.Regular, (int)BowlerType.Sub, ErrorMessage="You must select a bowler type")]
+    [NotifyDataErrorInfo]
+    private int _bowlerTypeIndex = -1;
 
     private Person? _person;
 
@@ -82,15 +83,8 @@ public partial class PersonAddEditViewModel :
     [ObservableProperty]
     private bool _isExistingBowler;
 
-    private int selectedType = -1;
+    public IReadOnlyList<BowlerType> BowlerTypes { get; } = Enum.GetValues<BowlerType>();
 
-    [ObservableProperty]
-    [Required(ErrorMessage = "Bowler type is a required field")]
-    [NotifyDataErrorInfo]
-    private string _selectedTypeName = string.Empty;
-
-    public IReadOnlyList<BowlerType> AllTypes { get; } = Enum.GetValues<BowlerType>().ToList();
-    
     public override async Task LoadAsync()
     {
         await Loading(
@@ -145,22 +139,6 @@ public partial class PersonAddEditViewModel :
         await _avatarOptionsBottomSheet.ShowAsync();
     }
 
-    [RelayCommand]
-    private async Task ShowBowlerTypePicker()
-    {
-        var result = await _popupService.ShowPopupAsync<BowlerTypePopupViewModel>(onPresenting: vm => vm.RadioSubstituteOption = selectedType == (int)BowlerType.Sub);
-        if (result is null)
-        {
-            return;
-        }
-
-        selectedType = (bool)result
-            ? (int)BowlerType.Sub
-            : (int)BowlerType.Regular;
-
-        UpdateSelectedTypeName();
-    }
-
     [RelayCommand(CanExecute = nameof(CanSubmitBowler))]
     private async Task Submit()
     {
@@ -213,7 +191,7 @@ public partial class PersonAddEditViewModel :
             Id = Id,
             Name = Name,
             ImageUrl = ImageUrl,
-            IsSub = selectedType == (int)BowlerType.Sub,
+            IsSub = BowlerTypeIndex == (int)BowlerType.Sub,
         };
     }
 
@@ -227,23 +205,14 @@ public partial class PersonAddEditViewModel :
             IsSub = model.IsSub;
             Initials = model.Id > 0 ? model.Name.GetInitials() : string.Empty;
 
-            selectedType = model.IsSub
+            BowlerTypeIndex = model.IsSub
                 ? (int)BowlerType.Sub
                 : (int)BowlerType.Regular;
-
-            UpdateSelectedTypeName();
         }
 
         PageTitle = Id > 0
             ? "Edit Bowler"
             : "Add Bowler";
-    }
-
-    private void UpdateSelectedTypeName()
-    {
-        SelectedTypeName = selectedType == (int)BowlerType.Sub
-            ? "Substitute"
-            : "Regular";
     }
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)
