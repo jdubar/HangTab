@@ -61,6 +61,7 @@
             Margin="10,20,10,0">
             <Grid
                 ColumnDefinitions="30,*">
+                
                 <Image
                     Margin="5,0">
                     <Image.Source>
@@ -71,16 +72,20 @@
                             Color="{DynamicResource TextPrimaryColor}" />
                     </Image.Source>
                 </Image>
+                
                 <Entry
                     Grid.Column="1"
                     x:Name="NameEntry"
                     ClearButtonVisibility="WhileEditing"
-                    Placeholder="Name"
+                    IsSpellCheckEnabled="False"
+                    IsTextPredictionEnabled="False"
+                    Placeholder="Type Bowler Name"
                     Keyboard="Text"
                     ReturnType="Done"
                     Text="{Binding Name}"
                     TextColor="{DynamicResource TextPrimaryColor}"
-                    PlaceholderColor="{DynamicResource TextPrimaryColor}"/>
+                    PlaceholderColor="{DynamicResource TextSecondaryColor}" />
+                
             </Grid>
         </VerticalStackLayout>
         
