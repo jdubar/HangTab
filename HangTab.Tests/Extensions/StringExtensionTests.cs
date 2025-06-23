@@ -26,7 +26,7 @@ public class StringExtensionsTests
     [Theory]
     [InlineData("")]
     [InlineData("   ")]
-    [InlineData(null)]
+    [InlineData(null!)]
     public void GetInitials_ShouldReturnEmpty(string input)
     {
         var expected = string.Empty;
