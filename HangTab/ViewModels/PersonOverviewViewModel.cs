@@ -131,12 +131,12 @@ public partial class PersonOverviewViewModel :
             }
 
             Bowlers.ToList()
-                   .ForEach(bowler => bowler.Hangings = allWeeks.SelectMany(w => w.Bowlers.Where(b => (b.Status == Enums.Status.UsingSub ? b.SubId : b.PersonId) == bowler.Id))
-                                                                .Sum(w => w.HangCount));
+                   .ForEach(bowler => bowler.HangCount = allWeeks.SelectMany(w => w.Bowlers.Where(b => (b.Status == Enums.Status.UsingSub ? b.SubId : b.PersonId) == bowler.Id))
+                                                                 .Sum(w => w.HangCount));
 
             Bowlers.Where(b => !b.IsSub).ToList().ForEach(b =>
             {
-                b.HasLowestHangCount = b.Hangings == Bowlers.Where(bw => !bw.IsSub).Min(bw => bw.Hangings);
+                b.HasLowestHangCount = b.HangCount == Bowlers.Where(bw => !bw.IsSub).Min(bw => bw.HangCount);
             });
         }
     }

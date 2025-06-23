@@ -16,7 +16,7 @@ public class PersonMapperTests
             name: "Jane Doe",
             isSub: true,
             bowlerId: 7,
-            hangings: 3,
+            hangCount: 3,
             imageUrl: "img.png",
             status: Status.UsingSub
         );

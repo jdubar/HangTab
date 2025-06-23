@@ -59,7 +59,7 @@ public class BowlerListItemViewModelMapperTests
         Assert.Equal(1, actual.Id);
         Assert.Equal("Charlie", actual.Name);
         Assert.True(actual.IsSub);
-        Assert.Equal(5, actual.Hangings);
+        Assert.Equal(5, actual.HangCount);
         Assert.Equal(10, actual.BowlerId);
         Assert.Equal("img3", actual.ImageUrl);
         Assert.Equal(Status.UsingSub, actual.Status);

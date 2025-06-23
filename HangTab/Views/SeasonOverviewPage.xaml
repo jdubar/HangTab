@@ -107,7 +107,7 @@
                                         VerticalOptions="Center"
                                         FontSize="Medium"
                                         TextColor="{DynamicResource TextPrimaryColor}"
-                                        Text="{Binding Hangings, Mode=OneWay, StringFormat='Hangings: {0}'}" />
+                                        Text="{Binding HangCount, Mode=OneWay, StringFormat='Hangings: {0}'}" />
                                     <Label
                                         VerticalOptions="Center"
                                         FontSize="Medium"

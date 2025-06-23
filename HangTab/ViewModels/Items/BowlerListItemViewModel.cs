@@ -18,7 +18,7 @@ public partial class BowlerListItemViewModel : ObservableObject
     private bool _isSub;
 
     [ObservableProperty]
-    private int _hangings;
+    private int _hangCount;
 
     [ObservableProperty]
     private int _bowlerId;
@@ -29,7 +29,7 @@ public partial class BowlerListItemViewModel : ObservableObject
     [ObservableProperty]
     private string _initials;
 
-    partial void OnHangingsChanged(int oldValue, int newValue)
+    partial void OnHangCountChanged(int oldValue, int newValue)
     {
         if (oldValue != newValue && newValue >= 0)
         {
@@ -48,7 +48,7 @@ public partial class BowlerListItemViewModel : ObservableObject
         string name,
         bool isSub,
         int bowlerId = 0,
-        int hangings = 0,
+        int hangCount = 0,
         string? imageUrl = null,
         Status status = Status.Active)
     {
@@ -56,7 +56,7 @@ public partial class BowlerListItemViewModel : ObservableObject
         Name = name;
         IsSub = isSub;
         BowlerId = bowlerId;
-        Hangings = hangings;
+        HangCount = hangCount;
         ImageUrl = imageUrl;
         Status = status;
         Initials = name.GetInitials();

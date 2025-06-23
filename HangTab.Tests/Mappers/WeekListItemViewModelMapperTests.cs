@@ -49,7 +49,7 @@ public class WeekListItemViewModelMapperTests
         Assert.Equal(1, vm.Id);
         Assert.Equal(2, vm.Number);
         Assert.Equal(3, vm.BusRides);
-        Assert.Equal(7, vm.Hangings); // 5 + 2
+        Assert.Equal(7, vm.HangCount); // 5 + 2
     }
 
     [Fact]
