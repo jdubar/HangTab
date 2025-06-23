@@ -1,7 +1,5 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
 
-using System.Collections.ObjectModel;
-
 namespace HangTab.ViewModels.Items;
 public partial class WeekListItemViewModel : ObservableObject
 {
@@ -17,23 +15,15 @@ public partial class WeekListItemViewModel : ObservableObject
     [ObservableProperty]
     private int _hangings;
 
-    [ObservableProperty]
-    [NotifyPropertyChangedFor(nameof(Bowlers))]
-    private IEnumerable<BowlerListItemViewModel> _allBowlers = [];
-
-    public ObservableCollection<BowlerListItemViewModel> Bowlers => new(AllBowlers);
-
     public WeekListItemViewModel(
         int id,
         int number,
         int busRides,
-        int hangings,
-        IEnumerable<BowlerListItemViewModel> allBowlers)
+        int hangings)
     {
         Id = id;
         Number = number;
         BusRides = busRides;
         Hangings = hangings;
-        AllBowlers = allBowlers;
     }
 }

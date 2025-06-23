@@ -10,8 +10,7 @@ public class WeekListItemViewModelMapperTests
     public void Map_ValidWeeks_MapsToViewModels()
     {
         // Arrange
-        var bowleristItemViewModelMapper = new BowlerListItemViewModelMapper();
-        var mapper = new WeekListItemViewModelMapper(bowleristItemViewModelMapper);
+        var mapper = new WeekListItemViewModelMapper();
         var weeks = new List<Week>
         {
             new()
@@ -51,18 +50,13 @@ public class WeekListItemViewModelMapperTests
         Assert.Equal(2, vm.Number);
         Assert.Equal(3, vm.BusRides);
         Assert.Equal(7, vm.Hangings); // 5 + 2
-        Assert.NotNull(vm.Bowlers);
-        Assert.Equal(2, vm.Bowlers.Count);
-        Assert.Contains(vm.Bowlers, b => b.Name == "Alice" && b.Hangings == 5);
-        Assert.Contains(vm.Bowlers, b => b.Name == "Bob" && b.Hangings == 2);
     }
 
     [Fact]
     public void Map_EmptyWeeks_ReturnsEmpty()
     {
         // Arrange
-        var bowleristItemViewModelMapper = new BowlerListItemViewModelMapper();
-        var mapper = new WeekListItemViewModelMapper(bowleristItemViewModelMapper);
+        var mapper = new WeekListItemViewModelMapper();
         var weeks = new List<Week>();
 
         // Act
@@ -76,8 +70,7 @@ public class WeekListItemViewModelMapperTests
     public void Map_NullWeeks_ThrowsArgumentNullException()
     {
         // Arrange
-        var bowleristItemViewModelMapper = new BowlerListItemViewModelMapper();
-        var mapper = new WeekListItemViewModelMapper(bowleristItemViewModelMapper);
+        var mapper = new WeekListItemViewModelMapper();
 
         // Act & Assert
         Assert.Throws<ArgumentNullException>(() => mapper.Map(null!));
@@ -87,8 +80,7 @@ public class WeekListItemViewModelMapperTests
     public void Map_WeekWithNullBowlers_ThrowsArgumentNullException()
     {
         // Arrange
-        var bowleristItemViewModelMapper = new BowlerListItemViewModelMapper();
-        var mapper = new WeekListItemViewModelMapper(bowleristItemViewModelMapper);
+        var mapper = new WeekListItemViewModelMapper();
         var weeks = new List<Week>
         {
             new()
