@@ -136,7 +136,7 @@ public partial class PersonOverviewViewModel :
 
             Bowlers.Where(b => !b.IsSub).ToList().ForEach(b =>
             {
-                b.HasLowestHangs = b.Hangings == Bowlers.Where(bw => !bw.IsSub).Min(bw => bw.Hangings);
+                b.HasLowestHangCount = b.Hangings == Bowlers.Where(bw => !bw.IsSub).Min(bw => bw.Hangings);
             });
         }
     }

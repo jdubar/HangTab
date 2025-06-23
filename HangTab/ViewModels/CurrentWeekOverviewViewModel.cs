@@ -215,7 +215,7 @@ public partial class CurrentWeekOverviewViewModel :
     {
         CurrentWeekBowlers.Where(b => !b.IsSub).ToList().ForEach(b =>
         {
-            b.HasLowestHangs = b.HangCount == CurrentWeekBowlers.Where(bw => !bw.IsSub).Min(bw => bw.HangCount);
+            b.HasLowestHangCount = b.HangCount == CurrentWeekBowlers.Where(bw => !bw.IsSub).Min(bw => bw.HangCount);
         });
     }
 

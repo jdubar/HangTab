@@ -50,7 +50,7 @@ public partial class CurrentWeekListItemViewModel : ObservableObject
     private string _initials;
 
     [ObservableProperty]
-    private bool _hasLowestHangs;
+    private bool _hasLowestHangCount;
 
     public bool EnableStepper => Status is not Status.Blind;
 
