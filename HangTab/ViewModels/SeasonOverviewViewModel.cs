@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 using HangTab.Mappers;
 using HangTab.Models;
@@ -34,6 +35,16 @@ public partial class SeasonOverviewViewModel(
         {
             Weeks.Clear();
             Weeks = mapper.Map(weeks.Where(w => w.Id != settingsService.CurrentWeekPrimaryKey).OrderByDescending(w => w.Number)).ToObservableCollection();
+        }
+    }
+
+    [RelayCommand]
+    private async Task NavigateToSelectedWeekDetails()
+    {
+        if (SelectedWeek is not null)
+        {
+            await navigationService.GoToWeekDetails(SelectedWeek.Id);
+            SelectedWeek = null;
         }
     }
 }

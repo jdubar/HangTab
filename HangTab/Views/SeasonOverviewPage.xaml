@@ -46,7 +46,8 @@
             <CollectionView
                 ItemsSource="{Binding Weeks}"
                 SelectedItem="{Binding SelectedWeek}"
-                SelectionMode="Single">
+                SelectionMode="Single"
+                SelectionChangedCommand="{Binding NavigateToSelectedWeekDetailsCommand}">
 
                 <CollectionView.ItemTemplate>
                     <DataTemplate

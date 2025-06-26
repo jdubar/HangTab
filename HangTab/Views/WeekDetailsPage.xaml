@@ -1,0 +1,144 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<views:ContentPageBase
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:HangTab.Views.Controls"
+    xmlns:views="clr-namespace:HangTab.Views.Base"
+    xmlns:vm="clr-namespace:HangTab.ViewModels"
+    xmlns:vmitems="clr-namespace:HangTab.ViewModels.Items"
+    x:Class="HangTab.Views.WeekDetailsPage"
+    x:DataType="vm:WeekDetailsViewModel">
+    
+    <Shell.TitleView>
+        <controls:PageTitle
+            Title="{Binding PageTitle}" />
+    </Shell.TitleView>
+    
+    <ContentPage.Content>
+        <Grid
+            RowDefinitions="*,30,Auto">
+            
+            <!--This Week's Bowler List & Splash-->
+            <Grid>
+                
+                <!--Loading Indicator-->
+                <controls:LoadingIndicator
+                    ShowLoadingIndicator="{Binding IsLoading}"
+                    LoadingText="{Binding LoadingText}" />
+
+                <!--Bowler List-->
+                <CollectionView
+                    ItemsSource="{Binding Bowlers}">
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate
+                            x:DataType="vmitems:CurrentWeekListItemViewModel">
+                            
+                            <VerticalStackLayout>
+                                
+                                <Border
+                                    Margin="5,2"
+                                    Style="{StaticResource RoundedCornerBorder}">
+                                    <Grid
+                                        Padding="5"
+                                        ColumnDefinitions="Auto,*,Auto">
+                                            
+                                        <!--Avatar Image-->
+                                        <controls:UserImage
+                                            ImageUrl="{Binding ImageUrl}"
+                                            Initials="{Binding Initials}"
+                                            ShowBlind="{Binding IsBlind}"
+                                            ShowSub="{Binding IsSub}" />
+                                
+                                        <!--Full Name-->
+                                        <Label
+                                            Grid.Column="1"
+                                            VerticalOptions="Center"
+                                            FontSize="Large"
+                                            Text="{Binding Name}"
+                                            Style="{StaticResource BowlerName}" />
+                            
+                                        <!--Hanging Stepper-->
+                                        <controls:Stepper 
+                                            Grid.Column="2"
+                                            IsControlEnabled="False"
+                                            Value="{Binding HangCount}" />
+                                    
+                                    </Grid>
+                                </Border>
+                                
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    
+                    <!--Empty List Message-->
+                    <CollectionView.EmptyView>
+                        <controls:EmptyCollectionMessage
+                            IsVisible="{Binding LoadingComplete}"
+                            Message="Your lineup is empty"
+                            SubMessage="Create bowlers on the Bowlers page" />
+                    </CollectionView.EmptyView>
+                    
+                </CollectionView>
+            </Grid>
+            
+            <!--Total hangings this week-->
+            <Grid
+                Grid.Row="1">
+                <Grid
+                    ColumnDefinitions="Auto,*">
+                    <Border
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Style="{StaticResource RoundedCornerBorder}"
+                        ZIndex="1">
+                    </Border>
+                    
+                    <Grid
+                        Grid.Column="1"
+                        ColumnDefinitions="Auto,*"
+                        ZIndex="2">
+                        <Label
+                            Text="{Binding TeamHangTotal, Mode=OneWay, StringFormat='Total Hangings: {0}'}"
+                            Style="{StaticResource TotalHangings}" />
+                    </Grid>
+                </Grid>
+            </Grid>
+        
+            <!--This Week's Bus Ride Count-->
+            <Grid
+                Grid.Row="2"
+                ColumnDefinitions="*,Auto"
+                Margin="0,0,0,10">
+                
+                <Border
+                    Style="{StaticResource RoundedCornerBorder}">
+                    <Grid
+                        ColumnDefinitions="Auto,*,Auto">
+                        <Image
+                            Grid.Column="0"
+                            Source="school_bus.png"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            Margin="15,0,20,10"
+                            HeightRequest="80" />
+
+                        <Label
+                            Grid.Column="1"
+                            Text="Bus Rides"
+                            Style="{StaticResource BusRides}" />
+                
+                        <!--Bus Ride Stepper-->
+                        <controls:Stepper 
+                            Grid.Column="3"
+                            IsControlEnabled="False"
+                            Value="{Binding BusRides}" />
+
+                    </Grid>
+                </Border>
+            </Grid>
+            
+        </Grid>
+    </ContentPage.Content>
+    
+</views:ContentPageBase>
