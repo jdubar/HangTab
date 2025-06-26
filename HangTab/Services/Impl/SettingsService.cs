@@ -1,12 +1,7 @@
 ﻿namespace HangTab.Services.Impl;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a simple settings service with no complex logic, so we don't need to cover it extensively.")]
 public class SettingsService(IPreferences preferences) : ISettingsService
 {
-    public decimal CostPerHang
-    {
-        get => preferences.Get(nameof(CostPerHang), 0.25m);
-        set => preferences.Set(nameof(CostPerHang), value);
-    }
-
     public int CurrentWeekPrimaryKey
     {
         get => preferences.Get(nameof(CurrentWeekPrimaryKey), 0);

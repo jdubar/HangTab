@@ -2,6 +2,7 @@
 using HangTab.Models;
 
 namespace HangTab.Services.Impl;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a service class for navigation, not unit tested directly.")]
 public class NavigationService : INavigationService
 {
     public Task GoBack() => Shell.Current.GoToAsync("..");

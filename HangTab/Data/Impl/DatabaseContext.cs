@@ -4,6 +4,7 @@ using SQLiteNetExtensionsAsync.Extensions;
 using System.Linq.Expressions;
 
 namespace HangTab.Data.Impl;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We will not test database context. There's no logic to test.")]
 public class DatabaseContext : IDatabaseContext, IAsyncDisposable
 {
     private SQLiteAsyncConnection? _connection;

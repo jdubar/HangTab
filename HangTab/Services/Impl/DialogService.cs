@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui.Alerts;
 
 namespace HangTab.Services.Impl;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a simple dialog service with no complex logic, so we don't need to cover it extensively.")]
 public class DialogService : IDialogService
 {
     public async Task AlertAsync(string title, string message, string buttonText) => await Shell.Current.DisplayAlert(title, message, buttonText);
