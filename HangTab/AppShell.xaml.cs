@@ -12,5 +12,6 @@ public partial class AppShell : Shell
         Routing.RegisterRoute(Routes.BowlerAdd, typeof(PersonAddEditPage));
         Routing.RegisterRoute(Routes.BowlerEdit, typeof(PersonAddEditPage));
         Routing.RegisterRoute(Routes.BowlerSelectSub, typeof(BowlerSelectSubPage));
+        Routing.RegisterRoute(Routes.WeekDetails, typeof(WeekDetailsPage));
     }
 }

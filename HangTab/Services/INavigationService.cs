@@ -7,4 +7,5 @@ public interface INavigationService
     Task GoToAddBowler();
     Task GoToEditBowler(Person person);
     Task GoToSelectSub(Bowler bowler);
+    Task GoToWeekDetails(int weekId);
 }

@@ -27,4 +27,14 @@ public class NavigationService : INavigationService
 
         await Shell.Current.GoToAsync(Routes.BowlerSelectSub, navigationParameter);
     }
+
+    public async Task GoToWeekDetails(int weekId)
+    {
+        var navigationParameter = new ShellNavigationQueryParameters
+        {
+            { nameof(weekId), weekId }
+        };
+
+        await Shell.Current.GoToAsync(Routes.WeekDetails, navigationParameter);
+    }
 }
