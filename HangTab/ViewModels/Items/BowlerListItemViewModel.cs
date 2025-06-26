@@ -20,6 +20,14 @@ public partial class BowlerListItemViewModel : ObservableObject
     [ObservableProperty]
     private int _hangCount;
 
+    partial void OnHangCountChanged(int oldValue, int newValue)
+    {
+        if (oldValue != newValue && newValue >= 0)
+        {
+            WeakReferenceMessenger.Default.Send(new BowlerHangCountChangedMessage(BowlerId, newValue));
+        }
+    }
+
     [ObservableProperty]
     private int _bowlerId;
 
@@ -28,14 +36,6 @@ public partial class BowlerListItemViewModel : ObservableObject
     
     [ObservableProperty]
     private string _initials;
-
-    partial void OnHangCountChanged(int oldValue, int newValue)
-    {
-        if (oldValue != newValue && newValue >= 0)
-        {
-            WeakReferenceMessenger.Default.Send(new BowlerHangCountChangedMessage(BowlerId, newValue));
-        }
-    }
 
     [ObservableProperty]
     private bool _hasLowestHangCount;
