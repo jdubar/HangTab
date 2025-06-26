@@ -6,6 +6,7 @@ using HangTab.Services;
 using HangTab.ViewModels.Base;
 
 namespace HangTab.ViewModels.BottomSheets;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a ViewModel for the UI and does not require unit tests.")]
 public partial class AvatarSelectViewModel(
     IDialogService dialogService,
     IMediaPickerService mediaPickerService) : ViewModelBase

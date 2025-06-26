@@ -6,6 +6,7 @@ using HangTab.Extensions;
 using HangTab.Messages;
 
 namespace HangTab.ViewModels.Items;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a ViewModel for the UI and does not require unit tests.")]
 public partial class BowlerListItemViewModel : ObservableObject
 {
     [ObservableProperty]

@@ -2,6 +2,7 @@
 using CommunityToolkit.Mvvm.Input;
 
 namespace HangTab.ViewModels.Base;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a ViewModel for the UI and does not require unit tests.")]
 public partial class ViewModelBase : ObservableValidator, IViewModelBase
 {
     [ObservableProperty]
