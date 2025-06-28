@@ -1,32 +1,26 @@
-﻿using CommunityToolkit.Mvvm.ComponentModel;
+﻿using HangTab.Enums;
 
 using SQLite;
 
+using SQLiteNetExtensions.Attributes;
+
 namespace HangTab.Models;
-
-[Table("bowler")]
-public class Bowler : ObservableObject
+[Table("Bowlers")]
+public class Bowler
 {
-    private int _totalHangings;
-    private string _imageUrl = "account_circle.png";
-
     [PrimaryKey, AutoIncrement]
     public int Id { get; set; }
-    public string ImageUrl
-    {
-        get => _imageUrl;
-        set => SetProperty(ref _imageUrl, value);
-    }
+    public Status Status { get; set; } = Status.Active;
+    public int HangCount { get; set; }
 
-    public string FirstName { get; set; } = string.Empty;
-    public string LastName { get; set; } = string.Empty;
-    public bool IsSub { get; set; }
-    public bool IsHidden { get; set; }
-    public int TotalHangings
-    {
-        get => _totalHangings;
-        set => SetProperty(ref _totalHangings, value);
-    }
+    [ForeignKey(typeof(Week))]
+    public int WeekId { get; set; }
 
-    public string FullName => $"{FirstName} {LastName}";
+    [ForeignKey(typeof(Person))]
+    public int PersonId { get; set; }
+
+    public int? SubId { get; set; } = null;
+
+    [ManyToOne(CascadeOperations = CascadeOperation.All)]
+    public Person Person { get; set; } = new();
 }

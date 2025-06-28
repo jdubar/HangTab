@@ -1,0 +1,211 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<views:ContentPageBase
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:HangTab.Views.Controls"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:views="clr-namespace:HangTab.Views.Base"
+    xmlns:vm="clr-namespace:HangTab.ViewModels"
+    xmlns:vmitems="clr-namespace:HangTab.ViewModels.Items"
+    x:Class="HangTab.Views.CurrentWeekOverviewPage"
+    x:DataType="vm:CurrentWeekOverviewViewModel">
+    
+    <Shell.TitleView>
+        <controls:PageTitle
+            Title="{Binding PageTitle}" />
+    </Shell.TitleView>
+    
+    <ContentPage.Content>
+        <Grid
+            RowDefinitions="*,30,Auto,Auto">
+            
+            <!--This Week's Bowler List & Splash-->
+            <Grid>
+                
+                <!--Bus Ride Splash-->
+                <Image
+                    Source="bus_splash.png"
+                    HeightRequest="300"
+                    ZIndex="2"
+                    IsVisible="{Binding PlayBusRideAnimation}"
+                    HorizontalOptions="Center"
+                    VerticalOptions="Center" />
+                
+                <!--Loading Indicator-->
+                <controls:LoadingIndicator
+                    ShowLoadingIndicator="{Binding IsLoading}"
+                    LoadingText="{Binding LoadingText}" />
+
+                <!--Bowler List-->
+                <CollectionView
+                    ItemsSource="{Binding CurrentWeekBowlers}"
+                    SelectedItem="{Binding SelectedBowler}">
+
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate
+                            x:DataType="vmitems:CurrentWeekListItemViewModel">
+                            
+                            <VerticalStackLayout>
+                                <SwipeView>
+                                    <SwipeView.LeftItems>
+                                        <SwipeItems>
+                                            
+                                            <!--Active Swipe Item-->
+                                            <SwipeItemView
+                                                IsVisible="{Binding ShowActiveOption}"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CurrentWeekOverviewViewModel}}, Path=SetBowlerStatusToActiveCommand}"
+                                                CommandParameter="{Binding .}">
+                                                <controls:SwipeItem
+                                                    RoundCorners="True"
+                                                    IconSource="person.png"
+                                                    Text="Active"
+                                                    Color="{DynamicResource Success}" />
+                                            </SwipeItemView>
+                                            
+                                            <!--Blind Swipe Item-->
+                                            <SwipeItemView
+                                                IsVisible="{Binding ShowBlindOption}"
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CurrentWeekOverviewViewModel}}, Path=SetBowlerStatusToBlindCommand}"
+                                                CommandParameter="{Binding .}">
+                                                <controls:SwipeItem
+                                                    RoundCorners="True"
+                                                    IconSource="person_off.png"
+                                                    Text="Blind"
+                                                    Color="{DynamicResource Error}" />
+                                            </SwipeItemView>
+                                            
+                                            <!--Use Sub Swipe Item-->
+                                            <SwipeItemView
+                                                Command="{Binding Source={RelativeSource AncestorType={x:Type vm:CurrentWeekOverviewViewModel}}, Path=SetBowlerStatusToUsingSubCommand}"
+                                                CommandParameter="{Binding .}">
+                                                <controls:SwipeItem
+                                                    IconSource="switch_account.png"
+                                                    Text="Sub"
+                                                    Color="{DynamicResource SecondaryColor}" />
+                                            </SwipeItemView>
+                                        </SwipeItems>
+                                    </SwipeView.LeftItems>
+                                    
+                                    <Border
+                                        Margin="5,2"
+                                        Style="{StaticResource RoundedCornerBorder}">
+                                        <Grid
+                                            Padding="5"
+                                            ColumnDefinitions="Auto,*,Auto">
+                                            
+                                            <!--Avatar Image-->
+                                            <controls:UserImage
+                                                ImageUrl="{Binding ImageUrl}"
+                                                Initials="{Binding Initials}"
+                                                ShowBlind="{Binding IsBlind}"
+                                                ShowSub="{Binding IsSub}" />
+                                
+                                            <!--Full Name-->
+                                            <Label
+                                                Grid.Column="1"
+                                                VerticalOptions="Center"
+                                                FontSize="Large"
+                                                Text="{Binding Name}"
+                                                Style="{StaticResource BowlerName}" />
+                            
+                                            <!--Hanging Stepper-->
+                                            <controls:Stepper 
+                                                Grid.Column="2"
+                                                IsControlEnabled="{Binding EnableStepper}"
+                                                Value="{Binding HangCount}" />
+                                    
+                                        </Grid>
+                                    </Border>
+                                </SwipeView>
+                            </VerticalStackLayout>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    
+                    <!--Empty List Message-->
+                    <CollectionView.EmptyView>
+                        <controls:EmptyCollectionMessage
+                            IsVisible="{Binding LoadingComplete}"
+                            Message="Your lineup is empty"
+                            SubMessage="Create bowlers on the Bowlers page" />
+                    </CollectionView.EmptyView>
+                    
+                </CollectionView>
+            </Grid>
+            
+            <!--Total hangings this week-->
+            <Grid
+                Grid.Row="1">
+                <Grid
+                    ColumnDefinitions="Auto,*">
+                    <Border
+                        Grid.Column="0"
+                        Grid.ColumnSpan="2"
+                        Style="{StaticResource RoundedCornerBorder}"
+                        ZIndex="1">
+                    </Border>
+                    
+                    <Grid
+                        Grid.Column="1"
+                        ColumnDefinitions="Auto,*"
+                        ZIndex="2">
+                        <Label
+                            Text="{Binding TeamHangTotal, Mode=OneWay, StringFormat='Total Hangings: {0}'}"
+                            Style="{StaticResource TotalHangings}" />
+                        <Image
+                            Grid.Column="1"
+                            Source="popper_anim.gif"
+                            IsVisible="{Binding PlayPopperAnimation}"
+                            HeightRequest="40"
+                            Margin="0,0,0,10"
+                            HorizontalOptions="Start"
+                            IsAnimationPlaying="{Binding PlayPopperAnimation}" />
+                    </Grid>
+                </Grid>
+            </Grid>
+        
+            <!--This Week's Bus Ride Count-->
+            <Grid
+                Grid.Row="2"
+                ColumnDefinitions="*,Auto">
+                
+                <Border
+                    Style="{StaticResource RoundedCornerBorder}">
+                    <Grid
+                        ColumnDefinitions="Auto,*,Auto">
+                        <Image
+                            Grid.Column="0"
+                            Source="school_bus.png"
+                            HorizontalOptions="Center"
+                            VerticalOptions="Center"
+                            Margin="15,0,20,10"
+                            HeightRequest="80" />
+
+                        <Label
+                            Grid.Column="1"
+                            Text="Bus Rides"
+                            Style="{StaticResource BusRides}" />
+                
+                        <!--Bus Ride Stepper-->
+                        <controls:Stepper 
+                            Grid.Column="3"
+                            IsControlEnabled="{Binding BusRideStepperEnabled}"
+                            Value="{Binding BusRides}" />
+
+                    </Grid>
+                </Border>
+            </Grid>
+        
+            <!--Submit Button-->
+            <StackLayout
+                Grid.Row="3"
+                Grid.Column="0"
+                Margin="5">
+                <Button
+                    IsEnabled="{Binding IsEnableCompleteWeek}"
+                    Style="{StaticResource PrimaryButton}"
+                    Text="{Binding WeekNumber, StringFormat='Complete week {0}'}"
+                    Command="{Binding SubmitWeekCommand}"/>
+            </StackLayout>
+        </Grid>
+    </ContentPage.Content>
+</views:ContentPageBase>

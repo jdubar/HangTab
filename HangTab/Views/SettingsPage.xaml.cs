@@ -1,21 +1,13 @@
-using HangTab.Views.ViewModels;
+using HangTab.ViewModels;
+using HangTab.Views.Base;
 
 namespace HangTab.Views;
-[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We won't test UI code-behind.")]
-public partial class SettingsPage
-{
-    private readonly SettingsViewModel _viewModel;
 
-    public SettingsPage(SettingsViewModel viewModel)
+public partial class SettingsPage : ContentPageBase
+{
+    public SettingsPage(SettingsViewModel vm)
     {
         InitializeComponent();
-        BindingContext = viewModel;
-        _viewModel = viewModel;
+        BindingContext = vm;
     }
-
-    private void ClearAllDataOnTap(object sender, EventArgs e) => _viewModel.DropAllTablesCommand.Execute(null);
-
-    private void ResetHangingsOnTap(object sender, EventArgs e) => _viewModel.ResetAllHangingsCommand.Execute(null);
-
-    private void SaveSeasonSettingsOnChange(object sender, EventArgs e) => _viewModel?.UpdateSeasonSettingsCommand.Execute(null);
 }

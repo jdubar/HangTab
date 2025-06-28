@@ -1,22 +1,13 @@
-using HangTab.Views.ViewModels;
+using HangTab.ViewModels;
+using HangTab.Views.Base;
 
 namespace HangTab.Views;
-[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We won't test UI code-behind.")]
-public partial class WeekDetailsPage
+
+public partial class WeekDetailsPage : ContentPageBase
 {
-    private readonly WeekDetailsViewModel _viewModel;
-
-    public WeekDetailsPage(WeekDetailsViewModel viewModel)
+	public WeekDetailsPage(WeekDetailsViewModel vm)
 	{
-        InitializeComponent();
-        BindingContext = viewModel;
-        _viewModel = viewModel;
-
-    }
-
-    protected override void OnAppearing()
-    {
-        base.OnAppearing();
-        _viewModel.InitializeDataCommand.Execute(null);
+		InitializeComponent();
+		BindingContext = vm;
     }
 }

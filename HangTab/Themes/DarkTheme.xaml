@@ -1,0 +1,46 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="HangTab.Themes.DarkTheme">
+    
+    <Color x:Key="PrimaryColor">#113B5E</Color>
+    <Color x:Key="PrimaryContrastTextColor">#FAFDFF</Color>
+    
+    <Color x:Key="SecondaryColor">#2379BF</Color>
+    <Color x:Key="SecondaryContrastTextColor">#FAFDFF</Color>
+    
+    <Color x:Key="TertiaryColor">#A9D0EF</Color>
+    <Color x:Key="TertiaryContrastTextPrimaryColor">#FAFDFF</Color>
+
+    <Color x:Key="TextPrimaryColor">#FAFDFF</Color>
+    <Color x:Key="TextSecondaryColor">#6E6E6E</Color>
+    
+    <Color x:Key="ControlDisabledColor">#383843</Color>
+    <Color x:Key="ControlDisabledTextColor">#6E6E6E</Color>
+
+    <Color x:Key="PageBackgroundColor">#1F1F1F</Color>
+    <Color x:Key="StatusBarColor">#113B5E</Color>
+    <Color x:Key="SurfaceColor">#414141</Color>
+    <Color x:Key="DividerColor">#6E6E6E</Color>
+    <Color x:Key="BorderColor">#6E6E6E</Color>
+    <Color x:Key="IconColor">#FAFDFF</Color>
+    <Color x:Key="AvatarBackgroundColor">#E0E0E0</Color>
+    <Color x:Key="ControlShadowColor">#141414</Color>
+    <Color x:Key="PickerTitleColor">#FAFDFD</Color><!--Needed due to how Android handles the placeholder text-->
+    <Color x:Key="SearchBarBackgroundColor">Transparent</Color>
+    
+    <Color x:Key="TabBarBackgroundColor">Black</Color>
+    <Color x:Key="TabBarSelectedColor">#2379BF</Color>
+    
+    <SolidColorBrush x:Key="ControlShadowBrush" Color="{StaticResource ControlShadowColor}"/>
+    
+    <!-- Common colors -->
+    <Color x:Key="InactiveBowler">#FF1744</Color>
+    <Color x:Key="SubBowler">#00E676</Color>
+    <Color x:Key="Success">#0bba83</Color>
+    <Color x:Key="Error">#f64e62</Color>
+    
+    <Color x:Key="Black">Black</Color>
+    <Color x:Key="White">White</Color>
+</ResourceDictionary>

@@ -1,30 +1,188 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
-             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-             xmlns:vm="clr-namespace:HangTab.Views.ViewModels"
-             x:Class="HangTab.Views.SettingsPage"
-             x:DataType="vm:SettingsViewModel"
-             Title="Settings">
-    <TableView Intent="Settings">
-        <TableRoot>
-            <TableSection Title="General Settings"
-                          TextColor="{StaticResource Primary}">
-                <EntryCell HorizontalTextAlignment="End"
-                           Keyboard="Numeric" 
-                           Label="Weeks In The Season"
-                           LabelColor="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Gray500}}"
-                           PropertyChanged="SaveSeasonSettingsOnChange"
-                           Text="{Binding TotalSeasonWeeks}" />
-            </TableSection>
-            <TableSection Title="Data Reset"
-                          TextColor="{StaticResource Primary}">
-                <TextCell Tapped="ResetHangingsOnTap"
-                          Text="Start New Season"
-                          TextColor="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Gray500}}" />
-                <TextCell Tapped="ClearAllDataOnTap"
-                          Text="Delete All Bowlers and Data"
-                          TextColor="{AppThemeBinding Dark={StaticResource White}, Light={StaticResource Gray500}}" />
-            </TableSection>
-        </TableRoot>
-    </TableView>
-</ContentPage>
+<views:ContentPageBase
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:HangTab.Views.Controls"
+    xmlns:views="clr-namespace:HangTab.Views.Base"
+    xmlns:vm="clr-namespace:HangTab.ViewModels"
+    x:Class="HangTab.Views.SettingsPage"
+    x:DataType="vm:SettingsViewModel">
+    
+    <Shell.TitleView>
+        <controls:PageTitle
+            Title="Settings" />
+    </Shell.TitleView>
+    
+    <StackLayout>
+        <Grid
+            RowDefinitions="Auto,Auto,Auto">
+            <Label
+                Grid.Row="0"
+                Text="General Settings"
+                Style="{StaticResource SettingsHeader}" />
+        
+            <!--Weeks in the season-->
+            <Border
+                Grid.Row="1"
+                HeightRequest="70"
+                Stroke="{DynamicResource BorderColor}"
+                Margin="-2,0">
+                <Grid
+                    ColumnDefinitions="Auto,Auto,*,Auto"
+                    BackgroundColor="{DynamicResource SurfaceColor}">
+                    <Image
+                        Margin="15,0,10,0"
+                        WidthRequest="30"
+                        HeightRequest="30">
+                        <Image.Source>
+                            <FontImageSource
+                                FontFamily="MaterialIcons"
+                                Glyph="{StaticResource calendar_month}"
+                                Size="30"
+                                Color="{DynamicResource IconColor}" />
+                        </Image.Source>
+                    </Image>
+                    <Label
+                        Grid.Column="1"
+                        Margin="10,0"
+                        VerticalOptions="Center"
+                        FontSize="Medium"
+                        Text="Weeks In The Season"
+                        TextColor="{DynamicResource TextPrimaryColor}" />
+                    <controls:Stepper 
+                        Grid.Column="3"
+                        Minimum="1"
+                        Maximum="52"
+                        Value="{Binding TotalSeasonWeeks}" />
+                </Grid>
+            </Border>
+        
+            <!--Theme-->
+            <Border
+                Grid.Row="2"
+                HeightRequest="70"
+                Stroke="{DynamicResource BorderColor}"
+                Margin="-2,-2">
+                <Grid
+                    ColumnDefinitions="Auto,*,75"
+                    BackgroundColor="{DynamicResource SurfaceColor}">
+                    <Image
+                        Margin="15,0,10,0"
+                        WidthRequest="30"
+                        HeightRequest="30">
+                        <Image.Source>
+                            <FontImageSource
+                                FontFamily="MaterialIcons"
+                                Glyph="{StaticResource brightness_4}"
+                                Size="30"
+                                Color="{DynamicResource IconColor}" />
+                        </Image.Source>
+                    </Image>
+                    <Label
+                        Grid.Column="1"
+                        Margin="10,0"
+                        VerticalOptions="Center"
+                        FontSize="Medium"
+                        Text="Dark Theme"
+                        TextColor="{DynamicResource TextPrimaryColor}" />
+                    <StackLayout
+                        Grid.Column="2"
+                        Margin="15,0"
+                        VerticalOptions="Center"
+                        HorizontalOptions="End">
+                        <Switch
+                            IsToggled="{Binding DarkThemeEnabled, Mode=TwoWay}" />
+                    </StackLayout>
+                </Grid>
+            </Border>
+        </Grid>
+        
+        <Grid
+            RowDefinitions="Auto,Auto,Auto">
+            <Label
+                Grid.Row="0"
+                Text="Data Reset"
+                Style="{StaticResource SettingsHeader}" />
+            
+            <!--Start New Season-->
+            <Border
+                Grid.Row="1"
+                HeightRequest="70"
+                Stroke="{DynamicResource BorderColor}"
+                Margin="-2,0">
+                <Grid
+                    ColumnDefinitions="Auto,*"
+                    BackgroundColor="{DynamicResource SurfaceColor}">
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding StartNewSeasonCommand}" />
+                    </Grid.GestureRecognizers>
+                    <Image
+                        Margin="15,0,10,0"
+                        WidthRequest="30"
+                        HeightRequest="30">
+                        <Image.Source>
+                            <FontImageSource
+                                FontFamily="MaterialIcons"
+                                Glyph="{StaticResource play_arrow}"
+                                Size="30"
+                                Color="{DynamicResource IconColor}" />
+                        </Image.Source>
+                    </Image>
+                    <VerticalStackLayout
+                        Grid.Column="1"
+                        Margin="10,7"
+                        VerticalOptions="Center">
+                        <Label
+                            FontSize="Medium"
+                            Text="Start New Season"
+                            TextColor="{DynamicResource TextPrimaryColor}" />
+                        <Label
+                            FontSize="Caption"
+                            Text="Keep existing bowlers and clear their stats"
+                            TextColor="{DynamicResource TextPrimaryColor}" />
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+            
+            <!--Delete All Data-->
+            <Border
+                Grid.Row="2"
+                HeightRequest="70"
+                Stroke="{DynamicResource BorderColor}"
+                Margin="-2,-2">
+                <Grid
+                    ColumnDefinitions="Auto,Auto,*,Auto"
+                    BackgroundColor="{DynamicResource SurfaceColor}">
+                    <Grid.GestureRecognizers>
+                        <TapGestureRecognizer Command="{Binding DeleteAllDataCommand}" />
+                    </Grid.GestureRecognizers>
+                    <Image
+                        Margin="15,0,10,0"
+                        WidthRequest="30"
+                        HeightRequest="30">
+                        <Image.Source>
+                            <FontImageSource
+                                FontFamily="MaterialIcons"
+                                Glyph="{StaticResource delete}"
+                                Size="30"
+                                Color="{StaticResource Error}" />
+                        </Image.Source>
+                    </Image>
+                    <VerticalStackLayout
+                        Grid.Column="1"
+                        Margin="10,7"
+                        VerticalOptions="Center">
+                        <Label
+                            FontSize="Medium"
+                            Text="Delete All Data"
+                            TextColor="{DynamicResource TextPrimaryColor}" />
+                        <Label
+                            FontSize="Caption"
+                            Text="Delete all bowlers and their data"
+                            TextColor="{DynamicResource TextPrimaryColor}" />
+                    </VerticalStackLayout>
+                </Grid>
+            </Border>
+        </Grid>
+    </StackLayout>
+</views:ContentPageBase>

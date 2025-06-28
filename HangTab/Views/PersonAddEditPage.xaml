@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<views:ContentPageBase
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:views="clr-namespace:HangTab.Views.Base"
+    xmlns:vm="clr-namespace:HangTab.ViewModels"
+    xmlns:controls="clr-namespace:HangTab.Views.Controls"
+    xmlns:converters="clr-namespace:HangTab.Converters"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:dataAnnotations="clr-namespace:System.ComponentModel.DataAnnotations;assembly=System.ComponentModel.Annotations"
+    x:Class="HangTab.Views.PersonAddEditPage"
+    x:DataType="vm:PersonAddEditViewModel">
+    
+    <ContentPage.Resources>
+        <converters:BowlerTypeEnumToTextConverter x:Key="BowlerTypeEnumToTextConverter" />
+    </ContentPage.Resources>
+    
+    <!--Page titlebar-->
+    <Shell.TitleView>
+        <controls:PageTitle
+            Title="{Binding PageTitle}" />
+    </Shell.TitleView>
+    
+    <Grid
+        RowDefinitions="Auto,Auto,Auto,*,Auto,Auto"
+        RowSpacing="10"
+        HorizontalOptions="Fill"
+        VerticalOptions="Fill">
+            
+        <!--Avatar Image/Update Avatar Button-->
+        <Grid
+            HeightRequest="220"
+            Grid.ColumnSpan="3"
+            BackgroundColor="{DynamicResource AvatarBackgroundColor}">
+            
+            <!--Update Avatar Image Button-->
+            <ImageButton
+                Style="{StaticResource FAB}"
+                ZIndex="2"
+                Margin="0,200,20,0"
+                Command="{Binding ShowAvatarOptionsBottomSheetCommand}"
+                CommandParameter="{x:Reference NameEntry}">
+                <ImageButton.Source>
+                    <FontImageSource
+                        FontFamily="MaterialIcons"
+                        Glyph="{StaticResource add_a_photo}"
+                        Size="40"
+                        Color="{DynamicResource PrimaryContrastTextColor}" />
+                </ImageButton.Source>
+            </ImageButton>
+            
+            <!--Avatar Image-->
+            <Image
+                Source="{Binding ImageUrl, TargetNullValue='person.png'}"
+                ZIndex="1"/>
+        </Grid>
+            
+        <!--Bowler Name Entry-->
+        <VerticalStackLayout
+            Grid.Row="1"
+            Margin="10,20,10,0">
+            <Grid
+                ColumnDefinitions="30,*">
+                
+                <Image
+                    Margin="5,0">
+                    <Image.Source>
+                        <FontImageSource
+                            FontFamily="MaterialIcons"
+                            Glyph="{StaticResource person}"
+                            Size="30"
+                            Color="{DynamicResource TextPrimaryColor}" />
+                    </Image.Source>
+                </Image>
+                
+                <Entry
+                    Grid.Column="1"
+                    x:Name="NameEntry"
+                    ClearButtonVisibility="WhileEditing"
+                    IsSpellCheckEnabled="False"
+                    IsTextPredictionEnabled="False"
+                    Placeholder="Type Bowler Name"
+                    Keyboard="Text"
+                    ReturnType="Done"
+                    Text="{Binding Name}"
+                    TextColor="{DynamicResource TextPrimaryColor}"
+                    PlaceholderColor="{DynamicResource TextSecondaryColor}" />
+                
+            </Grid>
+        </VerticalStackLayout>
+        
+        <!--Bowler Type Picker-->
+        <Grid
+            Grid.Row="2"
+            Margin="10,0"
+            ColumnDefinitions="30,*">
+            
+            <Image
+                Margin="5,0">
+                <Image.Source>
+                    <FontImageSource
+                        FontFamily="MaterialIcons"
+                        Glyph="{StaticResource group}"
+                        Size="30"
+                        Color="{DynamicResource TextPrimaryColor}" />
+                </Image.Source>
+            </Image>
+            
+            <Picker
+                Grid.Column="1"
+                ItemDisplayBinding="{Binding ., Converter={StaticResource BowlerTypeEnumToTextConverter}}"
+                ItemsSource="{Binding BowlerTypes}"
+                SelectedIndex="{Binding BowlerTypeIndex}"
+                TextColor="{DynamicResource TextPrimaryColor}"
+                Title="Select Bowler Type"
+                TitleColor="{DynamicResource TextSecondaryColor}" />
+            
+        </Grid>
+                    
+        <!--Validation Errors List-->
+        <VerticalStackLayout
+            Grid.Row="3"
+            Margin="40,0,0,0"
+            BindableLayout.ItemsSource="{Binding Errors}">
+            <BindableLayout.ItemTemplate>
+                <DataTemplate
+                    x:DataType="dataAnnotations:ValidationResult">
+                    <Label
+                        Style="{StaticResource ErrorLabel}"
+                        Text="{Binding ErrorMessage}" />
+                </DataTemplate>
+            </BindableLayout.ItemTemplate>
+        </VerticalStackLayout>
+            
+        <!--Delete Button-->
+        <StackLayout
+                Grid.Row="4"
+                Margin="10,0">
+            <Button
+                Style="{StaticResource PrimaryButton}"
+                BackgroundColor="{DynamicResource Error}"
+                Text="Delete Bowler"
+                IsVisible="{Binding IsExistingBowler}"
+                Command="{Binding DeletePersonCommand}" />
+        </StackLayout>
+        
+        <!--Submit Button-->
+        <StackLayout
+                Grid.Row="5"
+                Margin="10,0,10,10">
+            <Button
+                Style="{StaticResource PrimaryButton}"
+                Text="Save Changes"
+                Command="{Binding SubmitCommand}" />
+        </StackLayout>
+    </Grid>
+</views:ContentPageBase>

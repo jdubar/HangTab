@@ -1,15 +1,17 @@
-﻿using HangTab.Views;
+﻿using HangTab.Constants;
+using HangTab.Views;
 
 namespace HangTab;
-[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We won't test UI code-behind.")]
-public partial class AppShell
+
+public partial class AppShell : Shell
 {
     public AppShell()
     {
         InitializeComponent();
-        Routing.RegisterRoute(nameof(AddBowlerPage), typeof(AddBowlerPage));
-        Routing.RegisterRoute(nameof(SeasonSummaryPage), typeof(SeasonSummaryPage));
-        Routing.RegisterRoute(nameof(SwitchBowlerPage), typeof(SwitchBowlerPage));
-        Routing.RegisterRoute(nameof(WeekDetailsPage), typeof(WeekDetailsPage));
+
+        Routing.RegisterRoute(Routes.BowlerAdd, typeof(PersonAddEditPage));
+        Routing.RegisterRoute(Routes.BowlerEdit, typeof(PersonAddEditPage));
+        Routing.RegisterRoute(Routes.BowlerSelectSub, typeof(BowlerSelectSubPage));
+        Routing.RegisterRoute(Routes.WeekDetails, typeof(WeekDetailsPage));
     }
 }

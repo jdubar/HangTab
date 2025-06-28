@@ -1,11 +1,49 @@
-﻿namespace HangTab;
-[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We won't test dependency injection code.")]
-public partial class App
+﻿using HangTab.Enums;
+using HangTab.Services;
+
+namespace HangTab;
+
+public partial class App : Application
 {
-    public App()
+    private readonly IServiceProvider _serviceProvider;
+
+    public App(IServiceProvider serviceProvider)
     {
         InitializeComponent();
 
-        MainPage = new AppShell();
+        _serviceProvider = serviceProvider;
+
+        // TODO: Check how long the user has been away to save the current week stats and start a new week
+        SetCurrentUserSelectedTheme();
+    }
+
+    protected override Window CreateWindow(IActivationState? activationState)
+    {
+        return new Window(new AppShell());
+    }
+
+    private void SetCurrentUserSelectedTheme()
+    {
+        var settingsService = _serviceProvider.GetService<ISettingsService>();
+        if (settingsService is null)
+        {
+            return;
+        }
+
+        if (settingsService.Theme == (int)Theme.Light)
+        {
+            return;
+        }
+
+        var themeService = _serviceProvider.GetService<IThemeService>();
+        if (themeService is null)
+        {
+            return;
+        }
+
+        if (settingsService.Theme == (int)Theme.Dark)
+        {
+            themeService.SetDarkTheme();
+        }
     }
 }

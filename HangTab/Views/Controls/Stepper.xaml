@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="HangTab.Views.Controls.Stepper"
+    x:Name="StepperView">
+    
+    <Grid
+        ColumnDefinitions="40,50,40"
+        Margin="15,10">
+        
+        <!--Decrease Button-->
+        <ImageButton
+            Grid.Column="0"
+            x:Name="DecreaseButton"
+            Clicked="OnMinusButtonClicked"
+            IsEnabled="{Binding Source={x:Reference StepperView}, Path=IsControlEnabled}"
+            Style="{StaticResource StepperControl}">
+            <ImageButton.Source>
+                <FontImageSource
+                    FontFamily="MaterialIcons"
+                    Glyph="{StaticResource arrow_drop_down}"
+                    Size="30"
+                    Color="{DynamicResource PrimaryContrastTextColor}" />
+            </ImageButton.Source>
+        </ImageButton>
+
+        <!--Value Label-->
+        <Label
+            Grid.Column="1"
+            Text="{Binding Source={x:Reference StepperView}, Path=Value}"
+            VerticalOptions="Center"
+            HorizontalOptions="Center"
+            FontSize="Medium"
+            TextColor="{DynamicResource TextPrimaryColor}" />
+        
+        <!--Increase Button-->
+        <ImageButton
+            Grid.Column="2"
+            x:Name="IncreaseButton"
+            Clicked="OnPlusButtonClicked"
+            IsEnabled="{Binding Source={x:Reference StepperView}, Path=IsControlEnabled}"
+            Style="{StaticResource StepperControl}">
+            <ImageButton.Source>
+                <FontImageSource
+                    FontFamily="MaterialIcons"
+                    Glyph="{StaticResource arrow_drop_up}"
+                    Size="30"
+                    Color="{DynamicResource PrimaryContrastTextColor}" />
+            </ImageButton.Source>
+        </ImageButton>
+    </Grid>
+    
+</ContentView>
