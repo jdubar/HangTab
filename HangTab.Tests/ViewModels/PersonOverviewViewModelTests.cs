@@ -32,8 +32,8 @@ public class PersonOverviewViewModelTests
         };
         var bowlers = new List<BowlerListItemViewModel>
         {
-            new( id: 1, name: "Alice", isSub: false),
-            new(id : 2, name : "Bob", isSub : false)
+            new(id: 1, name: "Alice", isSub: false),
+            new(id: 2, name: "Bob", isSub: false)
         };
         A.CallTo(() => _personService.GetAllPeople()).Returns(Task.FromResult<IEnumerable<Person>>(people));
         A.CallTo(() => _bowlerListItemViewModelMapper.Map(A<IEnumerable<Person>>._)).Returns(bowlers);
