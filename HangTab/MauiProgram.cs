@@ -22,7 +22,7 @@ using System.Runtime.Versioning;
 using The49.Maui.BottomSheet;
 
 namespace HangTab;
-
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We will not test the app code behind. There's no logic to test.")]
 public static class MauiProgram
 {
     [SupportedOSPlatform("windows10.0.17763.0")]

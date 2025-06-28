@@ -2,7 +2,7 @@
 using HangTab.Views;
 
 namespace HangTab;
-
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We will not test the view code behind. There's no logic to test.")]
 public partial class AppShell : Shell
 {
     public AppShell()

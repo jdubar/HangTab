@@ -2,7 +2,7 @@
 using HangTab.Services;
 
 namespace HangTab;
-
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We will not test the app code behind. There's no logic to test.")]
 public partial class App : Application
 {
     private readonly IServiceProvider _serviceProvider;
