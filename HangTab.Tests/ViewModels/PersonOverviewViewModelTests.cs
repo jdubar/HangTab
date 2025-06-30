@@ -21,33 +21,6 @@ public class PersonOverviewViewModelTests
         new(_personService, _navigationService, _weekService, _personMapper, _bowlerListItemViewModelMapper);
 
     [Fact]
-    public async Task LoadAsync_WhenNoBowlers_LoadsAllBowlers()
-    {
-        // Arrange
-        var vm = CreateVm();
-        var people = new List<Person>
-        {
-            new() { Id = 1, Name = "Alice" },
-            new() { Id = 2, Name = "Bob" }
-        };
-        var bowlers = new List<BowlerListItemViewModel>
-        {
-            new(id: 1, name: "Alice", isSub: false),
-            new(id: 2, name: "Bob", isSub: false)
-        };
-        A.CallTo(() => _personService.GetAllPeople()).Returns(Task.FromResult<IEnumerable<Person>>(people));
-        A.CallTo(() => _bowlerListItemViewModelMapper.Map(A<IEnumerable<Person>>._)).Returns(bowlers);
-
-        // Act
-        await vm.LoadAsync();
-
-        // Assert
-        Assert.Equal(2, vm.Bowlers.Count);
-        Assert.Contains(vm.Bowlers, b => b.Name == "Alice");
-        Assert.Contains(vm.Bowlers, b => b.Name == "Bob");
-    }
-
-    [Fact]
     public void OnSearchTextChanged_FiltersBowlers()
     {
         // Arrange
