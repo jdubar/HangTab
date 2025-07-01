@@ -1,4 +1,6 @@
-﻿namespace HangTab.Repositories.Impl;
+﻿using HangTab.Constants;
+
+namespace HangTab.Repositories.Impl;
 public class MediaPickerRepository(IMediaPicker mediaPicker) : IMediaPickerRepository
 {
     public async Task<string> PickPhotoAsync()
@@ -14,22 +16,20 @@ public class MediaPickerRepository(IMediaPicker mediaPicker) : IMediaPickerRepos
 
     public async Task<string> TakePhotoAsync()
     {
-        if (MediaPicker.Default.IsCaptureSupported)
-        {
-            var photo = await mediaPicker.CapturePhotoAsync();
-            return photo is not null
-                ? await SavePhotoToDiskAsync(photo)
-                : string.Empty;
-        }
-        else
+        if (!MediaPicker.Default.IsCaptureSupported)
         {
             return string.Empty;
         }
+
+        var photo = await mediaPicker.CapturePhotoAsync();
+        return photo is not null
+            ? await SavePhotoToDiskAsync(photo)
+            : string.Empty;
     }
 
     private static async Task<string> SavePhotoToDiskAsync(FileResult fileResult)
     {
-        var localFilePath = Path.Combine(FileSystem.CacheDirectory, fileResult.FileName);
+        var localFilePath = Path.Combine(Files.CacheDirectory, fileResult.FileName);
 
         using var sourceStream = await fileResult.OpenReadAsync();
         using var localFileStream = File.OpenWrite(localFilePath);

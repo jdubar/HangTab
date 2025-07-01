@@ -3,4 +3,5 @@
 public static class Files
 {
     public static string BusRideSoundFileName => "beepbeep.mp3";
+    public static string CacheDirectory => FileSystem.CacheDirectory;
 }
