@@ -5,5 +5,7 @@ public static class Routes
     public static string BowlerAdd => "bowler/add";
     public static string BowlerEdit => "bowler/edit";
     public static string BowlerSelectSub => "bowler/selectsub";
+    public static string PersonAdd => "person/add";
+    public static string PersonEdit => "bowler/edit";
     public static string WeekDetails => "week/details";
 }

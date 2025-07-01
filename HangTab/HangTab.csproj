@@ -101,7 +101,7 @@
 		<MauiXaml Update="Views\PersonAddEditPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\PersonOverviewPage.xaml">
+		<MauiXaml Update="Views\PersonListOverviewPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Controls\Stepper.xaml">
@@ -113,7 +113,7 @@
 		<MauiXaml Update="Views\BowlerSelectSubPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\SeasonOverviewPage.xaml">
+		<MauiXaml Update="Views\WeekListOverviewPage.xaml">
 		    <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\SettingsPage.xaml">
@@ -123,9 +123,4 @@
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 	</ItemGroup>
-	<!-- <ProjectExtensions>
-    <VisualStudio>
-      <UserProperties XamarinHotReloadUnhandledDeviceExceptionHangTabHideInfoBar="True" />
-    </VisualStudio>
-  </ProjectExtensions> -->
 </Project>

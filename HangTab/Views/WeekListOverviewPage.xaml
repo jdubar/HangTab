@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<views:ContentPageBase
+<base:ContentPageBase
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:HangTab.Views.Controls"
-    xmlns:views="clr-namespace:HangTab.Views.Base"
+    xmlns:base="clr-namespace:HangTab.Views.Base"
     xmlns:vm="clr-namespace:HangTab.ViewModels"
     xmlns:vmitems="clr-namespace:HangTab.ViewModels.Items"
-    x:Class="HangTab.Views.SeasonOverviewPage"
-    x:DataType="vm:SeasonOverviewViewModel">
+    x:Class="HangTab.Views.WeekListOverviewPage"
+    x:DataType="vm:WeeksOverviewViewModel">
     
     <!--Page titlebar-->
     <Shell.TitleView>
@@ -149,4 +149,4 @@
     </ContentPage.Content>
 
 
-</views:ContentPageBase>
+</base:ContentPageBase>

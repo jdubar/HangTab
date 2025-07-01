@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<views:ContentPageBase
+<base:ContentPageBase
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
-    xmlns:views="clr-namespace:HangTab.Views.Base"
+    xmlns:base="clr-namespace:HangTab.Views.Base"
     xmlns:vm="clr-namespace:HangTab.ViewModels"
     xmlns:vmitems="clr-namespace:HangTab.ViewModels.Items"
     xmlns:models="clr-namespace:HangTab.Models"
     xmlns:controls="clr-namespace:HangTab.Views.Controls"
-    x:Class="HangTab.Views.BowlerOverviewPage"
-    x:DataType="vm:PersonOverviewViewModel">
+    x:Class="HangTab.Views.PersonListOverviewPage"
+    x:DataType="vm:PeopleOverviewViewModel">
     
     <!--Page titlebar-->
     <Shell.TitleView>
@@ -137,4 +137,4 @@
             </ImageButton>
         </Grid>
     </ContentPage.Content>
-</views:ContentPageBase>
+</base:ContentPageBase>
