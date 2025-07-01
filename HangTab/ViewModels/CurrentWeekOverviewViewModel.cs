@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 
+using HangTab.Extensions;
 using HangTab.Mappers;
 using HangTab.Messages;
 using HangTab.Models;
@@ -13,6 +14,7 @@ using HangTab.ViewModels.Items;
 using System.Collections.ObjectModel;
 
 namespace HangTab.ViewModels;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a ViewModel for the UI and does not require unit tests.")]
 public partial class CurrentWeekOverviewViewModel :
     ViewModelBase,
     IRecipient<PersonAddedOrChangedMessage>,
@@ -163,7 +165,7 @@ public partial class CurrentWeekOverviewViewModel :
             {
                 CurrentWeekBowlers.Clear();
                 CurrentWeekBowlers = _currentWeekListItemViewModelMapper.Map(CurrentWeek.Bowlers).ToObservableCollection();
-                UpdateLowestHangsStatus();
+                CurrentWeekBowlers.SetLowestBowlerHangCount();
             }
 
             MapWeekData(CurrentWeek);
@@ -211,14 +213,6 @@ public partial class CurrentWeekOverviewViewModel :
         await GetCurrentWeek();
     }
 
-    private void UpdateLowestHangsStatus()
-    {
-        CurrentWeekBowlers.Where(b => !b.IsSub).ToList().ForEach(b =>
-        {
-            b.HasLowestHangCount = b.HangCount == CurrentWeekBowlers.Where(bw => !bw.IsSub).Min(bw => bw.HangCount);
-        });
-    }
-
     public async void Receive(SystemResetMessage message)
     {
         CurrentWeekBowlers.Clear();
@@ -256,7 +250,7 @@ public partial class CurrentWeekOverviewViewModel :
             var newHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
             var isIncrease = newHangTotal > TeamHangTotal;
             TeamHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
-            UpdateLowestHangsStatus();
+            CurrentWeekBowlers.SetLowestBowlerHangCount();
 
             if (isIncrease)
             {
@@ -293,7 +287,7 @@ public partial class CurrentWeekOverviewViewModel :
         if (deletedBowler is not null)
         {
             CurrentWeekBowlers.Remove(deletedBowler);
-            UpdateLowestHangsStatus();
+            CurrentWeekBowlers.SetLowestBowlerHangCount();
         }
     }
 }

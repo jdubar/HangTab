@@ -18,6 +18,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace HangTab.ViewModels;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a ViewModel for the UI and does not require unit tests.")]
 public partial class PersonAddEditViewModel :
     ViewModelBase,
     IQueryAttributable,

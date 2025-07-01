@@ -13,6 +13,7 @@ using HangTab.ViewModels.Items;
 using System.Collections.ObjectModel;
 
 namespace HangTab.ViewModels;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a ViewModel for the UI and does not require unit tests.")]
 public partial class BowlerSelectSubViewModel(
     IPersonService personService,
     IBowlerService bowlerService,
@@ -64,7 +65,7 @@ public partial class BowlerSelectSubViewModel(
             return;
         }
 
-        DeselectAllSubs();
+        Subs.ToList().ForEach(sub => sub.IsSelected = false);
         SelectedSub.IsSelected = true;
     }
 
@@ -79,14 +80,6 @@ public partial class BowlerSelectSubViewModel(
         await bowlerService.UpdateBowler(MapDataToBowler());
         WeakReferenceMessenger.Default.Send(new BowlerSubChangedMessage(Id, SelectedSub.Id));
         await navigationService.GoBack();
-    }
-
-    private void DeselectAllSubs()
-    {
-        foreach (var sub in Subs)
-        {
-            sub.IsSelected = false;
-        }
     }
 
     private async Task GetSubs()
