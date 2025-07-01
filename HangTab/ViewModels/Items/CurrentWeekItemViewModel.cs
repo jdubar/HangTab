@@ -3,10 +3,11 @@ using CommunityToolkit.Mvvm.Messaging;
 
 using HangTab.Enums;
 using HangTab.Messages;
+using HangTab.ViewModels.Items.Interfaces;
 
 namespace HangTab.ViewModels.Items;
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a ViewModel for the UI and does not require unit tests.")]
-public partial class CurrentWeekListItemViewModel : ObservableObject
+public partial class CurrentWeekListItemViewModel : ObservableObject, ILowestHangCountBowler
 {
     [ObservableProperty]
     private int _weekId;

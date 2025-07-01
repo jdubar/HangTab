@@ -9,14 +9,16 @@ using HangTab.Messages;
 using HangTab.Models;
 using HangTab.Services;
 using HangTab.ViewModels.Base;
-using HangTab.ViewModels.BottomSheets;
 using HangTab.Views.BottomSheets;
+
+using Plugin.Maui.BottomSheet.Navigation;
 
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace HangTab.ViewModels;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a ViewModel for the UI and does not require unit tests.")]
 public partial class PersonAddEditViewModel :
     ViewModelBase,
     IQueryAttributable,
@@ -25,22 +27,18 @@ public partial class PersonAddEditViewModel :
     private readonly IPersonService _personService;
     private readonly IDialogService _dialogService;
     private readonly INavigationService _navigationService;
-    private readonly IMediaPickerService _mediaPickerService;
-
-    private readonly AvatarSelectBottomSheet _avatarOptionsBottomSheet;
+    private readonly IBottomSheetNavigationService _bottomSheetNavigationService;
 
     public PersonAddEditViewModel(
         IPersonService personService,
         IDialogService dialogService,
         INavigationService navigationService,
-        IMediaPickerService mediaPickerService)
+        IBottomSheetNavigationService bottomSheetNavigationService)
     {
         _personService = personService;
         _dialogService = dialogService;
         _navigationService = navigationService;
-        _mediaPickerService = mediaPickerService;
-
-        _avatarOptionsBottomSheet = new AvatarSelectBottomSheet(new AvatarSelectViewModel(_dialogService, _mediaPickerService));
+        _bottomSheetNavigationService = bottomSheetNavigationService;
 
         WeakReferenceMessenger.Default.Register(this);
 
@@ -136,7 +134,7 @@ public partial class PersonAddEditViewModel :
             await view.HideKeyboardAsync(token);
         }
 
-        await _avatarOptionsBottomSheet.ShowAsync();
+        await _bottomSheetNavigationService.NavigateToAsync(nameof(AvatarSelectBottomSheet));
     }
 
     [RelayCommand(CanExecute = nameof(CanSubmitBowler))]
@@ -223,9 +221,5 @@ public partial class PersonAddEditViewModel :
         }
     }
 
-    public void Receive(PersonImageAddedOrChangedMessage message)
-    {
-        ImageUrl = message.ImageUrl;
-        _avatarOptionsBottomSheet.DismissAsync();
-    }
+    public void Receive(PersonImageAddedOrChangedMessage message) => ImageUrl = message.ImageUrl;
 }

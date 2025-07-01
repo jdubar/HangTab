@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel;
 
 namespace HangTab.Views.Controls.Behaviors;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a Behavior for the UI and does not require unit tests.")]
 public partial class TadaAnimationBehavior : Behavior<Image>
 {
     protected override void OnAttachedTo(Image image)

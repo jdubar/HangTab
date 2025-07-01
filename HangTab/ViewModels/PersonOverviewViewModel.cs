@@ -3,6 +3,7 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 
+using HangTab.Extensions;
 using HangTab.Mappers;
 
 using HangTab.Messages;
@@ -14,6 +15,7 @@ using HangTab.ViewModels.Items;
 using System.Collections.ObjectModel;
 
 namespace HangTab.ViewModels;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a ViewModel for the UI and does not require unit tests.")]
 public partial class PersonOverviewViewModel :
     ViewModelBase,
     IRecipient<BowlerHangCountChangedMessage>,
@@ -130,14 +132,8 @@ public partial class PersonOverviewViewModel :
                 return;
             }
 
-            Bowlers.ToList()
-                   .ForEach(bowler => bowler.HangCount = allWeeks.SelectMany(w => w.Bowlers.Where(b => (b.Status == Enums.Status.UsingSub ? b.SubId : b.PersonId) == bowler.Id))
-                                                                 .Sum(w => w.HangCount));
-
-            Bowlers.Where(b => !b.IsSub).ToList().ForEach(b =>
-            {
-                b.HasLowestHangCount = b.HangCount == Bowlers.Where(bw => !bw.IsSub).Min(bw => bw.HangCount);
-            });
+            Bowlers.SetBowlerHangSumByWeeks(allWeeks);
+            Bowlers.SetLowestBowlerHangCount();
         }
     }
 

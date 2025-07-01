@@ -1,7 +1,7 @@
 using HangTab.Utilities;
 
 namespace HangTab.Views.Controls;
-
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a Behavior for the UI and does not require unit tests.")]
 public partial class Stepper : ContentView
 {
     public Stepper()

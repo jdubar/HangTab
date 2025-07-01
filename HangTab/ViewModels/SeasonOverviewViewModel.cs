@@ -11,6 +11,7 @@ using HangTab.ViewModels.Items;
 using System.Collections.ObjectModel;
 
 namespace HangTab.ViewModels;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a ViewModel for the UI and does not require unit tests.")]
 public partial class SeasonOverviewViewModel(
     IWeekService weekService,
     ISettingsService settingsService,
