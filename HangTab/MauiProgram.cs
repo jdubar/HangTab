@@ -12,14 +12,14 @@ using HangTab.ViewModels;
 using HangTab.ViewModels.BottomSheets;
 using HangTab.ViewModels.Items;
 using HangTab.Views;
+using HangTab.Views.BottomSheets;
 
 using Microsoft.Extensions.Logging;
 
 using Plugin.Maui.Audio;
+using Plugin.Maui.BottomSheet.Hosting;
 
 using System.Runtime.Versioning;
-
-using The49.Maui.BottomSheet;
 
 namespace HangTab;
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We will not test the app code behind. There's no logic to test.")]
@@ -35,7 +35,7 @@ public static class MauiProgram
             {
                 options.SetShouldEnableSnackbarOnWindows(true);
             })
-            .UseBottomSheet()
+            .UseBottomSheet(config => config.CopyPagePropertiesToBottomSheet = true)
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
@@ -46,6 +46,7 @@ public static class MauiProgram
             .RegisterServices()
             .RegisterViewModels()
             .RegisterViews()
+            .RegisterBottomSheets()
             .RegisterMappers();
 
 #if DEBUG
@@ -113,6 +114,12 @@ public static class MauiProgram
         builder.Services.AddTransient<BowlerSelectSubPage>();
         builder.Services.AddTransient<PersonAddEditPage>();
         builder.Services.AddTransient<WeekDetailsPage>();
+        return builder;
+    }
+
+    private static MauiAppBuilder RegisterBottomSheets(this MauiAppBuilder builder)
+    {
+        builder.Services.AddBottomSheet<AvatarSelectBottomSheet, AvatarSelectViewModel>(nameof(AvatarSelectBottomSheet));
         return builder;
     }
 

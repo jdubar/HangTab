@@ -1,117 +1,125 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<the49:BottomSheet
+<bottomsheet:BottomSheet
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:the49="https://schemas.the49.com/dotnet/2023/maui"
+    xmlns:bottomsheet="http://pluginmauibottomsheet.com"
     xmlns:vm="clr-namespace:HangTab.ViewModels.BottomSheets"
     x:Class="HangTab.Views.BottomSheets.AvatarSelectBottomSheet"
     x:DataType="vm:AvatarSelectViewModel"
-    HasBackdrop="True"
     HasHandle="True"
+    States="Peek"
     BackgroundColor="{DynamicResource PageBackgroundColor}">
     
-    <VerticalStackLayout
-        Spacing="16">
+    <bottomsheet:BottomSheet.Content>
+        <bottomsheet:BottomSheetContent>
+            <VerticalStackLayout
+                Spacing="16">
+                <VerticalStackLayout.Behaviors>
+                    <bottomsheet:BottomSheetPeekBehavior />
+                </VerticalStackLayout.Behaviors>
         
-        <!--Header Text-->
-        <Grid
-            ColumnDefinitions="*,2*,*"
-            Margin="0,35,0,0">
-            <Label
-                Grid.Column="1"
-                Text="Bowler photo"
-                TextColor="{DynamicResource TextPrimaryColor}"
-                FontAttributes="Bold"
-                FontSize="20"
-                HorizontalOptions="Center"
-                VerticalOptions="Center" />
-        </Grid>
+                <!--Header Text-->
+                <Grid
+                    ColumnDefinitions="*,2*,*"
+                    Margin="0,35,0,0">
+                    <Label
+                        Grid.Column="1"
+                        Text="Bowler photo"
+                        TextColor="{DynamicResource TextPrimaryColor}"
+                        FontAttributes="Bold"
+                        FontSize="20"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center" />
+                </Grid>
         
-        <Grid
-            RowDefinitions="Auto,Auto"
-            ColumnDefinitions="*,2*,*"
-            Margin="20,10,20,0">
+                <Grid
+                    RowDefinitions="Auto,Auto"
+                    ColumnDefinitions="*,2*,*"
+                    Margin="20,10,20,0">
             
-            <!--Camera Button-->
-            <ImageButton
-                Grid.Column="0"
-                Aspect="Center"
-                CornerRadius="70"
-                HeightRequest="40"
-                WidthRequest="40"
-                Command="{Binding SelectBowlerImageFromCameraCommand}">
-                <ImageButton.Source>
-                    <FontImageSource
-                        Color="{DynamicResource IconColor}"
-                        FontFamily="MaterialIcons"
-                        Glyph="{StaticResource photo_camera}"
-                        Size="40"/>
-                </ImageButton.Source>
-            </ImageButton>
+                    <!--Camera Button-->
+                    <ImageButton
+                        Grid.Column="0"
+                        Aspect="Center"
+                        CornerRadius="70"
+                        HeightRequest="40"
+                        WidthRequest="40"
+                        Command="{Binding SelectBowlerImageFromCameraCommand}">
+                        <ImageButton.Source>
+                            <FontImageSource
+                                Color="{DynamicResource IconColor}"
+                                FontFamily="MaterialIcons"
+                                Glyph="{StaticResource photo_camera}"
+                                Size="40"/>
+                        </ImageButton.Source>
+                    </ImageButton>
             
-            <!--Gallery Button-->
-            <ImageButton
-                Grid.Column="1"
-                Aspect="Center"
-                CornerRadius="70"
-                HeightRequest="40"
-                WidthRequest="40"
-                Command="{Binding SelectBowlerImageFromGalleryCommand}">
-                <ImageButton.Source>
-                    <FontImageSource
-                        Color="{DynamicResource IconColor}"
-                        FontFamily="MaterialIcons"
-                        Glyph="{StaticResource image}"
-                        Size="40"/>
-                </ImageButton.Source>
-            </ImageButton>
+                    <!--Gallery Button-->
+                    <ImageButton
+                        Grid.Column="1"
+                        Aspect="Center"
+                        CornerRadius="70"
+                        HeightRequest="40"
+                        WidthRequest="40"
+                        Command="{Binding SelectBowlerImageFromGalleryCommand}">
+                        <ImageButton.Source>
+                            <FontImageSource
+                                Color="{DynamicResource IconColor}"
+                                FontFamily="MaterialIcons"
+                                Glyph="{StaticResource image}"
+                                Size="40"/>
+                        </ImageButton.Source>
+                    </ImageButton>
             
-            <!--Delete Current Photo Button-->
-            <ImageButton
-                Grid.Column="2"
-                Aspect="Center"
-                CornerRadius="70"
-                HeightRequest="40"
-                WidthRequest="40"
-                Command="{Binding DeleteBowlerImageCommand}">
-                <ImageButton.Source>
-                    <FontImageSource
-                        Color="{DynamicResource IconColor}"
-                        FontFamily="MaterialIcons"
-                        Glyph="{StaticResource delete}"
-                        Size="40"/>
-                </ImageButton.Source>
-            </ImageButton>
+                    <!--Delete Current Photo Button-->
+                    <ImageButton
+                        Grid.Column="2"
+                        Aspect="Center"
+                        CornerRadius="70"
+                        HeightRequest="40"
+                        WidthRequest="40"
+                        Command="{Binding DeleteBowlerImageCommand}">
+                        <ImageButton.Source>
+                            <FontImageSource
+                                Color="{DynamicResource IconColor}"
+                                FontFamily="MaterialIcons"
+                                Glyph="{StaticResource delete}"
+                                Size="40"/>
+                        </ImageButton.Source>
+                    </ImageButton>
 
-        </Grid>
+                </Grid>
         
-        <!--Button Label Row-->
-        <Grid
-            ColumnDefinitions="*,2*,*"
-            Margin="20,0,20,20">
+                <!--Button Label Row-->
+                <Grid
+                    ColumnDefinitions="*,2*,*"
+                    Margin="20,0,20,20">
             
-            <!--Camera Label-->
-            <Label
-                Grid.Column="0"
-                Text="Camera"
-                TextColor="{DynamicResource TextPrimaryColor}"
-                HorizontalOptions="Center" />
+                    <!--Camera Label-->
+                    <Label
+                        Grid.Column="0"
+                        Text="Camera"
+                        TextColor="{DynamicResource TextPrimaryColor}"
+                        HorizontalOptions="Center" />
             
-            <!--Gallery Label-->
-            <Label
-                Grid.Column="1"
-                Text="Gallery"
-                TextColor="{DynamicResource TextPrimaryColor}"
-                HorizontalOptions="Center"
-                VerticalOptions="Center" />
+                    <!--Gallery Label-->
+                    <Label
+                        Grid.Column="1"
+                        Text="Gallery"
+                        TextColor="{DynamicResource TextPrimaryColor}"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center" />
             
-            <!--Delete Image Label-->
-            <Label
-                Grid.Column="2"
-                Text="Delete"
-                TextColor="{DynamicResource TextPrimaryColor}"
-                HorizontalOptions="Center"
-                VerticalOptions="Center" />
-        </Grid>
-    </VerticalStackLayout>
-</the49:BottomSheet>
+                    <!--Delete Image Label-->
+                    <Label
+                        Grid.Column="2"
+                        Text="Delete"
+                        TextColor="{DynamicResource TextPrimaryColor}"
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center" />
+                </Grid>
+            </VerticalStackLayout>
+        </bottomsheet:BottomSheetContent>
+    </bottomsheet:BottomSheet.Content>
+    
+</bottomsheet:BottomSheet>
