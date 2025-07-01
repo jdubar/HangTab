@@ -1,6 +1,7 @@
 ﻿using HangTab.Constants;
 
 namespace HangTab.Repositories.Impl;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a Repository for the data layer and does not require unit tests.")]
 public class MediaPickerRepository(IMediaPicker mediaPicker) : IMediaPickerRepository
 {
     public async Task<string> PickPhotoAsync()
