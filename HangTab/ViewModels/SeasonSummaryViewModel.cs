@@ -28,9 +28,6 @@ public partial class SeasonSummaryViewModel(
     [ObservableProperty]
     private WeekListItemViewModel? _bestBusRideWeek;
 
-    [ObservableProperty]
-    private bool _enableConfetti;
-
     public override async Task LoadAsync()
     {
         if (Bowlers.Count == 0)
@@ -41,8 +38,6 @@ public partial class SeasonSummaryViewModel(
                 await GetWeeks();
             });
         }
-
-        EnableConfetti = true;
     }
 
     private async Task GetBowlers()
