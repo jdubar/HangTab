@@ -100,13 +100,13 @@ public static class MauiProgram
         builder.Services.AddTransient<AvatarSelectViewModel>();
         builder.Services.AddTransient<BowlerSelectSubViewModel>();
         builder.Services.AddTransient<PersonAddEditViewModel>();
+        builder.Services.AddTransient<SeasonSummaryViewModel>();
         builder.Services.AddTransient<WeekDetailsViewModel>();
         return builder;
     }
 
     private static MauiAppBuilder RegisterViews(this MauiAppBuilder builder)
     {
-        builder.Services.AddSingleton<BowlerOverviewPage>();
         builder.Services.AddSingleton<CurrentWeekOverviewPage>();
         builder.Services.AddSingleton<PersonListOverviewPage>();
         builder.Services.AddSingleton<WeekListOverviewPage>();
@@ -114,6 +114,7 @@ public static class MauiProgram
 
         builder.Services.AddTransient<BowlerSelectSubPage>();
         builder.Services.AddTransient<PersonAddEditPage>();
+        builder.Services.AddTransient<SeasonSummaryPage>();
         builder.Services.AddTransient<WeekDetailsPage>();
         return builder;
     }

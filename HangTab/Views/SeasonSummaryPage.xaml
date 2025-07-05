@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<base:ContentPageBase
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:base="clr-namespace:HangTab.Views.Base"
+    xmlns:confetti="clr-namespace:HangTab.Views.Controls.Confetti"
+    xmlns:vm="clr-namespace:HangTab.ViewModels"
+    x:Class="HangTab.Views.SeasonSummaryPage"
+    x:DataType="vm:SeasonSummaryViewModel">
+    
+    <Grid>
+        <confetti:ConfettiView
+            IsVisible="{Binding EnableConfetti}"
+            HorizontalOptions="Fill"
+            VerticalOptions="Fill"
+            InputTransparent="True" />
+        
+    </Grid>
+    
+</base:ContentPageBase>

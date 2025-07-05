@@ -139,6 +139,18 @@ public partial class CurrentWeekOverviewViewModel :
             return;
         }
 
+        if (CurrentWeek.Number < _settingsService.TotalSeasonWeeks)
+        {
+            await StartNewWeek();
+        }
+        else
+        {
+            await _navigationService.GoToSeasonSummary();
+        }
+    }
+
+    private async Task StartNewWeek()
+    {
         await _weekService.CreateWeek(CurrentWeek.Number + 1).ContinueWith(async saveTask =>
         {
             if (saveTask.IsCompletedSuccessfully)
