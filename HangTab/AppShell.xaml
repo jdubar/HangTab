@@ -31,8 +31,8 @@
                     Glyph="{StaticResource groups}" />
             </Tab.Icon>
             <ShellContent
-                ContentTemplate="{DataTemplate views:BowlerOverviewPage}"
-                Route="bowleroverview"/>
+                ContentTemplate="{DataTemplate views:PersonListOverviewPage}"
+                Route="personlistoverview"/>
         </Tab>
         <Tab 
             Title="Season">
@@ -42,8 +42,8 @@
                     Glyph="{StaticResource calendar_month}" />
             </Tab.Icon>
             <ShellContent
-                ContentTemplate="{DataTemplate views:SeasonOverviewPage}"
-                Route="seasonoverview"/>
+                ContentTemplate="{DataTemplate views:WeekListOverviewPage}"
+                Route="weeklistoverview"/>
         </Tab>
         <Tab
             Title="Settings">

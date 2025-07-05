@@ -7,7 +7,7 @@
     xmlns:vm="clr-namespace:HangTab.ViewModels"
     xmlns:vmitems="clr-namespace:HangTab.ViewModels.Items"
     x:Class="HangTab.Views.WeekListOverviewPage"
-    x:DataType="vm:WeeksOverviewViewModel">
+    x:DataType="vm:WeekListOverviewViewModel">
     
     <!--Page titlebar-->
     <Shell.TitleView>

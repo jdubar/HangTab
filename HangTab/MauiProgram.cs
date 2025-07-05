@@ -108,7 +108,8 @@ public static class MauiProgram
     {
         builder.Services.AddSingleton<BowlerOverviewPage>();
         builder.Services.AddSingleton<CurrentWeekOverviewPage>();
-        builder.Services.AddSingleton<SeasonOverviewPage>();
+        builder.Services.AddSingleton<PersonListOverviewPage>();
+        builder.Services.AddSingleton<WeekListOverviewPage>();
         builder.Services.AddSingleton<SettingsPage>();
 
         builder.Services.AddTransient<BowlerSelectSubPage>();
