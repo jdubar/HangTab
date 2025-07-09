@@ -16,7 +16,7 @@ public class BowlerRepository(IDatabaseContext context) : IBowlerRepository
         return context.GetAllWithChildrenAsync<Bowler>(wl => wl.WeekId == id);
     }
 
-    public Task<IEnumerable<Bowler>> GetAllBowlers() => context.GetAllAsync<Bowler>();
+    public Task<IEnumerable<Bowler>> GetAllBowlers() => context.GetAllWithChildrenAsync<Bowler>();
 
     public Task<Bowler> GetBowlerById(int id)
     {
