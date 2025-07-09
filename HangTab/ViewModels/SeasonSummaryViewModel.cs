@@ -1,6 +1,7 @@
 ﻿using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 
+using HangTab.Extensions;
 using HangTab.Mappers;
 using HangTab.Models;
 using HangTab.Services;
@@ -12,21 +13,30 @@ using System.Collections.ObjectModel;
 namespace HangTab.ViewModels;
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a ViewModel for the UI and does not require unit tests.")]
 public partial class SeasonSummaryViewModel(
-    IBowlerService bowlerService,
+    IPersonService personService,
     IWeekService weekService,
-    IMapper<IEnumerable<Bowler>, IEnumerable<BowlerListItemViewModel>> mapper) : ViewModelBase
+    IMapper<IEnumerable<Person>, IEnumerable<BowlerListItemViewModel>> mapper) : ViewModelBase
 {
     [ObservableProperty]
     private ObservableCollection<BowlerListItemViewModel> _bowlers = [];
 
     [ObservableProperty]
-    private WeekListItemViewModel? _bestHangingWeek;
+    private int _bestHangWeekNumber;
 
     [ObservableProperty]
-    private WeekListItemViewModel? _worstHangingWeek;
+    private int _bestHangCount;
 
     [ObservableProperty]
-    private WeekListItemViewModel? _bestBusRideWeek;
+    private int _worstHangWeekNumber;
+
+    [ObservableProperty]
+    private int _worstHangCount;
+
+    [ObservableProperty]
+    private int _bestBusRideWeekNumber;
+
+    [ObservableProperty]
+    private int _bestBusRideCount;
 
     public override async Task LoadAsync()
     {
@@ -42,16 +52,22 @@ public partial class SeasonSummaryViewModel(
 
     private async Task GetBowlers()
     {
-        var allBowlers = await bowlerService.GetAllBowlers();
-        if (!allBowlers.Any())
+        var people = await personService.GetRegulars();
+        if (!people.Any())
         {
             return;
         }
 
-        var lowestHangCount = allBowlers.Min(b => b.HangCount);
-        var bowlers = allBowlers.Where(b => b.HangCount == lowestHangCount);
+        var allWeeks = await weekService.GetAllWeeks();
+        if (!allWeeks.Any())
+        {
+            return;
+        }
 
-        Bowlers = mapper.Map(bowlers).ToObservableCollection();
+        var bowlers = mapper.Map(people.OrderBy(b => b.Name)).ToList();
+        bowlers.SetBowlerHangSumByWeeks(allWeeks);
+
+        Bowlers = bowlers.Where(b => b.HangCount == bowlers.Min(b => b.HangCount)).ToObservableCollection();
     }
 
     private async Task GetWeeks()
@@ -65,9 +81,16 @@ public partial class SeasonSummaryViewModel(
         var weeks = allWeeks.Select(w => new WeekListItemViewModel(w.Id, w.BusRides, w.Number, w.Bowlers.Sum(b => b.HangCount)))
                             .OrderByDescending(w => w.HangCount);
 
-        BestHangingWeek = weeks.First();
-        WorstHangingWeek = weeks.Last();
+        var bestHangingWeek = weeks.First();
+        BestHangWeekNumber = bestHangingWeek.Number;
+        BestHangCount = bestHangingWeek.HangCount;
 
-        BestBusRideWeek = weeks.OrderByDescending(w => w.BusRides).First();
+        var worstHangingWeek = weeks.Last(w => w.Number != 0);
+        WorstHangWeekNumber = worstHangingWeek.Number;
+        WorstHangCount = worstHangingWeek.HangCount;
+
+        var bestBusRideWeek = weeks.OrderByDescending(w => w.BusRides).First();
+        BestBusRideWeekNumber = bestBusRideWeek.Number;
+        BestBusRideCount = bestBusRideWeek.BusRides;
     }
 }

@@ -138,8 +138,7 @@
                 <CollectionView.EmptyView>
                     <controls:EmptyCollectionMessage
                         IsVisible="{Binding LoadingComplete}"
-                        Message="No Completed Weeks Found"
-                        SubMessage="Create a bowler using the button below" />
+                        Message="No Completed Weeks Found" />
                 </CollectionView.EmptyView>
 
             </CollectionView>
