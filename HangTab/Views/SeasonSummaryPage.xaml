@@ -13,26 +13,29 @@
     
     <Grid
         RowDefinitions="*,Auto,80">
+        
+        <!--Confetti animation-->
         <confetti:ConfettiView
             ZIndex="2"
             HorizontalOptions="Fill"
             VerticalOptions="Fill"
             InputTransparent="True" />
         
+        <!--Bowler(s) with the least amount of hangs-->
         <CollectionView
             ZIndex="1"
             ItemsSource="{Binding Bowlers}"
             HorizontalOptions="Center"
-            VerticalOptions="Center">
-            <CollectionView.ItemsLayout>
-                <LinearItemsLayout Orientation="Horizontal" />
-            </CollectionView.ItemsLayout>
+            VerticalOptions="Center"
+            ItemsLayout="Horizontal">
             <CollectionView.ItemTemplate>
                 <DataTemplate
                     x:DataType="vmitems:BowlerListItemViewModel">
+                    
                     <VerticalStackLayout
                         HorizontalOptions="Center"
                         VerticalOptions="Center">
+                        
                         <controls:UserImage
                             ImageUrl="{Binding ImageUrl}"
                             Initials="{Binding Initials}"
@@ -44,11 +47,14 @@
                             Text="{Binding Name}"
                             Style="{StaticResource BowlerName}"
                             HorizontalOptions="Center" />
+                        
                         <Label
                             Text="{Binding HangCount, StringFormat='Hangings: {0}'}"
                             Style="{StaticResource Label_Hangings}"
                             HorizontalOptions="Center" />
+                        
                     </VerticalStackLayout>
+                    
                 </DataTemplate>
             </CollectionView.ItemTemplate>
         </CollectionView>
@@ -56,137 +62,28 @@
         <VerticalStackLayout
             Grid.Row="1"
             Margin="10,0">
-            <Label
-                Text="Best Hanging Week"
-                Style="{StaticResource Header}" />
-            <Border
-                Margin="5,8"
-                Style="{StaticResource RoundedCornerBorder}">
-                            
-                <Grid
-                    Padding="8"
-                    ColumnDefinitions="Auto,Auto,*">
-                                
-                    <Grid
-                        WidthRequest="50"
-                        HeightRequest="50">
-                        <Image
-                            WidthRequest="30"
-                            HeightRequest="30"
-                            Source="trophy.png">
-                        </Image>
-                    </Grid>
-                                
-                    <Label
-                        Grid.Column="1"
-                        Margin="10,0"
-                        FontSize="Large"
-                        VerticalOptions="Center"
-                        TextColor="{DynamicResource TextPrimaryColor}"
-                        Text="{Binding BestHangWeekNumber, Mode=OneWay, StringFormat='Week {0}'}" />
-                                
-                    <VerticalStackLayout
-                        Grid.Column="2"
-                        VerticalOptions="Center"
-                        Margin="15,0">
-                        <Label
-                            VerticalOptions="Center"
-                            FontSize="Medium"
-                            TextColor="{DynamicResource TextPrimaryColor}"
-                            Text="{Binding BestHangCount, Mode=OneWay, StringFormat='Hangings: {0}'}" />
-                    </VerticalStackLayout>
-                                
-                </Grid>
-                        
-            </Border>
             
-            <Label
-                Text="Worst Hanging Week"
-                Style="{StaticResource Header}" />
-            <Border
-                Margin="5,8"
-                Style="{StaticResource RoundedCornerBorder}">
-                            
-                <Grid
-                    Padding="8"
-                    ColumnDefinitions="Auto,Auto,*">
-                                
-                    <Grid
-                        WidthRequest="50"
-                        HeightRequest="50">
-                        <Image
-                            WidthRequest="30"
-                            HeightRequest="30"
-                            Source="dislike_button.png">
-                        </Image>
-                    </Grid>
-                                
-                    <Label
-                        Grid.Column="1"
-                        Margin="10,0"
-                        FontSize="Large"
-                        VerticalOptions="Center"
-                        TextColor="{DynamicResource TextPrimaryColor}"
-                        Text="{Binding WorstHangWeekNumber, Mode=OneWay, StringFormat='Week {0}'}" />
-                                
-                    <VerticalStackLayout
-                        Grid.Column="2"
-                        VerticalOptions="Center"
-                        Margin="15,0">
-                        <Label
-                            VerticalOptions="Center"
-                            FontSize="Medium"
-                            TextColor="{DynamicResource TextPrimaryColor}"
-                            Text="{Binding WorstHangCount, Mode=OneWay, StringFormat='Hangings: {0}'}" />
-                    </VerticalStackLayout>
-                                
-                </Grid>
-                        
-            </Border>
+            <!--Most hangs in a week-->
+            <controls:SeasonSummaryItem
+                Title="Most Hangings in a Week"
+                ImageSource="trophy.png"
+                WeekNumber="{Binding BestHangWeekNumber}"
+                Count="{Binding BestHangCount}" />
             
-            <Label
-                Text="Best Bus Ride Week"
-                Style="{StaticResource Header}" />
-            <Border
-                Margin="5,8"
-                Style="{StaticResource RoundedCornerBorder}">
-                            
-                <Grid
-                    Padding="8"
-                    ColumnDefinitions="Auto,Auto,*">
-                                
-                    <Grid
-                        WidthRequest="50"
-                        HeightRequest="50">
-                        <Image
-                            WidthRequest="40"
-                            HeightRequest="40"
-                            Source="school_bus.png">
-                        </Image>
-                    </Grid>
-                                
-                    <Label
-                        Grid.Column="1"
-                        Margin="10,0"
-                        FontSize="Large"
-                        VerticalOptions="Center"
-                        TextColor="{DynamicResource TextPrimaryColor}"
-                        Text="{Binding BestBusRideWeekNumber, Mode=OneWay, StringFormat='Week {0}'}" />
-                                
-                    <VerticalStackLayout
-                        Grid.Column="2"
-                        VerticalOptions="Center"
-                        Margin="15,0">
-                        <Label
-                            VerticalOptions="Center"
-                            FontSize="Medium"
-                            TextColor="{DynamicResource TextPrimaryColor}"
-                            Text="{Binding BestBusRideCount, Mode=OneWay, StringFormat='Bus Rides: {0}'}" />
-                    </VerticalStackLayout>
-                                
-                </Grid>
-                        
-            </Border>
+            <!--Least hangs in a week-->
+            <controls:SeasonSummaryItem
+                Title="Least Hangings in a Week"
+                ImageSource="dislike_button.png"
+                WeekNumber="{Binding WorstHangWeekNumber}"
+                Count="{Binding WorstHangCount}" />
+            
+            <!--Most bus rides in a week-->
+            <controls:SeasonSummaryItem
+                Title="Most Bus Rides in a Week"
+                ImageSource="school_bus.png"
+                WeekNumber="{Binding BestBusRideWeekNumber}"
+                Count="{Binding BestBusRideCount}" />
+            
         </VerticalStackLayout>
         
     </Grid>

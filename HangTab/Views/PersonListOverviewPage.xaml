@@ -45,7 +45,7 @@
                 HorizontalOptions="Fill"
                 Style="{StaticResource SearchBarFrame}">
                 <SearchBar
-                    Placeholder="Search by name" 
+                    Placeholder="Search by name"
                     Text="{Binding SearchText, Mode=TwoWay}" />
             </Border>
             

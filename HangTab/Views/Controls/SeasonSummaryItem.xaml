@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="HangTab.Views.Controls.SeasonSummaryItem"
+    x:Name="SeasonSummaryItemView">
+    
+    <VerticalStackLayout>
+        
+        <Label
+            Text="{Binding Source={x:Reference SeasonSummaryItemView}, Path=Title}"
+            Style="{StaticResource Header}" />
+        <Border
+            Margin="5,8"
+            Style="{StaticResource RoundedCornerBorder}">
+                            
+            <Grid
+                Padding="8"
+                HeightRequest="60"
+                ColumnDefinitions="50,Auto,*">
+                                
+                <Image
+                    WidthRequest="30"
+                    HeightRequest="30"
+                    Source="{Binding Source={x:Reference SeasonSummaryItemView}, Path=ImageSource}" />
+                                
+                <Label
+                    Grid.Column="1"
+                    Margin="10,0"
+                    FontSize="Large"
+                    VerticalOptions="Center"
+                    TextColor="{DynamicResource TextPrimaryColor}"
+                    Text="{Binding Source={x:Reference SeasonSummaryItemView}, Path=WeekNumber, StringFormat='Week {0}' }" />
+                                
+                <Label
+                    Grid.Column="2"
+                    Margin="15,0"
+                    VerticalOptions="Center"
+                    FontSize="Medium"
+                    TextColor="{DynamicResource TextPrimaryColor}"
+                    Text="{Binding Source={x:Reference SeasonSummaryItemView}, Path=Count, StringFormat='Hangings {0}' }" />
+                                
+            </Grid>
+                        
+        </Border>
+        
+    </VerticalStackLayout>
+    
+</ContentView>
