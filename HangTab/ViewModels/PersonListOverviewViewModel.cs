@@ -112,14 +112,16 @@ public partial class PersonListOverviewViewModel :
     private async Task GetBowlers()
     {
         var people = await _personService.GetAllPeople();
-        if (people.Any())
+        if (!people.Any())
         {
-            Bowlers.Clear();
-            AllBowlers = _bowlerListItemViewModelMapper.Map(people.OrderBy(b => b.Name));
-            Bowlers = AllBowlers.ToObservableCollection();
-
-            await UpdateBowlerHangCounts();
+            return;
         }
+
+        Bowlers.Clear();
+        AllBowlers = _bowlerListItemViewModelMapper.Map(people.OrderBy(b => b.Name));
+        Bowlers = AllBowlers.ToObservableCollection();
+
+        await UpdateBowlerHangCounts();
     }
 
     private async Task UpdateBowlerHangCounts()

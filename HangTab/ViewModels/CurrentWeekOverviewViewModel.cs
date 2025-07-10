@@ -141,7 +141,7 @@ public partial class CurrentWeekOverviewViewModel :
 
         if (CurrentWeek.Number < _settingsService.TotalSeasonWeeks)
         {
-            await StartNewWeek();
+            await Loading(StartNewWeek);
         }
         else
         {
@@ -170,20 +170,22 @@ public partial class CurrentWeekOverviewViewModel :
     private async Task GetCurrentWeek()
     {
         CurrentWeek = await _weekService.GetWeekById(_settingsService.CurrentWeekPrimaryKey);
-        if (CurrentWeek is not null)
+        if (CurrentWeek is null)
         {
-            _settingsService.CurrentWeekPrimaryKey = CurrentWeek.Id;
-            if (CurrentWeek.Bowlers.Count > 0)
-            {
-                CurrentWeekBowlers.Clear();
-                CurrentWeekBowlers = _currentWeekListItemViewModelMapper.Map(CurrentWeek.Bowlers).ToObservableCollection();
-                CurrentWeekBowlers.SetLowestBowlerHangCount();
-            }
-
-            MapWeekData(CurrentWeek);
+            return;
         }
+
+        _settingsService.CurrentWeekPrimaryKey = CurrentWeek.Id;
+        if (CurrentWeek.Bowlers.Count > 0)
+        {
+            CurrentWeekBowlers.Clear();
+            CurrentWeekBowlers = _currentWeekListItemViewModelMapper.Map(CurrentWeek.Bowlers).ToObservableCollection();
+            CurrentWeekBowlers.SetLowestBowlerHangCount();
+        }
+
+        MapWeekData(CurrentWeek);
     }
-    
+
     private void InitializeCurrentWeekPageSettings()
     {
         IsEnableCompleteWeek = CurrentWeekBowlers.Count > 0;

@@ -78,14 +78,19 @@ public partial class SeasonSummaryViewModel(
             return;
         }
 
-        var weeks = allWeeks.Select(w => new WeekListItemViewModel(w.Id, w.BusRides, w.Number, w.Bowlers.Sum(b => b.HangCount)))
-                            .OrderByDescending(w => w.HangCount);
+        var weeks = allWeeks
+            .Select(w => new WeekListItemViewModel(
+                w.Id,
+                w.Number,
+                w.BusRides,
+                w.Bowlers.Sum(b => b.HangCount)))
+            .OrderByDescending(w => w.HangCount);
 
         var bestHangingWeek = weeks.First();
         BestHangWeekNumber = bestHangingWeek.Number;
         BestHangCount = bestHangingWeek.HangCount;
 
-        var worstHangingWeek = weeks.Last(w => w.Number != 0);
+        var worstHangingWeek = weeks.Last();
         WorstHangWeekNumber = worstHangingWeek.Number;
         WorstHangCount = worstHangingWeek.HangCount;
 

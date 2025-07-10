@@ -32,11 +32,13 @@ public partial class WeekListOverviewViewModel(
     private async Task GetWeeks()
     {
         var weeks = await weekService.GetAllWeeks();
-        if (weeks.Any())
+        if (!weeks.Any())
         {
-            Weeks.Clear();
-            Weeks = mapper.Map(weeks.Where(w => w.Id != settingsService.CurrentWeekPrimaryKey).OrderByDescending(w => w.Number)).ToObservableCollection();
+            return;
         }
+
+        Weeks.Clear();
+        Weeks = mapper.Map(weeks.Where(w => w.Id != settingsService.CurrentWeekPrimaryKey).OrderByDescending(w => w.Number)).ToObservableCollection();
     }
 
     [RelayCommand]
