@@ -15,12 +15,24 @@ public partial class App : Application
 
         // TODO: Check how long the user has been away to save the current week stats and start a new week
         SetCurrentUserSelectedTheme();
+        InitializeDatabase();
     }
 
     protected override Window CreateWindow(IActivationState? activationState)
     {
         return new Window(new AppShell());
     }
+
+    private void InitializeDatabase()
+     {
+        var databaseService = _serviceProvider.GetService<IDatabaseService>();
+        if (databaseService is null)
+        {
+            return;
+        }
+
+        databaseService.InitializeDatabase();
+     }
 
     private void SetCurrentUserSelectedTheme()
     {

@@ -56,10 +56,13 @@
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Maui" Version="[11.1.0]" />
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="[8.3.2]" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="[9.0.40]" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.6" />
+		<!--<PackageReference Include="CommunityToolkit.Maui" Version="[11.1.0]" />-->
+		<PackageReference Include="CommunityToolkit.Maui" Version="12.1.0" />
+		<!--<PackageReference Include="CommunityToolkit.Mvvm" Version="[8.3.2]" />-->
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+		<!--<PackageReference Include="Microsoft.Maui.Controls" Version="[9.0.40]" />-->
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.81" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.7" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Plugin.Maui.Audio" Version="4.0.0" />
 		<PackageReference Include="Plugin.Maui.BottomSheet" Version="9.1.8" />
@@ -90,6 +93,9 @@
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Controls\PageTitle.xaml">
+		  <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Controls\SeasonSummaryItem.xaml">
 		  <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Controls\SwipeItem.xaml">

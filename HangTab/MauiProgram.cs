@@ -2,6 +2,7 @@
 
 using HangTab.Data;
 using HangTab.Data.Impl;
+using HangTab.Handlers.SearchBar;
 using HangTab.Mappers;
 using HangTab.Models;
 using HangTab.Repositories;
@@ -35,12 +36,18 @@ public static class MauiProgram
             {
                 options.SetShouldEnableSnackbarOnWindows(true);
             })
+#if ANDROID
             .UseBottomSheet(config => config.CopyPagePropertiesToBottomSheet = true)
+#endif
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 fonts.AddFont("MaterialIconsOutlined-Regular.otf", "MaterialIcons");
+            })
+            .ConfigureMauiHandlers(handlers =>
+            {
+                handlers.AddHandler<SearchBar, SearchBarExHandler>();
             })
             .RegisterRepositories()
             .RegisterServices()
