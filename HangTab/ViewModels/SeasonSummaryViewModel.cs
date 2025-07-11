@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.Maui.Core.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
+using CommunityToolkit.Mvvm.Input;
 
 using HangTab.Extensions;
 using HangTab.Mappers;
@@ -15,7 +16,8 @@ namespace HangTab.ViewModels;
 public partial class SeasonSummaryViewModel(
     IPersonService personService,
     IWeekService weekService,
-    IMapper<IEnumerable<Person>, IEnumerable<BowlerListItemViewModel>> mapper) : ViewModelBase
+    IMapper<IEnumerable<Person>, IEnumerable<BowlerListItemViewModel>> mapper,
+    DataManagerViewModel dataManager) : ViewModelBase
 {
     [ObservableProperty]
     private ObservableCollection<BowlerListItemViewModel> _bestBowlers = [];
@@ -49,6 +51,9 @@ public partial class SeasonSummaryViewModel(
             });
         }
     }
+
+    [RelayCommand]
+    private async Task SubmitSeasonAsync() => await dataManager.StartNewSeasonAsync();
 
     private async Task GetBowlers()
     {
