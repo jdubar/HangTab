@@ -38,6 +38,9 @@ public partial class SeasonSummaryViewModel(
     [ObservableProperty]
     private int _bestBusRideCount;
 
+    [ObservableProperty]
+    private string _bowlerListHeader;
+
     public override async Task LoadAsync()
     {
         if (Bowlers.Count == 0)
@@ -68,6 +71,8 @@ public partial class SeasonSummaryViewModel(
         bowlers.SetBowlerHangSumByWeeks(allWeeks);
 
         Bowlers = bowlers.Where(b => b.HangCount == bowlers.Min(b => b.HangCount)).ToObservableCollection();
+        var s = Bowlers.Count > 1 ? "s" : "";
+        BowlerListHeader = $"Bowler{s} with the least hangs";
     }
 
     private async Task GetWeeks()

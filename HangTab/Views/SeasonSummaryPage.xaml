@@ -22,12 +22,18 @@
             InputTransparent="True" />
         
         <!--Bowler(s) with the least amount of hangs-->
+        <Label
+            Style="{StaticResource Header}"
+            FontSize="Large"
+            HorizontalOptions="Center"
+            Text="{Binding BowlerListHeader}" />
+        
         <CollectionView
             ZIndex="1"
             ItemsSource="{Binding Bowlers}"
             HorizontalOptions="Center"
             VerticalOptions="Center"
-            ItemsLayout="Horizontal">
+            ItemsLayout="HorizontalList">
             <CollectionView.ItemTemplate>
                 <DataTemplate
                     x:DataType="vmitems:BowlerListItemViewModel">
@@ -65,21 +71,21 @@
             
             <!--Most hangs in a week-->
             <controls:SeasonSummaryItem
-                Title="Most Hangings in a Week"
+                Title="Most Hangings"
                 ImageSource="trophy.png"
                 WeekNumber="{Binding BestHangWeekNumber}"
                 Count="{Binding BestHangCount}" />
             
             <!--Least hangs in a week-->
             <controls:SeasonSummaryItem
-                Title="Least Hangings in a Week"
+                Title="Least Hangings"
                 ImageSource="dislike_button.png"
                 WeekNumber="{Binding WorstHangWeekNumber}"
                 Count="{Binding WorstHangCount}" />
             
             <!--Most bus rides in a week-->
             <controls:SeasonSummaryItem
-                Title="Most Bus Rides in a Week"
+                Title="Most Bus Rides"
                 ImageSource="school_bus.png"
                 WeekNumber="{Binding BestBusRideWeekNumber}"
                 Count="{Binding BestBusRideCount}" />
