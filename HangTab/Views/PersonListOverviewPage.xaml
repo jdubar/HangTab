@@ -14,7 +14,7 @@
     <!--Page titlebar-->
     <Shell.TitleView>
         <controls:PageTitle
-            Title="All Bowlers" />
+            Title="Bowlers" />
     </Shell.TitleView>
     
     <ContentPage.Resources>

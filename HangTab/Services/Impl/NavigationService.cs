@@ -19,10 +19,9 @@ public class NavigationService : INavigationService
         await Shell.Current.GoToAsync(Routes.PersonEdit, navigationParameter);
     }
 
-    public async Task GoToSeasonSummary()
-    {
-        await Shell.Current.GoToAsync(Routes.SeasonSummary);
-    }
+    public async Task GoToHome() => await Shell.Current.GoToAsync(Routes.Home);
+
+    public async Task GoToSeasonSummary() => await Shell.Current.GoToAsync(Routes.SeasonSummary);
 
     public async Task GoToSelectSub(Bowler bowler)
     {

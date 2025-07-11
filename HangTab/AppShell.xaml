@@ -56,5 +56,12 @@
                 ContentTemplate="{DataTemplate views:SettingsPage}"
                 Route="settings"/>
         </Tab>
+        <Tab
+            IsVisible="False"
+            Title="Season Summary">
+            <ShellContent
+                ContentTemplate="{DataTemplate views:SeasonSummaryPage}"
+                Route="seasonsummary"/>
+        </Tab>
     </TabBar>
 </Shell>

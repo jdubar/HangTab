@@ -12,7 +12,7 @@
     <!--Page titlebar-->
     <Shell.TitleView>
         <controls:PageTitle
-            Title="Season Overview" />
+            Title="Season" />
     </Shell.TitleView>
     
     <ContentPage.Resources>
@@ -104,16 +104,40 @@
                                     Grid.Column="2"
                                     VerticalOptions="Center"
                                     Margin="15,0">
-                                    <Label
-                                        VerticalOptions="Center"
-                                        FontSize="Medium"
-                                        TextColor="{DynamicResource TextPrimaryColor}"
-                                        Text="{Binding HangCount, Mode=OneWay, StringFormat='Hangings: {0}'}" />
-                                    <Label
-                                        VerticalOptions="Center"
-                                        FontSize="Medium"
-                                        TextColor="{DynamicResource TextPrimaryColor}"
-                                        Text="{Binding BusRides, Mode=OneWay, StringFormat='Bus Rides: {0}'}" />
+                                    
+                                    <!--Hang count label-->
+                                    <Grid
+                                        ColumnDefinitions="*,20"
+                                        VerticalOptions="Center">
+                                        <Label
+                                            VerticalOptions="Center"
+                                            FontSize="Medium"
+                                            TextColor="{DynamicResource TextPrimaryColor}"
+                                            Text="Hangings:" />
+                                        <Label
+                                            Grid.Column="1"
+                                            VerticalOptions="Center"
+                                            FontSize="Medium"
+                                            TextColor="{DynamicResource TextPrimaryColor}"
+                                            Text="{Binding HangCount}" />
+                                    </Grid>
+                                    
+                                    <!--BusRide count label-->
+                                    <Grid
+                                        ColumnDefinitions="*,20"
+                                        VerticalOptions="Center">
+                                        <Label
+                                            VerticalOptions="Center"
+                                            FontSize="Medium"
+                                            TextColor="{DynamicResource TextPrimaryColor}"
+                                            Text="Bus Rides:" />
+                                        <Label
+                                            Grid.Column="1"
+                                            VerticalOptions="Center"
+                                            FontSize="Medium"
+                                            TextColor="{DynamicResource TextPrimaryColor}"
+                                            Text="{Binding BusRides}" />
+                                    </Grid>
                                 </VerticalStackLayout>
                                 
                                 <!--Chevron Image-->

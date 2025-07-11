@@ -11,8 +11,17 @@
     x:Class="HangTab.Views.SeasonSummaryPage"
     x:DataType="vm:SeasonSummaryViewModel">
     
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" />
+    </Shell.BackButtonBehavior>
+    
+    <Shell.TitleView>
+        <controls:PageTitle
+            Title="Season Summary" />
+    </Shell.TitleView>
+    
     <Grid
-        RowDefinitions="*,Auto,50">
+        RowDefinitions="*,Auto,Auto">
         
         <!--Confetti animation-->
         <confetti:ConfettiView
@@ -105,6 +114,16 @@
                 ItemCount="{Binding BestBusRideWeekCount, StringFormat='Bus Rides: {0}'}" />
             
         </VerticalStackLayout>
+        
+        <!--Submit Button-->
+        <StackLayout
+            Grid.Row="2"
+            Margin="5">
+            <Button
+                Style="{StaticResource PrimaryButton}"
+                Text="Start a new season"
+                Command="{Binding SubmitSeasonCommand}"/>
+        </StackLayout>
         
     </Grid>
     

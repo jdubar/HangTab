@@ -18,10 +18,7 @@ public partial class App : Application
         InitializeDatabase();
     }
 
-    protected override Window CreateWindow(IActivationState? activationState)
-    {
-        return new Window(new AppShell());
-    }
+    protected override Window CreateWindow(IActivationState? activationState) => new(new AppShell());
 
     private void InitializeDatabase()
      {

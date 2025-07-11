@@ -114,6 +114,12 @@ public partial class CurrentWeekOverviewViewModel :
 
     public override async Task LoadAsync()
     {
+        if (_settingsService.SeasonComplete)
+        {
+            await _navigationService.GoToSeasonSummary();
+            return;
+        }
+
         if (CurrentWeekBowlers.Count == 0)
         {
             await Loading(GetCurrentWeek);
@@ -145,6 +151,7 @@ public partial class CurrentWeekOverviewViewModel :
         }
         else
         {
+            _settingsService.SeasonComplete = true;
             await _navigationService.GoToSeasonSummary();
         }
     }

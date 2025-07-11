@@ -106,6 +106,7 @@ public static class MauiProgram
 
         builder.Services.AddTransient<AvatarSelectViewModel>();
         builder.Services.AddTransient<BowlerSelectSubViewModel>();
+        builder.Services.AddTransient<DataManagerViewModel>();
         builder.Services.AddTransient<PersonAddEditViewModel>();
         builder.Services.AddTransient<SeasonSummaryViewModel>();
         builder.Services.AddTransient<WeekDetailsViewModel>();

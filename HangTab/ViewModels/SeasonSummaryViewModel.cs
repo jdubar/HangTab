@@ -14,6 +14,7 @@ using System.Collections.ObjectModel;
 namespace HangTab.ViewModels;
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a ViewModel for the UI and does not require unit tests.")]
 public partial class SeasonSummaryViewModel(
+    INavigationService navigationService,
     IPersonService personService,
     IWeekService weekService,
     IMapper<IEnumerable<Person>, IEnumerable<BowlerListItemViewModel>> mapper,
@@ -53,7 +54,11 @@ public partial class SeasonSummaryViewModel(
     }
 
     [RelayCommand]
-    private async Task SubmitSeasonAsync() => await dataManager.StartNewSeasonAsync();
+    private async Task SubmitSeasonAsync()
+    {
+        await dataManager.StartNewSeasonAsync();
+        await navigationService.GoToHome();
+    }
 
     private async Task GetBowlers()
     {

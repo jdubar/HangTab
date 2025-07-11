@@ -3,8 +3,9 @@
 public static class Routes
 {
     public static string BowlerSelectSub => "bowler/selectsub";
+    public static string Home => "//currentweekoverview";
     public static string PersonAdd => "person/add";
     public static string PersonEdit => "bowler/edit";
-    public static string SeasonSummary => "season/summary";
+    public static string SeasonSummary => "//seasonsummary";
     public static string WeekDetails => "week/details";
 }
