@@ -23,20 +23,22 @@
         
         <!--Bowler(s) with the least amount of hangs-->
         <Grid
-            ColumnDefinitions="Auto,*"
+            ColumnDefinitions="80,*,80"
             HorizontalOptions="Center"
             VerticalOptions="Start">
             <Label
+                Grid.Column="1"
                 Style="{StaticResource Header}"
                 FontSize="Large"
                 HorizontalOptions="Center"
                 Text="Congratulations!" />
             
             <Image
-                Grid.Column="1"
+                Grid.Column="2"
                 Source="popper_anim.gif"
                 Margin="0,3"
                 HeightRequest="40"
+                HorizontalOptions="Start"
                 IsAnimationPlaying="True" />
         </Grid>
         
