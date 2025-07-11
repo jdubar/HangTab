@@ -11,19 +11,15 @@
     <x:String x:Key="check">&#xe5ca;</x:String>
     <x:String x:Key="calendar_month">&#xebcc;</x:String>
     <x:String x:Key="chevron_right">&#xe5cc;</x:String>
-    <x:String x:Key="close">&#xe5cd;</x:String>
     <x:String x:Key="delete">&#xe872;</x:String>
     <x:String x:Key="group">&#xe7ef;</x:String>
     <x:String x:Key="groups">&#xf233;</x:String>
     <x:String x:Key="home">&#xe88a;</x:String>
     <x:String x:Key="image">&#xe3f4;</x:String>
-    <x:String x:Key="manage_accounts">&#xf02e;</x:String>
     <x:String x:Key="person">&#xe7fd;</x:String>
     <x:String x:Key="person_add">&#xe7fe;</x:String>
-    <x:String x:Key="person_off">&#xe510;</x:String>
     <x:String x:Key="photo_camera">&#xe412;</x:String>
     <x:String x:Key="play_arrow">&#xe037;</x:String>
     <x:String x:Key="settings">&#xe8b8;</x:String>
-    <x:String x:Key="switch_account">&#xe9ed;</x:String>
-    <x:String x:Key="tune">&#xe429;</x:String>
+    
 </ResourceDictionary>

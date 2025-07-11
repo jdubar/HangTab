@@ -48,8 +48,6 @@
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#000000" />
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
-		<MauiImage Update="Resources\Images\bus_splash.svg" Resize="True" BaseSize="818,556" />
-		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
@@ -93,13 +91,13 @@
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Controls\PageTitle.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+		    <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Controls\SeasonSummaryItem.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+		    <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Controls\SwipeItem.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+		    <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Controls\UserImage.xaml">
 			<Generator>MSBuild:Compile</Generator>
@@ -126,10 +124,10 @@
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\WeekDetailsPage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+		    <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\SeasonSummaryPage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+		    <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 	</ItemGroup>
 </Project>
