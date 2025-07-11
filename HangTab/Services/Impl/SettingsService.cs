@@ -19,4 +19,10 @@ public class SettingsService(IPreferences preferences) : ISettingsService
         get => preferences.Get(nameof(Theme), 0);
         set => preferences.Set(nameof(Theme), value);
     }
+
+    public bool SeasonComplete
+    {
+        get => preferences.Get(nameof(SeasonComplete), false);
+        set => preferences.Set(nameof(SeasonComplete), value);
+    }
 }
