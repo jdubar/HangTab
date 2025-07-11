@@ -11,7 +11,7 @@
             Text="{Binding Source={x:Reference SeasonSummaryItemView}, Path=Title}"
             Style="{StaticResource Header}" />
         <Border
-            Margin="5,8"
+            Margin="5,3"
             Style="{StaticResource RoundedCornerBorder}">
                             
             <Grid
@@ -20,8 +20,8 @@
                 ColumnDefinitions="50,Auto,*">
                                 
                 <Image
-                    WidthRequest="30"
-                    HeightRequest="30"
+                    WidthRequest="40"
+                    HeightRequest="40"
                     Source="{Binding Source={x:Reference SeasonSummaryItemView}, Path=ImageSource}" />
                                 
                 <Label
@@ -38,7 +38,7 @@
                     VerticalOptions="Center"
                     FontSize="Medium"
                     TextColor="{DynamicResource TextPrimaryColor}"
-                    Text="{Binding Source={x:Reference SeasonSummaryItemView}, Path=Count, StringFormat='Hangings {0}' }" />
+                    Text="{Binding Source={x:Reference SeasonSummaryItemView}, Path=ItemCount}" />
                                 
             </Grid>
                         

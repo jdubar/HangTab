@@ -12,7 +12,7 @@
     x:DataType="vm:SeasonSummaryViewModel">
     
     <Grid
-        RowDefinitions="*,Auto,80">
+        RowDefinitions="*,Auto,50">
         
         <!--Confetti animation-->
         <confetti:ConfettiView
@@ -22,15 +22,27 @@
             InputTransparent="True" />
         
         <!--Bowler(s) with the least amount of hangs-->
-        <Label
-            Style="{StaticResource Header}"
-            FontSize="Large"
+        <Grid
+            ColumnDefinitions="Auto,*"
             HorizontalOptions="Center"
-            Text="{Binding BowlerListHeader}" />
+            VerticalOptions="Start">
+            <Label
+                Style="{StaticResource Header}"
+                FontSize="Large"
+                HorizontalOptions="Center"
+                Text="Congratulations!" />
+            
+            <Image
+                Grid.Column="1"
+                Source="popper_anim.gif"
+                Margin="0,3"
+                HeightRequest="40"
+                IsAnimationPlaying="True" />
+        </Grid>
         
         <CollectionView
             ZIndex="1"
-            ItemsSource="{Binding Bowlers}"
+            ItemsSource="{Binding BestBowlers}"
             HorizontalOptions="Center"
             VerticalOptions="Center"
             ItemsLayout="HorizontalList">
@@ -74,21 +86,21 @@
                 Title="Most Hangings"
                 ImageSource="trophy.png"
                 WeekNumber="{Binding BestHangWeekNumber}"
-                Count="{Binding BestHangCount}" />
+                ItemCount="{Binding BestHangWeekCount, StringFormat='Hangings: {0}'}" />
             
             <!--Least hangs in a week-->
             <controls:SeasonSummaryItem
                 Title="Least Hangings"
                 ImageSource="dislike_button.png"
                 WeekNumber="{Binding WorstHangWeekNumber}"
-                Count="{Binding WorstHangCount}" />
+                ItemCount="{Binding WorstHangWeekCount, StringFormat='Hangings: {0}'}" />
             
             <!--Most bus rides in a week-->
             <controls:SeasonSummaryItem
                 Title="Most Bus Rides"
                 ImageSource="school_bus.png"
                 WeekNumber="{Binding BestBusRideWeekNumber}"
-                Count="{Binding BestBusRideCount}" />
+                ItemCount="{Binding BestBusRideWeekCount, StringFormat='Bus Rides: {0}'}" />
             
         </VerticalStackLayout>
         

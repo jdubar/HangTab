@@ -18,32 +18,29 @@ public partial class SeasonSummaryViewModel(
     IMapper<IEnumerable<Person>, IEnumerable<BowlerListItemViewModel>> mapper) : ViewModelBase
 {
     [ObservableProperty]
-    private ObservableCollection<BowlerListItemViewModel> _bowlers = [];
+    private ObservableCollection<BowlerListItemViewModel> _bestBowlers = [];
 
     [ObservableProperty]
     private int _bestHangWeekNumber;
 
     [ObservableProperty]
-    private int _bestHangCount;
-
-    [ObservableProperty]
-    private int _worstHangWeekNumber;
-
-    [ObservableProperty]
-    private int _worstHangCount;
+    private int _bestHangWeekCount;
 
     [ObservableProperty]
     private int _bestBusRideWeekNumber;
 
     [ObservableProperty]
-    private int _bestBusRideCount;
+    private int _bestBusRideWeekCount;
 
     [ObservableProperty]
-    private string _bowlerListHeader;
+    private int _worstHangWeekNumber;
+
+    [ObservableProperty]
+    private int _worstHangWeekCount;
 
     public override async Task LoadAsync()
     {
-        if (Bowlers.Count == 0)
+        if (BestBowlers.Count == 0)
         {
             await Loading(async () =>
             {
@@ -70,9 +67,7 @@ public partial class SeasonSummaryViewModel(
         var bowlers = mapper.Map(people.OrderBy(b => b.Name)).ToList();
         bowlers.SetBowlerHangSumByWeeks(allWeeks);
 
-        Bowlers = bowlers.Where(b => b.HangCount == bowlers.Min(b => b.HangCount)).ToObservableCollection();
-        var s = Bowlers.Count > 1 ? "s" : "";
-        BowlerListHeader = $"Bowler{s} with the least hangs";
+        BestBowlers = bowlers.Where(b => b.HangCount == bowlers.Min(b => b.HangCount)).ToObservableCollection();
     }
 
     private async Task GetWeeks()
@@ -93,14 +88,14 @@ public partial class SeasonSummaryViewModel(
 
         var bestHangingWeek = weeks.First();
         BestHangWeekNumber = bestHangingWeek.Number;
-        BestHangCount = bestHangingWeek.HangCount;
+        BestHangWeekCount = bestHangingWeek.HangCount;
 
         var worstHangingWeek = weeks.Last();
         WorstHangWeekNumber = worstHangingWeek.Number;
-        WorstHangCount = worstHangingWeek.HangCount;
+        WorstHangWeekCount = worstHangingWeek.HangCount;
 
         var bestBusRideWeek = weeks.OrderByDescending(w => w.BusRides).First();
         BestBusRideWeekNumber = bestBusRideWeek.Number;
-        BestBusRideCount = bestBusRideWeek.BusRides;
+        BestBusRideWeekCount = bestBusRideWeek.BusRides;
     }
 }
