@@ -1,5 +1,5 @@
 ﻿namespace HangTab.Views.Controls.ConfettiView;
-
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We will not test the view code behind. There's no logic to test.")]
 public partial class ConfettiView : GraphicsView
 {
     private readonly Random _random = new();

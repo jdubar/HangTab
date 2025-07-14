@@ -1,4 +1,5 @@
 ﻿namespace HangTab.Views.Controls.ConfettiView;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We will not test the view code behind. There's no logic to test.")]
 public class ConfettiDrawable(List<ConfettiParticle> particles) : IDrawable
 {
     public void Draw(ICanvas canvas, RectF dirtyRect)

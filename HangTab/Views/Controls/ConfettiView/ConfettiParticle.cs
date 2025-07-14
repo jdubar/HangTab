@@ -1,4 +1,5 @@
 namespace HangTab.Views.Controls.ConfettiView;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We will not test the model. There's no logic to test.")]
 public class ConfettiParticle
 {
     public float X { get; set; }
