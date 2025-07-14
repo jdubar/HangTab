@@ -92,4 +92,19 @@ public class DatabaseServiceTests
         // Act & Assert
         await Assert.ThrowsAsync<Exception>(service.DeleteSeasonData);
     }
+
+    [Fact]
+    public async Task InitializeDatabase_CallsRepositoryInitializeDatabase()
+    {
+        // Arrange
+        var databaseRepo = A.Fake<IDatabaseRepository>();
+        var service = new DatabaseService(databaseRepo);
+        A.CallTo(() => databaseRepo.InitializeDatabase()).Returns(Task.CompletedTask);
+
+        // Act
+        await service.InitializeDatabase();
+
+        // Assert
+        A.CallTo(() => databaseRepo.InitializeDatabase()).MustHaveHappenedOnceExactly();
+    }
 }
