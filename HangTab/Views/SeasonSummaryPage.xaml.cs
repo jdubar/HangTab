@@ -3,11 +3,11 @@ using HangTab.Views.Base;
 
 namespace HangTab.Views;
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We will not test the view code behind. There's no logic to test.")]
-public partial class SeasonOverviewPage : ContentPageBase
+public partial class SeasonSummaryPage : ContentPageBase
 {
-	public SeasonOverviewPage(SeasonOverviewViewModel vm)
+	public SeasonSummaryPage(SeasonSummaryViewModel vm)
 	{
 		InitializeComponent();
-        BindingContext = vm;
+		BindingContext = vm;
     }
 }

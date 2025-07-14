@@ -5,4 +5,5 @@ public class DatabaseService(IDatabaseRepository databaseRepository) : IDatabase
 {
     public Task<bool> DeleteAllData() => databaseRepository.DeleteAllData();
     public Task<bool> DeleteSeasonData() => databaseRepository.DeleteSeasonData();
+    public Task InitializeDatabase() => databaseRepository.InitializeDatabase();
 }

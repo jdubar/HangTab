@@ -114,6 +114,12 @@ public partial class CurrentWeekOverviewViewModel :
 
     public override async Task LoadAsync()
     {
+        if (_settingsService.SeasonComplete)
+        {
+            await _navigationService.GoToSeasonSummary();
+            return;
+        }
+
         if (CurrentWeekBowlers.Count == 0)
         {
             await Loading(GetCurrentWeek);
@@ -139,6 +145,19 @@ public partial class CurrentWeekOverviewViewModel :
             return;
         }
 
+        if (CurrentWeek.Number < _settingsService.TotalSeasonWeeks)
+        {
+            await Loading(StartNewWeek);
+        }
+        else
+        {
+            _settingsService.SeasonComplete = true;
+            await _navigationService.GoToSeasonSummary();
+        }
+    }
+
+    private async Task StartNewWeek()
+    {
         await _weekService.CreateWeek(CurrentWeek.Number + 1).ContinueWith(async saveTask =>
         {
             if (saveTask.IsCompletedSuccessfully)
@@ -158,20 +177,22 @@ public partial class CurrentWeekOverviewViewModel :
     private async Task GetCurrentWeek()
     {
         CurrentWeek = await _weekService.GetWeekById(_settingsService.CurrentWeekPrimaryKey);
-        if (CurrentWeek is not null)
+        if (CurrentWeek is null)
         {
-            _settingsService.CurrentWeekPrimaryKey = CurrentWeek.Id;
-            if (CurrentWeek.Bowlers.Count > 0)
-            {
-                CurrentWeekBowlers.Clear();
-                CurrentWeekBowlers = _currentWeekListItemViewModelMapper.Map(CurrentWeek.Bowlers).ToObservableCollection();
-                CurrentWeekBowlers.SetLowestBowlerHangCount();
-            }
-
-            MapWeekData(CurrentWeek);
+            return;
         }
+
+        _settingsService.CurrentWeekPrimaryKey = CurrentWeek.Id;
+        if (CurrentWeek.Bowlers.Count > 0)
+        {
+            CurrentWeekBowlers.Clear();
+            CurrentWeekBowlers = _currentWeekListItemViewModelMapper.Map(CurrentWeek.Bowlers).ToObservableCollection();
+            CurrentWeekBowlers.SetLowestBowlerHangCount();
+        }
+
+        MapWeekData(CurrentWeek);
     }
-    
+
     private void InitializeCurrentWeekPageSettings()
     {
         IsEnableCompleteWeek = CurrentWeekBowlers.Count > 0;

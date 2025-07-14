@@ -3,16 +3,11 @@ using HangTab.Views.Base;
 
 namespace HangTab.Views;
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We will not test the view code behind. There's no logic to test.")]
-public partial class BowlerOverviewPage : ContentPageBase
+public partial class PersonListOverviewPage : ContentPageBase
 {
-	public BowlerOverviewPage(PersonOverviewViewModel vm)
+	public PersonListOverviewPage(PersonListOverviewViewModel vm)
 	{
 		InitializeComponent();
         BindingContext = vm;
     }
-
-    //private void SearchBar_TextChanged(object sender, TextChangedEventArgs e)
-    //{
-
-    //}
 }

@@ -2,6 +2,7 @@
 
 using HangTab.Data;
 using HangTab.Data.Impl;
+using HangTab.Handlers.SearchBar;
 using HangTab.Mappers;
 using HangTab.Models;
 using HangTab.Repositories;
@@ -35,12 +36,18 @@ public static class MauiProgram
             {
                 options.SetShouldEnableSnackbarOnWindows(true);
             })
+#if ANDROID
             .UseBottomSheet(config => config.CopyPagePropertiesToBottomSheet = true)
+#endif
             .ConfigureFonts(fonts =>
             {
                 fonts.AddFont("OpenSans-Regular.ttf", "OpenSansRegular");
                 fonts.AddFont("OpenSans-Semibold.ttf", "OpenSansSemibold");
                 fonts.AddFont("MaterialIconsOutlined-Regular.otf", "MaterialIcons");
+            })
+            .ConfigureMauiHandlers(handlers =>
+            {
+                handlers.AddHandler<SearchBar, SearchBarExHandler>();
             })
             .RegisterRepositories()
             .RegisterServices()
@@ -93,26 +100,29 @@ public static class MauiProgram
     private static MauiAppBuilder RegisterViewModels(this MauiAppBuilder builder)
     {
         builder.Services.AddSingleton<CurrentWeekOverviewViewModel>();
-        builder.Services.AddSingleton<PersonOverviewViewModel>();
-        builder.Services.AddSingleton<SeasonOverviewViewModel>();
+        builder.Services.AddSingleton<PersonListOverviewViewModel>();
+        builder.Services.AddSingleton<WeekListOverviewViewModel>();
         builder.Services.AddSingleton<SettingsViewModel>();
 
         builder.Services.AddTransient<AvatarSelectViewModel>();
         builder.Services.AddTransient<BowlerSelectSubViewModel>();
+        builder.Services.AddTransient<DataManagerViewModel>();
         builder.Services.AddTransient<PersonAddEditViewModel>();
+        builder.Services.AddTransient<SeasonSummaryViewModel>();
         builder.Services.AddTransient<WeekDetailsViewModel>();
         return builder;
     }
 
     private static MauiAppBuilder RegisterViews(this MauiAppBuilder builder)
     {
-        builder.Services.AddSingleton<BowlerOverviewPage>();
         builder.Services.AddSingleton<CurrentWeekOverviewPage>();
-        builder.Services.AddSingleton<SeasonOverviewPage>();
+        builder.Services.AddSingleton<PersonListOverviewPage>();
+        builder.Services.AddSingleton<WeekListOverviewPage>();
         builder.Services.AddSingleton<SettingsPage>();
 
         builder.Services.AddTransient<BowlerSelectSubPage>();
         builder.Services.AddTransient<PersonAddEditPage>();
+        builder.Services.AddTransient<SeasonSummaryPage>();
         builder.Services.AddTransient<WeekDetailsPage>();
         return builder;
     }

@@ -16,7 +16,7 @@ using System.Collections.ObjectModel;
 
 namespace HangTab.ViewModels;
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a ViewModel for the UI and does not require unit tests.")]
-public partial class PersonOverviewViewModel :
+public partial class PersonListOverviewViewModel :
     ViewModelBase,
     IRecipient<BowlerHangCountChangedMessage>,
     IRecipient<PersonAddedOrChangedMessage>,
@@ -30,7 +30,7 @@ public partial class PersonOverviewViewModel :
     private readonly IMapper<BowlerListItemViewModel, Person> _personMapper;
     private readonly IMapper<IEnumerable<Person>, IEnumerable<BowlerListItemViewModel>> _bowlerListItemViewModelMapper;
 
-    public PersonOverviewViewModel(
+    public PersonListOverviewViewModel(
         IPersonService personService,
         INavigationService navigationService,
         IWeekService weekService,
@@ -112,14 +112,16 @@ public partial class PersonOverviewViewModel :
     private async Task GetBowlers()
     {
         var people = await _personService.GetAllPeople();
-        if (people.Any())
+        if (!people.Any())
         {
-            Bowlers.Clear();
-            AllBowlers = _bowlerListItemViewModelMapper.Map(people.OrderBy(b => b.Name));
-            Bowlers = AllBowlers.ToObservableCollection();
-
-            await UpdateBowlerHangCounts();
+            return;
         }
+
+        Bowlers.Clear();
+        AllBowlers = _bowlerListItemViewModelMapper.Map(people.OrderBy(b => b.Name));
+        Bowlers = AllBowlers.ToObservableCollection();
+
+        await UpdateBowlerHangCounts();
     }
 
     private async Task UpdateBowlerHangCounts()

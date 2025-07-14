@@ -12,7 +12,7 @@ using System.Collections.ObjectModel;
 
 namespace HangTab.ViewModels;
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a ViewModel for the UI and does not require unit tests.")]
-public partial class SeasonOverviewViewModel(
+public partial class WeekListOverviewViewModel(
     IWeekService weekService,
     ISettingsService settingsService,
     INavigationService navigationService,
@@ -24,19 +24,18 @@ public partial class SeasonOverviewViewModel(
     [ObservableProperty]
     private WeekListItemViewModel? _selectedWeek;
 
-    public override async Task LoadAsync()
-    {
-        await Loading(GetWeeks);
-    }
+    public override async Task LoadAsync() => await Loading(GetWeeks);
 
     private async Task GetWeeks()
     {
         var weeks = await weekService.GetAllWeeks();
-        if (weeks.Any())
+        if (!weeks.Any())
         {
-            Weeks.Clear();
-            Weeks = mapper.Map(weeks.Where(w => w.Id != settingsService.CurrentWeekPrimaryKey).OrderByDescending(w => w.Number)).ToObservableCollection();
+            return;
         }
+
+        Weeks.Clear();
+        Weeks = mapper.Map(weeks.Where(w => w.Id != settingsService.CurrentWeekPrimaryKey).OrderByDescending(w => w.Number)).ToObservableCollection();
     }
 
     [RelayCommand]

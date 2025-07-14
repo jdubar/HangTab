@@ -17,9 +17,9 @@ public partial class ContentPageBase : ContentPage
 
             await viewModelBase.InitializeAsyncCommand.ExecuteAsync(null);
         }
-        catch (Exception)
+        catch (Exception ex)
         {
-            // TODO: handle exception
+            throw new Exception($"An error occurred while initializing the view model: {ex.Message}", ex);
         }
     }
 }

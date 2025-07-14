@@ -7,7 +7,7 @@ public class NavigationService : INavigationService
 {
     public Task GoBack() => Shell.Current.GoToAsync("..");
 
-    public async Task GoToAddBowler() => await Shell.Current.GoToAsync(Routes.BowlerAdd);
+    public async Task GoToAddBowler() => await Shell.Current.GoToAsync(Routes.PersonAdd);
 
     public async Task GoToEditBowler(Person person)
     {
@@ -16,8 +16,12 @@ public class NavigationService : INavigationService
             { nameof(Person), person }
         };
 
-        await Shell.Current.GoToAsync(Routes.BowlerEdit, navigationParameter);
+        await Shell.Current.GoToAsync(Routes.PersonEdit, navigationParameter);
     }
+
+    public async Task GoToHome() => await Shell.Current.GoToAsync(Routes.Home);
+
+    public async Task GoToSeasonSummary() => await Shell.Current.GoToAsync(Routes.SeasonSummary);
 
     public async Task GoToSelectSub(Bowler bowler)
     {

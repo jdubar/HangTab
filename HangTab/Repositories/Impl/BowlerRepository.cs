@@ -16,18 +16,12 @@ public class BowlerRepository(IDatabaseContext context) : IBowlerRepository
         return context.GetAllWithChildrenAsync<Bowler>(wl => wl.WeekId == id);
     }
 
-    public Task<IEnumerable<Bowler>> GetAllBowlers() => context.GetAllAsync<Bowler>();
+    public Task<IEnumerable<Bowler>> GetAllBowlers() => context.GetAllWithChildrenAsync<Bowler>();
 
     public Task<Bowler> GetBowlerById(int id)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(id);
         return context.GetItemByIdAsync<Bowler>(id);
-    }
-
-    public Task<IEnumerable<Bowler>> GetBowlersByWeekId(int weekId)
-    {
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(weekId);
-        return context.GetFilteredAsync<Bowler>(wl => wl.WeekId == weekId);// TODO: Possibly redundant
     }
 
     public Task<bool> UpdateBowler(Bowler bowler)

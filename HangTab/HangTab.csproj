@@ -48,18 +48,21 @@
 		<MauiSplashScreen Include="Resources\Splash\splash.svg" Color="#000000" />
 		<!-- Images -->
 		<MauiImage Include="Resources\Images\*" />
+		<!-- Sizing for this image is necessary to avoid canvas sizing issues -->
 		<MauiImage Update="Resources\Images\bus_splash.svg" Resize="True" BaseSize="818,556" />
-		<MauiImage Update="Resources\Images\dotnet_bot.png" Resize="True" BaseSize="300,185" />
 		<!-- Custom Fonts -->
 		<MauiFont Include="Resources\Fonts\*" />
 		<!-- Raw Assets (also remove the "Resources\Raw" prefix) -->
 		<MauiAsset Include="Resources\Raw\**" LogicalName="%(RecursiveDir)%(Filename)%(Extension)" />
 	</ItemGroup>
 	<ItemGroup>
-		<PackageReference Include="CommunityToolkit.Maui" Version="[11.1.0]" />
-		<PackageReference Include="CommunityToolkit.Mvvm" Version="[8.3.2]" />
-		<PackageReference Include="Microsoft.Maui.Controls" Version="[9.0.40]" />
-		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.6" />
+		<!--<PackageReference Include="CommunityToolkit.Maui" Version="[11.1.0]" />-->
+		<PackageReference Include="CommunityToolkit.Maui" Version="12.1.0" />
+		<!--<PackageReference Include="CommunityToolkit.Mvvm" Version="[8.3.2]" />-->
+		<PackageReference Include="CommunityToolkit.Mvvm" Version="8.4.0" />
+		<!--<PackageReference Include="Microsoft.Maui.Controls" Version="[9.0.40]" />-->
+		<PackageReference Include="Microsoft.Maui.Controls" Version="9.0.81" />
+		<PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="9.0.7" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
 		<PackageReference Include="Plugin.Maui.Audio" Version="4.0.0" />
 		<PackageReference Include="Plugin.Maui.BottomSheet" Version="9.1.8" />
@@ -90,10 +93,13 @@
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Controls\PageTitle.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+		    <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\Controls\SeasonSummaryItem.xaml">
+		    <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Controls\SwipeItem.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+		    <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Controls\UserImage.xaml">
 			<Generator>MSBuild:Compile</Generator>
@@ -101,7 +107,7 @@
 		<MauiXaml Update="Views\PersonAddEditPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\PersonOverviewPage.xaml">
+		<MauiXaml Update="Views\PersonListOverviewPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\Controls\Stepper.xaml">
@@ -113,19 +119,17 @@
 		<MauiXaml Update="Views\BowlerSelectSubPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
-		<MauiXaml Update="Views\SeasonOverviewPage.xaml">
+		<MauiXaml Update="Views\WeekListOverviewPage.xaml">
 		    <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\SettingsPage.xaml">
 			<Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 		<MauiXaml Update="Views\WeekDetailsPage.xaml">
-		  <Generator>MSBuild:Compile</Generator>
+		    <Generator>MSBuild:Compile</Generator>
+		</MauiXaml>
+		<MauiXaml Update="Views\SeasonSummaryPage.xaml">
+		    <Generator>MSBuild:Compile</Generator>
 		</MauiXaml>
 	</ItemGroup>
-	<!-- <ProjectExtensions>
-    <VisualStudio>
-      <UserProperties XamarinHotReloadUnhandledDeviceExceptionHangTabHideInfoBar="True" />
-    </VisualStudio>
-  </ProjectExtensions> -->
 </Project>

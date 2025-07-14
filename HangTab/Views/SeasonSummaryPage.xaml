@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<base:ContentPageBase
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:base="clr-namespace:HangTab.Views.Base"
+    xmlns:confetti="clr-namespace:HangTab.Views.Controls.ConfettiView"
+    xmlns:controls="clr-namespace:HangTab.Views.Controls"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:vm="clr-namespace:HangTab.ViewModels"
+    xmlns:vmitems="clr-namespace:HangTab.ViewModels.Items"
+    x:Class="HangTab.Views.SeasonSummaryPage"
+    x:DataType="vm:SeasonSummaryViewModel">
+    
+    <Shell.BackButtonBehavior>
+        <BackButtonBehavior IsVisible="False" />
+    </Shell.BackButtonBehavior>
+    
+    <Shell.TitleView>
+        <controls:PageTitle
+            Title="Season Summary" />
+    </Shell.TitleView>
+    
+    <Grid
+        RowDefinitions="*,Auto,Auto">
+        
+        <!--Confetti animation-->
+        <confetti:ConfettiView
+            ZIndex="2"
+            HorizontalOptions="Fill"
+            VerticalOptions="Fill"
+            InputTransparent="True" />
+        
+        <!--Bowler(s) with the least amount of hangs-->
+        <Grid
+            ColumnDefinitions="80,*,80"
+            HorizontalOptions="Center"
+            VerticalOptions="Start">
+            <Label
+                Grid.Column="1"
+                Style="{StaticResource Header}"
+                FontSize="Large"
+                HorizontalOptions="Center"
+                Text="Congratulations!" />
+            
+            <Image
+                Grid.Column="2"
+                Source="popper_anim.gif"
+                Margin="0,3"
+                HeightRequest="40"
+                HorizontalOptions="Start"
+                IsAnimationPlaying="True" />
+        </Grid>
+        
+        <CollectionView
+            ZIndex="1"
+            ItemsSource="{Binding BestBowlers}"
+            HorizontalOptions="Center"
+            VerticalOptions="Center"
+            ItemsLayout="HorizontalList">
+            <CollectionView.ItemTemplate>
+                <DataTemplate
+                    x:DataType="vmitems:BowlerListItemViewModel">
+                    
+                    <VerticalStackLayout
+                        HorizontalOptions="Center"
+                        VerticalOptions="Center">
+                        
+                        <controls:UserImage
+                            ImageUrl="{Binding ImageUrl}"
+                            Initials="{Binding Initials}"
+                            WidthRequest="80"
+                            HeightRequest="80"
+                            HorizontalOptions="Center" />
+
+                        <Label
+                            Text="{Binding Name}"
+                            Style="{StaticResource BowlerName}"
+                            HorizontalOptions="Center" />
+                        
+                        <Label
+                            Text="{Binding HangCount, StringFormat='Hangings: {0}'}"
+                            Style="{StaticResource Label_Hangings}"
+                            HorizontalOptions="Center" />
+                        
+                    </VerticalStackLayout>
+                    
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+        
+        <VerticalStackLayout
+            Grid.Row="1"
+            Margin="10,0">
+            
+            <!--Most hangs in a week-->
+            <controls:SeasonSummaryItem
+                Title="Most Hangings"
+                ImageSource="trophy.png"
+                WeekNumber="{Binding BestHangWeekNumber}"
+                ItemCount="{Binding BestHangWeekCount, StringFormat='Hangings: {0}'}" />
+            
+            <!--Least hangs in a week-->
+            <controls:SeasonSummaryItem
+                Title="Least Hangings"
+                ImageSource="dislike_button.png"
+                WeekNumber="{Binding WorstHangWeekNumber}"
+                ItemCount="{Binding WorstHangWeekCount, StringFormat='Hangings: {0}'}" />
+            
+            <!--Most bus rides in a week-->
+            <controls:SeasonSummaryItem
+                Title="Most Bus Rides"
+                ImageSource="school_bus.png"
+                WeekNumber="{Binding BestBusRideWeekNumber}"
+                ItemCount="{Binding BestBusRideWeekCount, StringFormat='Bus Rides: {0}'}" />
+            
+        </VerticalStackLayout>
+        
+        <!--Submit Button-->
+        <StackLayout
+            Grid.Row="2"
+            Margin="5">
+            <Button
+                Style="{StaticResource PrimaryButton}"
+                Text="Start a new season"
+                Command="{Binding SubmitSeasonCommand}"/>
+        </StackLayout>
+        
+    </Grid>
+    
+</base:ContentPageBase>

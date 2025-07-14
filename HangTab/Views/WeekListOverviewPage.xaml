@@ -1,18 +1,18 @@
 <?xml version="1.0" encoding="utf-8" ?>
-<views:ContentPageBase
+<base:ContentPageBase
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls="clr-namespace:HangTab.Views.Controls"
-    xmlns:views="clr-namespace:HangTab.Views.Base"
+    xmlns:base="clr-namespace:HangTab.Views.Base"
     xmlns:vm="clr-namespace:HangTab.ViewModels"
     xmlns:vmitems="clr-namespace:HangTab.ViewModels.Items"
-    x:Class="HangTab.Views.SeasonOverviewPage"
-    x:DataType="vm:SeasonOverviewViewModel">
+    x:Class="HangTab.Views.WeekListOverviewPage"
+    x:DataType="vm:WeekListOverviewViewModel">
     
     <!--Page titlebar-->
     <Shell.TitleView>
         <controls:PageTitle
-            Title="Season Overview" />
+            Title="Season" />
     </Shell.TitleView>
     
     <ContentPage.Resources>
@@ -104,16 +104,40 @@
                                     Grid.Column="2"
                                     VerticalOptions="Center"
                                     Margin="15,0">
-                                    <Label
-                                        VerticalOptions="Center"
-                                        FontSize="Medium"
-                                        TextColor="{DynamicResource TextPrimaryColor}"
-                                        Text="{Binding HangCount, Mode=OneWay, StringFormat='Hangings: {0}'}" />
-                                    <Label
-                                        VerticalOptions="Center"
-                                        FontSize="Medium"
-                                        TextColor="{DynamicResource TextPrimaryColor}"
-                                        Text="{Binding BusRides, Mode=OneWay, StringFormat='Bus Rides: {0}'}" />
+                                    
+                                    <!--Hang count label-->
+                                    <Grid
+                                        ColumnDefinitions="*,20"
+                                        VerticalOptions="Center">
+                                        <Label
+                                            VerticalOptions="Center"
+                                            FontSize="Medium"
+                                            TextColor="{DynamicResource TextPrimaryColor}"
+                                            Text="Hangings:" />
+                                        <Label
+                                            Grid.Column="1"
+                                            VerticalOptions="Center"
+                                            FontSize="Medium"
+                                            TextColor="{DynamicResource TextPrimaryColor}"
+                                            Text="{Binding HangCount}" />
+                                    </Grid>
+                                    
+                                    <!--BusRide count label-->
+                                    <Grid
+                                        ColumnDefinitions="*,20"
+                                        VerticalOptions="Center">
+                                        <Label
+                                            VerticalOptions="Center"
+                                            FontSize="Medium"
+                                            TextColor="{DynamicResource TextPrimaryColor}"
+                                            Text="Bus Rides:" />
+                                        <Label
+                                            Grid.Column="1"
+                                            VerticalOptions="Center"
+                                            FontSize="Medium"
+                                            TextColor="{DynamicResource TextPrimaryColor}"
+                                            Text="{Binding BusRides}" />
+                                    </Grid>
                                 </VerticalStackLayout>
                                 
                                 <!--Chevron Image-->
@@ -138,8 +162,7 @@
                 <CollectionView.EmptyView>
                     <controls:EmptyCollectionMessage
                         IsVisible="{Binding LoadingComplete}"
-                        Message="No Completed Weeks Found"
-                        SubMessage="Create a bowler using the button below" />
+                        Message="No Completed Weeks Found" />
                 </CollectionView.EmptyView>
 
             </CollectionView>
@@ -149,4 +172,4 @@
     </ContentPage.Content>
 
 
-</views:ContentPageBase>
+</base:ContentPageBase>

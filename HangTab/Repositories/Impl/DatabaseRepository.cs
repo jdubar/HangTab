@@ -8,13 +8,20 @@ public class DatabaseRepository(IDatabaseContext context) : IDatabaseRepository
     public async Task<bool> DeleteAllData()
     {
         return await context.ResetTableAsync<Person>()
-            && await context.ResetTableAsync<Week>()
-            && await context.ResetTableAsync<Bowler>();
+            && await context.ResetTableAsync<Bowler>()
+            && await context.ResetTableAsync<Week>();
     }
 
     public async Task<bool> DeleteSeasonData()
     {
-        return await context.ResetTableAsync<Week>()
-            && await context.ResetTableAsync<Bowler>();
+        return await context.ResetTableAsync<Bowler>()
+            && await context.ResetTableAsync<Week>();
+    }
+
+    public async Task InitializeDatabase()
+    {
+        await context.CreateTableIfNotExists<Person>();
+        await context.CreateTableIfNotExists<Bowler>();
+        await context.CreateTableIfNotExists<Week>();
     }
 }
