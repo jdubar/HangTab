@@ -24,12 +24,6 @@ public class BowlerRepository(IDatabaseContext context) : IBowlerRepository
         return context.GetItemByIdAsync<Bowler>(id);
     }
 
-    public Task<IEnumerable<Bowler>> GetBowlersByWeekId(int weekId)
-    {
-        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(weekId);
-        return context.GetFilteredAsync<Bowler>(wl => wl.WeekId == weekId);// TODO: Possibly redundant
-    }
-
     public Task<bool> UpdateBowler(Bowler bowler)
     {
         ArgumentNullException.ThrowIfNull(bowler);

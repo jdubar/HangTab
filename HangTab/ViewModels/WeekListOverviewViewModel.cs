@@ -24,10 +24,7 @@ public partial class WeekListOverviewViewModel(
     [ObservableProperty]
     private WeekListItemViewModel? _selectedWeek;
 
-    public override async Task LoadAsync()
-    {
-        await Loading(GetWeeks);
-    }
+    public override async Task LoadAsync() => await Loading(GetWeeks);
 
     private async Task GetWeeks()
     {
