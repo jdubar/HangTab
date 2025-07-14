@@ -1,5 +1,5 @@
 namespace HangTab.Views.Controls;
-
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We will not test the view code behind. There's no logic to test.")]
 public partial class SeasonSummaryItem : ContentView
 {
 	public SeasonSummaryItem()
