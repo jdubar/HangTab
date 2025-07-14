@@ -52,14 +52,14 @@ public class BowlerRepositoryTests
         var expected = new List<Bowler> { new() { Id = 1 } };
         var context = A.Fake<IDatabaseContext>();
         var bowlerRepository = new BowlerRepository(context);
-        A.CallTo(() => context.GetAllAsync<Bowler>()).Returns(expected);
+        A.CallTo(() => context.GetAllWithChildrenAsync<Bowler>(null)).Returns(expected);
 
         // Act
         var actual = await bowlerRepository.GetAllBowlers();
 
         // Assert
         Assert.Equal(expected, actual);
-        A.CallTo(() => context.GetAllAsync<Bowler>()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => context.GetAllWithChildrenAsync<Bowler>(null)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -88,15 +88,15 @@ public class BowlerRepositoryTests
         var expected = new List<Bowler> { new() { Id = 2, WeekId = weekId } };
         var context = A.Fake<IDatabaseContext>();
         var bowlerRepository = new BowlerRepository(context);
-        A.CallTo(() => context.GetFilteredAsync(A<Expression<Func<Bowler, bool>>>._))
+        A.CallTo(() => context.GetAllWithChildrenAsync(A<Expression<Func<Bowler, bool>>>._))
             .Returns(expected);
 
         // Act
-        var actual = await bowlerRepository.GetBowlersByWeekId(weekId);
+        var actual = await bowlerRepository.GetAllBowlersByWeekId(weekId);
 
         // Assert
         Assert.Equal(expected, actual);
-        A.CallTo(() => context.GetFilteredAsync(A<Expression<Func<Bowler, bool>>>._))
+        A.CallTo(() => context.GetAllWithChildrenAsync(A<Expression<Func<Bowler, bool>>>._))
             .MustHaveHappenedOnceExactly();
     }
 
@@ -160,8 +160,8 @@ public class BowlerRepositoryTests
         var bowlerRepository = new BowlerRepository(context);
 
         // Act & Assert
-        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => bowlerRepository.GetBowlersByWeekId(0));
-        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => bowlerRepository.GetBowlersByWeekId(-2));
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => bowlerRepository.GetAllBowlersByWeekId(0));
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => bowlerRepository.GetAllBowlersByWeekId(-2));
     }
 
     [Fact]

@@ -105,15 +105,15 @@ public class BowlerServiceTests
         var expected = new List<Bowler> { new() { Id = 3, WeekId = id } };
         var bowlerRepo = A.Fake<IBowlerRepository>();
         var service = new BowlerService(bowlerRepo);
-        A.CallTo(() => bowlerRepo.GetBowlersByWeekId(A<int>._)).Returns(Task.FromResult<IEnumerable<Bowler>>(expected));
+        A.CallTo(() => bowlerRepo.GetAllBowlersByWeekId(A<int>._)).Returns(Task.FromResult<IEnumerable<Bowler>>(expected));
 
         // Act
-        var result = await service.GetBowlersByWeekId(id);
+        var result = await service.GetAllBowlersByWeekId(id);
 
         // Assert
         Assert.Single(result);
         Assert.Equal(expected[0].Id, result.First().Id);
-        A.CallTo(() => bowlerRepo.GetBowlersByWeekId(A<int>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => bowlerRepo.GetAllBowlersByWeekId(A<int>._)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
