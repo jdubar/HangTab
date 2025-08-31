@@ -103,7 +103,7 @@ public partial class PersonAddEditViewModel :
     }
 
     [RelayCommand]
-    private async Task DeletePerson()
+    private async Task DeletePersonAsync()
     {
         if (_person is null)
         {
@@ -127,7 +127,7 @@ public partial class PersonAddEditViewModel :
     }
 
     [RelayCommand]
-    private async Task ShowAvatarOptionsBottomSheet(ITextInput view, CancellationToken token)
+    private async Task ShowAvatarOptionsBottomSheetAsync(ITextInput view, CancellationToken token)
     {
         if (view.IsSoftKeyboardShowing())
         {
@@ -138,7 +138,7 @@ public partial class PersonAddEditViewModel :
     }
 
     [RelayCommand(CanExecute = nameof(CanSubmitBowler))]
-    private async Task Submit()
+    private async Task SubmitAsync()
     {
         ValidateAllProperties();
         if (Errors.Any())
@@ -163,7 +163,7 @@ public partial class PersonAddEditViewModel :
         {
             if (await _personService.UpdatePerson(person))
             {
-                WeakReferenceMessenger.Default.Send(new PersonAddedOrChangedMessage());
+                WeakReferenceMessenger.Default.Send(new PersonAddedOrChangedMessage(person.Id, person.IsSub));
             }
             else
             {

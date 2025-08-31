@@ -24,6 +24,12 @@ public class BowlerRepository(IDatabaseContext context) : IBowlerRepository
         return context.GetItemByIdAsync<Bowler>(id);
     }
 
+    public Task<bool> RemoveBowler(int id)
+    {
+        ArgumentOutOfRangeException.ThrowIfNegativeOrZero(id);
+        return context.DeleteItemByIdAsync<Bowler>(id);
+    }
+
     public Task<bool> UpdateBowler(Bowler bowler)
     {
         ArgumentNullException.ThrowIfNull(bowler);

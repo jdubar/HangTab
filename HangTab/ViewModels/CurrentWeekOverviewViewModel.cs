@@ -288,14 +288,22 @@ public partial class CurrentWeekOverviewViewModel :
 
     public async void Receive(PersonAddedOrChangedMessage message)
     {
-        if (message.Id > 0 && !message.IsSub && !CurrentWeekBowlers.Any(b => b.PersonId == message.Id))
+        if (message.Id > 0)
         {
             var bowler = new Bowler
             {
                 PersonId = message.Id,
                 WeekId = _settingsService.CurrentWeekPrimaryKey,
             };
-            await _bowlerService.AddBowler(bowler);
+
+            if (!message.IsSub && !CurrentWeekBowlers.Any(b => b.PersonId == message.Id))
+            {
+                await _bowlerService.AddBowler(bowler);
+            }
+            else if (message.IsSub && CurrentWeekBowlers.Any(b => b.PersonId == message.Id))
+            {
+                await _bowlerService.RemoveBowler(message.Id);
+            }
         }
 
         CurrentWeekBowlers.Clear();

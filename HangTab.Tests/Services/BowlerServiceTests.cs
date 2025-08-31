@@ -117,6 +117,53 @@ public class BowlerServiceTests
     }
 
     [Fact]
+    public async Task RemoveBowler_ValidId_ReturnsTrue()
+    {
+        // Arrange
+        var id = 1;
+        var bowlerRepo = A.Fake<IBowlerRepository>();
+        var service = new BowlerService(bowlerRepo);
+        A.CallTo(() => bowlerRepo.RemoveBowler(id)).Returns(Task.FromResult(true));
+
+        // Act
+        var result = await service.RemoveBowler(id);
+
+        // Assert
+        Assert.True(result);
+        A.CallTo(() => bowlerRepo.RemoveBowler(id)).MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task RemoveBowler_InvalidId_ReturnsFalse()
+    {
+        // Arrange
+        var id = 999;
+        var bowlerRepo = A.Fake<IBowlerRepository>();
+        var service = new BowlerService(bowlerRepo);
+        A.CallTo(() => bowlerRepo.RemoveBowler(id)).Returns(Task.FromResult(false));
+
+        // Act
+        var result = await service.RemoveBowler(id);
+
+        // Assert
+        Assert.False(result);
+        A.CallTo(() => bowlerRepo.RemoveBowler(id)).MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task RemoveBowler_RepositoryThrowsException_PropagatesException()
+    {
+        // Arrange
+        var id = 2;
+        var bowlerRepo = A.Fake<IBowlerRepository>();
+        var service = new BowlerService(bowlerRepo);
+        A.CallTo(() => bowlerRepo.RemoveBowler(id)).Throws(new InvalidOperationException("Repository error"));
+
+        // Act & Assert
+        await Assert.ThrowsAsync<InvalidOperationException>(() => service.RemoveBowler(id));
+    }
+
+    [Fact]
     public async Task UpdateBowler_RepositoryReturnsTrue_ReturnsTrue()
     {
         // Arrange

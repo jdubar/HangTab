@@ -2,8 +2,10 @@
 <ContentView
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:HangTab.Views.Controls"
     x:Class="HangTab.Views.Controls.SwipeItem"
-    x:Name="SwipeItemView">
+    x:Name="SwipeItemView"
+    x:DataType="controls:SwipeItem">
     
     <Border
         x:Name="ButtonBorder"

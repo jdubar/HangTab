@@ -2,8 +2,10 @@
 <ContentView
     xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:controls="clr-namespace:HangTab.Views.Controls"
     x:Class="HangTab.Views.Controls.Stepper"
-    x:Name="StepperView">
+    x:Name="StepperView"
+    x:DataType="controls:Stepper">
     
     <Grid
         ColumnDefinitions="40,50,40"
