@@ -7,5 +7,6 @@ public interface IBowlerRepository
     Task<IEnumerable<Bowler>> GetAllBowlersByWeekId(int id);
     Task<IEnumerable<Bowler>> GetAllBowlers();
     Task<Bowler> GetBowlerById(int id);
+    Task<bool> RemoveBowler(int id);
     Task<bool> UpdateBowler(Bowler bowler);
 }
