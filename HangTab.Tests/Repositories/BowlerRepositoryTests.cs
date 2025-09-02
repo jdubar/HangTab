@@ -174,4 +174,50 @@ public class BowlerRepositoryTests
         // Act & Assert
         await Assert.ThrowsAsync<ArgumentNullException>(() => bowlerRepository.UpdateBowler(null!));
     }
+
+    [Fact]
+    public async Task RemoveBowler_CallsContextAndReturnsTrue()
+    {
+        // Arrange
+        var id = 10;
+        var context = A.Fake<IDatabaseContext>();
+        var bowlerRepository = new BowlerRepository(context);
+        A.CallTo(() => context.DeleteItemByIdAsync<Bowler>(id)).Returns(true);
+
+        // Act
+        var result = await bowlerRepository.RemoveBowler(id);
+
+        // Assert
+        Assert.True(result);
+        A.CallTo(() => context.DeleteItemByIdAsync<Bowler>(id)).MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task RemoveBowler_CallsContextAndReturnsFalse()
+    {
+        // Arrange
+        var id = 99;
+        var context = A.Fake<IDatabaseContext>();
+        var bowlerRepository = new BowlerRepository(context);
+        A.CallTo(() => context.DeleteItemByIdAsync<Bowler>(id)).Returns(false);
+
+        // Act
+        var result = await bowlerRepository.RemoveBowler(id);
+
+        // Assert
+        Assert.False(result);
+        A.CallTo(() => context.DeleteItemByIdAsync<Bowler>(id)).MustHaveHappenedOnceExactly();
+    }
+
+    [Fact]
+    public async Task RemoveBowler_ThrowsOnInvalidId()
+    {
+        // Arrange
+        var context = A.Fake<IDatabaseContext>();
+        var bowlerRepository = new BowlerRepository(context);
+
+        // Act & Assert
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => bowlerRepository.RemoveBowler(0));
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => bowlerRepository.RemoveBowler(-1));
+    }
 }
