@@ -6,7 +6,15 @@
 
 A simple MAUI app that records bowling 'hangings' and 'bus rides' for a team.
 
-![save and display your team's hangings](images/01.png) ![celebrate a busride with your team](images/02.png) ![maintain your teammates easily](images/03.png) ![view past weeks in the season](images/04.png) ![dark mode relax your eyes](images/05.png)
+<table>
+  <tr>
+    <td><img src="images/01.png" width="200" alt="save and display your team's hangings" /></td>
+    <td><img src="images/02.png" width="200" alt="celebrate a busride with your team" /></td>
+    <td><img src="images/03.png" width="200" alt="maintain your teammates easily" /></td>
+    <td><img src="images/04.png" width="200" alt="view past weeks in the season" /></td>
+    <td><img src="images/05.png" width="200" alt="dark mode relax your eyes" /></td>
+  </tr>
+</table>
 
 **Notes:**
 - A 'hanging' is when all bowlers BUT ONE strike, that bowler is then 'hung'.
