@@ -4,7 +4,7 @@
 
 # HangTab :bowling:
 
-A simple MAUI app that records bowling 'hangings' and 'bus rides' for a team.
+An Android app that records bowling 'hangings' and 'bus rides' for a team.
 
 <table>
   <tr>
