@@ -65,7 +65,14 @@ public static class MauiProgram
 
     private static MauiAppBuilder RegisterRepositories(this MauiAppBuilder builder)
     {
-        builder.Services.AddSingleton<IMediaPickerRepository>(new MediaPickerRepository(MediaPicker.Default));
+        builder.Services.AddSingleton<IStorageRepository, StorageRepository>();
+        builder.Services.AddSingleton<IMediaPickerRepository>(provider =>
+        {
+            var mediaPicker = MediaPicker.Default;
+            var storageRepository = provider.GetRequiredService<IStorageRepository>();
+            return new MediaPickerRepository(mediaPicker, storageRepository);
+        });
+        builder.Services.AddSingleton<IScreenshotRepository>(new ScreenshotRepository(Screenshot.Default));
 
         builder.Services.AddTransient<IPersonRepository, PersonRepository>();
         builder.Services.AddTransient<IDatabaseRepository, DatabaseRepository>();

@@ -33,6 +33,8 @@ public partial class CurrentWeekOverviewViewModel :
     private readonly IMapper<CurrentWeekListItemViewModel, Bowler> _bowlerMapper;
     private readonly IMapper<IEnumerable<Bowler>, IEnumerable<CurrentWeekListItemViewModel>> _currentWeekListItemViewModelMapper;
 
+    private const string BusSound = "beepbeep.mp3";
+
     public CurrentWeekOverviewViewModel(
         IAudioService audioService,
         IDialogService dialogService,
@@ -76,7 +78,7 @@ public partial class CurrentWeekOverviewViewModel :
             if (CurrentWeek.BusRides < value)
             {
                 PlayBusRideAnimation = true;
-                await _audioService.PlaySoundAsync(Constants.Files.BusRideSoundFileName);
+                await _audioService.PlaySoundAsync(BusSound);
                 await Task.Delay(1500);
                 PlayBusRideAnimation = false;
             }
