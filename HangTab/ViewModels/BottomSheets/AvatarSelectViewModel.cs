@@ -27,22 +27,26 @@ public partial class AvatarSelectViewModel(
     [RelayCommand]
     private async Task SelectBowlerImageFromCamera()
     {
-        var photo = await mediaPickerService.TakePhotoAsync();
-        if (!string.IsNullOrEmpty(photo))
+        var photoPath = await mediaPickerService.TakePhotoAsync();
+        if (string.IsNullOrEmpty(photoPath))
         {
-            await bottomSheetNavigationService.GoBackAsync();
-            WeakReferenceMessenger.Default.Send(new PersonImageAddedOrChangedMessage(photo));
+            return;
         }
+
+        await bottomSheetNavigationService.GoBackAsync();
+        WeakReferenceMessenger.Default.Send(new PersonImageAddedOrChangedMessage(photoPath));
     }
 
     [RelayCommand]
     private async Task SelectBowlerImageFromGallery()
     {
-        var photo = await mediaPickerService.PickPhotoAsync();
-        if (!string.IsNullOrEmpty(photo))
+        var photoPath = await mediaPickerService.PickPhotoAsync();
+        if (string.IsNullOrEmpty(photoPath))
         {
-            await bottomSheetNavigationService.GoBackAsync();
-            WeakReferenceMessenger.Default.Send(new PersonImageAddedOrChangedMessage(photo));
+            return;
         }
+
+        await bottomSheetNavigationService.GoBackAsync();
+        WeakReferenceMessenger.Default.Send(new PersonImageAddedOrChangedMessage(photoPath));
     }
 }

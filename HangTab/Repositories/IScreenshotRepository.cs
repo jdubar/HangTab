@@ -1,5 +1,5 @@
 ﻿namespace HangTab.Repositories;
 public interface IScreenshotRepository
 {
-    Task<ImageSource?> TakeScreenshotAsync();
+    Task<IScreenshotResult?> TakeScreenshotAsync();
 }

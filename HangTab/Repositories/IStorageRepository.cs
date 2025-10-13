@@ -1,5 +1,6 @@
 ﻿namespace HangTab.Repositories;
 public interface IStorageRepository
 {
-    Task<string> SaveToDiskAsync(FileResult result);
+    Task<string> SaveFileAsync(FileResult result);
+    Task<string> SaveScreenshotAsync(IScreenshotResult result);
 }
