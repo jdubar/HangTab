@@ -21,5 +21,6 @@
     <x:String x:Key="photo_camera">&#xe412;</x:String>
     <x:String x:Key="play_arrow">&#xe037;</x:String>
     <x:String x:Key="settings">&#xe8b8;</x:String>
+    <x:String x:Key="share">&#xe80d;</x:String>
     
 </ResourceDictionary>

@@ -1,6 +1,6 @@
 ﻿namespace HangTab.Repositories;
 public interface IMediaPickerRepository
 {
-    Task<string> PickPhotoAsync();
-    Task<string> TakePhotoAsync();
+    Task<FileResult?> PickPhotoAsync();
+    Task<FileResult?> TakePhotoAsync();
 }
