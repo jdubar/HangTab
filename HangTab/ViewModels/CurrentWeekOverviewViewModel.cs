@@ -29,6 +29,8 @@ public partial class CurrentWeekOverviewViewModel :
     private readonly ISettingsService _settingsService;
     private readonly IWeekService _weekService;
     private readonly IBowlerService _bowlerService;
+    private readonly IScreenshotService _screenshotService;
+    private readonly IShareService _shareService;
 
     private readonly IMapper<CurrentWeekListItemViewModel, Bowler> _bowlerMapper;
     private readonly IMapper<IEnumerable<Bowler>, IEnumerable<CurrentWeekListItemViewModel>> _currentWeekListItemViewModelMapper;
@@ -42,6 +44,8 @@ public partial class CurrentWeekOverviewViewModel :
         ISettingsService settingsService,
         IWeekService weekService,
         IBowlerService bowlerService,
+        IScreenshotService screenshotService,
+        IShareService shareService,
         IMapper<CurrentWeekListItemViewModel, Bowler> bowlerMapper,
         IMapper<IEnumerable<Bowler>, IEnumerable<CurrentWeekListItemViewModel>> currentWeekListItemViewModelMapper)
     {
@@ -51,6 +55,8 @@ public partial class CurrentWeekOverviewViewModel :
         _settingsService = settingsService;
         _weekService = weekService;
         _bowlerService = bowlerService;
+        _screenshotService = screenshotService;
+        _shareService = shareService;
 
         _bowlerMapper = bowlerMapper;
         _currentWeekListItemViewModelMapper = currentWeekListItemViewModelMapper;
@@ -138,6 +144,20 @@ public partial class CurrentWeekOverviewViewModel :
 
     [RelayCommand]
     private async Task SetBowlerStatusToUsingSub(CurrentWeekListItemViewModel? vm) => await SetBowlerStatus(vm, Enums.Status.UsingSub);
+
+    [RelayCommand]
+    private async Task ShareScreenshot()
+    {
+        var screenshot = await _screenshotService.TakeScreenshotAsync();
+        if (string.IsNullOrWhiteSpace(screenshot))
+        {
+            await _dialogService.AlertAsync("Error", "Unable to take screenshot.", "Ok");
+        }
+        else
+        {
+            await _shareService.ShareFileAsync(screenshot);
+        }
+    }
 
     [RelayCommand]
     private async Task SubmitWeek()

@@ -11,8 +11,26 @@
     x:DataType="vm:CurrentWeekOverviewViewModel">
     
     <Shell.TitleView>
-        <controls:PageTitle
-            Title="{Binding PageTitle}" />
+        <Grid ColumnDefinitions="*,Auto">
+            <controls:PageTitle
+                Title="{Binding PageTitle}" />
+            
+            <ImageButton
+                Grid.Column="1"
+                Aspect="Center"
+                CornerRadius="70"
+                HeightRequest="30"
+                WidthRequest="30"
+                Margin="0,0,20,0"
+                Command="{Binding ShareScreenshotCommand}">
+                <ImageButton.Source>
+                    <FontImageSource
+                        FontFamily="MaterialIcons"
+                        Glyph="{StaticResource share}"
+                        Size="24"/>
+                </ImageButton.Source>
+            </ImageButton>
+        </Grid>
     </Shell.TitleView>
     
     <ContentPage.Content>

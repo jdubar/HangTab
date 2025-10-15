@@ -67,7 +67,8 @@ public static class MauiProgram
     {
         builder.Services.AddSingleton<IMediaPickerRepository>(new MediaPickerRepository(MediaPicker.Default));
         builder.Services.AddSingleton<IScreenshotRepository>(new ScreenshotRepository(Screenshot.Default));
-        builder.Services.AddSingleton<IStorageRepository, StorageRepository>();
+        builder.Services.AddSingleton<IStorageRepository>(new StorageRepository(FileSystem.Current));
+        builder.Services.AddSingleton<IShareRepository>(new ShareRepository(Share.Default));
 
         builder.Services.AddTransient<IPersonRepository, PersonRepository>();
         builder.Services.AddTransient<IDatabaseRepository, DatabaseRepository>();
@@ -96,6 +97,8 @@ public static class MauiProgram
         builder.Services.AddTransient<IThemeService, ThemeService>();
         builder.Services.AddTransient<IWeekService, WeekService>();
         builder.Services.AddTransient<IBowlerService, BowlerService>();
+        builder.Services.AddTransient<IScreenshotService, ScreenshotService>();
+        builder.Services.AddTransient<IShareService, ShareService>();
         return builder;
     }
 
