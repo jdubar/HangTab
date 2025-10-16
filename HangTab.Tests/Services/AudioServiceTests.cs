@@ -29,10 +29,10 @@ public class AudioServiceTests
         var storageRepo = A.Fake<IStorageRepository>();
         var service = new AudioService(audioRepo, storageRepo);
         A.CallTo(() => storageRepo.OpenAppPackageFileAsync(A<string>._)).Returns(new MemoryStream());
-        A.CallTo(() => audioRepo.PlayAudioStreamAsync(A<MemoryStream>._)).Throws<InvalidOperationException>();
+        A.CallTo(() => audioRepo.PlayAudioStreamAsync(A<Stream>._)).Throws<InvalidOperationException>();
 
         // Act & Assert
-        var ex = await Assert.ThrowsAsync<InvalidOperationException>(() => service.PlaySoundAsync("bad.mp3"));
-        Assert.Equal("Operation is not valid due to the current state of the object.", ex.Message);
+        var actual = await service.PlaySoundAsync("sound.mp3");
+        Assert.False(actual.IsSuccess);
     }
 }

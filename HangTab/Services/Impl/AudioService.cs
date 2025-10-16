@@ -4,7 +4,7 @@ using HangTab.Repositories;
 
 namespace HangTab.Services.Impl;
 public class AudioService(
-    IAudioRepository audioService,
+    IAudioRepository audioRepository,
     IStorageRepository storageRepository) : IAudioService
 {
     public async Task<Result> PlaySoundAsync(string audioFileName)
@@ -23,7 +23,7 @@ public class AudioService(
         try
         {
             using var stream = result.Value;
-            await audioService.PlayAudioStreamAsync(stream);
+            await audioRepository.PlayAudioStreamAsync(stream);
             return Result.Ok();
         }
         catch (InvalidOperationException ex)
