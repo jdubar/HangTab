@@ -7,9 +7,15 @@ public class ScreenshotService(
 {
     public async Task<string> TakeScreenshotAsync()
     {
-        var result = await screenshot.TakeScreenshotAsync();
-        return result is null
-            ? string.Empty
-            : await storage.SaveScreenshotAsync(result);
+        var fileResult = await screenshot.TakeScreenshotAsync();
+        if (fileResult is null)
+        {
+            return string.Empty;
+        }
+
+        var result = await storage.SaveScreenshotAsync(fileResult);
+        return result.IsSuccess
+            ? result.Value
+            : string.Empty;
     }
 }

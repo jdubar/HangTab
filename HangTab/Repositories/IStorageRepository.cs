@@ -1,6 +1,9 @@
-﻿namespace HangTab.Repositories;
+﻿using FluentResults;
+
+namespace HangTab.Repositories;
 public interface IStorageRepository
 {
-    Task<string> SaveFileAsync(FileResult result);
-    Task<string> SaveScreenshotAsync(IScreenshotResult result);
+    Task<Result<Stream>> OpenAppPackageFileAsync(string fileName);
+    Task<Result<string>> SaveFileAsync(FileResult result);
+    Task<Result<string>> SaveScreenshotAsync(IScreenshotResult result);
 }

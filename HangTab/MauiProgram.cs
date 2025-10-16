@@ -49,6 +49,7 @@ public static class MauiProgram
             {
                 handlers.AddHandler<SearchBar, SearchBarExHandler>();
             })
+            .RegisterDatabaseContext()
             .RegisterRepositories()
             .RegisterServices()
             .RegisterViewModels()
@@ -63,42 +64,43 @@ public static class MauiProgram
         return builder.Build();
     }
 
+    private static MauiAppBuilder RegisterDatabaseContext(this MauiAppBuilder builder)
+    {
+        builder.Services.AddSingleton<IDatabaseContext, DatabaseContext>();
+        return builder;
+    }
+
     private static MauiAppBuilder RegisterRepositories(this MauiAppBuilder builder)
     {
+        builder.Services.AddSingleton<IAudioRepository>(new AudioRepository(AudioManager.Current));
         builder.Services.AddSingleton<IMediaPickerRepository>(new MediaPickerRepository(MediaPicker.Default));
         builder.Services.AddSingleton<IScreenshotRepository>(new ScreenshotRepository(Screenshot.Default));
-        builder.Services.AddSingleton<IStorageRepository>(new StorageRepository(FileSystem.Current));
         builder.Services.AddSingleton<IShareRepository>(new ShareRepository(Share.Default));
+        builder.Services.AddSingleton<IStorageRepository>(new StorageRepository(FileSystem.Current));
 
-        builder.Services.AddTransient<IPersonRepository, PersonRepository>();
-        builder.Services.AddTransient<IDatabaseRepository, DatabaseRepository>();
-        builder.Services.AddTransient<IWeekRepository, WeekRepository>();
         builder.Services.AddTransient<IBowlerRepository, BowlerRepository>();
+        builder.Services.AddTransient<IDatabaseRepository, DatabaseRepository>();
+        builder.Services.AddTransient<IPersonRepository, PersonRepository>();
+        builder.Services.AddTransient<IWeekRepository, WeekRepository>();
         return builder;
     }
 
     private static MauiAppBuilder RegisterServices(this MauiAppBuilder builder)
     {
-        builder.Services.AddSingleton<IFileSystemService>(new FileSystemService(FileSystem.Current));
-        builder.Services.AddSingleton<IAudioService>(provider =>
-        {
-            var audioManager = AudioManager.Current;
-            var fileSystemService = provider.GetRequiredService<IFileSystemService>();
-            return new AudioService(audioManager, fileSystemService);
-        });
-        builder.Services.AddSingleton<IDatabaseContext, DatabaseContext>();
         builder.Services.AddSingleton<ISettingsService>(new SettingsService(Preferences.Default));
 
-        builder.Services.AddTransient<IPersonService, PersonService>();
-        builder.Services.AddTransient<IDatabaseService, DatabaseService>();
-        builder.Services.AddTransient<IDialogService, DialogService>();
-        builder.Services.AddTransient<IMediaPickerService, MediaPickerService>();
-        builder.Services.AddTransient<INavigationService, NavigationService>();
-        builder.Services.AddTransient<IThemeService, ThemeService>();
-        builder.Services.AddTransient<IWeekService, WeekService>();
+        builder.Services.AddTransient<IAudioService, AudioService>();
         builder.Services.AddTransient<IBowlerService, BowlerService>();
+        builder.Services.AddTransient<IDatabaseService, DatabaseService>();
+        builder.Services.AddTransient<IMediaPickerService, MediaPickerService>();
+        builder.Services.AddTransient<IPersonService, PersonService>();
         builder.Services.AddTransient<IScreenshotService, ScreenshotService>();
         builder.Services.AddTransient<IShareService, ShareService>();
+        builder.Services.AddTransient<IWeekService, WeekService>();
+
+        builder.Services.AddTransient<IDialogService, DialogService>();
+        builder.Services.AddTransient<INavigationService, NavigationService>();
+        builder.Services.AddTransient<IThemeService, ThemeService>();
         return builder;
     }
 
@@ -106,8 +108,8 @@ public static class MauiProgram
     {
         builder.Services.AddSingleton<CurrentWeekOverviewViewModel>();
         builder.Services.AddSingleton<PersonListOverviewViewModel>();
-        builder.Services.AddSingleton<WeekListOverviewViewModel>();
         builder.Services.AddSingleton<SettingsViewModel>();
+        builder.Services.AddSingleton<WeekListOverviewViewModel>();
 
         builder.Services.AddTransient<AvatarSelectViewModel>();
         builder.Services.AddTransient<BowlerSelectSubViewModel>();
@@ -122,8 +124,8 @@ public static class MauiProgram
     {
         builder.Services.AddSingleton<CurrentWeekOverviewPage>();
         builder.Services.AddSingleton<PersonListOverviewPage>();
-        builder.Services.AddSingleton<WeekListOverviewPage>();
         builder.Services.AddSingleton<SettingsPage>();
+        builder.Services.AddSingleton<WeekListOverviewPage>();
 
         builder.Services.AddTransient<BowlerSelectSubPage>();
         builder.Services.AddTransient<PersonAddEditPage>();

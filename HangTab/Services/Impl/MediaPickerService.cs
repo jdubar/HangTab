@@ -8,17 +8,31 @@ public class MediaPickerService(
 {
     public async Task<string> PickPhotoAsync()
     {
-        var result = await media.PickPhotoAsync();
-        return result is null
-            ? string.Empty
-            : await storage.SaveFileAsync(result);
+        var fileResult = await media.PickPhotoAsync();
+        if (fileResult is null)
+        {
+            return string.Empty;
+        }
+
+        return await SaveFileAsync(fileResult);
     }
 
     public async Task<string> TakePhotoAsync()
     {
-        var result = await media.TakePhotoAsync();
-        return result is null
-            ? string.Empty
-            : await storage.SaveFileAsync(result);
+        var fileResult = await media.TakePhotoAsync();
+        if (fileResult is null)
+        {
+            return string.Empty;
+        }
+
+        return await SaveFileAsync(fileResult);
+    }
+
+    private async Task<string> SaveFileAsync(FileResult fileResult)
+    {
+        var result = await storage.SaveFileAsync(fileResult);
+        return result.IsSuccess
+            ? result.Value
+            : string.Empty;
     }
 }

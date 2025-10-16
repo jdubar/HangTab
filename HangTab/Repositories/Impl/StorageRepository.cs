@@ -1,20 +1,57 @@
-﻿namespace HangTab.Repositories.Impl;
+﻿using FluentResults;
+
+namespace HangTab.Repositories.Impl;
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a Repository for the data layer and does not require unit tests.")]
 public class StorageRepository(IFileSystem fileSystem) : IStorageRepository
 {
-    public async Task<string> SaveFileAsync(FileResult result)
+    public async Task<Result<Stream>> OpenAppPackageFileAsync(string fileName)
     {
-        ArgumentNullException.ThrowIfNull(result);
+        if (string.IsNullOrWhiteSpace(fileName))
+        {
+            return Result.Fail("File name cannot be null or empty.");
+        }
+
+        if (!await fileSystem.AppPackageFileExistsAsync(fileName))
+        {
+            return Result.Fail($"File not found in app package '{fileName}'.");
+        }
+
+        try
+        {
+            var stream = await fileSystem.OpenAppPackageFileAsync(fileName);
+            return Result.Ok(stream);
+        }
+        catch (FileNotFoundException)
+        {
+            return Result.Fail($"File not found in app package '{fileName}'.");
+        }
+        catch (Exception ex)
+        {
+            return Result.Fail($"Error opening file: {ex.Message}");
+        }
+    }
+
+    public async Task<Result<string>> SaveFileAsync(FileResult result)
+    {
+        if (result is null)
+        {
+            return Result.Fail("File result cannot be null.");
+        }
+
         return await SaveAsync(result, fileSystem.AppDataDirectory);
     }
 
-    public async Task<string> SaveScreenshotAsync(IScreenshotResult result)
+    public async Task<Result<string>> SaveScreenshotAsync(IScreenshotResult result)
     {
-        ArgumentNullException.ThrowIfNull(result);
+        if (result is null)
+        {
+            return Result.Fail("Screenshot result cannot be null.");
+        }
+
         return await SaveAsync(result, fileSystem.CacheDirectory);
     }
 
-    private static async Task<string> SaveAsync<T>(T result, string folderPath) where T : class
+    private static async Task<Result<string>> SaveAsync<T>(T result, string folderPath) where T : class
     {
         string fileName;
         Stream sourceStream;
@@ -40,12 +77,11 @@ public class StorageRepository(IFileSystem fileSystem) : IStorageRepository
             using var localFileStream = File.OpenWrite(localFilePath);
 
             await sourceStream.CopyToAsync(localFileStream);
-            return localFilePath;
+            return Result.Ok(localFilePath);
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"Error saving file to disk: {ex.Message}");
-            return string.Empty;
+            return Result.Fail($"Error saving file to disk: {ex.Message}");
         }
     }
 }
