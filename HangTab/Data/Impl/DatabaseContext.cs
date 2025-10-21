@@ -7,9 +7,15 @@ namespace HangTab.Data.Impl;
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "We will not test database context. There's no logic to test.")]
 public class DatabaseContext : IDatabaseContext, IAsyncDisposable
 {
+    private static string FileName => "Bowling.db3";
+	private static SQLiteOpenFlags OpenFlags =>
+		SQLiteOpenFlags.ReadWrite |
+		SQLiteOpenFlags.Create |
+		SQLiteOpenFlags.SharedCache;
+
     private SQLiteAsyncConnection? _connection;
-    private static string DatabasePath => Path.Combine(FileSystem.AppDataDirectory, Constants.Database.FileName);
-    private SQLiteAsyncConnection Database => _connection ??= new SQLiteAsyncConnection(DatabasePath, Constants.Database.OpenFlags);
+    private static string DatabasePath => Path.Combine(FileSystem.AppDataDirectory, FileName);
+    private SQLiteAsyncConnection Database => _connection ??= new SQLiteAsyncConnection(DatabasePath, OpenFlags);
 
     public async Task<bool> AddItemAsync<TTable>(TTable item) where TTable : class, new() => await Execute<TTable, bool>(async () => await Database.InsertAsync(item) > 0);
 
