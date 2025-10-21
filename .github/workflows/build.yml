@@ -13,7 +13,7 @@ on:
       - reopened
 
 jobs:
-  sonarcloud:
+  codecov:
     name: Codecov
     runs-on: windows-latest
     steps:
