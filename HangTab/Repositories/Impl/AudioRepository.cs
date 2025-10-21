@@ -3,6 +3,7 @@
 using Plugin.Maui.Audio;
 
 namespace HangTab.Repositories.Impl;
+[System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a Repository for the data layer and does not require unit tests.")]
 public class AudioRepository(IAudioManager audioManager) : IAudioRepository
 {
     public async Task<Result> PlayAudioStreamAsync(Stream audioStream)
