@@ -1,19 +1,34 @@
-﻿using Plugin.Maui.Audio;
+﻿using FluentResults;
+
+using HangTab.Repositories;
 
 namespace HangTab.Services.Impl;
 public class AudioService(
-    IAudioManager audioManager,
-    IFileSystemService fileSystemService) : IAudioService
+    IAudioRepository audioRepository,
+    IStorageRepository storageRepository) : IAudioService
 {
-    public async Task PlaySoundAsync(string audioFileName)
+    public async Task<Result> PlaySoundAsync(string audioFileName)
     {
         if (string.IsNullOrWhiteSpace(audioFileName))
         {
             throw new ArgumentException("File name cannot be null or empty.", nameof(audioFileName));
         }
 
-        using var stream = await fileSystemService.OpenAppPackageFileAsync(audioFileName);
-        var player = audioManager.CreateAsyncPlayer(stream) ?? throw new InvalidOperationException("Audio player could not be created. Ensure the audio file exists and is supported.");
-        await player.PlayAsync(CancellationToken.None);
+        var result = await storageRepository.OpenAppPackageFileAsync(audioFileName);
+        if (result.IsFailed)
+        {
+            return Result.Fail(result.Errors);
+        }
+
+        try
+        {
+            using var stream = result.Value;
+            await audioRepository.PlayAudioStreamAsync(stream);
+            return Result.Ok();
+        }
+        catch (InvalidOperationException ex)
+        {
+            return Result.Fail(new Error(ex.Message).CausedBy(ex));
+        }
     }
 }
