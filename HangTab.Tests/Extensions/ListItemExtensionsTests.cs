@@ -53,8 +53,8 @@ public class ListItemExtensionsTests
     public void SetBowlerHangSumByWeeks_SetsHangCountCorrectly()
     {
         // Arrange
-        var bowler1 = new BowlerListItemViewModel(id: 1, name: "A", isSub: false);
-        var bowler2 = new BowlerListItemViewModel(id: 2, name: "B", isSub: false);
+        var bowler1 = new BowlerListItemViewModel{ Id = 1, Name = "A", IsSub = true };
+        var bowler2 = new BowlerListItemViewModel{ Id = 2, Name = "B", IsSub = false };
         var weeks = new List<Week>
         {
             new()
@@ -90,7 +90,7 @@ public class ListItemExtensionsTests
         // Arrange
         var subId = 10;
         var hangCount = 5;
-        var bowler = new BowlerListItemViewModel(id:subId, name: "Super Sub", isSub: true);
+        var bowler = new BowlerListItemViewModel{ Id = subId, Name = "Super Sub", IsSub = true };
         var weeks = new List<Week>
         {
             new()

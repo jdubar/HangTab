@@ -17,55 +17,48 @@ namespace HangTab.ViewModels;
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a ViewModel for the UI and does not require unit tests.")]
 public partial class CurrentWeekOverviewViewModel :
     ViewModelBase,
+    IRecipient<BowlerSubChangedMessage>,
     IRecipient<PersonAddedOrChangedMessage>,
     IRecipient<PersonDeletedMessage>,
-    IRecipient<BowlerHangCountChangedMessage>,
-    IRecipient<SystemResetMessage>,
-    IRecipient<BowlerSubChangedMessage>
+    IRecipient<SystemResetMessage>
 {
     private readonly IAudioService _audioService;
+    private readonly IBowlerService _bowlerService;
     private readonly IDialogService _dialogService;
+    private readonly IMessenger _messenger;
     private readonly INavigationService _navigationService;
     private readonly ISettingsService _settingsService;
-    private readonly IWeekService _weekService;
-    private readonly IBowlerService _bowlerService;
     private readonly IScreenshotService _screenshotService;
     private readonly IShareService _shareService;
-
-    private readonly IMapper<CurrentWeekListItemViewModel, Bowler> _bowlerMapper;
-    private readonly IMapper<IEnumerable<Bowler>, IEnumerable<CurrentWeekListItemViewModel>> _currentWeekListItemViewModelMapper;
+    private readonly IWeekService _weekService;
 
     private const string BusSound = "beepbeep.mp3";
 
     public CurrentWeekOverviewViewModel(
         IAudioService audioService,
-        IDialogService dialogService,
-        INavigationService navigationService,
-        ISettingsService settingsService,
-        IWeekService weekService,
         IBowlerService bowlerService,
+        IDialogService dialogService,
+        IMessenger messenger,
+        INavigationService navigationService,
         IScreenshotService screenshotService,
+        ISettingsService settingsService,
         IShareService shareService,
-        IMapper<CurrentWeekListItemViewModel, Bowler> bowlerMapper,
-        IMapper<IEnumerable<Bowler>, IEnumerable<CurrentWeekListItemViewModel>> currentWeekListItemViewModelMapper)
+        IWeekService weekService)
     {
         _audioService = audioService;
-        _dialogService = dialogService;
-        _navigationService = navigationService;
-        _settingsService = settingsService;
-        _weekService = weekService;
         _bowlerService = bowlerService;
+        _dialogService = dialogService;
+        _messenger = messenger;
+        _navigationService = navigationService;
         _screenshotService = screenshotService;
+        _settingsService = settingsService;
         _shareService = shareService;
+        _weekService = weekService;
 
-        _bowlerMapper = bowlerMapper;
-        _currentWeekListItemViewModelMapper = currentWeekListItemViewModelMapper;
-
-        WeakReferenceMessenger.Default.Register<PersonAddedOrChangedMessage>(this);
-        WeakReferenceMessenger.Default.Register<PersonDeletedMessage>(this);
-        WeakReferenceMessenger.Default.Register<BowlerHangCountChangedMessage>(this);
-        WeakReferenceMessenger.Default.Register<SystemResetMessage>(this);
-        WeakReferenceMessenger.Default.Register<BowlerSubChangedMessage>(this);
+        _messenger.Register<BowlerSubChangedMessage>(this);
+        _messenger.Register<PersonAddedOrChangedMessage>(this);
+        _messenger.Register<PersonDeletedMessage>(this);
+        _messenger.Register<SystemResetMessage>(this);
     }
 
     [ObservableProperty]
@@ -208,7 +201,7 @@ public partial class CurrentWeekOverviewViewModel :
         if (CurrentWeek.Bowlers.Count > 0)
         {
             CurrentWeekBowlers.Clear();
-            CurrentWeekBowlers = _currentWeekListItemViewModelMapper.Map(CurrentWeek.Bowlers).ToObservableCollection();
+            CurrentWeekBowlers = CurrentWeek.Bowlers.ToCurrentWeekListItemViewModelList().ToObservableCollection();
             CurrentWeekBowlers.SetLowestBowlerHangCount();
         }
 
@@ -241,19 +234,49 @@ public partial class CurrentWeekOverviewViewModel :
             case Enums.Status.Active:
                 vm.SubId = null;
                 vm.Status = Enums.Status.Active;
-                await _bowlerService.UpdateBowler(_bowlerMapper.Map(vm));
+                await _bowlerService.UpdateBowler(vm.ToBowler());
                 break;
             case Enums.Status.Blind:
                 vm.SubId = null;
                 vm.Status = Enums.Status.Blind;
-                await _bowlerService.UpdateBowler(_bowlerMapper.Map(vm));
+                await _bowlerService.UpdateBowler(vm.ToBowler());
                 break;
             case Enums.Status.UsingSub:
-                await _navigationService.GoToSelectSub(_bowlerMapper.Map(vm));
+                await _navigationService.GoToSelectSub(vm.ToBowler());
                 return;
         }
 
         await GetCurrentWeek();
+    }
+
+    [RelayCommand]
+    private async Task BowlerHangCountChangedAsync(CurrentWeekListItemViewModel? vm)
+    {
+        if (vm is null)
+        {
+            return;
+        }
+
+        if (await _bowlerService.UpdateBowler(vm.ToBowler()))
+        {
+            var newHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
+            var isIncrease = newHangTotal > TeamHangTotal;
+            TeamHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
+            CurrentWeekBowlers.SetLowestBowlerHangCount();
+
+            if (isIncrease)
+            {
+                PlayPopperAnimation = true;
+                await Task.Delay(1000);
+                PlayPopperAnimation = false;
+            }
+
+            _messenger.Send(new BowlerHangCountChangedMessage(vm.BowlerId, vm.HangCount));
+        }
+        else
+        {
+            await _dialogService.AlertAsync("Error", "Unable to update bowler hang count", "Ok");
+        }
     }
 
     public async void Receive(SystemResetMessage message)
@@ -267,45 +290,17 @@ public partial class CurrentWeekOverviewViewModel :
 
     public async void Receive(BowlerSubChangedMessage message)
     {
-        var bowler = CurrentWeekBowlers.FirstOrDefault(b => b.BowlerId == message.Id);
-        if (bowler is null)
+        var vm = CurrentWeekBowlers.FirstOrDefault(b => b.BowlerId == message.Id);
+        if (vm is null)
         {
             return;
         }
 
-        bowler.SubId = message.SubId;
-        bowler.Status = Enums.Status.UsingSub;
-        await _bowlerService.UpdateBowler(_bowlerMapper.Map(bowler));
+        vm.SubId = message.SubId;
+        vm.Status = Enums.Status.UsingSub;
+        await _bowlerService.UpdateBowler(vm.ToBowler());
 
         await GetCurrentWeek();
-    }
-
-    public async void Receive(BowlerHangCountChangedMessage message)
-    {
-        var bowler = CurrentWeekBowlers.FirstOrDefault(b => b.BowlerId == message.BowlerId);
-        if (bowler is null)
-        {
-            return;
-        }
-
-        if (await _bowlerService.UpdateBowler(_bowlerMapper.Map(bowler)))
-        {
-            var newHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
-            var isIncrease = newHangTotal > TeamHangTotal;
-            TeamHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
-            CurrentWeekBowlers.SetLowestBowlerHangCount();
-
-            if (isIncrease)
-            {
-                PlayPopperAnimation = true;
-                await Task.Delay(1000);
-                PlayPopperAnimation = false;
-            }
-        }
-        else
-        {
-            await _dialogService.AlertAsync("Error", "Unable to update bowler hang count", "Ok");
-        }
     }
 
     public async void Receive(PersonAddedOrChangedMessage message)

@@ -76,6 +76,9 @@ public partial class PersonAddEditViewModel :
     private bool _isSub;
 
     [ObservableProperty]
+    private bool _isDeleted;
+
+    [ObservableProperty]
     private ObservableCollection<ValidationResult> _errors = [];
 
     [ObservableProperty]
@@ -190,6 +193,7 @@ public partial class PersonAddEditViewModel :
             Name = Name,
             ImageUrl = ImageUrl,
             IsSub = BowlerTypeIndex == (int)BowlerType.Sub,
+            IsDeleted = IsDeleted
         };
     }
 
@@ -201,6 +205,7 @@ public partial class PersonAddEditViewModel :
             Name = model.Name;
             ImageUrl = model.ImageUrl;
             IsSub = model.IsSub;
+            IsDeleted = model.IsDeleted;
             Initials = model.Id > 0 ? model.Name.GetInitials() : string.Empty;
 
             BowlerTypeIndex = model.IsSub

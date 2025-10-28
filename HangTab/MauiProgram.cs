@@ -1,17 +1,15 @@
 ﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Mvvm.Messaging;
 
 using HangTab.Data;
 using HangTab.Data.Impl;
 using HangTab.Handlers.SearchBar;
-using HangTab.Mappers;
-using HangTab.Models;
 using HangTab.Repositories;
 using HangTab.Repositories.Impl;
 using HangTab.Services;
 using HangTab.Services.Impl;
 using HangTab.ViewModels;
 using HangTab.ViewModels.BottomSheets;
-using HangTab.ViewModels.Items;
 using HangTab.Views;
 using HangTab.Views.BottomSheets;
 
@@ -54,8 +52,7 @@ public static class MauiProgram
             .RegisterServices()
             .RegisterViewModels()
             .RegisterViews()
-            .RegisterBottomSheets()
-            .RegisterMappers();
+            .RegisterBottomSheets();
 
 #if DEBUG
         builder.Logging.AddDebug();
@@ -88,6 +85,7 @@ public static class MauiProgram
     private static MauiAppBuilder RegisterServices(this MauiAppBuilder builder)
     {
         builder.Services.AddSingleton<ISettingsService>(new SettingsService(Preferences.Default));
+        builder.Services.AddSingleton<IMessenger, WeakReferenceMessenger>();
 
         builder.Services.AddTransient<IAudioService, AudioService>();
         builder.Services.AddTransient<IBowlerService, BowlerService>();
@@ -137,18 +135,6 @@ public static class MauiProgram
     private static MauiAppBuilder RegisterBottomSheets(this MauiAppBuilder builder)
     {
         builder.Services.AddBottomSheet<AvatarSelectBottomSheet, AvatarSelectViewModel>(nameof(AvatarSelectBottomSheet));
-        return builder;
-    }
-
-    private static MauiAppBuilder RegisterMappers(this MauiAppBuilder builder)
-    {
-        builder.Services.AddSingleton<IMapper<CurrentWeekListItemViewModel, Bowler>, BowlerMapper>();
-        builder.Services.AddSingleton<IMapper<BowlerListItemViewModel, Person>, PersonMapper>();
-        builder.Services.AddSingleton<IMapper<IEnumerable<Person>, IEnumerable<BowlerListItemViewModel>>, BowlerListItemViewModelMapper>();
-        builder.Services.AddSingleton<IMapper<IEnumerable<Bowler>, IEnumerable<BowlerListItemViewModel>>, BowlerListItemViewModelMapper>();
-        builder.Services.AddSingleton<IMapper<IEnumerable<Bowler>, IEnumerable<CurrentWeekListItemViewModel>>, CurrentWeekListItemViewModelMapper>();
-        builder.Services.AddSingleton<IMapper<IEnumerable<Person>, IEnumerable<SubListItemViewModel>>, SubListItemViewModelMapper>();
-        builder.Services.AddSingleton<IMapper<IEnumerable<Week>, IEnumerable<WeekListItemViewModel>>, WeekListItemViewModelMapper>();
         return builder;
     }
 }

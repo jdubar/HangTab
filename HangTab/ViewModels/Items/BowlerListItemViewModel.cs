@@ -1,9 +1,7 @@
 ﻿using CommunityToolkit.Mvvm.ComponentModel;
-using CommunityToolkit.Mvvm.Messaging;
 
 using HangTab.Enums;
 using HangTab.Extensions;
-using HangTab.Messages;
 using HangTab.ViewModels.Items.Interfaces;
 
 namespace HangTab.ViewModels.Items;
@@ -14,53 +12,29 @@ public partial class BowlerListItemViewModel : ObservableObject, ILowestHangCoun
     private int _id;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(Initials))]
     private string _name = string.Empty;
 
     [ObservableProperty]
     private bool _isSub;
 
     [ObservableProperty]
-    private int _hangCount;
+    private bool _isDeleted;
 
-    partial void OnHangCountChanged(int oldValue, int newValue)
-    {
-        if (oldValue != newValue && newValue >= 0)
-        {
-            WeakReferenceMessenger.Default.Send(new BowlerHangCountChangedMessage(BowlerId, newValue));
-        }
-    }
+    [ObservableProperty]
+    private int _hangCount;
 
     [ObservableProperty]
     private int _bowlerId;
 
     [ObservableProperty]
-    private string? _imageUrl;
-    
-    [ObservableProperty]
-    private string _initials;
+    private string? _imageUrl = null;
+
+    public string Initials => Name.GetInitials();
 
     [ObservableProperty]
     private bool _hasLowestHangCount;
 
     [ObservableProperty]
-    private Status _status;
-
-    public BowlerListItemViewModel(
-        int id,
-        string name,
-        bool isSub,
-        int bowlerId = 0,
-        int hangCount = 0,
-        string? imageUrl = null,
-        Status status = Status.Active)
-    {
-        Id = id;
-        Name = name;
-        IsSub = isSub;
-        BowlerId = bowlerId;
-        HangCount = hangCount;
-        ImageUrl = imageUrl;
-        Status = status;
-        Initials = name.GetInitials();
-    }
+    private Status _status = Status.Active;
 }

@@ -1,5 +1,7 @@
 using HangTab.Utilities;
 
+using System.Windows.Input;
+
 namespace HangTab.Views.Controls;
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a Behavior for the UI and does not require unit tests.")]
 public partial class Stepper : ContentView
@@ -34,6 +36,18 @@ public partial class Stepper : ContentView
         set => SetValue(IsControlEnabledProperty, value);
     }
 
+    public ICommand ValueChangedCommand
+    {
+        get => (ICommand)GetValue(ValueChangedCommandProperty);
+        set => SetValue(ValueChangedCommandProperty, value);
+    }
+
+    public object ValueChangedCommandParameter
+    {
+        get => GetValue(ValueChangedCommandParameterProperty);
+        set => SetValue(ValueChangedCommandParameterProperty, value);
+    }
+
     public static readonly BindableProperty ValueProperty =
         BindableProperty.Create(nameof(Value), typeof(int), typeof(Stepper), defaultValue: 0, BindingMode.TwoWay,
         propertyChanged: (bindableObject, oldValue, newValue) =>
@@ -43,6 +57,7 @@ public partial class Stepper : ContentView
             {
                 stepper.SetDecreaseButtonState((int)newValue > stepper.Minimum);
                 stepper.SetIncreaseButtonState((int)newValue < stepper.Maximum);
+                stepper.OnValueChanged();
             }
         });
 
@@ -68,6 +83,12 @@ public partial class Stepper : ContentView
                 stepper.SetIncreaseButtonState(false);
             }
         });
+
+    public static readonly BindableProperty ValueChangedCommandProperty =
+        BindableProperty.Create(nameof(ValueChangedCommand), typeof(ICommand), typeof(Stepper), default(ICommand), BindingMode.OneWay);
+
+    public static readonly BindableProperty ValueChangedCommandParameterProperty =
+        BindableProperty.Create(nameof(ValueChangedCommandParameter), typeof(object), typeof(Stepper), default, BindingMode.OneWay);
 
     private void OnMinusButtonClicked(object sender, EventArgs e)
     {
@@ -106,6 +127,15 @@ public partial class Stepper : ContentView
             buttonImage.Color = isEnabled
                 ? TextColor.PrimaryContrastTextColor
                 : TextColor.ControlDisabledTextColor;
+        }
+    }
+
+    private void OnValueChanged()
+    {
+        var parameter = ValueChangedCommandParameter ?? Value;
+        if (ValueChangedCommand?.CanExecute(parameter) ?? false)
+        {
+            ValueChangedCommand.Execute(parameter);
         }
     }
 }

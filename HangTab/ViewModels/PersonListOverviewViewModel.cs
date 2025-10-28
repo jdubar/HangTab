@@ -5,9 +5,7 @@ using CommunityToolkit.Mvvm.Messaging;
 
 using HangTab.Extensions;
 using HangTab.Mappers;
-
 using HangTab.Messages;
-using HangTab.Models;
 using HangTab.Services;
 using HangTab.ViewModels.Base;
 using HangTab.ViewModels.Items;
@@ -23,31 +21,26 @@ public partial class PersonListOverviewViewModel :
     IRecipient<PersonDeletedMessage>,
     IRecipient<SystemResetMessage>
 {
-    private readonly IPersonService _personService;
+    private readonly IMessenger _messenger;
     private readonly INavigationService _navigationService;
+    private readonly IPersonService _personService;
     private readonly IWeekService _weekService;
 
-    private readonly IMapper<BowlerListItemViewModel, Person> _personMapper;
-    private readonly IMapper<IEnumerable<Person>, IEnumerable<BowlerListItemViewModel>> _bowlerListItemViewModelMapper;
-
     public PersonListOverviewViewModel(
-        IPersonService personService,
+        IMessenger messenger,
         INavigationService navigationService,
-        IWeekService weekService,
-        IMapper<BowlerListItemViewModel, Person> personMapper,
-        IMapper<IEnumerable<Person>, IEnumerable<BowlerListItemViewModel>> bowlerListItemViewModelMapper)
+        IPersonService personService,
+        IWeekService weekService)
     {
-        _personService = personService;
+        _messenger = messenger;
         _navigationService = navigationService;
+        _personService = personService;
         _weekService = weekService;
 
-        _personMapper = personMapper;
-        _bowlerListItemViewModelMapper = bowlerListItemViewModelMapper;
-
-        WeakReferenceMessenger.Default.Register<BowlerHangCountChangedMessage>(this);
-        WeakReferenceMessenger.Default.Register<PersonAddedOrChangedMessage>(this);
-        WeakReferenceMessenger.Default.Register<PersonDeletedMessage>(this);
-        WeakReferenceMessenger.Default.Register<SystemResetMessage>(this);
+        _messenger.Register<BowlerHangCountChangedMessage>(this);
+        _messenger.Register<PersonAddedOrChangedMessage>(this);
+        _messenger.Register<PersonDeletedMessage>(this);
+        _messenger.Register<SystemResetMessage>(this);
     }
 
     private IEnumerable<BowlerListItemViewModel> _allBowlers = [];
@@ -96,7 +89,7 @@ public partial class PersonListOverviewViewModel :
     {
         if (SelectedBowler is not null)
         {
-            await _navigationService.GoToEditBowler(_personMapper.Map(SelectedBowler));
+            await _navigationService.GoToEditBowler(SelectedBowler.ToPerson());
             SelectedBowler = null;
         }
     }
@@ -118,7 +111,7 @@ public partial class PersonListOverviewViewModel :
         }
 
         Bowlers.Clear();
-        AllBowlers = _bowlerListItemViewModelMapper.Map(people.OrderBy(b => b.Name));
+        AllBowlers = people.OrderBy(b => b.Name).ToBowlerListItemViewModelList();
         Bowlers = AllBowlers.ToObservableCollection();
 
         await UpdateBowlerHangCounts();

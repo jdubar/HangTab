@@ -4,7 +4,6 @@ using CommunityToolkit.Mvvm.Input;
 
 using HangTab.Extensions;
 using HangTab.Mappers;
-using HangTab.Models;
 using HangTab.Services;
 using HangTab.ViewModels.Base;
 using HangTab.ViewModels.Items;
@@ -17,7 +16,6 @@ public partial class SeasonSummaryViewModel(
     INavigationService navigationService,
     IPersonService personService,
     IWeekService weekService,
-    IMapper<IEnumerable<Person>, IEnumerable<BowlerListItemViewModel>> mapper,
     DataManagerViewModel dataManager) : ViewModelBase
 {
     [ObservableProperty]
@@ -74,7 +72,7 @@ public partial class SeasonSummaryViewModel(
             return;
         }
 
-        var bowlers = mapper.Map(people.OrderBy(b => b.Name)).ToList();
+        var bowlers = people.OrderBy(b => b.Name).ToBowlerListItemViewModelList().ToList();
         bowlers.SetBowlerHangSumByWeeks(allWeeks);
 
         BestBowlers = bowlers.Where(b => b.HangCount == bowlers.Min(b => b.HangCount)).ToObservableCollection();
@@ -89,20 +87,22 @@ public partial class SeasonSummaryViewModel(
         }
 
         var weeks = allWeeks
-            .Select(w => new WeekListItemViewModel(
-                w.Id,
-                w.Number,
-                w.BusRides,
-                w.Bowlers.Sum(b => b.HangCount)))
-            .OrderByDescending(w => w.HangCount);
+            .Select(w => new WeekListItemViewModel
+            {
+                Id = w.Id,
+                Number = w.Number,
+                BusRides = w.BusRides,
+                TotalHangCount = w.Bowlers.Sum(b => b.HangCount)
+            })
+            .OrderByDescending(w => w.TotalHangCount);
 
         var bestHangingWeek = weeks.First();
         BestHangWeekNumber = bestHangingWeek.Number;
-        BestHangWeekCount = bestHangingWeek.HangCount;
+        BestHangWeekCount = bestHangingWeek.TotalHangCount;
 
         var worstHangingWeek = weeks.Last();
         WorstHangWeekNumber = worstHangingWeek.Number;
-        WorstHangWeekCount = worstHangingWeek.HangCount;
+        WorstHangWeekCount = worstHangingWeek.TotalHangCount;
 
         var bestBusRideWeek = weeks.OrderByDescending(w => w.BusRides).First();
         BestBusRideWeekNumber = bestBusRideWeek.Number;
