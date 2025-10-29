@@ -123,23 +123,23 @@ public partial class CurrentWeekOverviewViewModel :
 
         if (CurrentWeekBowlers.Count == 0)
         {
-            await Loading(GetCurrentWeek);
+            await Loading(GetCurrentWeekAsync);
         }
 
         InitializeCurrentWeekPageSettings();
     }
 
     [RelayCommand]
-    private async Task SetBowlerStatusToActive(CurrentWeekListItemViewModel? vm) => await SetBowlerStatus(vm, Enums.Status.Active);
+    private async Task SetBowlerStatusToActiveAsync(CurrentWeekListItemViewModel? vm) => await SetBowlerStatusAsync(vm, Enums.Status.Active);
 
     [RelayCommand]
-    private async Task SetBowlerStatusToBlind(CurrentWeekListItemViewModel? vm) => await SetBowlerStatus(vm, Enums.Status.Blind);
+    private async Task SetBowlerStatusToBlindAsync(CurrentWeekListItemViewModel? vm) => await SetBowlerStatusAsync(vm, Enums.Status.Blind);
 
     [RelayCommand]
-    private async Task SetBowlerStatusToUsingSub(CurrentWeekListItemViewModel? vm) => await SetBowlerStatus(vm, Enums.Status.UsingSub);
+    private async Task SetBowlerStatusToUsingSubAsync(CurrentWeekListItemViewModel? vm) => await SetBowlerStatusAsync(vm, Enums.Status.UsingSub);
 
     [RelayCommand]
-    private async Task ShareScreenshot()
+    private async Task ShareScreenshotAsync()
     {
         var screenshot = await _screenshotService.TakeScreenshotAsync();
         if (string.IsNullOrWhiteSpace(screenshot))
@@ -153,7 +153,7 @@ public partial class CurrentWeekOverviewViewModel :
     }
 
     [RelayCommand]
-    private async Task SubmitWeek()
+    private async Task SubmitWeekAsync()
     {
         if (!await _dialogService.Ask("Complete Week", $"Are you ready to complete week {CurrentWeek.Number}?", "Yes", "No"))
         {
@@ -162,7 +162,7 @@ public partial class CurrentWeekOverviewViewModel :
 
         if (CurrentWeek.Number < _settingsService.TotalSeasonWeeks)
         {
-            await Loading(StartNewWeek);
+            await Loading(StartNewWeekAsync);
         }
         else
         {
@@ -171,7 +171,7 @@ public partial class CurrentWeekOverviewViewModel :
         }
     }
 
-    private async Task StartNewWeek()
+    private async Task StartNewWeekAsync()
     {
         await _weekService.CreateWeek(CurrentWeek.Number + 1).ContinueWith(async saveTask =>
         {
@@ -179,7 +179,7 @@ public partial class CurrentWeekOverviewViewModel :
             {
                 var newWeek = await saveTask;
                 _settingsService.CurrentWeekPrimaryKey = newWeek.Id;
-                await GetCurrentWeek();
+                await GetCurrentWeekAsync();
                 InitializeCurrentWeekPageSettings();
             }
             else
@@ -189,7 +189,7 @@ public partial class CurrentWeekOverviewViewModel :
         });
     }
 
-    private async Task GetCurrentWeek()
+    private async Task GetCurrentWeekAsync()
     {
         CurrentWeek = await _weekService.GetWeekById(_settingsService.CurrentWeekPrimaryKey);
         if (CurrentWeek is null)
@@ -222,7 +222,7 @@ public partial class CurrentWeekOverviewViewModel :
         BusRides = week.BusRides;
     }
 
-    private async Task SetBowlerStatus(CurrentWeekListItemViewModel? vm, Enums.Status status)
+    private async Task SetBowlerStatusAsync(CurrentWeekListItemViewModel? vm, Enums.Status status)
     {
         if (vm is null)
         {
@@ -246,7 +246,7 @@ public partial class CurrentWeekOverviewViewModel :
                 return;
         }
 
-        await GetCurrentWeek();
+        await GetCurrentWeekAsync();
     }
 
     [RelayCommand]
@@ -285,7 +285,7 @@ public partial class CurrentWeekOverviewViewModel :
         TeamHangTotal = 0;
         IsEnableCompleteWeek = false;
         PageTitle = "Week 1";
-        await GetCurrentWeek();
+        await GetCurrentWeekAsync();
     }
 
     public async void Receive(BowlerSubChangedMessage message)
@@ -300,7 +300,7 @@ public partial class CurrentWeekOverviewViewModel :
         vm.Status = Enums.Status.UsingSub;
         await _bowlerService.UpdateBowler(vm.ToBowler());
 
-        await GetCurrentWeek();
+        await GetCurrentWeekAsync();
     }
 
     public async void Receive(PersonAddedOrChangedMessage message)
@@ -324,7 +324,7 @@ public partial class CurrentWeekOverviewViewModel :
         }
 
         CurrentWeekBowlers.Clear();
-        await GetCurrentWeek();
+        await GetCurrentWeekAsync();
     }
 
     public void Receive(PersonDeletedMessage message)

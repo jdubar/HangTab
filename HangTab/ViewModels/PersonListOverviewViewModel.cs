@@ -74,18 +74,18 @@ public partial class PersonListOverviewViewModel :
         }
         else
         {
-            Task.Run(async () => { await SearchBowlers(value); }).Wait();
+            SearchBowlers(value);
         }
     }
 
-    // TODO: Add filtering by Subs,Regulars
+    // TODO: Add filtering by Subs,Regulars (using chips?)
     // TODO: Add sort by most hangs,least hangs, name asc/desc
 
     [RelayCommand]
-    private async Task NavigateToAddBowler() => await _navigationService.GoToAddBowler();
+    private async Task NavigateToAddBowlerAsync() => await _navigationService.GoToAddBowler();
 
     [RelayCommand]
-    private async Task NavigateToEditSelectedBowler()
+    private async Task NavigateToEditSelectedBowlerAsync()
     {
         if (SelectedBowler is not null)
         {
@@ -98,11 +98,11 @@ public partial class PersonListOverviewViewModel :
     {
         if (Bowlers.Count == 0)
         {
-            await Loading(GetBowlers);
+            await Loading(GetBowlersAsync);
         }
     }
 
-    private async Task GetBowlers()
+    private async Task GetBowlersAsync()
     {
         var people = await _personService.GetAllPeople();
         if (!people.Any())
@@ -114,10 +114,10 @@ public partial class PersonListOverviewViewModel :
         AllBowlers = people.OrderBy(b => b.Name).ToBowlerListItemViewModelList();
         Bowlers = AllBowlers.ToObservableCollection();
 
-        await UpdateBowlerHangCounts();
+        await UpdateBowlerHangCountsAsync();
     }
 
-    private async Task UpdateBowlerHangCounts()
+    private async Task UpdateBowlerHangCountsAsync()
     {
         if (Bowlers.Count > 0)
         {
@@ -132,11 +132,10 @@ public partial class PersonListOverviewViewModel :
         }
     }
 
-    private Task SearchBowlers(string searchText)
+    private void SearchBowlers(string searchText)
     {
         Bowlers.Clear();
         Bowlers = AllBowlers.Where(b => b.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)).ToObservableCollection();
-        return Task.CompletedTask;
     }
 
     public void Receive(SystemResetMessage message)
@@ -145,9 +144,9 @@ public partial class PersonListOverviewViewModel :
         AllBowlers = [];
     }
 
-    public async void Receive(BowlerHangCountChangedMessage message) => await UpdateBowlerHangCounts();
+    public async void Receive(BowlerHangCountChangedMessage message) => await UpdateBowlerHangCountsAsync();
 
-    public async void Receive(PersonAddedOrChangedMessage message) => await GetBowlers();
+    public async void Receive(PersonAddedOrChangedMessage message) => await GetBowlersAsync();
 
-    public async void Receive(PersonDeletedMessage message) => await GetBowlers();
+    public async void Receive(PersonDeletedMessage message) => await GetBowlersAsync();
 }

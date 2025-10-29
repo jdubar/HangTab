@@ -41,7 +41,7 @@ public partial class BowlerSelectSubViewModel(
             await Loading(
                 async () =>
                 {
-                    await GetSubs();
+                    await GetSubsAsync();
 
                     if (_bowler is not null)
                     {
@@ -82,9 +82,9 @@ public partial class BowlerSelectSubViewModel(
         await navigationService.GoBack();
     }
 
-    private async Task GetSubs()
+    private async Task GetSubsAsync()
     {
-        var subs = await GetAvailableSubs();
+        var subs = await GetAvailableSubsAsync();
         if (subs.Any())
         {
             Subs.Clear();
@@ -92,7 +92,7 @@ public partial class BowlerSelectSubViewModel(
         }
     }
 
-    private async Task<IEnumerable<Person>> GetAvailableSubs()
+    private async Task<IEnumerable<Person>> GetAvailableSubsAsync()
     {
         var subs = await personService.GetSubstitutes();
         if (!subs.Any())
