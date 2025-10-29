@@ -14,17 +14,5 @@ public partial class WeekListItemViewModel : ObservableObject
     private int _busRides;
 
     [ObservableProperty]
-    private int _hangCount;
-
-    public WeekListItemViewModel(
-        int id,
-        int number,
-        int busRides,
-        int hangCount)
-    {
-        Id = id;
-        Number = number;
-        BusRides = busRides;
-        HangCount = hangCount;
-    }
+    private int _totalHangCount;
 }

@@ -10,6 +10,7 @@ public partial class SubListItemViewModel : ObservableObject
     private int _id;
 
     [ObservableProperty]
+    [NotifyPropertyChangedFor(nameof(Initials))]
     private string _name = string.Empty;
 
     [ObservableProperty]
@@ -19,21 +20,10 @@ public partial class SubListItemViewModel : ObservableObject
     private string? _imageUrl;
     
     [ObservableProperty]
-    private string _initials;
-
-    [ObservableProperty]
     private bool _isSelected;
 
-    public SubListItemViewModel(
-        int id,
-        string name,
-        bool isSub,
-        string? imageUrl = null)
-    {
-        Id = id;
-        Name = name;
-        IsSub = isSub;
-        ImageUrl = imageUrl;
-        Initials = name.GetInitials();
-    }
+    [ObservableProperty]
+    private bool _isDeleted;
+
+    public string Initials => Name.GetInitials();
 }

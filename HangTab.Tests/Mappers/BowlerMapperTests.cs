@@ -10,22 +10,21 @@ public class BowlerMapperTests
     public void Map_ValidCurrentWeekListItemViewModel_MapsToBowler()
     {
         // Arrange
-        var mapper = new BowlerMapper();
-        var vm = new CurrentWeekListItemViewModel(
-            weekId: 2,
-            bowlerId: 10,
-            personId: 5,
-            subId: 7,
-            status: Status.UsingSub,
-            hangCount: 3,
-            name: "Test Bowler",
-            isSub: false,
-            initials: "TB",
-            imageUrl: "img.png"
-        );
+        var vm = new CurrentWeekListItemViewModel
+        {
+            WeekId = 2,
+            BowlerId = 10,
+            PersonId = 5,
+            SubId = 7,
+            Status = Status.UsingSub,
+            HangCount = 3,
+            Name = "Test Bowler",
+            IsSub = false,
+            ImageUrl = "img.png"
+        };
 
         // Act
-        var actual = mapper.Map(vm);
+        var actual = vm.ToBowler();
 
         // Assert
         Assert.Equal(10, actual.Id);
@@ -38,10 +37,9 @@ public class BowlerMapperTests
     public void Map_NullViewModel_ThrowsArgumentNullException()
     {
         // Arrange
-        var mapper = new BowlerMapper();
         CurrentWeekListItemViewModel? vm = null;
 
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => mapper.Map(vm!));
+        Assert.Throws<ArgumentNullException>(() => vm.ToBowler());
     }
 }

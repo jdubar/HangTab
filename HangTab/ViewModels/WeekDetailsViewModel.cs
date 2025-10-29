@@ -13,8 +13,7 @@ namespace HangTab.ViewModels;
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a ViewModel for the UI and does not require unit tests.")]
 public partial class WeekDetailsViewModel(
     ISettingsService settingsService,
-    IWeekService weekService,
-    IMapper<IEnumerable<Bowler>, IEnumerable<CurrentWeekListItemViewModel>> mapper) : ViewModelBase, IQueryAttributable
+    IWeekService weekService) : ViewModelBase, IQueryAttributable
 {
     [ObservableProperty]
     private int _id;
@@ -69,7 +68,7 @@ public partial class WeekDetailsViewModel(
         Id = week.Id;
         Number = week.Number;
         BusRides = week.BusRides;
-        Bowlers = mapper.Map(week.Bowlers).ToObservableCollection();
+        Bowlers = week.Bowlers.ToCurrentWeekListItemViewModelList().ToObservableCollection();
     }
 
     public void ApplyQueryAttributes(IDictionary<string, object> query)

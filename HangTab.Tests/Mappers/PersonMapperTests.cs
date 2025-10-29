@@ -1,4 +1,3 @@
-using HangTab.Enums;
 using HangTab.Mappers;
 using HangTab.ViewModels.Items;
 
@@ -10,19 +9,16 @@ public class PersonMapperTests
     public void Map_ValidBowlerListItemViewModel_MapsToPerson()
     {
         // Arrange
-        var mapper = new PersonMapper();
-        var vm = new BowlerListItemViewModel(
-            id: 42,
-            name: "Jane Doe",
-            isSub: true,
-            bowlerId: 7,
-            hangCount: 3,
-            imageUrl: "img.png",
-            status: Status.UsingSub
-        );
+        var vm = new BowlerListItemViewModel
+        {
+            Id = 42,
+            Name = "Jane Doe",
+            IsSub = true,
+            ImageUrl = "img.png"
+        };
 
         // Act
-        var person = mapper.Map(vm);
+        var person = vm.ToPerson();
 
         // Assert
         Assert.Equal(42, person.Id);
@@ -35,9 +31,9 @@ public class PersonMapperTests
     public void Map_NullViewModel_ThrowsArgumentNullException()
     {
         // Arrange
-        var mapper = new PersonMapper();
+        BowlerListItemViewModel vm = null!;
 
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => mapper.Map(null!));
+        Assert.Throws<ArgumentNullException>(() => vm.ToPerson());
     }
 }

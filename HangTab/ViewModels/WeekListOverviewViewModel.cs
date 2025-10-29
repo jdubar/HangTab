@@ -3,7 +3,6 @@ using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 
 using HangTab.Mappers;
-using HangTab.Models;
 using HangTab.Services;
 using HangTab.ViewModels.Base;
 using HangTab.ViewModels.Items;
@@ -15,8 +14,7 @@ namespace HangTab.ViewModels;
 public partial class WeekListOverviewViewModel(
     IWeekService weekService,
     ISettingsService settingsService,
-    INavigationService navigationService,
-    IMapper<IEnumerable<Week>, IEnumerable<WeekListItemViewModel>> mapper) : ViewModelBase
+    INavigationService navigationService) : ViewModelBase
 {
     [ObservableProperty]
     private ObservableCollection<WeekListItemViewModel> _weeks = [];
@@ -35,7 +33,7 @@ public partial class WeekListOverviewViewModel(
         }
 
         Weeks.Clear();
-        Weeks = mapper.Map(weeks.Where(w => w.Id != settingsService.CurrentWeekPrimaryKey).OrderByDescending(w => w.Number)).ToObservableCollection();
+        Weeks = weeks.Where(w => w.Id != settingsService.CurrentWeekPrimaryKey).OrderByDescending(w => w.Number).ToWeekListItemViewModelList().ToObservableCollection();
     }
 
     [RelayCommand]

@@ -9,7 +9,6 @@ public class SubListItemViewModelMapperTests
     public void Map_ValidPersonList_MapsToViewModels()
     {
         // Arrange
-        var mapper = new SubListItemViewModelMapper();
         var people = new List<Person>
         {
             new() { Id = 1, Name = "Alice", IsSub = true, ImageUrl = "img1.png" },
@@ -17,7 +16,7 @@ public class SubListItemViewModelMapperTests
         };
 
         // Act
-        var actual = mapper.Map(people).ToList();
+        var actual = people.ToSubListItemViewModelList().ToList();
 
         // Assert
         Assert.Equal(2, actual.Count);
@@ -37,9 +36,9 @@ public class SubListItemViewModelMapperTests
     public void Map_NullPeopleList_ThrowsArgumentNullException()
     {
         // Arrange
-        var mapper = new SubListItemViewModelMapper();
+        List<Person> people = null!;
 
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => mapper.Map(null!));
+        Assert.Throws<ArgumentNullException>(() => people.ToSubListItemViewModelList());
     }
 }

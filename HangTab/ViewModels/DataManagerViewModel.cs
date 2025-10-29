@@ -8,6 +8,7 @@ namespace HangTab.ViewModels;
 public partial class DataManagerViewModel(
     IDialogService dialogService,
     IDatabaseService databaseService,
+    IMessenger messenger,
     ISettingsService settingsService)
 {
     /// <summary>
@@ -62,6 +63,6 @@ public partial class DataManagerViewModel(
     {
         settingsService.CurrentWeekPrimaryKey = 0;
         settingsService.SeasonComplete = false;
-        WeakReferenceMessenger.Default.Send(new SystemResetMessage());
+        messenger.Send(new SystemResetMessage());
     }
 }
