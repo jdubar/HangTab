@@ -26,21 +26,24 @@ public partial class PersonAddEditViewModel :
 {
     private readonly IPersonService _personService;
     private readonly IDialogService _dialogService;
+    private readonly IMessenger _messenger;
     private readonly INavigationService _navigationService;
     private readonly IBottomSheetNavigationService _bottomSheetNavigationService;
 
     public PersonAddEditViewModel(
         IPersonService personService,
         IDialogService dialogService,
+        IMessenger messenger,
         INavigationService navigationService,
         IBottomSheetNavigationService bottomSheetNavigationService)
     {
         _personService = personService;
         _dialogService = dialogService;
+        _messenger = messenger;
         _navigationService = navigationService;
         _bottomSheetNavigationService = bottomSheetNavigationService;
 
-        WeakReferenceMessenger.Default.Register(this);
+        _messenger.Register(this);
 
         ErrorsChanged += AddBowlerViewModel_ErrorsChanged;
     }
@@ -118,7 +121,7 @@ public partial class PersonAddEditViewModel :
         {
             if (await _personService.DeletePerson(_person.Id))
             {
-                WeakReferenceMessenger.Default.Send(new PersonDeletedMessage(_person.Id));
+                _messenger.Send(new PersonDeletedMessage(_person.Id));
             }
             else
             {
@@ -154,7 +157,7 @@ public partial class PersonAddEditViewModel :
         {
             if (await _personService.AddPerson(person))
             {
-                WeakReferenceMessenger.Default.Send(new PersonAddedOrChangedMessage(person.Id, person.IsSub));
+                _messenger.Send(new PersonAddedOrChangedMessage(person.Id, person.IsSub));
             }
             else
             {
@@ -166,7 +169,7 @@ public partial class PersonAddEditViewModel :
         {
             if (await _personService.UpdatePerson(person))
             {
-                WeakReferenceMessenger.Default.Send(new PersonAddedOrChangedMessage(person.Id, person.IsSub));
+                _messenger.Send(new PersonAddedOrChangedMessage(person.Id, person.IsSub));
             }
             else
             {

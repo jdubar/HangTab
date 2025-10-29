@@ -12,20 +12,21 @@ namespace HangTab.ViewModels.BottomSheets;
 public partial class AvatarSelectViewModel(
     IDialogService dialogService,
     IMediaPickerService mediaPickerService,
+    IMessenger messenger,
     IBottomSheetNavigationService bottomSheetNavigationService) : ViewModelBase
 {
     [RelayCommand]
-    private async Task DeleteBowlerImage()
+    private async Task DeleteBowlerImageAsync()
     {
         if (await dialogService.Ask("Delete", "Remove the bowler's profile image?"))
         {
             await bottomSheetNavigationService.GoBackAsync();
-            WeakReferenceMessenger.Default.Send(new PersonImageAddedOrChangedMessage(null));
+            messenger.Send(new PersonImageAddedOrChangedMessage(null));
         }
     }
 
     [RelayCommand]
-    private async Task SelectBowlerImageFromCamera()
+    private async Task SelectBowlerImageFromCameraAsync()
     {
         var photoPath = await mediaPickerService.TakePhotoAsync();
         if (string.IsNullOrEmpty(photoPath))
@@ -34,11 +35,11 @@ public partial class AvatarSelectViewModel(
         }
 
         await bottomSheetNavigationService.GoBackAsync();
-        WeakReferenceMessenger.Default.Send(new PersonImageAddedOrChangedMessage(photoPath));
+        messenger.Send(new PersonImageAddedOrChangedMessage(photoPath));
     }
 
     [RelayCommand]
-    private async Task SelectBowlerImageFromGallery()
+    private async Task SelectBowlerImageFromGalleryAsync()
     {
         var photoPath = await mediaPickerService.PickPhotoAsync();
         if (string.IsNullOrEmpty(photoPath))
@@ -47,6 +48,6 @@ public partial class AvatarSelectViewModel(
         }
 
         await bottomSheetNavigationService.GoBackAsync();
-        WeakReferenceMessenger.Default.Send(new PersonImageAddedOrChangedMessage(photoPath));
+        messenger.Send(new PersonImageAddedOrChangedMessage(photoPath));
     }
 }

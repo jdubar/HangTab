@@ -17,6 +17,7 @@ namespace HangTab.ViewModels;
 public partial class BowlerSelectSubViewModel(
     IPersonService personService,
     IBowlerService bowlerService,
+    IMessenger messenger,
     INavigationService navigationService) : ViewModelBase, IQueryAttributable
 {
     private Bowler? _bowler;
@@ -77,7 +78,7 @@ public partial class BowlerSelectSubViewModel(
         }
 
         await bowlerService.UpdateBowler(MapDataToBowler());
-        WeakReferenceMessenger.Default.Send(new BowlerSubChangedMessage(Id, SelectedSub.Id));
+        messenger.Send(new BowlerSubChangedMessage(Id, SelectedSub.Id));
         await navigationService.GoBack();
     }
 
