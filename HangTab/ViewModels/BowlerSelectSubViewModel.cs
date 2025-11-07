@@ -77,7 +77,7 @@ public partial class BowlerSelectSubViewModel(
             return;
         }
 
-        await bowlerService.UpdateBowler(MapDataToBowler());
+        await bowlerService.UpdateBowlerAsync(MapDataToBowler());
         messenger.Send(new BowlerSubChangedMessage(Id, SelectedSub.Id));
         await navigationService.GoBack();
     }
@@ -94,13 +94,13 @@ public partial class BowlerSelectSubViewModel(
 
     private async Task<IEnumerable<Person>> GetAvailableSubsAsync()
     {
-        var subs = await personService.GetSubstitutes();
+        var subs = await personService.GetSubstitutesAsync();
         if (!subs.Any())
         {
             return [];
         }
 
-        var bowlers = await bowlerService.GetAllBowlersByWeekId(_bowler?.WeekId ?? 0);
+        var bowlers = await bowlerService.GetAllBowlersByWeekIdAsync(_bowler?.WeekId ?? 0);
         return bowlers.Any()
             ? subs.Where(s => !bowlers.Any(b => b.SubId == s.Id))
             : subs;

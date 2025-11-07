@@ -10,8 +10,6 @@ public class WeekRepositoryTests
 {
     private readonly IDatabaseContext _context = A.Fake<IDatabaseContext>();
 
-    private WeekRepository CreateRepo() => new(_context);
-
     [Fact]
     public async Task GetWeekById_WithValidId_ReturnsWeekWithBowlers()
     {
@@ -33,7 +31,7 @@ public class WeekRepositoryTests
         A.CallTo(() => context.GetItemByIdAsync<Person>(A<int>._)).Returns(person);
 
         // Act
-        var actual = await weekRepository.GetWeekById(weekId);
+        var actual = await weekRepository.GetWeekByIdAsync(weekId);
 
         // Assert
         Assert.Equal(weekId, actual.Id);
@@ -55,7 +53,7 @@ public class WeekRepositoryTests
         A.CallTo(() => context.GetItemByIdAsync<Week>(A<int>._)).Returns(createdWeek);
 
         // Act
-        var actual = await weekRepository.GetWeekById(0);
+        var actual = await weekRepository.GetWeekByIdAsync(0);
 
         // Assert
         Assert.Equal(1, actual.Number);
@@ -68,10 +66,10 @@ public class WeekRepositoryTests
         var weekId = 99;
         var context = A.Fake<IDatabaseContext>();
         var weekRepository = new WeekRepository(context);
-        A.CallTo(() => context.GetItemByIdAsync<Week>(weekId)).Returns((Week?)null);
+        A.CallTo(() => context.GetItemByIdAsync<Week>(A<int>._)).Returns((Week?)null!);
 
         // Act
-        var actual = await weekRepository.GetWeekById(weekId);
+        var actual = await weekRepository.GetWeekByIdAsync(weekId);
 
         // Assert
         Assert.NotNull(actual);
@@ -88,7 +86,7 @@ public class WeekRepositoryTests
         A.CallTo(() => context.GetAllWithChildrenAsync<Week>(null)).Returns(weeks);
 
         // Act
-        var actual = await weekRepository.GetAllWeeks();
+        var actual = await weekRepository.GetAllWeeksAsync();
 
         // Assert
         Assert.Equal(weeks, actual);
@@ -111,7 +109,7 @@ public class WeekRepositoryTests
         A.CallTo(() => context.AddItemAsync(A<Bowler>._)).Returns(true);
 
         // Act
-        var actual = await weekRepository.CreateWeek(3);
+        var actual = await weekRepository.CreateWeekAsync(3);
 
         // Assert
         Assert.Equal(3, actual.Number);
@@ -129,7 +127,7 @@ public class WeekRepositoryTests
         A.CallTo(() => context.GetFilteredAsync(A<Expression<Func<Person, bool>>>._)).Returns([]);
 
         // Act
-        var actual = await weekRepository.CreateWeek(2);
+        var actual = await weekRepository.CreateWeekAsync(2);
 
         // Assert
         Assert.Equal(2, actual.Number);
@@ -147,7 +145,7 @@ public class WeekRepositoryTests
         A.CallTo(() => context.UpdateWithChildrenAsync(A<Week>._)).Returns(Task.CompletedTask);
 
         // Act
-        await weekRepository.UpdateWeek(week);
+        await weekRepository.UpdateWeekAsync(week);
 
         // Assert
         A.CallTo(() => context.UpdateWithChildrenAsync(A<Week>._)).MustHaveHappenedOnceExactly();

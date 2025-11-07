@@ -18,7 +18,7 @@ public class BowlerRepositoryTests
         A.CallTo(() => context.AddItemAsync(A<Bowler>._)).Returns(true);
 
         // Act
-        var actual = await bowlerRepository.AddBowler(bowler);
+        var actual = await bowlerRepository.AddBowlerAsync(bowler);
 
         // Assert
         Assert.True(actual);
@@ -37,7 +37,7 @@ public class BowlerRepositoryTests
             .Returns(expected);
 
         // Act
-        var actual = await bowlerRepository.GetAllBowlersByWeekId(weekId);
+        var actual = await bowlerRepository.GetAllBowlersByWeekIdAsync(weekId);
 
         // Assert
         Assert.Equal(expected, actual);
@@ -55,7 +55,7 @@ public class BowlerRepositoryTests
         A.CallTo(() => context.GetAllWithChildrenAsync<Bowler>(null)).Returns(expected);
 
         // Act
-        var actual = await bowlerRepository.GetAllBowlers();
+        var actual = await bowlerRepository.GetAllBowlersAsync();
 
         // Assert
         Assert.Equal(expected, actual);
@@ -73,7 +73,7 @@ public class BowlerRepositoryTests
         A.CallTo(() => context.GetItemByIdAsync<Bowler>(A<int>._)).Returns(bowler);
 
         // Act
-        var result = await bowlerRepository.GetBowlerById(id);
+        var result = await bowlerRepository.GetBowlerByIdAsync(id);
 
         // Assert
         Assert.Equal(bowler, result);
@@ -92,7 +92,7 @@ public class BowlerRepositoryTests
             .Returns(expected);
 
         // Act
-        var actual = await bowlerRepository.GetAllBowlersByWeekId(weekId);
+        var actual = await bowlerRepository.GetAllBowlersByWeekIdAsync(weekId);
 
         // Assert
         Assert.Equal(expected, actual);
@@ -110,7 +110,7 @@ public class BowlerRepositoryTests
         A.CallTo(() => context.UpdateItemAsync(A<Bowler>._)).Returns(true);
 
         // Act
-        var result = await bowlerRepository.UpdateBowler(bowler);
+        var result = await bowlerRepository.UpdateBowlerAsync(bowler);
 
         // Assert
         Assert.True(result);
@@ -125,7 +125,7 @@ public class BowlerRepositoryTests
         var bowlerRepository = new BowlerRepository(context);
 
         // Act & Assert
-        await Assert.ThrowsAsync<ArgumentNullException>(() => bowlerRepository.AddBowler(null!));
+        await Assert.ThrowsAsync<ArgumentNullException>(() => bowlerRepository.AddBowlerAsync(null!));
     }
 
     [Fact]
@@ -136,8 +136,8 @@ public class BowlerRepositoryTests
         var bowlerRepository = new BowlerRepository(context);
 
         // Act & Assert
-        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => bowlerRepository.GetAllBowlersByWeekId(0));
-        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => bowlerRepository.GetAllBowlersByWeekId(-1));
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => bowlerRepository.GetAllBowlersByWeekIdAsync(0));
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => bowlerRepository.GetAllBowlersByWeekIdAsync(-1));
     }
 
     [Fact]
@@ -148,8 +148,8 @@ public class BowlerRepositoryTests
         var bowlerRepository = new BowlerRepository(context);
 
         // Act & Assert
-        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => bowlerRepository.GetBowlerById(0));
-        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => bowlerRepository.GetBowlerById(-5));
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => bowlerRepository.GetBowlerByIdAsync(0));
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => bowlerRepository.GetBowlerByIdAsync(-5));
     }
 
     [Fact]
@@ -160,8 +160,8 @@ public class BowlerRepositoryTests
         var bowlerRepository = new BowlerRepository(context);
 
         // Act & Assert
-        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => bowlerRepository.GetAllBowlersByWeekId(0));
-        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => bowlerRepository.GetAllBowlersByWeekId(-2));
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => bowlerRepository.GetAllBowlersByWeekIdAsync(0));
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => bowlerRepository.GetAllBowlersByWeekIdAsync(-2));
     }
 
     [Fact]
@@ -172,7 +172,7 @@ public class BowlerRepositoryTests
         var bowlerRepository = new BowlerRepository(context);
 
         // Act & Assert
-        await Assert.ThrowsAsync<ArgumentNullException>(() => bowlerRepository.UpdateBowler(null!));
+        await Assert.ThrowsAsync<ArgumentNullException>(() => bowlerRepository.UpdateBowlerAsync(null!));
     }
 
     [Fact]
@@ -185,7 +185,7 @@ public class BowlerRepositoryTests
         A.CallTo(() => context.DeleteItemByIdAsync<Bowler>(id)).Returns(true);
 
         // Act
-        var result = await bowlerRepository.RemoveBowler(id);
+        var result = await bowlerRepository.RemoveBowlerAsync(id);
 
         // Assert
         Assert.True(result);
@@ -202,7 +202,7 @@ public class BowlerRepositoryTests
         A.CallTo(() => context.DeleteItemByIdAsync<Bowler>(id)).Returns(false);
 
         // Act
-        var result = await bowlerRepository.RemoveBowler(id);
+        var result = await bowlerRepository.RemoveBowlerAsync(id);
 
         // Assert
         Assert.False(result);
@@ -217,7 +217,7 @@ public class BowlerRepositoryTests
         var bowlerRepository = new BowlerRepository(context);
 
         // Act & Assert
-        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => bowlerRepository.RemoveBowler(0));
-        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => bowlerRepository.RemoveBowler(-1));
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => bowlerRepository.RemoveBowlerAsync(0));
+        await Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => bowlerRepository.RemoveBowlerAsync(-1));
     }
 }

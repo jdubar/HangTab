@@ -60,13 +60,13 @@ public partial class SeasonSummaryViewModel(
 
     private async Task GetBowlers()
     {
-        var people = await personService.GetRegulars();
+        var people = await personService.GetRegularsAsync();
         if (!people.Any())
         {
             return;
         }
 
-        var allWeeks = await weekService.GetAllWeeks();
+        var allWeeks = await weekService.GetAllWeeksAsync();
         if (!allWeeks.Any())
         {
             return;
@@ -80,7 +80,7 @@ public partial class SeasonSummaryViewModel(
 
     private async Task GetWeeks()
     {
-        var allWeeks = await weekService.GetAllWeeks();
+        var allWeeks = await weekService.GetAllWeeksAsync();
         if (!allWeeks.Any())
         {
             return;

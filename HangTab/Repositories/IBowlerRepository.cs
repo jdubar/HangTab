@@ -3,10 +3,10 @@
 namespace HangTab.Repositories;
 public interface IBowlerRepository
 {
-    Task<bool> AddBowler(Bowler bowler);
-    Task<IEnumerable<Bowler>> GetAllBowlersByWeekId(int id);
-    Task<IEnumerable<Bowler>> GetAllBowlers();
-    Task<Bowler> GetBowlerById(int id);
-    Task<bool> RemoveBowler(int id);
-    Task<bool> UpdateBowler(Bowler bowler);
+    Task<bool> AddBowlerAsync(Bowler bowler);
+    Task<IEnumerable<Bowler>> GetAllBowlersByWeekIdAsync(int id);
+    Task<IEnumerable<Bowler>> GetAllBowlersAsync();
+    Task<Bowler> GetBowlerByIdAsync(int id);
+    Task<bool> RemoveBowlerAsync(int id);
+    Task<bool> UpdateBowlerAsync(Bowler bowler);
 }

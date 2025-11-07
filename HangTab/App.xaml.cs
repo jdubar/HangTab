@@ -28,7 +28,7 @@ public partial class App : Application
             return;
         }
 
-        databaseService.InitializeDatabase();
+        databaseService.InitializeDatabaseAsync();
      }
 
     private void SetCurrentUserSelectedTheme()

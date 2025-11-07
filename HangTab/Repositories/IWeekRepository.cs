@@ -3,8 +3,8 @@
 namespace HangTab.Repositories;
 public interface IWeekRepository
 {
-    Task<Week> GetWeekById(int id);
-    Task<IEnumerable<Week>> GetAllWeeks();
-    Task<Week> CreateWeek(int weekNumber = 1);
-    Task UpdateWeek(Week week);
+    Task<Week> GetWeekByIdAsync(int id);
+    Task<IEnumerable<Week>> GetAllWeeksAsync();
+    Task<Week> CreateWeekAsync(int weekNumber = 1);
+    Task UpdateWeekAsync(Week week);
 }

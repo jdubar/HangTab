@@ -4,11 +4,11 @@ using HangTab.Models;
 namespace HangTab.Repositories.Impl;
 public class WeekRepository(IDatabaseContext context) : IWeekRepository
 {
-    public async Task<Week> GetWeekById(int id)
+    public async Task<Week> GetWeekByIdAsync(int id)
     {
         if (id < 1)
         {
-            return await CreateWeek(); // Create the first week if no valid ID is provided
+            return await CreateWeekAsync(); // Create the first week if no valid ID is provided
         }
 
         var week = await context.GetItemByIdAsync<Week>(id);
@@ -37,9 +37,9 @@ public class WeekRepository(IDatabaseContext context) : IWeekRepository
         return week;
     }
 
-    public Task<IEnumerable<Week>> GetAllWeeks() => context.GetAllWithChildrenAsync<Week>();
+    public Task<IEnumerable<Week>> GetAllWeeksAsync() => context.GetAllWithChildrenAsync<Week>();
 
-    public async Task<Week> CreateWeek(int weekNumber = 1)
+    public async Task<Week> CreateWeekAsync(int weekNumber = 1)
     {
         var week = new Week
         {
@@ -64,5 +64,5 @@ public class WeekRepository(IDatabaseContext context) : IWeekRepository
         return week;
     }
 
-    public Task UpdateWeek(Week week) => context.UpdateWithChildrenAsync(week);
+    public Task UpdateWeekAsync(Week week) => context.UpdateWithChildrenAsync(week);
 }

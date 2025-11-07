@@ -26,7 +26,7 @@ public partial class DataManagerViewModel(
             return;
         }
 
-        if (await databaseService.DeleteAllData())
+        if (await databaseService.DeleteAllDataAsync())
         {
             SendSystemResetMessage();
             await dialogService.ToastAsync("All data has been deleted");
@@ -48,7 +48,7 @@ public partial class DataManagerViewModel(
             return;
         }
 
-        if (await databaseService.DeleteSeasonData())
+        if (await databaseService.DeleteSeasonDataAsync())
         {
             SendSystemResetMessage();
             await dialogService.ToastAsync("A new season has started");

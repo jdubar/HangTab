@@ -13,15 +13,15 @@ public class WeekServiceTests
         var expected = new Week { Id = 1, Number = 7 };
         var weekRepo = A.Fake<IWeekRepository>();
         var service = new WeekService(weekRepo);
-        A.CallTo(() => weekRepo.GetWeekById(A<int>._)).Returns(Task.FromResult(expected));
+        A.CallTo(() => weekRepo.GetWeekByIdAsync(A<int>._)).Returns(Task.FromResult(expected));
 
         // Act
-        var result = await service.GetWeekById(1);
+        var result = await service.GetWeekByIdAsync(1);
 
         // Assert
         Assert.Equal(expected.Id, result.Id);
         Assert.Equal(expected.Number, result.Number);
-        A.CallTo(() => weekRepo.GetWeekById(1)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => weekRepo.GetWeekByIdAsync(1)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -31,14 +31,14 @@ public class WeekServiceTests
         var expected = new List<Week> { new() { Id = 1 }, new() { Id = 2 } };
         var weekRepo = A.Fake<IWeekRepository>();
         var service = new WeekService(weekRepo);
-        A.CallTo(() => weekRepo.GetAllWeeks()).Returns(Task.FromResult<IEnumerable<Week>>(expected));
+        A.CallTo(() => weekRepo.GetAllWeeksAsync()).Returns(Task.FromResult<IEnumerable<Week>>(expected));
 
         // Act
-        var result = await service.GetAllWeeks();
+        var result = await service.GetAllWeeksAsync();
 
         // Assert
         Assert.Equal(expected.Count, result.Count());
-        A.CallTo(() => weekRepo.GetAllWeeks()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => weekRepo.GetAllWeeksAsync()).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -48,15 +48,15 @@ public class WeekServiceTests
         var expected = new Week { Id = 3, Number = 4 };
         var weekRepo = A.Fake<IWeekRepository>();
         var service = new WeekService(weekRepo);
-        A.CallTo(() => weekRepo.CreateWeek(A<int>._)).Returns(Task.FromResult(expected));
+        A.CallTo(() => weekRepo.CreateWeekAsync(A<int>._)).Returns(Task.FromResult(expected));
 
         // Act
-        var result = await service.CreateWeek(4);
+        var result = await service.CreateWeekAsync(4);
 
         // Assert
         Assert.Equal(expected.Id, result.Id);
         Assert.Equal(expected.Number, result.Number);
-        A.CallTo(() => weekRepo.CreateWeek(4)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => weekRepo.CreateWeekAsync(4)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -66,13 +66,13 @@ public class WeekServiceTests
         var week = new Week { Id = 5, Number = 6 };
         var weekRepo = A.Fake<IWeekRepository>();
         var service = new WeekService(weekRepo);
-        A.CallTo(() => weekRepo.UpdateWeek(A<Week>._)).Returns(Task.CompletedTask);
+        A.CallTo(() => weekRepo.UpdateWeekAsync(A<Week>._)).Returns(Task.CompletedTask);
 
         // Act
-        await service.UpdateWeek(week);
+        await service.UpdateWeekAsync(week);
 
         // Assert
-        A.CallTo(() => weekRepo.UpdateWeek(week)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => weekRepo.UpdateWeekAsync(week)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -82,10 +82,10 @@ public class WeekServiceTests
         var id = 99;
         var weekRepo = A.Fake<IWeekRepository>();
         var service = new WeekService(weekRepo);
-        A.CallTo(() => weekRepo.GetWeekById(A<int>._)).Throws(new InvalidOperationException("Not found"));
+        A.CallTo(() => weekRepo.GetWeekByIdAsync(A<int>._)).Throws(new InvalidOperationException("Not found"));
 
         // Act & Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(() => service.GetWeekById(id));
+        await Assert.ThrowsAsync<InvalidOperationException>(() => service.GetWeekByIdAsync(id));
     }
 
     [Fact]
@@ -95,10 +95,10 @@ public class WeekServiceTests
         var id = 42;
         var weekRepo = A.Fake<IWeekRepository>();
         var service = new WeekService(weekRepo);
-        A.CallTo(() => weekRepo.CreateWeek(A<int>._)).Throws(new Exception("Create failed"));
+        A.CallTo(() => weekRepo.CreateWeekAsync(A<int>._)).Throws(new Exception("Create failed"));
 
         // Act & Assert
-        await Assert.ThrowsAsync<Exception>(() => service.CreateWeek(id));
+        await Assert.ThrowsAsync<Exception>(() => service.CreateWeekAsync(id));
     }
 
     [Fact]
@@ -108,9 +108,9 @@ public class WeekServiceTests
         var week = new Week { Id = 7, Number = 8 };
         var weekRepo = A.Fake<IWeekRepository>();
         var service = new WeekService(weekRepo);
-        A.CallTo(() => weekRepo.UpdateWeek(A<Week>._)).Throws(new Exception("Update failed"));
+        A.CallTo(() => weekRepo.UpdateWeekAsync(A<Week>._)).Throws(new Exception("Update failed"));
 
         // Act & Assert
-        await Assert.ThrowsAsync<Exception>(() => service.UpdateWeek(week));
+        await Assert.ThrowsAsync<Exception>(() => service.UpdateWeekAsync(week));
     }
 }

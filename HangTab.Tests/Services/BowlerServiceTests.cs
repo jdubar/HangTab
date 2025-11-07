@@ -13,14 +13,14 @@ public class BowlerServiceTests
         var bowler = new Bowler { Id = 1 };
         var bowlerRepo = A.Fake<IBowlerRepository>();
         var service = new BowlerService(bowlerRepo);
-        A.CallTo(() => bowlerRepo.AddBowler(A<Bowler>._)).Returns(Task.FromResult(true));
+        A.CallTo(() => bowlerRepo.AddBowlerAsync(A<Bowler>._)).Returns(Task.FromResult(true));
 
         // Act
-        var result = await service.AddBowler(bowler);
+        var result = await service.AddBowlerAsync(bowler);
 
         // Assert
         Assert.True(result);
-        A.CallTo(() => bowlerRepo.AddBowler(bowler)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => bowlerRepo.AddBowlerAsync(bowler)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -30,14 +30,14 @@ public class BowlerServiceTests
         var bowler = new Bowler { Id = 2 };
         var bowlerRepo = A.Fake<IBowlerRepository>();
         var service = new BowlerService(bowlerRepo);
-        A.CallTo(() => bowlerRepo.AddBowler(A<Bowler>._)).Returns(Task.FromResult(false));
+        A.CallTo(() => bowlerRepo.AddBowlerAsync(A<Bowler>._)).Returns(Task.FromResult(false));
 
         // Act
-        var result = await service.AddBowler(bowler);
+        var result = await service.AddBowlerAsync(bowler);
 
         // Assert
         Assert.False(result);
-        A.CallTo(() => bowlerRepo.AddBowler(A<Bowler>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => bowlerRepo.AddBowlerAsync(A<Bowler>._)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -53,14 +53,14 @@ public class BowlerServiceTests
 
         var bowlerRepo = A.Fake<IBowlerRepository>();
         var service = new BowlerService(bowlerRepo);
-        A.CallTo(() => bowlerRepo.GetAllBowlersByWeekId(A<int>._)).Returns(Task.FromResult<IEnumerable<Bowler>>(expected));
+        A.CallTo(() => bowlerRepo.GetAllBowlersByWeekIdAsync(A<int>._)).Returns(Task.FromResult<IEnumerable<Bowler>>(expected));
 
         // Act
-        var result = await service.GetAllBowlersByWeekId(weeekId);
+        var result = await service.GetAllBowlersByWeekIdAsync(weeekId);
 
         // Assert
         Assert.Equal(expected.Count, result.Count());
-        A.CallTo(() => bowlerRepo.GetAllBowlersByWeekId(A<int>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => bowlerRepo.GetAllBowlersByWeekIdAsync(A<int>._)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -69,14 +69,14 @@ public class BowlerServiceTests
         // Arrange
         var bowlerRepo = A.Fake<IBowlerRepository>();
         var service = new BowlerService(bowlerRepo);
-        A.CallTo(() => bowlerRepo.GetAllBowlers()).Returns(Task.FromResult<IEnumerable<Bowler>>([]));
+        A.CallTo(() => bowlerRepo.GetAllBowlersAsync()).Returns(Task.FromResult<IEnumerable<Bowler>>([]));
 
         // Act
-        var result = await service.GetAllBowlers();
+        var result = await service.GetAllBowlersAsync();
 
         // Assert
         Assert.Empty(result);
-        A.CallTo(() => bowlerRepo.GetAllBowlers()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => bowlerRepo.GetAllBowlersAsync()).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -87,14 +87,14 @@ public class BowlerServiceTests
         var expected = new Bowler { Id = id };
         var bowlerRepo = A.Fake<IBowlerRepository>();
         var service = new BowlerService(bowlerRepo);
-        A.CallTo(() => bowlerRepo.GetBowlerById(A<int>._)).Returns(Task.FromResult(expected));
+        A.CallTo(() => bowlerRepo.GetBowlerByIdAsync(A<int>._)).Returns(Task.FromResult(expected));
 
         // Act
-        var result = await service.GetBowlerById(id);
+        var result = await service.GetBowlerByIdAsync(id);
 
         // Assert
         Assert.Equal(expected.Id, result.Id);
-        A.CallTo(() => bowlerRepo.GetBowlerById(A<int>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => bowlerRepo.GetBowlerByIdAsync(A<int>._)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -105,15 +105,15 @@ public class BowlerServiceTests
         var expected = new List<Bowler> { new() { Id = 3, WeekId = id } };
         var bowlerRepo = A.Fake<IBowlerRepository>();
         var service = new BowlerService(bowlerRepo);
-        A.CallTo(() => bowlerRepo.GetAllBowlersByWeekId(A<int>._)).Returns(Task.FromResult<IEnumerable<Bowler>>(expected));
+        A.CallTo(() => bowlerRepo.GetAllBowlersByWeekIdAsync(A<int>._)).Returns(Task.FromResult<IEnumerable<Bowler>>(expected));
 
         // Act
-        var result = await service.GetAllBowlersByWeekId(id);
+        var result = await service.GetAllBowlersByWeekIdAsync(id);
 
         // Assert
         Assert.Single(result);
         Assert.Equal(expected[0].Id, result.First().Id);
-        A.CallTo(() => bowlerRepo.GetAllBowlersByWeekId(A<int>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => bowlerRepo.GetAllBowlersByWeekIdAsync(A<int>._)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -123,14 +123,14 @@ public class BowlerServiceTests
         var id = 1;
         var bowlerRepo = A.Fake<IBowlerRepository>();
         var service = new BowlerService(bowlerRepo);
-        A.CallTo(() => bowlerRepo.RemoveBowler(id)).Returns(Task.FromResult(true));
+        A.CallTo(() => bowlerRepo.RemoveBowlerAsync(id)).Returns(Task.FromResult(true));
 
         // Act
-        var result = await service.RemoveBowler(id);
+        var result = await service.RemoveBowlerAsync(id);
 
         // Assert
         Assert.True(result);
-        A.CallTo(() => bowlerRepo.RemoveBowler(id)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => bowlerRepo.RemoveBowlerAsync(id)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -140,14 +140,14 @@ public class BowlerServiceTests
         var id = 999;
         var bowlerRepo = A.Fake<IBowlerRepository>();
         var service = new BowlerService(bowlerRepo);
-        A.CallTo(() => bowlerRepo.RemoveBowler(id)).Returns(Task.FromResult(false));
+        A.CallTo(() => bowlerRepo.RemoveBowlerAsync(id)).Returns(Task.FromResult(false));
 
         // Act
-        var result = await service.RemoveBowler(id);
+        var result = await service.RemoveBowlerAsync(id);
 
         // Assert
         Assert.False(result);
-        A.CallTo(() => bowlerRepo.RemoveBowler(id)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => bowlerRepo.RemoveBowlerAsync(id)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -157,10 +157,10 @@ public class BowlerServiceTests
         var id = 2;
         var bowlerRepo = A.Fake<IBowlerRepository>();
         var service = new BowlerService(bowlerRepo);
-        A.CallTo(() => bowlerRepo.RemoveBowler(id)).Throws(new InvalidOperationException("Repository error"));
+        A.CallTo(() => bowlerRepo.RemoveBowlerAsync(id)).Throws(new InvalidOperationException("Repository error"));
 
         // Act & Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(() => service.RemoveBowler(id));
+        await Assert.ThrowsAsync<InvalidOperationException>(() => service.RemoveBowlerAsync(id));
     }
 
     [Fact]
@@ -170,14 +170,14 @@ public class BowlerServiceTests
         var expected = new Bowler { Id = 4 };
         var bowlerRepo = A.Fake<IBowlerRepository>();
         var service = new BowlerService(bowlerRepo);
-        A.CallTo(() => bowlerRepo.UpdateBowler(A<Bowler>._)).Returns(Task.FromResult(true));
+        A.CallTo(() => bowlerRepo.UpdateBowlerAsync(A<Bowler>._)).Returns(Task.FromResult(true));
 
         // Act
-        var result = await service.UpdateBowler(expected);
+        var result = await service.UpdateBowlerAsync(expected);
 
         // Assert
         Assert.True(result);
-        A.CallTo(() => bowlerRepo.UpdateBowler(A<Bowler>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => bowlerRepo.UpdateBowlerAsync(A<Bowler>._)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -187,14 +187,14 @@ public class BowlerServiceTests
         var expected = new Bowler { Id = 5 };
         var bowlerRepo = A.Fake<IBowlerRepository>();
         var service = new BowlerService(bowlerRepo);
-        A.CallTo(() => bowlerRepo.UpdateBowler(A<Bowler>._)).Returns(Task.FromResult(false));
+        A.CallTo(() => bowlerRepo.UpdateBowlerAsync(A<Bowler>._)).Returns(Task.FromResult(false));
 
         // Act
-        var result = await service.UpdateBowler(expected);
+        var result = await service.UpdateBowlerAsync(expected);
 
         // Assert
         Assert.False(result);
-        A.CallTo(() => bowlerRepo.UpdateBowler(A<Bowler>._)).MustHaveHappenedOnceExactly();
+        A.CallTo(() => bowlerRepo.UpdateBowlerAsync(A<Bowler>._)).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -203,10 +203,10 @@ public class BowlerServiceTests
         // Arrange
         var bowlerRepo = A.Fake<IBowlerRepository>();
         var service = new BowlerService(bowlerRepo);
-        A.CallTo(() => bowlerRepo.AddBowler(A<Bowler>._)).Throws(new ArgumentNullException(nameof(Bowler)));
+        A.CallTo(() => bowlerRepo.AddBowlerAsync(A<Bowler>._)).Throws(new ArgumentNullException(nameof(Bowler)));
 
         // Act & Assert
-        await Assert.ThrowsAsync<ArgumentNullException>(() => service.AddBowler(null!));
+        await Assert.ThrowsAsync<ArgumentNullException>(() => service.AddBowlerAsync(null!));
     }
 
     [Fact]
@@ -215,9 +215,9 @@ public class BowlerServiceTests
         // Arrange
         var bowlerRepo = A.Fake<IBowlerRepository>();
         var service = new BowlerService(bowlerRepo);
-        A.CallTo(() => bowlerRepo.UpdateBowler(A<Bowler>._)).Throws(new ArgumentNullException(nameof(Bowler)));
+        A.CallTo(() => bowlerRepo.UpdateBowlerAsync(A<Bowler>._)).Throws(new ArgumentNullException(nameof(Bowler)));
 
         // Act & Assert
-        await Assert.ThrowsAsync<ArgumentNullException>(() => service.UpdateBowler(null!));
+        await Assert.ThrowsAsync<ArgumentNullException>(() => service.UpdateBowlerAsync(null!));
     }
 }

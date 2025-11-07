@@ -83,7 +83,7 @@ public partial class CurrentWeekOverviewViewModel :
             }
 
             CurrentWeek.BusRides = value;
-            await _weekService.UpdateWeek(CurrentWeek);
+            await _weekService.UpdateWeekAsync(CurrentWeek);
         }
     }
 
@@ -173,7 +173,7 @@ public partial class CurrentWeekOverviewViewModel :
 
     private async Task StartNewWeekAsync()
     {
-        await _weekService.CreateWeek(CurrentWeek.Number + 1).ContinueWith(async saveTask =>
+        await _weekService.CreateWeekAsync(CurrentWeek.Number + 1).ContinueWith(async saveTask =>
         {
             if (saveTask.IsCompletedSuccessfully)
             {
@@ -191,7 +191,7 @@ public partial class CurrentWeekOverviewViewModel :
 
     private async Task GetCurrentWeekAsync()
     {
-        CurrentWeek = await _weekService.GetWeekById(_settingsService.CurrentWeekPrimaryKey);
+        CurrentWeek = await _weekService.GetWeekByIdAsync(_settingsService.CurrentWeekPrimaryKey);
         if (CurrentWeek is null)
         {
             return;
@@ -234,12 +234,12 @@ public partial class CurrentWeekOverviewViewModel :
             case Enums.Status.Active:
                 vm.SubId = null;
                 vm.Status = Enums.Status.Active;
-                await _bowlerService.UpdateBowler(vm.ToBowler());
+                await _bowlerService.UpdateBowlerAsync(vm.ToBowler());
                 break;
             case Enums.Status.Blind:
                 vm.SubId = null;
                 vm.Status = Enums.Status.Blind;
-                await _bowlerService.UpdateBowler(vm.ToBowler());
+                await _bowlerService.UpdateBowlerAsync(vm.ToBowler());
                 break;
             case Enums.Status.UsingSub:
                 await _navigationService.GoToSelectSub(vm.ToBowler());
@@ -257,7 +257,7 @@ public partial class CurrentWeekOverviewViewModel :
             return;
         }
 
-        if (await _bowlerService.UpdateBowler(vm.ToBowler()))
+        if (await _bowlerService.UpdateBowlerAsync(vm.ToBowler()))
         {
             var newHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
             var isIncrease = newHangTotal > TeamHangTotal;
@@ -298,7 +298,7 @@ public partial class CurrentWeekOverviewViewModel :
 
         vm.SubId = message.SubId;
         vm.Status = Enums.Status.UsingSub;
-        await _bowlerService.UpdateBowler(vm.ToBowler());
+        await _bowlerService.UpdateBowlerAsync(vm.ToBowler());
 
         await GetCurrentWeekAsync();
     }
@@ -315,11 +315,11 @@ public partial class CurrentWeekOverviewViewModel :
 
             if (!message.IsSub && !CurrentWeekBowlers.Any(b => b.PersonId == message.Id))
             {
-                await _bowlerService.AddBowler(bowler);
+                await _bowlerService.AddBowlerAsync(bowler);
             }
             else if (message.IsSub && CurrentWeekBowlers.Any(b => b.PersonId == message.Id))
             {
-                await _bowlerService.RemoveBowler(message.Id);
+                await _bowlerService.RemoveBowlerAsync(message.Id);
             }
         }
 
