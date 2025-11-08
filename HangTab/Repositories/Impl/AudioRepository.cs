@@ -8,6 +8,16 @@ public class AudioRepository(IAudioManager audioManager) : IAudioRepository
 {
     public async Task<Result> PlayAudioStreamAsync(Stream audioStream)
     {
+        if (audioStream is null)
+        {
+            return Result.Fail(new Error("Audio stream cannot be null"));
+        }
+
+        if (!audioStream.CanRead)
+        {
+            return Result.Fail(new Error("Audio stream is not readable"));
+        }
+
         try
         {
             var player = audioManager.CreateAsyncPlayer(audioStream);

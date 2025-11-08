@@ -77,7 +77,7 @@ public partial class BowlerSelectSubViewModel(
             return;
         }
 
-        await bowlerService.UpdateBowlerAsync(MapDataToBowler());
+        await bowlerService.UpdateAsync(MapDataToBowler());
         messenger.Send(new BowlerSubChangedMessage(Id, SelectedSub.Id));
         await navigationService.GoBack();
     }
@@ -100,7 +100,7 @@ public partial class BowlerSelectSubViewModel(
             return [];
         }
 
-        var bowlers = await bowlerService.GetAllBowlersByWeekIdAsync(_bowler?.WeekId ?? 0);
+        var bowlers = await bowlerService.GetAllByWeekIdAsync(_bowler?.WeekId ?? 0);
         return bowlers.Any()
             ? subs.Where(s => !bowlers.Any(b => b.SubId == s.Id))
             : subs;

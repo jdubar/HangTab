@@ -49,7 +49,7 @@ public partial class WeekDetailsViewModel(
 
     private async Task GetWeek(int id)
     {
-        var week = await weekService.GetWeekByIdAsync(id);
+        var week = await weekService.GetByIdAsync(id);
         if (week is not null)
         {
             MapWeekData(week);

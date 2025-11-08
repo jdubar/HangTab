@@ -4,11 +4,40 @@ using HangTab.Models;
 namespace HangTab.Repositories.Impl;
 public class WeekRepository(IDatabaseContext context) : IWeekRepository
 {
-    public async Task<Week> GetWeekByIdAsync(int id)
+    public async Task<Week> CreateAsync(int weekNumber = 1)
+    {
+        var week = new Week
+        {
+            Number = weekNumber
+        };
+        await context.AddItemAsync(week);
+
+        var regulars = await context.GetFilteredAsync<Person>(p => !p.IsSub);
+        if (!regulars.Any())
+        {
+            return week;
+        }
+
+        foreach (var regular in regulars)
+        {
+            var bowler = new Bowler
+            {
+                PersonId = regular.Id,
+                WeekId = week.Id
+            };
+            await context.AddItemAsync(bowler);
+        }
+
+        return week;
+    }
+
+    public Task<IEnumerable<Week>> GetAllAsync() => context.GetAllWithChildrenAsync<Week>();
+
+    public async Task<Week> GetByIdAsync(int id)
     {
         if (id < 1)
         {
-            return await CreateWeekAsync(); // Create the first week if no valid ID is provided
+            return await CreateAsync(); // Create the first week if no valid ID is provided
         }
 
         var week = await context.GetItemByIdAsync<Week>(id);
@@ -37,32 +66,5 @@ public class WeekRepository(IDatabaseContext context) : IWeekRepository
         return week;
     }
 
-    public Task<IEnumerable<Week>> GetAllWeeksAsync() => context.GetAllWithChildrenAsync<Week>();
-
-    public async Task<Week> CreateWeekAsync(int weekNumber = 1)
-    {
-        var week = new Week
-        {
-            Number = weekNumber
-        };
-        await context.AddItemAsync(week);
-
-        var people = await context.GetFilteredAsync<Person>(p => !p.IsSub);
-        if (people.Any())
-        {
-            foreach (var person in people)
-            {
-                var bowler = new Bowler
-                {
-                    PersonId = person.Id,
-                    WeekId = week.Id
-                };
-                await context.AddItemAsync(bowler);
-            }
-        }
-
-        return week;
-    }
-
-    public Task UpdateWeekAsync(Week week) => context.UpdateWithChildrenAsync(week);
+    public Task UpdateAsync(Week week) => context.UpdateWithChildrenAsync(week);
 }

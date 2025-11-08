@@ -2,12 +2,12 @@
 using HangTab.Repositories;
 
 namespace HangTab.Services.Impl;
-public class BowlerService(IBowlerRepository bowlerRepository) : IBowlerService
+public class BowlerService(IBowlerRepository repo) : IBowlerService
 {
-    public Task<bool> AddBowlerAsync(Bowler bowler) => bowlerRepository.AddBowlerAsync(bowler);
-    public Task<IEnumerable<Bowler>> GetAllBowlersByWeekIdAsync(int id) => bowlerRepository.GetAllBowlersByWeekIdAsync(id);
-    public Task<IEnumerable<Bowler>> GetAllBowlersAsync() => bowlerRepository.GetAllBowlersAsync();
-    public Task<Bowler> GetBowlerByIdAsync(int id) => bowlerRepository.GetBowlerByIdAsync(id);
-    public Task<bool> RemoveBowlerAsync(int id) => bowlerRepository.RemoveBowlerAsync(id);
-    public Task<bool> UpdateBowlerAsync(Bowler bowler) => bowlerRepository.UpdateBowlerAsync(bowler);
+    public Task<bool> AddAsync(Bowler bowler) => repo.AddAsync(bowler);
+    public Task<IEnumerable<Bowler>> GetAllByWeekIdAsync(int id) => repo.GetAllByWeekIdAsync(id);
+    public Task<IEnumerable<Bowler>> GetAllAsync() => repo.GetAllAsync();
+    public Task<Bowler> GetByIdAsync(int id) => repo.GetByIdAsync(id);
+    public Task<bool> RemoveAsync(int id) => repo.RemoveAsync(id);
+    public Task<bool> UpdateAsync(Bowler bowler) => repo.UpdateAsync(bowler);
 }

@@ -66,7 +66,7 @@ public partial class SeasonSummaryViewModel(
             return;
         }
 
-        var allWeeks = await weekService.GetAllWeeksAsync();
+        var allWeeks = await weekService.GetAllAsync();
         if (!allWeeks.Any())
         {
             return;
@@ -80,7 +80,7 @@ public partial class SeasonSummaryViewModel(
 
     private async Task GetWeeks()
     {
-        var allWeeks = await weekService.GetAllWeeksAsync();
+        var allWeeks = await weekService.GetAllAsync();
         if (!allWeeks.Any())
         {
             return;

@@ -2,10 +2,10 @@
 using HangTab.Repositories;
 
 namespace HangTab.Services.Impl;
-public class WeekService(IWeekRepository weekRepository) : IWeekService
+public class WeekService(IWeekRepository repo) : IWeekService
 {
-    public Task<Week> GetWeekByIdAsync(int id) => weekRepository.GetWeekByIdAsync(id);
-    public Task<IEnumerable<Week>> GetAllWeeksAsync() => weekRepository.GetAllWeeksAsync();
-    public Task<Week> CreateWeekAsync(int weekNumber) => weekRepository.CreateWeekAsync(weekNumber);
-    public Task UpdateWeekAsync(Week week) => weekRepository.UpdateWeekAsync(week);
+    public Task<Week> CreateAsync(int weekNumber) => repo.CreateAsync(weekNumber);
+    public Task<IEnumerable<Week>> GetAllAsync() => repo.GetAllAsync();
+    public Task<Week> GetByIdAsync(int id) => repo.GetByIdAsync(id);
+    public Task UpdateAsync(Week week) => repo.UpdateAsync(week);
 }

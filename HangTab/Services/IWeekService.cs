@@ -3,8 +3,8 @@
 namespace HangTab.Services;
 public interface IWeekService
 {
-    Task<Week> GetWeekByIdAsync(int id);
-    Task<IEnumerable<Week>> GetAllWeeksAsync();
-    Task<Week> CreateWeekAsync(int weekNumber);
-    Task UpdateWeekAsync(Week week);
+    Task<Week> CreateAsync(int weekNumber);
+    Task<IEnumerable<Week>> GetAllAsync();
+    Task<Week> GetByIdAsync(int id);
+    Task UpdateAsync(Week week);
 }

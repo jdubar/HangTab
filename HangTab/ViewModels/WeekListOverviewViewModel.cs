@@ -26,7 +26,7 @@ public partial class WeekListOverviewViewModel(
 
     private async Task GetWeeks()
     {
-        var weeks = await weekService.GetAllWeeksAsync();
+        var weeks = await weekService.GetAllAsync();
         if (!weeks.Any())
         {
             return;

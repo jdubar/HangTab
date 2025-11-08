@@ -4,33 +4,33 @@ using HangTab.Models;
 namespace HangTab.Repositories.Impl;
 public class BowlerRepository(IDatabaseContext context) : IBowlerRepository
 {
-    public Task<bool> AddBowlerAsync(Bowler bowler)
+    public Task<bool> AddAsync(Bowler bowler)
     {
         ArgumentNullException.ThrowIfNull(bowler);
         return context.AddItemAsync(bowler);
     }
 
-    public Task<IEnumerable<Bowler>> GetAllBowlersByWeekIdAsync(int id)
+    public Task<IEnumerable<Bowler>> GetAllByWeekIdAsync(int id)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(id);
         return context.GetAllWithChildrenAsync<Bowler>(wl => wl.WeekId == id);
     }
 
-    public Task<IEnumerable<Bowler>> GetAllBowlersAsync() => context.GetAllWithChildrenAsync<Bowler>();
+    public Task<IEnumerable<Bowler>> GetAllAsync() => context.GetAllWithChildrenAsync<Bowler>();
 
-    public Task<Bowler> GetBowlerByIdAsync(int id)
+    public Task<Bowler> GetByIdAsync(int id)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(id);
         return context.GetItemByIdAsync<Bowler>(id);
     }
 
-    public Task<bool> RemoveBowlerAsync(int id)
+    public Task<bool> RemoveAsync(int id)
     {
         ArgumentOutOfRangeException.ThrowIfNegativeOrZero(id);
         return context.DeleteItemByIdAsync<Bowler>(id);
     }
 
-    public Task<bool> UpdateBowlerAsync(Bowler bowler)
+    public Task<bool> UpdateAsync(Bowler bowler)
     {
         ArgumentNullException.ThrowIfNull(bowler);
         return context.UpdateItemAsync(bowler);
