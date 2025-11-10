@@ -94,15 +94,16 @@ public partial class BowlerSelectSubViewModel(
 
     private async Task<IEnumerable<Person>> GetAvailableSubsAsync()
     {
-        var subs = await personService.GetSubstitutesAsync();
-        if (!subs.Any())
+        var subsResult = await personService.GetSubstitutesAsync();
+        if (subsResult.IsFailed)
         {
             return [];
         }
 
-        var bowlers = await bowlerService.GetAllByWeekIdAsync(_bowler?.WeekId ?? 0);
-        return bowlers.Any()
-            ? subs.Where(s => !bowlers.Any(b => b.SubId == s.Id))
+        var subs = subsResult.Value;
+        var bowlersResult = await bowlerService.GetAllByWeekIdAsync(_bowler?.WeekId ?? 0);
+        return bowlersResult.IsSuccess
+            ? subs.Where(s => !bowlersResult.Value.Any(b => b.SubId == s.Id))
             : subs;
     }
 

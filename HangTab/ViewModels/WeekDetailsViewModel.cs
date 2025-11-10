@@ -49,11 +49,12 @@ public partial class WeekDetailsViewModel(
 
     private async Task GetWeek(int id)
     {
-        var week = await weekService.GetByIdAsync(id);
-        if (week is not null)
+        var result = await weekService.GetByIdAsync(id);
+        if (result.IsFailed)
         {
-            MapWeekData(week);
+            return;
         }
+        MapWeekData(result.Value);
     }
 
     private void InitializeCurrentWeekPageSettings()

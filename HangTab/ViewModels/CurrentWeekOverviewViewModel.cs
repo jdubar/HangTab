@@ -173,30 +173,29 @@ public partial class CurrentWeekOverviewViewModel :
 
     private async Task StartNewWeekAsync()
     {
-        await _weekService.CreateAsync(CurrentWeek.Number + 1).ContinueWith(async saveTask =>
+        var result = await _weekService.AddAsync(CurrentWeek.Number + 1);
+        if (result.IsFailed)
         {
-            if (saveTask.IsCompletedSuccessfully)
-            {
-                var newWeek = await saveTask;
-                _settingsService.CurrentWeekPrimaryKey = newWeek.Id;
-                await GetCurrentWeekAsync();
-                InitializeCurrentWeekPageSettings();
-            }
-            else
-            {
-                await _dialogService.AlertAsync("Error", "Unable to create new week.", "Ok");
-            }
-        });
+            await _dialogService.AlertAsync("Error", "Unable to create a new week.", "Ok");
+            return;
+        }
+
+        var newWeek = result.Value;
+        _settingsService.CurrentWeekPrimaryKey = newWeek.Id;
+        await GetCurrentWeekAsync();
+        InitializeCurrentWeekPageSettings();
     }
 
     private async Task GetCurrentWeekAsync()
     {
-        CurrentWeek = await _weekService.GetByIdAsync(_settingsService.CurrentWeekPrimaryKey);
-        if (CurrentWeek is null)
+        var result = await _weekService.GetByIdAsync(_settingsService.CurrentWeekPrimaryKey);
+        if (result.IsFailed)
         {
+            await _dialogService.AlertAsync("Error", "Unable to load current week data.", "Ok");
             return;
         }
 
+        CurrentWeek = result.Value;
         _settingsService.CurrentWeekPrimaryKey = CurrentWeek.Id;
         if (CurrentWeek.Bowlers.Count > 0)
         {
@@ -257,26 +256,26 @@ public partial class CurrentWeekOverviewViewModel :
             return;
         }
 
-        if (await _bowlerService.UpdateAsync(vm.ToBowler()))
-        {
-            var newHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
-            var isIncrease = newHangTotal > TeamHangTotal;
-            TeamHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
-            CurrentWeekBowlers.SetLowestBowlerHangCount();
-
-            if (isIncrease)
-            {
-                PlayPopperAnimation = true;
-                await Task.Delay(1000);
-                PlayPopperAnimation = false;
-            }
-
-            _messenger.Send(new BowlerHangCountChangedMessage(vm.BowlerId, vm.HangCount));
-        }
-        else
+        var result = await _bowlerService.UpdateAsync(vm.ToBowler());
+        if (result.IsFailed)
         {
             await _dialogService.AlertAsync("Error", "Unable to update bowler hang count", "Ok");
+            return;
         }
+
+        var newHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
+        var isIncrease = newHangTotal > TeamHangTotal;
+        TeamHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
+        CurrentWeekBowlers.SetLowestBowlerHangCount();
+
+        if (isIncrease)
+        {
+            PlayPopperAnimation = true;
+            await Task.Delay(1000);
+            PlayPopperAnimation = false;
+        }
+
+        _messenger.Send(new BowlerHangCountChangedMessage(vm.BowlerId, vm.HangCount));
     }
 
     public async void Receive(SystemResetMessage message)

@@ -60,18 +60,20 @@ public partial class SeasonSummaryViewModel(
 
     private async Task GetBowlers()
     {
-        var people = await personService.GetRegularsAsync();
-        if (!people.Any())
+        var regularsResult = await personService.GetRegularsAsync();
+        if (regularsResult.IsFailed)
         {
             return;
         }
 
-        var allWeeks = await weekService.GetAllAsync();
-        if (!allWeeks.Any())
+        var people = regularsResult.Value;
+        var weeksResult = await weekService.GetAllAsync();
+        if (weeksResult.IsFailed)
         {
             return;
         }
 
+        var allWeeks = weeksResult.Value;
         var bowlers = people.OrderBy(b => b.Name).ToBowlerListItemViewModelList().ToList();
         bowlers.SetBowlerHangSumByWeeks(allWeeks);
 
@@ -80,13 +82,13 @@ public partial class SeasonSummaryViewModel(
 
     private async Task GetWeeks()
     {
-        var allWeeks = await weekService.GetAllAsync();
-        if (!allWeeks.Any())
+        var result = await weekService.GetAllAsync();
+        if (result.IsFailed)
         {
             return;
         }
 
-        var weeks = allWeeks
+        var weeks = result.Value
             .Select(w => new WeekListItemViewModel
             {
                 Id = w.Id,

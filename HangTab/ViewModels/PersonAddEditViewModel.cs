@@ -96,7 +96,11 @@ public partial class PersonAddEditViewModel :
             {
                 if (_person is null && Id > 0)
                 {
-                    _person = await _personService.GetPersonById(Id);
+                    var result = await _personService.GetByIdAsync(Id);
+                    if (result.IsSuccess)
+                    {
+                        _person = result.Value;
+                    }
                 }
 
                 if (_person is not null)
@@ -117,19 +121,22 @@ public partial class PersonAddEditViewModel :
             return;
         }
 
-        if (await _dialogService.Ask("Delete", "Are you sure you want to delete this bowler?"))
+        if (!await _dialogService.Ask("Delete", "Are you sure you want to delete this bowler?"))
         {
-            if (await _personService.DeletePerson(_person.Id))
-            {
-                _messenger.Send(new PersonDeletedMessage(_person.Id));
-            }
-            else
-            {
-                await _dialogService.AlertAsync("Critical Error", "Error occurred while deleting the bowler!", "Ok");
-            }
-
-            await _navigationService.GoBack();
+            return;
         }
+
+        var result = await _personService.DeleteAsync(Id);
+        if (result.IsSuccess)
+        {
+            _messenger.Send(new PersonDeletedMessage(_person.Id));
+        }
+        else
+        {
+            await _dialogService.AlertAsync("Critical Error", "Error occurred while deleting the bowler!", "Ok");
+        }
+
+        await _navigationService.GoBack();
     }
 
     [RelayCommand]
@@ -153,29 +160,34 @@ public partial class PersonAddEditViewModel :
         }
 
         var person = MapDataToPerson();
-        if (Id == 0)
+        var result = await SaveBowler(person);
+        if (result.IsSuccess)
         {
-            if (await _personService.AddPerson(person))
-            {
-                _messenger.Send(new PersonAddedOrChangedMessage(person.Id, person.IsSub));
-            }
-            else
-            {
-                await _dialogService.AlertAsync("Error", "The bowler could not be added.", "Ok");
-            }
-            await _navigationService.GoBack();
+            _messenger.Send(new PersonAddedOrChangedMessage(person.Id, person.IsSub));
         }
         else
         {
-            if (await _personService.UpdatePerson(person))
-            {
-                _messenger.Send(new PersonAddedOrChangedMessage(person.Id, person.IsSub));
-            }
-            else
-            {
-                await _dialogService.AlertAsync("Error", "The bowler could not be updated.", "Ok");
-            }
-            await _navigationService.GoBack();
+            await _dialogService.AlertAsync("Error", result.Errors[0].Message, "Ok");
+        }
+
+        await _navigationService.GoBack();
+    }
+
+    private async Task<Result> SaveBowler(Person person)
+    {
+        if (person.Id == 0)
+        {
+            var addResult = await _personService.AddAsync(person);
+            return addResult.IsSuccess
+                ? Result.Ok()
+                : Result.Fail("Failed to add the bowler.");
+        }
+        else
+        {
+            var updateResult = await _personService.UpdateAsync(person);
+            return updateResult.IsSuccess
+                ? Result.Ok()
+                : Result.Fail("Failed to update the bowler.");
         }
     }
 

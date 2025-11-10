@@ -104,12 +104,13 @@ public partial class PersonListOverviewViewModel :
 
     private async Task GetBowlersAsync()
     {
-        var people = await _personService.GetAllPeople();
-        if (!people.Any())
+        var result = await _personService.GetAllAsync();
+        if (result.IsFailed)
         {
             return;
         }
 
+        var people = result.Value;
         Bowlers.Clear();
         AllBowlers = people.OrderBy(b => b.Name).ToBowlerListItemViewModelList();
         Bowlers = AllBowlers.ToObservableCollection();
@@ -121,12 +122,13 @@ public partial class PersonListOverviewViewModel :
     {
         if (Bowlers.Count > 0)
         {
-            var allWeeks = await _weekService.GetAllWeeks();
-            if (allWeeks is null)
+            var result = await _weekService.GetAllAsync();
+            if (result.IsFailed)
             {
                 return;
             }
 
+            var allWeeks = result.Value;
             Bowlers.SetBowlerHangSumByWeeks(allWeeks);
             Bowlers.SetLowestBowlerHangCount();
         }

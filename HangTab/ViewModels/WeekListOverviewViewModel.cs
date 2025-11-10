@@ -26,12 +26,13 @@ public partial class WeekListOverviewViewModel(
 
     private async Task GetWeeks()
     {
-        var weeks = await weekService.GetAllAsync();
-        if (!weeks.Any())
+        var result = await weekService.GetAllAsync();
+        if (result.IsFailed)
         {
             return;
         }
 
+        var weeks = result.Value;
         Weeks.Clear();
         Weeks = weeks.Where(w => w.Id != settingsService.CurrentWeekPrimaryKey).OrderByDescending(w => w.Number).ToWeekListItemViewModelList().ToObservableCollection();
     }

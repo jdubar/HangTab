@@ -75,10 +75,8 @@ public static class MauiProgram
         builder.Services.AddSingleton<IShareRepository>(new ShareRepository(Share.Default));
         builder.Services.AddSingleton<IStorageRepository>(new StorageRepository(FileSystem.Current));
 
-        builder.Services.AddTransient<IBowlerRepository, BowlerRepository>();
+        builder.Services.AddTransient(typeof(IBaseRepository<>), typeof(BaseRepository<>));
         builder.Services.AddTransient<IDatabaseRepository, DatabaseRepository>();
-        builder.Services.AddTransient<IPersonRepository, PersonRepository>();
-        builder.Services.AddTransient<IWeekRepository, WeekRepository>();
         return builder;
     }
 
