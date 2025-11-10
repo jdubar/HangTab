@@ -11,18 +11,18 @@ public class PersonServiceTests
     {
         // Arrange
         var id = 42;
-        var expected = new Person { Id = id, Name = "Alice" };
-        var personRepo = A.Fake<IPersonRepository>();
+        var expected = new Person { Id = id, Name = "Jayden" };
+        var personRepo = A.Fake<IBaseRepository<Person>>();
         var service = new PersonService(personRepo);
-        A.CallTo(() => personRepo.GetPersonById(A<int>._)).Returns(Task.FromResult(expected));
+        A.CallTo(() => personRepo.GetByIdAsync(A<int>._)).Returns(expected);
 
         // Act
-        var result = await service.GetPersonById(id);
+        var result = await service.GetByIdAsync(id);
 
         // Assert
-        Assert.Equal(expected.Id, result.Id);
-        Assert.Equal("Alice", result.Name);
-        A.CallTo(() => personRepo.GetPersonById(A<int>._)).MustHaveHappenedOnceExactly();
+        var actual = result.Value;
+        Assert.Equal(expected.Id, actual.Id);
+        Assert.Equal("Jayden", actual.Name);
     }
 
     [Fact]
@@ -30,16 +30,16 @@ public class PersonServiceTests
     {
         // Arrange
         var expected = new List<Person> { new() { Id = 16 }, new() { Id = 17 } };
-        var personRepo = A.Fake<IPersonRepository>();
+        var personRepo = A.Fake<IBaseRepository<Person>>();
         var service = new PersonService(personRepo);
-        A.CallTo(() => personRepo.GetAllPeople()).Returns(Task.FromResult<IEnumerable<Person>>(expected));
+        A.CallTo(() => personRepo.GetAllAsync()).Returns(expected);
 
         // Act
-        var result = await service.GetAllPeople();
+        var result = await service.GetAllAsync();
 
         // Assert
-        Assert.Equal(expected.Count, result.Count());
-        A.CallTo(() => personRepo.GetAllPeople()).MustHaveHappenedOnceExactly();
+        var actual = result.Value;
+        Assert.Equal(expected.Count, actual.Count());
     }
 
     [Fact]
@@ -47,17 +47,17 @@ public class PersonServiceTests
     {
         // Arrange
         var expected = new List<Person> { new() { Id = 42, IsSub = false } };
-        var personRepo = A.Fake<IPersonRepository>();
+        var personRepo = A.Fake<IBaseRepository<Person>>();
         var service = new PersonService(personRepo);
-        A.CallTo(() => personRepo.GetRegulars()).Returns(Task.FromResult<IEnumerable<Person>>(expected));
+        A.CallTo(() => personRepo.GetFilteredAsync(A<System.Linq.Expressions.Expression<Func<Person, bool>>>._)).Returns(expected);
 
         // Act
-        var result = await service.GetRegulars();
+        var result = await service.GetRegularsAsync();
 
         // Assert
-        Assert.Single(result);
-        Assert.False(result.First().IsSub);
-        A.CallTo(() => personRepo.GetRegulars()).MustHaveHappenedOnceExactly();
+        var actual = result.Value;
+        Assert.Single(actual);
+        Assert.False(actual.First().IsSub);
     }
 
     [Fact]
@@ -65,140 +65,140 @@ public class PersonServiceTests
     {
         // Arrange
         var expected = new List<Person> { new() { Id = 42, IsSub = true } };
-        var personRepo = A.Fake<IPersonRepository>();
+        var personRepo = A.Fake<IBaseRepository<Person>>();
         var service = new PersonService(personRepo);
-        A.CallTo(() => personRepo.GetSubstitutes()).Returns(Task.FromResult<IEnumerable<Person>>(expected));
+        A.CallTo(() => personRepo.GetFilteredAsync(A<System.Linq.Expressions.Expression<Func<Person, bool>>>._)).Returns(expected);
 
         // Act
-        var result = await service.GetSubstitutes();
+        var result = await service.GetSubstitutesAsync();
 
         // Assert
-        Assert.Single(result);
-        Assert.True(result.First().IsSub);
-        A.CallTo(() => personRepo.GetSubstitutes()).MustHaveHappenedOnceExactly();
+        var actual = result.Value;
+        Assert.Single(actual);
+        Assert.True(actual.First().IsSub);
     }
 
     [Fact]
     public async Task AddPerson_ValidPerson_ReturnsTrue()
     {
         // Arrange
-        var expected = new Person { Id = 67, Name = "Bob" };
-        var personRepo = A.Fake<IPersonRepository>();
+        var expected = new Person { Id = 67, Name = "Squeakers" };
+        var personRepo = A.Fake<IBaseRepository<Person>>();
         var service = new PersonService(personRepo);
-        A.CallTo(() => personRepo.AddPerson(A<Person>._)).Returns(Task.FromResult(true));
+        A.CallTo(() => personRepo.AddAsync(A<Person>._)).Returns(true);
 
         // Act
-        var result = await service.AddPerson(expected);
+        var result = await service.AddAsync(expected);
 
         // Assert
-        Assert.True(result);
-        A.CallTo(() => personRepo.AddPerson(expected)).MustHaveHappenedOnceExactly();
+        Assert.True(result.IsSuccess);
     }
 
     [Fact]
     public async Task AddPerson_RepositoryReturnsFalse_ReturnsFalse()
     {
         // Arrange
-        var expected = new Person { Id = 4, Name = "Carol" };
-        var personRepo = A.Fake<IPersonRepository>();
+        var expected = new Person { Id = 4, Name = "Mr. Big Hands" };
+        var personRepo = A.Fake<IBaseRepository<Person>>();
         var service = new PersonService(personRepo);
-        A.CallTo(() => personRepo.AddPerson(A<Person>._)).Returns(Task.FromResult(false));
+        A.CallTo(() => personRepo.AddAsync(A<Person>._)).Returns(Task.FromResult(false));
 
         // Act
-        var result = await service.AddPerson(expected);
+        var result = await service.AddAsync(expected);
 
         // Assert
-        Assert.False(result);
-        A.CallTo(() => personRepo.AddPerson(expected)).MustHaveHappenedOnceExactly();
+        Assert.True(result.IsFailed);
     }
 
     [Fact]
     public async Task DeletePerson_ValidId_ReturnsTrue()
     {
         // Arrange
-        var personRepo = A.Fake<IPersonRepository>();
+        var personRepo = A.Fake<IBaseRepository<Person>>();
         var service = new PersonService(personRepo);
-        A.CallTo(() => personRepo.DeletePerson(A<int>._)).Returns(Task.FromResult(true));
+        A.CallTo(() => personRepo.DeleteByIdAsync(A<int>._)).Returns(true);
 
         // Act
-        var result = await service.DeletePerson(5);
+        var result = await service.DeleteAsync(42);
 
         // Assert
-        Assert.True(result);
-        A.CallTo(() => personRepo.DeletePerson(A<int>._)).MustHaveHappenedOnceExactly();
+        Assert.True(result.IsSuccess);
     }
 
     [Fact]
     public async Task DeletePerson_RepositoryReturnsFalse_ReturnsFalse()
     {
         // Arrange
-        var personRepo = A.Fake<IPersonRepository>();
+        var personRepo = A.Fake<IBaseRepository<Person>>();
         var service = new PersonService(personRepo);
-        A.CallTo(() => personRepo.DeletePerson(A<int>._)).Returns(Task.FromResult(false));
+        A.CallTo(() => personRepo.DeleteByIdAsync(A<int>._)).Returns(false);
 
         // Act
-        var result = await service.DeletePerson(6);
+        var result = await service.DeleteAsync(42);
 
         // Assert
-        Assert.False(result);
-        A.CallTo(() => personRepo.DeletePerson(A<int>._)).MustHaveHappenedOnceExactly();
+        Assert.True(result.IsFailed);
     }
 
     [Fact]
     public async Task UpdatePerson_ValidPerson_ReturnsTrue()
     {
         // Arrange
-        var expected = new Person { Id = 7, Name = "Stimpy" };
-        var personRepo = A.Fake<IPersonRepository>();
+        var expected = new Person { Id = 7, Name = "Mr. Grabby Hands" };
+        var personRepo = A.Fake<IBaseRepository<Person>>();
         var service = new PersonService(personRepo);
-        A.CallTo(() => personRepo.UpdatePerson(A<Person>._)).Returns(Task.FromResult(true));
+        A.CallTo(() => personRepo.UpdateAsync(A<Person>._)).Returns(true);
 
         // Act
-        var result = await service.UpdatePerson(expected);
+        var result = await service.UpdateAsync(expected);
 
         // Assert
-        Assert.True(result);
-        A.CallTo(() => personRepo.UpdatePerson(A<Person>._)).MustHaveHappenedOnceExactly();
+        Assert.True(result.IsSuccess);
     }
 
     [Fact]
     public async Task UpdatePerson_RepositoryReturnsFalse_ReturnsFalse()
     {
         // Arrange
-        var expected = new Person { Id = 8, Name = "Frank" };
-        var personRepo = A.Fake<IPersonRepository>();
+        var expected = new Person { Id = 8, Name = "Nolan" };
+        var personRepo = A.Fake<IBaseRepository<Person>>();
         var service = new PersonService(personRepo);
-        A.CallTo(() => personRepo.UpdatePerson(A<Person>._)).Returns(Task.FromResult(false));
+        A.CallTo(() => personRepo.UpdateAsync(A<Person>._)).Returns(false);
 
         // Act
-        var result = await service.UpdatePerson(expected);
+        var result = await service.UpdateAsync(expected);
 
         // Assert
-        Assert.False(result);
-        A.CallTo(() => personRepo.UpdatePerson(A<Person>._)).MustHaveHappenedOnceExactly();
+        Assert.True(result.IsFailed);
     }
 
     [Fact]
-    public async Task AddPerson_NullPerson_ThrowsArgumentNullException()
+    public async Task AddPerson_NullPerson_ReturnsFailedResult()
     {
         // Arrange
-        var personRepo = A.Fake<IPersonRepository>();
+        var personRepo = A.Fake<IBaseRepository<Person>>();
         var service = new PersonService(personRepo);
-        A.CallTo(() => personRepo.AddPerson(A<Person>._)).Throws(new ArgumentNullException(nameof(Person)));
 
-        // Act & Assert
-        await Assert.ThrowsAsync<ArgumentNullException>(() => service.AddPerson(null!));
+        // Act
+        var result = await service.AddAsync(null!);
+
+        // Assert
+        Assert.True(result.IsFailed);
+        Assert.Equal("Person cannot be null.", result.Errors[0].Message);
     }
 
     [Fact]
-    public async Task UpdatePerson_NullPerson_ThrowsArgumentNullException()
+    public async Task UpdatePerson_NullPerson_ReturnsFailedResult()
     {
         // Arrange
-        var personRepo = A.Fake<IPersonRepository>();
+        var personRepo = A.Fake<IBaseRepository<Person>>();
         var service = new PersonService(personRepo);
-        A.CallTo(() => personRepo.UpdatePerson(A<Person>._)).Throws(new ArgumentNullException(nameof(Person)));
 
-        // Act & Assert
-        await Assert.ThrowsAsync<ArgumentNullException>(() => service.UpdatePerson(null!));
+        // Act
+        var result = await service.UpdateAsync(null!);
+
+        // Assert
+        Assert.True(result.IsFailed);
+        Assert.Equal("Person cannot be null.", result.Errors[0].Message);
     }
 }
