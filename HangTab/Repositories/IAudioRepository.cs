@@ -1,6 +1,4 @@
-﻿using FluentResults;
-
-namespace HangTab.Repositories;
+﻿namespace HangTab.Repositories;
 public interface IAudioRepository
 {
     Task<Result> PlayAudioStreamAsync(Stream audioStream);

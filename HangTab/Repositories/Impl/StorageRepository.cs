@@ -1,6 +1,4 @@
-﻿using FluentResults;
-
-namespace HangTab.Repositories.Impl;
+﻿namespace HangTab.Repositories.Impl;
 [System.Diagnostics.CodeAnalysis.ExcludeFromCodeCoverage(Justification = "This is a Repository for the data layer and does not require unit tests.")]
 public class StorageRepository(IFileSystem fileSystem) : IStorageRepository
 {
