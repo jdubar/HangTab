@@ -131,19 +131,7 @@
                 </DataTemplate>
             </BindableLayout.ItemTemplate>
         </VerticalStackLayout>
-            
-        <!--Delete Button-->
-        <StackLayout
-                Grid.Row="4"
-                Margin="10,0">
-            <Button
-                Style="{StaticResource PrimaryButton}"
-                BackgroundColor="{DynamicResource Error}"
-                Text="Delete Bowler"
-                IsVisible="{Binding IsExistingBowler}"
-                Command="{Binding DeletePersonCommand}" />
-        </StackLayout>
-        
+
         <!--Submit Button-->
         <StackLayout
                 Grid.Row="5"

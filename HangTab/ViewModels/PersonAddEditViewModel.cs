@@ -79,9 +79,6 @@ public partial class PersonAddEditViewModel :
     private bool _isSub;
 
     [ObservableProperty]
-    private bool _isDeleted;
-
-    [ObservableProperty]
     private ObservableCollection<ValidationResult> _errors = [];
 
     [ObservableProperty]
@@ -110,33 +107,6 @@ public partial class PersonAddEditViewModel :
 
                 MapPerson(_person);
             });
-    }
-
-    [RelayCommand]
-    private async Task DeletePersonAsync()
-    {
-        if (_person is null)
-        {
-            await _dialogService.AlertAsync("Error", "No bowler selected to delete.", "Ok");
-            return;
-        }
-
-        if (!await _dialogService.Ask("Delete", "Are you sure you want to delete this bowler?"))
-        {
-            return;
-        }
-
-        var result = await _personService.DeleteAsync(Id);
-        if (result.IsSuccess)
-        {
-            _messenger.Send(new PersonDeletedMessage(_person.Id));
-        }
-        else
-        {
-            await _dialogService.AlertAsync("Critical Error", "Error occurred while deleting the bowler!", "Ok");
-        }
-
-        await _navigationService.GoBack();
     }
 
     [RelayCommand]
@@ -208,7 +178,6 @@ public partial class PersonAddEditViewModel :
             Name = Name,
             ImageUrl = ImageUrl,
             IsSub = BowlerTypeIndex == (int)BowlerType.Sub,
-            IsDeleted = IsDeleted
         };
     }
 
@@ -220,7 +189,6 @@ public partial class PersonAddEditViewModel :
             Name = model.Name;
             ImageUrl = model.ImageUrl;
             IsSub = model.IsSub;
-            IsDeleted = model.IsDeleted;
             Initials = model.Id > 0 ? model.Name.GetInitials() : string.Empty;
 
             BowlerTypeIndex = model.IsSub
