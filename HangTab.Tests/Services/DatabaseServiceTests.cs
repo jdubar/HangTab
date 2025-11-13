@@ -11,14 +11,14 @@ public class DatabaseServiceTests
         // Arrange
         var databaseRepo = A.Fake<IDatabaseRepository>();
         var service = new DatabaseService(databaseRepo);
-        A.CallTo(() => databaseRepo.DeleteAllData()).Returns(Task.FromResult(true));
+        A.CallTo(() => databaseRepo.DeleteAllDataAsync()).Returns(Task.FromResult(true));
 
         // Act
-        var result = await service.DeleteAllData();
+        var result = await service.DeleteAllDataAsync();
 
         // Assert
         Assert.True(result);
-        A.CallTo(() => databaseRepo.DeleteAllData()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => databaseRepo.DeleteAllDataAsync()).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -27,14 +27,14 @@ public class DatabaseServiceTests
         // Arrange
         var databaseRepo = A.Fake<IDatabaseRepository>();
         var service = new DatabaseService(databaseRepo);
-        A.CallTo(() => databaseRepo.DeleteAllData()).Returns(Task.FromResult(false));
+        A.CallTo(() => databaseRepo.DeleteAllDataAsync()).Returns(Task.FromResult(false));
 
         // Act
-        var result = await service.DeleteAllData();
+        var result = await service.DeleteAllDataAsync();
 
         // Assert
         Assert.False(result);
-        A.CallTo(() => databaseRepo.DeleteAllData()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => databaseRepo.DeleteAllDataAsync()).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -43,10 +43,10 @@ public class DatabaseServiceTests
         // Arrange
         var databaseRepo = A.Fake<IDatabaseRepository>();
         var service = new DatabaseService(databaseRepo);
-        A.CallTo(() => databaseRepo.DeleteAllData()).Throws(new InvalidOperationException("fail"));
+        A.CallTo(() => databaseRepo.DeleteAllDataAsync()).Throws(new InvalidOperationException("fail"));
 
         // Act & Assert
-        await Assert.ThrowsAsync<InvalidOperationException>(service.DeleteAllData);
+        await Assert.ThrowsAsync<InvalidOperationException>(service.DeleteAllDataAsync);
     }
 
     [Fact]
@@ -55,14 +55,14 @@ public class DatabaseServiceTests
         // Arrange
         var databaseRepo = A.Fake<IDatabaseRepository>();
         var service = new DatabaseService(databaseRepo);
-        A.CallTo(() => databaseRepo.DeleteSeasonData()).Returns(Task.FromResult(true));
+        A.CallTo(() => databaseRepo.DeleteSeasonDataAsync()).Returns(Task.FromResult(true));
 
         // Act
-        var result = await service.DeleteSeasonData();
+        var result = await service.DeleteSeasonDataAsync();
 
         // Assert
         Assert.True(result);
-        A.CallTo(() => databaseRepo.DeleteSeasonData()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => databaseRepo.DeleteSeasonDataAsync()).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -71,14 +71,14 @@ public class DatabaseServiceTests
         // Arrange
         var databaseRepo = A.Fake<IDatabaseRepository>();
         var service = new DatabaseService(databaseRepo);
-        A.CallTo(() => databaseRepo.DeleteSeasonData()).Returns(Task.FromResult(false));
+        A.CallTo(() => databaseRepo.DeleteSeasonDataAsync()).Returns(Task.FromResult(false));
 
         // Act
-        var result = await service.DeleteSeasonData();
+        var result = await service.DeleteSeasonDataAsync();
 
         // Assert
         Assert.False(result);
-        A.CallTo(() => databaseRepo.DeleteSeasonData()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => databaseRepo.DeleteSeasonDataAsync()).MustHaveHappenedOnceExactly();
     }
 
     [Fact]
@@ -87,10 +87,10 @@ public class DatabaseServiceTests
         // Arrange
         var databaseRepo = A.Fake<IDatabaseRepository>();
         var service = new DatabaseService(databaseRepo);
-        A.CallTo(() => databaseRepo.DeleteSeasonData()).Throws(new Exception("fail"));
+        A.CallTo(() => databaseRepo.DeleteSeasonDataAsync()).Throws(new Exception("fail"));
 
         // Act & Assert
-        await Assert.ThrowsAsync<Exception>(service.DeleteSeasonData);
+        await Assert.ThrowsAsync<Exception>(service.DeleteSeasonDataAsync);
     }
 
     [Fact]
@@ -99,12 +99,12 @@ public class DatabaseServiceTests
         // Arrange
         var databaseRepo = A.Fake<IDatabaseRepository>();
         var service = new DatabaseService(databaseRepo);
-        A.CallTo(() => databaseRepo.InitializeDatabase()).Returns(Task.CompletedTask);
+        A.CallTo(() => databaseRepo.InitializeDatabaseAsync()).Returns(Task.CompletedTask);
 
         // Act
-        await service.InitializeDatabase();
+        await service.InitializeDatabaseAsync();
 
         // Assert
-        A.CallTo(() => databaseRepo.InitializeDatabase()).MustHaveHappenedOnceExactly();
+        A.CallTo(() => databaseRepo.InitializeDatabaseAsync()).MustHaveHappenedOnceExactly();
     }
 }

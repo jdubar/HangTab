@@ -17,8 +17,8 @@ namespace HangTab.ViewModels;
 public partial class BowlerSelectSubViewModel(
     IPersonService personService,
     IBowlerService bowlerService,
-    INavigationService navigationService,
-    IMapper<IEnumerable<Person>, IEnumerable<SubListItemViewModel>> mapper) : ViewModelBase, IQueryAttributable
+    IMessenger messenger,
+    INavigationService navigationService) : ViewModelBase, IQueryAttributable
 {
     private Bowler? _bowler;
 
@@ -41,7 +41,7 @@ public partial class BowlerSelectSubViewModel(
             await Loading(
                 async () =>
                 {
-                    await GetSubs();
+                    await GetSubsAsync();
 
                     if (_bowler is not null)
                     {
@@ -77,32 +77,33 @@ public partial class BowlerSelectSubViewModel(
             return;
         }
 
-        await bowlerService.UpdateBowler(MapDataToBowler());
-        WeakReferenceMessenger.Default.Send(new BowlerSubChangedMessage(Id, SelectedSub.Id));
+        await bowlerService.UpdateAsync(MapDataToBowler());
+        messenger.Send(new BowlerSubChangedMessage(Id, SelectedSub.Id));
         await navigationService.GoBack();
     }
 
-    private async Task GetSubs()
+    private async Task GetSubsAsync()
     {
-        var subs = await GetAvailableSubs();
+        var subs = await GetAvailableSubsAsync();
         if (subs.Any())
         {
             Subs.Clear();
-            Subs = mapper.Map(subs).ToObservableCollection();
+            Subs = subs.ToSubListItemViewModelList().ToObservableCollection();
         }
     }
 
-    private async Task<IEnumerable<Person>> GetAvailableSubs()
+    private async Task<IEnumerable<Person>> GetAvailableSubsAsync()
     {
-        var subs = await personService.GetSubstitutes();
-        if (!subs.Any())
+        var subsResult = await personService.GetSubstitutesAsync();
+        if (subsResult.IsFailed)
         {
             return [];
         }
 
-        var bowlers = await bowlerService.GetAllBowlersByWeekId(_bowler?.WeekId ?? 0);
-        return bowlers.Any()
-            ? subs.Where(s => !bowlers.Any(b => b.SubId == s.Id))
+        var subs = subsResult.Value;
+        var bowlersResult = await bowlerService.GetAllByWeekIdAsync(_bowler?.WeekId ?? 0);
+        return bowlersResult.IsSuccess
+            ? subs.Where(s => !bowlersResult.Value.Any(b => b.SubId == s.Id))
             : subs;
     }
 

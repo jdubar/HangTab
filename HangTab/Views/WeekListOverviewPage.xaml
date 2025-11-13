@@ -119,7 +119,7 @@
                                             VerticalOptions="Center"
                                             FontSize="Medium"
                                             TextColor="{DynamicResource TextPrimaryColor}"
-                                            Text="{Binding HangCount}" />
+                                            Text="{Binding TotalHangCount}" />
                                     </Grid>
                                     
                                     <!--BusRide count label-->

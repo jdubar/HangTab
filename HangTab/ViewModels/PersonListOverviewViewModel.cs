@@ -5,9 +5,7 @@ using CommunityToolkit.Mvvm.Messaging;
 
 using HangTab.Extensions;
 using HangTab.Mappers;
-
 using HangTab.Messages;
-using HangTab.Models;
 using HangTab.Services;
 using HangTab.ViewModels.Base;
 using HangTab.ViewModels.Items;
@@ -23,31 +21,26 @@ public partial class PersonListOverviewViewModel :
     IRecipient<PersonDeletedMessage>,
     IRecipient<SystemResetMessage>
 {
-    private readonly IPersonService _personService;
+    private readonly IMessenger _messenger;
     private readonly INavigationService _navigationService;
+    private readonly IPersonService _personService;
     private readonly IWeekService _weekService;
 
-    private readonly IMapper<BowlerListItemViewModel, Person> _personMapper;
-    private readonly IMapper<IEnumerable<Person>, IEnumerable<BowlerListItemViewModel>> _bowlerListItemViewModelMapper;
-
     public PersonListOverviewViewModel(
-        IPersonService personService,
+        IMessenger messenger,
         INavigationService navigationService,
-        IWeekService weekService,
-        IMapper<BowlerListItemViewModel, Person> personMapper,
-        IMapper<IEnumerable<Person>, IEnumerable<BowlerListItemViewModel>> bowlerListItemViewModelMapper)
+        IPersonService personService,
+        IWeekService weekService)
     {
-        _personService = personService;
+        _messenger = messenger;
         _navigationService = navigationService;
+        _personService = personService;
         _weekService = weekService;
 
-        _personMapper = personMapper;
-        _bowlerListItemViewModelMapper = bowlerListItemViewModelMapper;
-
-        WeakReferenceMessenger.Default.Register<BowlerHangCountChangedMessage>(this);
-        WeakReferenceMessenger.Default.Register<PersonAddedOrChangedMessage>(this);
-        WeakReferenceMessenger.Default.Register<PersonDeletedMessage>(this);
-        WeakReferenceMessenger.Default.Register<SystemResetMessage>(this);
+        _messenger.Register<BowlerHangCountChangedMessage>(this);
+        _messenger.Register<PersonAddedOrChangedMessage>(this);
+        _messenger.Register<PersonDeletedMessage>(this);
+        _messenger.Register<SystemResetMessage>(this);
     }
 
     private IEnumerable<BowlerListItemViewModel> _allBowlers = [];
@@ -81,22 +74,22 @@ public partial class PersonListOverviewViewModel :
         }
         else
         {
-            Task.Run(async () => { await SearchBowlers(value); }).Wait();
+            SearchBowlers(value);
         }
     }
 
-    // TODO: Add filtering by Subs,Regulars
+    // TODO: Add filtering by Subs,Regulars (using chips?)
     // TODO: Add sort by most hangs,least hangs, name asc/desc
 
     [RelayCommand]
-    private async Task NavigateToAddBowler() => await _navigationService.GoToAddBowler();
+    private async Task NavigateToAddBowlerAsync() => await _navigationService.GoToAddBowler();
 
     [RelayCommand]
-    private async Task NavigateToEditSelectedBowler()
+    private async Task NavigateToEditSelectedBowlerAsync()
     {
         if (SelectedBowler is not null)
         {
-            await _navigationService.GoToEditBowler(_personMapper.Map(SelectedBowler));
+            await _navigationService.GoToEditBowler(SelectedBowler.ToPerson());
             SelectedBowler = null;
         }
     }
@@ -105,45 +98,46 @@ public partial class PersonListOverviewViewModel :
     {
         if (Bowlers.Count == 0)
         {
-            await Loading(GetBowlers);
+            await Loading(GetBowlersAsync);
         }
     }
 
-    private async Task GetBowlers()
+    private async Task GetBowlersAsync()
     {
-        var people = await _personService.GetAllPeople();
-        if (!people.Any())
+        var result = await _personService.GetAllAsync();
+        if (result.IsFailed)
         {
             return;
         }
 
+        var people = result.Value;
         Bowlers.Clear();
-        AllBowlers = _bowlerListItemViewModelMapper.Map(people.OrderBy(b => b.Name));
+        AllBowlers = people.OrderBy(b => b.Name).ToBowlerListItemViewModelList();
         Bowlers = AllBowlers.ToObservableCollection();
 
-        await UpdateBowlerHangCounts();
+        await UpdateBowlerHangCountsAsync();
     }
 
-    private async Task UpdateBowlerHangCounts()
+    private async Task UpdateBowlerHangCountsAsync()
     {
         if (Bowlers.Count > 0)
         {
-            var allWeeks = await _weekService.GetAllWeeks();
-            if (allWeeks is null)
+            var result = await _weekService.GetAllAsync();
+            if (result.IsFailed)
             {
                 return;
             }
 
+            var allWeeks = result.Value;
             Bowlers.SetBowlerHangSumByWeeks(allWeeks);
             Bowlers.SetLowestBowlerHangCount();
         }
     }
 
-    private Task SearchBowlers(string searchText)
+    private void SearchBowlers(string searchText)
     {
         Bowlers.Clear();
         Bowlers = AllBowlers.Where(b => b.Name.Contains(searchText, StringComparison.OrdinalIgnoreCase)).ToObservableCollection();
-        return Task.CompletedTask;
     }
 
     public void Receive(SystemResetMessage message)
@@ -152,9 +146,9 @@ public partial class PersonListOverviewViewModel :
         AllBowlers = [];
     }
 
-    public async void Receive(BowlerHangCountChangedMessage message) => await UpdateBowlerHangCounts();
+    public async void Receive(BowlerHangCountChangedMessage message) => await UpdateBowlerHangCountsAsync();
 
-    public async void Receive(PersonAddedOrChangedMessage message) => await GetBowlers();
+    public async void Receive(PersonAddedOrChangedMessage message) => await GetBowlersAsync();
 
-    public async void Receive(PersonDeletedMessage message) => await GetBowlers();
+    public async void Receive(PersonDeletedMessage message) => await GetBowlersAsync();
 }

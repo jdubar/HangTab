@@ -1,6 +1,4 @@
-﻿using FluentResults;
-
-namespace HangTab.Services;
+﻿namespace HangTab.Services;
 public interface IAudioService
 {
     Task<Result> PlaySoundAsync(string audioFileName);

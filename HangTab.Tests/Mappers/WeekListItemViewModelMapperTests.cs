@@ -10,7 +10,6 @@ public class WeekListItemViewModelMapperTests
     public void Map_ValidWeeks_MapsToViewModels()
     {
         // Arrange
-        var mapper = new WeekListItemViewModelMapper();
         var weeks = new List<Week>
         {
             new()
@@ -41,7 +40,7 @@ public class WeekListItemViewModelMapperTests
         };
 
         // Act
-        var actual = mapper.Map(weeks).ToList();
+        var actual = weeks.ToWeekListItemViewModelList().ToList();
 
         // Assert
         Assert.Single(actual);
@@ -49,18 +48,17 @@ public class WeekListItemViewModelMapperTests
         Assert.Equal(1, vm.Id);
         Assert.Equal(2, vm.Number);
         Assert.Equal(3, vm.BusRides);
-        Assert.Equal(7, vm.HangCount); // 5 + 2
+        Assert.Equal(7, vm.TotalHangCount); // 5 + 2
     }
 
     [Fact]
     public void Map_EmptyWeeks_ReturnsEmpty()
     {
         // Arrange
-        var mapper = new WeekListItemViewModelMapper();
         var weeks = new List<Week>();
 
         // Act
-        var actual = mapper.Map(weeks).ToList();
+        var actual = weeks.ToWeekListItemViewModelList().ToList();
 
         // Assert
         Assert.Empty(actual);
@@ -70,17 +68,16 @@ public class WeekListItemViewModelMapperTests
     public void Map_NullWeeks_ThrowsArgumentNullException()
     {
         // Arrange
-        var mapper = new WeekListItemViewModelMapper();
+        List<Week>? weeks = null!;
 
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => mapper.Map(null!));
+        Assert.Throws<ArgumentNullException>(() => weeks.ToWeekListItemViewModelList());
     }
 
     [Fact]
     public void Map_WeekWithNullBowlers_ThrowsArgumentNullException()
     {
         // Arrange
-        var mapper = new WeekListItemViewModelMapper();
         var weeks = new List<Week>
         {
             new()
@@ -93,6 +90,6 @@ public class WeekListItemViewModelMapperTests
         };
 
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => mapper.Map(weeks).ToList());
+        Assert.Throws<ArgumentNullException>(() => weeks.ToWeekListItemViewModelList().ToList());
     }
 }

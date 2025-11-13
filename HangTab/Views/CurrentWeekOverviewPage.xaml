@@ -130,7 +130,9 @@
                                             <controls:Stepper 
                                                 Grid.Column="2"
                                                 IsControlEnabled="{Binding EnableStepper}"
-                                                Value="{Binding HangCount}" />
+                                                Value="{Binding HangCount}"
+                                                ValueChangedCommand="{Binding Source={RelativeSource AncestorType={x:Type vm:CurrentWeekOverviewViewModel}}, Path=BowlerHangCountChangedCommand}"
+                                                ValueChangedCommandParameter="{Binding .}"/>
                                     
                                         </Grid>
                                     </Border>

@@ -10,7 +10,6 @@ public class BowlerListItemViewModelMapperTests
     public void Map_FromPersonList_ReturnsCorrectViewModel()
     {
         // Arrange
-        var mapper = new BowlerListItemViewModelMapper();
         var people = new List<Person>
         {
             new() { Id = 1, Name = "Alice", IsSub = false, ImageUrl = "img1" },
@@ -18,7 +17,7 @@ public class BowlerListItemViewModelMapperTests
         };
 
         // Act
-        var actual = mapper.Map(people).ToList();
+        var actual = people.ToBowlerListItemViewModelList().ToList();
 
         // Assert
         Assert.Equal(2, actual.Count);
@@ -38,7 +37,6 @@ public class BowlerListItemViewModelMapperTests
     public void Map_FromBowlerList_ReturnsCorrectViewModel()
     {
         // Arrange
-        var mapper = new BowlerListItemViewModelMapper();
         var bowlers = new List<Bowler>
         {
             new() {
@@ -51,7 +49,7 @@ public class BowlerListItemViewModelMapperTests
         };
 
         // Act
-        var vm = mapper.Map(bowlers).ToList();
+        var vm = bowlers.ToBowlerListItemViewModelList().ToList();
 
         // Assert
         Assert.Single(vm);
@@ -63,25 +61,5 @@ public class BowlerListItemViewModelMapperTests
         Assert.Equal(10, actual.BowlerId);
         Assert.Equal("img3", actual.ImageUrl);
         Assert.Equal(Status.UsingSub, actual.Status);
-    }
-
-    [Fact]
-    public void Map_NullPerson_ThrowsArgumentNullException()
-    {
-        // Arrange
-        var mapper = new BowlerListItemViewModelMapper();
-
-        // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => mapper.Map((IEnumerable<Person>)null!));
-    }
-
-    [Fact]
-    public void Map_NullBowler_ThrowsArgumentNullException()
-    {
-        // Arrange
-        var mapper = new BowlerListItemViewModelMapper();
-
-        // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => mapper.Map((IEnumerable<Bowler>)null!));
     }
 }

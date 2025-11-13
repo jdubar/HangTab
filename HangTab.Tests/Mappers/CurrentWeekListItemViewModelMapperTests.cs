@@ -10,7 +10,6 @@ public class CurrentWeekListItemViewModelMapperTests
     public void Map_ValidBowlerList_MapsToViewModels()
     {
         // Arrange
-        var mapper = new CurrentWeekListItemViewModelMapper();
         var bowlers = new List<Bowler>
         {
             new() {
@@ -46,7 +45,7 @@ public class CurrentWeekListItemViewModelMapperTests
         };
 
         // Act
-        var actual = mapper.Map(bowlers).ToList();
+        var actual = bowlers.ToCurrentWeekListItemViewModelList().ToList();
 
         // Assert
         Assert.Equal(2, actual.Count);
@@ -78,9 +77,9 @@ public class CurrentWeekListItemViewModelMapperTests
     public void Map_NullBowlerList_ThrowsArgumentNullException()
     {
         // Arrange
-        var mapper = new CurrentWeekListItemViewModelMapper();
+        List<Bowler> bowlers = null!;
 
         // Act & Assert
-        Assert.Throws<ArgumentNullException>(() => mapper.Map(null!));
+        Assert.Throws<ArgumentNullException>(() => bowlers.ToCurrentWeekListItemViewModelList());
     }
 }

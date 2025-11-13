@@ -8,6 +8,7 @@ namespace HangTab.ViewModels;
 public partial class DataManagerViewModel(
     IDialogService dialogService,
     IDatabaseService databaseService,
+    IMessenger messenger,
     ISettingsService settingsService)
 {
     /// <summary>
@@ -25,7 +26,7 @@ public partial class DataManagerViewModel(
             return;
         }
 
-        if (await databaseService.DeleteAllData())
+        if (await databaseService.DeleteAllDataAsync())
         {
             SendSystemResetMessage();
             await dialogService.ToastAsync("All data has been deleted");
@@ -47,7 +48,7 @@ public partial class DataManagerViewModel(
             return;
         }
 
-        if (await databaseService.DeleteSeasonData())
+        if (await databaseService.DeleteSeasonDataAsync())
         {
             SendSystemResetMessage();
             await dialogService.ToastAsync("A new season has started");
@@ -62,6 +63,6 @@ public partial class DataManagerViewModel(
     {
         settingsService.CurrentWeekPrimaryKey = 0;
         settingsService.SeasonComplete = false;
-        WeakReferenceMessenger.Default.Send(new SystemResetMessage());
+        messenger.Send(new SystemResetMessage());
     }
 }
