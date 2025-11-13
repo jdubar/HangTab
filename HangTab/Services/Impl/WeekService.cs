@@ -67,7 +67,7 @@ public class WeekService(
                 WeekId = bowler.WeekId,
                 PersonId = bowler.PersonId,
                 SubId = bowler.SubId,
-                Person = await personRepo.GetByIdAsync(bowler.SubId is not null ? (int)bowler.SubId : bowler.PersonId)
+                Person = await personRepo.GetByIdAsync(bowler.SubId is not null ? bowler.SubId.Value : bowler.PersonId)
             });
         }
 

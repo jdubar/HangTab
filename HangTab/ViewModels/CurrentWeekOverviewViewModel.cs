@@ -171,6 +171,36 @@ public partial class CurrentWeekOverviewViewModel :
         }
     }
 
+    [RelayCommand]
+    private async Task BowlerHangCountChangedAsync(CurrentWeekListItemViewModel? vm)
+    {
+        if (vm is null)
+        {
+            return;
+        }
+
+        var result = await _bowlerService.UpdateAsync(vm.ToBowler());
+        if (result.IsFailed)
+        {
+            await _dialogService.AlertAsync("Error", "Unable to update bowler hang count", "Ok");
+            return;
+        }
+
+        var newHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
+        var isIncrease = newHangTotal > TeamHangTotal;
+        TeamHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
+        CurrentWeekBowlers.SetLowestBowlerHangCount();
+
+        if (isIncrease)
+        {
+            PlayPopperAnimation = true;
+            await Task.Delay(1000);
+            PlayPopperAnimation = false;
+        }
+
+        _messenger.Send(new BowlerHangCountChangedMessage(vm.BowlerId, vm.HangCount));
+    }
+
     private async Task StartNewWeekAsync()
     {
         var result = await _weekService.AddAsync(CurrentWeek.Number + 1);
@@ -200,7 +230,7 @@ public partial class CurrentWeekOverviewViewModel :
         if (CurrentWeek.Bowlers.Count > 0)
         {
             CurrentWeekBowlers.Clear();
-            CurrentWeekBowlers = CurrentWeek.Bowlers.ToCurrentWeekListItemViewModelList().ToObservableCollection();
+            CurrentWeekBowlers = CurrentWeek.Bowlers.OrderBy(b => b.Person.Name).ToCurrentWeekListItemViewModelList().ToObservableCollection();
             CurrentWeekBowlers.SetLowestBowlerHangCount();
         }
 
@@ -246,36 +276,6 @@ public partial class CurrentWeekOverviewViewModel :
         }
 
         await GetCurrentWeekAsync();
-    }
-
-    [RelayCommand]
-    private async Task BowlerHangCountChangedAsync(CurrentWeekListItemViewModel? vm)
-    {
-        if (vm is null)
-        {
-            return;
-        }
-
-        var result = await _bowlerService.UpdateAsync(vm.ToBowler());
-        if (result.IsFailed)
-        {
-            await _dialogService.AlertAsync("Error", "Unable to update bowler hang count", "Ok");
-            return;
-        }
-
-        var newHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
-        var isIncrease = newHangTotal > TeamHangTotal;
-        TeamHangTotal = CurrentWeekBowlers.Sum(b => b.HangCount);
-        CurrentWeekBowlers.SetLowestBowlerHangCount();
-
-        if (isIncrease)
-        {
-            PlayPopperAnimation = true;
-            await Task.Delay(1000);
-            PlayPopperAnimation = false;
-        }
-
-        _messenger.Send(new BowlerHangCountChangedMessage(vm.BowlerId, vm.HangCount));
     }
 
     public async void Receive(SystemResetMessage message)
